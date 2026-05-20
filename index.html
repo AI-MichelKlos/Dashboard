@@ -515,4 +515,14 @@ body { background: var(--bg); font-family: 'Segoe UI', Arial, sans-serif; color:
     ]);
   }
 
-  window.setPeriod = fun
+  window.setPeriod = function(n, btn) {
+    document.querySelectorAll('.period-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    drawAll(n);
+  };
+
+  drawAll(36);
+})();
+</script>
+</body>
+</html>
