@@ -50,7 +50,8 @@ body { background: var(--bg); font-family: 'Segoe UI', Arial, sans-serif; color:
 
   <div class="dash-header">
     <h1>Analytisk overblik – Arbejdsmarkedet</h1>
-    <p>Nøgletal for det danske arbejdsmarked · Opdateret maj 2026</p>
+    <p>Nøgletal for det danske arbejdsmarked · Sidst opdateret: maj 2026</p>
+    <p style="margin-top:6px; font-size:12px; color:#888;">Dashboardet er opdelt i to dele: KPI-overblik øverst med de seneste nøgletal, efterfulgt af uddybende grafer med historiske tidsserier.</p>
   </div>
 
   <div class="period-bar">
@@ -514,14 +515,4 @@ body { background: var(--bg); font-family: 'Segoe UI', Arial, sans-serif; color:
     ]);
   }
 
-  window.setPeriod = function(n, btn) {
-    document.querySelectorAll('.period-btn').forEach(b => b.classList.remove('active'));
-    btn.classList.add('active');
-    drawAll(n);
-  };
-
-  drawAll(36);
-})();
-</script>
-</body>
-</html>
+  window.setPeriod = fun
