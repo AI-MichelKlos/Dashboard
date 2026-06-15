@@ -1,528 +1,156 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="da">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Analytisk overblik – Arbejdsmarkedet</title>
-<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
-<style>
-:root {
-  --green: #6B9E78; --dark-green: #3d6b47; --head: #0F2B36;
-  --grid: #E8EBE8; --bg: #f7f9f7; --card-bg: #fff; --text: #222;
-  --muted: #666; --border: #e0e4e0;
-}
-* { box-sizing: border-box; margin: 0; padding: 0; }
-body { background: var(--bg); font-family: 'Segoe UI', Arial, sans-serif; color: var(--text); font-size: 14px; }
-#dak-dashboard { max-width: 1300px; margin: 0 auto; padding: 16px 12px 40px; }
-.dash-header { text-align: center; margin-bottom: 20px; }
-.dash-header h1 { font-size: 22px; color: var(--head); font-weight: 700; }
-.dash-header p { color: var(--muted); font-size: 13px; margin-top: 4px; }
-.section-title { font-size: 15px; font-weight: 700; color: var(--head); border-left: 4px solid var(--green); padding-left: 10px; margin: 28px 0 14px; }
-.period-bar { display: flex; gap: 6px; margin-bottom: 16px; flex-wrap: wrap; }
-.period-btn { padding: 4px 12px; border: 1px solid var(--green); border-radius: 4px; cursor: pointer; font-size: 12px; color: var(--green); background: #fff; }
-.period-btn.active { background: var(--green); color: #fff; }
-.kpi-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 12px; margin-bottom: 16px; }
-.kpi-card { background: var(--card-bg); border: 1px solid var(--border); border-radius: 8px; padding: 14px 16px; }
-.kpi-card .kpi-period { font-size: 11px; color: var(--muted); margin-bottom: 4px; }
-.kpi-card .kpi-label { font-size: 12px; color: var(--muted); margin-bottom: 2px; text-transform: uppercase; letter-spacing: 0.4px; }
-.kpi-card .kpi-value { font-size: 26px; font-weight: 700; color: var(--head); line-height: 1.1; }
-.kpi-card .kpi-sub { font-size: 11px; color: var(--muted); margin-top: 3px; }
-.kpi-card .kpi-compare { margin-top: 10px; display: grid; grid-template-columns: 1fr 1fr; gap: 6px; border-top: 1px solid var(--border); padding-top: 8px; }
-.kpi-card .kpi-prev { font-size: 11px; color: var(--muted); }
-.kpi-card .kpi-prev strong { display: block; font-size: 13px; color: var(--text); }
-.kpi-card .kpi-delta { margin-top: 6px; font-size: 11px; }
-.up { color: #d44; }
-.green-up { color: #3a9a52; }
-.chart-card { background: var(--card-bg); border: 1px solid var(--border); border-radius: 8px; padding: 16px; margin-bottom: 16px; }
-.chart-card h3 { font-size: 14px; color: var(--head); margin-bottom: 12px; font-weight: 600; }
-.chart-wrap { height: 400px; position: relative; }
-.chart-source { font-size: 11px; color: var(--muted); margin-top: 6px; text-align: right; }
-.chart-2col { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-@media(max-width: 700px) { .chart-2col { grid-template-columns: 1fr; } }
-.euro-table { width: 100%; border-collapse: collapse; font-size: 13px; }
-.euro-table th { background: var(--head); color: #fff; padding: 8px 10px; text-align: left; }
-.euro-table td { padding: 7px 10px; border-bottom: 1px solid var(--border); }
-.euro-table tr:nth-child(even) td { background: #f5f7f5; }
-</style>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>DAK Dashboard - Analytisk overblik</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+  <style>
+    :root{--green:#6B9E78;--dark-green:#3d6b47;--heading:#0F2B36;--orange:#E07A40;--blue:#4A90C4;--purple:#9B59B6;--grid:#E8EBE8;--muted:#637079;--panel:#ffffff;--bg:#F6F8F6}
+    *{box-sizing:border-box} body{margin:0;background:var(--bg);font-family:Segoe UI,Arial,sans-serif;color:#17313b}.dak-dashboard{max-width:1420px;margin:0 auto;padding:28px 22px 48px}.topbar{display:flex;justify-content:space-between;align-items:flex-start;gap:20px;margin-bottom:22px}.title h1{margin:0;color:var(--heading);font-size:34px;line-height:1.12;letter-spacing:0}.title p{max-width:760px;margin:10px 0 0;color:var(--muted);line-height:1.5}.meta{min-width:245px;text-align:right;color:var(--muted);font-size:14px;line-height:1.6}.period-nav{display:flex;flex-wrap:wrap;gap:8px;margin:8px 0 24px}.period-nav a{color:var(--dark-green);text-decoration:none;border:1px solid rgba(61,107,71,.22);background:#fff;padding:9px 12px;border-radius:8px;font-size:14px}.section{margin-top:34px}.section h2{font-size:23px;color:var(--heading);margin:0 0 14px}.kpi-grid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:12px}.kpi-card{background:var(--panel);border:1px solid var(--grid);border-radius:8px;padding:15px 15px 13px;min-height:158px;box-shadow:0 1px 2px rgba(15,43,54,.04)}.kpi-title{font-size:13px;color:var(--muted);font-weight:700;text-transform:uppercase}.kpi-period{font-size:13px;color:var(--muted);margin-top:5px}.kpi-value{font-size:30px;line-height:1.12;color:var(--heading);font-weight:750;margin-top:12px}.kpi-sub{margin-top:12px;display:grid;gap:4px;font-size:13px;color:#53626b}.delta{font-weight:700}.delta.good{color:var(--dark-green)}.delta.bad{color:#B84A34}.chart-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}.chart-panel{background:#fff;border:1px solid var(--grid);border-radius:8px;padding:18px;min-height:472px}.chart-panel h3{margin:0 0 12px;color:var(--heading);font-size:17px}.chart-wrap{height:400px;position:relative}.chart-wrap.tall{height:620px}.wide{grid-column:1/-1}.tables{display:grid;grid-template-columns:1fr 1fr;gap:16px}.table-panel{background:#fff;border:1px solid var(--grid);border-radius:8px;padding:18px}.table-panel h3{margin:0 0 12px;color:var(--heading);font-size:17px}table{width:100%;border-collapse:collapse;font-size:14px}th,td{padding:9px 8px;border-bottom:1px solid var(--grid);text-align:right}th:first-child,td:first-child{text-align:left}th{color:var(--muted);font-size:12px;text-transform:uppercase}.note{margin-top:16px;color:var(--muted);font-size:13px;line-height:1.5}@media(max-width:1100px){.kpi-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.chart-grid,.tables{grid-template-columns:1fr}.wide{grid-column:auto}.meta{text-align:left}.topbar{flex-direction:column}}@media(max-width:640px){.dak-dashboard{padding:20px 14px 36px}.title h1{font-size:27px}.kpi-grid{grid-template-columns:1fr}.chart-panel{padding:14px}.chart-wrap{height:340px}.chart-wrap.tall{height:520px}}
+    </style>
 </head>
 <body>
-<div id="dak-dashboard">
-
-  <div class="dash-header">
-    <h1>Analytisk overblik – Arbejdsmarkedet</h1>
-    <p>Nøgletal for det danske arbejdsmarked · Sidst opdateret: maj 2026</p>
-    <p style="margin-top:6px; font-size:12px; color:#888;">Dashboardet er opdelt i to dele: KPI-overblik øverst med de seneste nøgletal, efterfulgt af uddybende grafer med historiske tidsserier.</p>
-  </div>
-
-  <div class="period-bar">
-    <button class="period-btn" onclick="setPeriod(24,this)">2 år</button>
-    <button class="period-btn active" onclick="setPeriod(36,this)">3 år</button>
-    <button class="period-btn" onclick="setPeriod(60,this)">5 år</button>
-    <button class="period-btn" onclick="setPeriod(9999,this)">Alle data</button>
-  </div>
-
-  <!-- ===== ALLE KPI-KORT ØVERST ===== -->
-  <div class="section-title">Ledighed og beskæftigelse</div>
-  <div class="kpi-grid">
-    <div class="kpi-card">
-      <div class="kpi-period">Apr. 2026</div>
-      <div class="kpi-label">Bruttoledighed (sæsonkorr.)</div>
-      <div class="kpi-value">92.643</div>
-      <div class="kpi-sub">fuldtidspersoner</div>
-      <div class="kpi-compare">
-        <div class="kpi-prev"><span>Forrige md. (Mar. 2026)</span><strong>91.963</strong></div>
-        <div class="kpi-prev"><span>Samme md. i fjor (Apr. 2025)</span><strong>86.742</strong></div>
-      </div>
-      <div class="kpi-delta">Md.: <span class="up">&#9650; 680</span>&nbsp;|&nbsp;År: <span class="up">&#9650; 5.901</span></div>
+<main class="dak-dashboard">
+  <header class="topbar">
+    <div class="title">
+      <h1>Danske A-kasser: Analytisk overblik</h1>
+      <p>Interaktivt arbejdsmarkedsdashboard baseret på det faste Drive-regneark. KPI'er viser seneste datapunkt, ændring fra forrige datapunkt og ændring fra samme periode året før, hvor sammenligningen findes.</p>
     </div>
-
-    <div class="kpi-card">
-      <div class="kpi-period">Apr. 2026</div>
-      <div class="kpi-label">Bruttoledighed i procent</div>
-      <div class="kpi-value">3,1%</div>
-      <div class="kpi-sub">af arbejdsstyrken (sæsonkorr.)</div>
-      <div class="kpi-compare">
-        <div class="kpi-prev"><span>Forrige md. (Mar. 2026)</span><strong>3,0%</strong></div>
-        <div class="kpi-prev"><span>Samme md. i fjor (Apr. 2025)</span><strong>2,9%</strong></div>
-      </div>
-      <div class="kpi-delta">Md.: <span class="up">&#9650; 0,1</span>&nbsp;|&nbsp;År: <span class="up">&#9650; 0,2</span></div>
+    <div class="meta">
+      <div><strong>Genereret:</strong> 2026-06-15 11:30</div>
+      <div><strong>Månedlige data:</strong> maj 2026</div>
+      <div><strong>Eurostat:</strong> 1. kvt. 2026</div>
     </div>
-
-    <div class="kpi-card">
-      <div class="kpi-period">Apr. 2026</div>
-      <div class="kpi-label">Nyopslåede stillinger</div>
-      <div class="kpi-value">24.981</div>
-      <div class="kpi-sub">jobnet.dk</div>
-      <div class="kpi-compare">
-        <div class="kpi-prev"><span>Forrige md. (Mar. 2026)</span><strong>29.665</strong></div>
-        <div class="kpi-prev"><span>Samme md. i fjor (Apr. 2025)</span><strong>24.125</strong></div>
+  </header>
+  <nav class="period-nav">
+    <a href="#arbejdsmarked">Ledighed og beskæftigelse</a>
+    <a href="#indikatorer">Samfundsøkonomiske indikatorer</a>
+    <a href="#internationalt">Internationalt</a>
+    <a href="#grafer">Grafer</a>
+  </nav>
+  <section id="arbejdsmarked" class="section">
+    <h2>Ledighed og beskæftigelse</h2>
+    <div id="kpiGrid" class="kpi-grid"></div>
+  </section>
+  <section id="indikatorer" class="section">
+    <h2>Samfundsøkonomiske indikatorer</h2>
+    <div class="tables">
+      <div class="table-panel">
+        <h3>Periodedækning</h3>
+        <table><tbody id="coverageTable"></tbody></table>
       </div>
-      <div class="kpi-delta">Md.: <span class="up">&#9660; 4.684</span>&nbsp;|&nbsp;År: <span class="green-up">&#9650; 856</span></div>
-    </div>
-
-    <div class="kpi-card">
-      <div class="kpi-period">Feb. 2026</div>
-      <div class="kpi-label">Lønmodtagere</div>
-      <div class="kpi-value">3.078.456</div>
-      <div class="kpi-sub">Off.: 895.752 · Priv.: 2.182.704</div>
-      <div class="kpi-compare">
-        <div class="kpi-prev"><span>Forrige md. (Jan. 2026)</span><strong>3.079.563</strong></div>
-        <div class="kpi-prev"><span>Samme md. i fjor (Feb. 2025)</span><strong>3.046.389</strong></div>
-      </div>
-      <div class="kpi-delta">Md.: <span class="up">&#9660; 1.107</span>&nbsp;|&nbsp;År: <span class="green-up">&#9650; 32.067</span></div>
-    </div>
-
-    <div class="kpi-card">
-      <div class="kpi-period">Apr. 2026</div>
-      <div class="kpi-label">Varslede afskedigelser</div>
-      <div class="kpi-value">373</div>
-      <div class="kpi-sub">personer · 15 virksomheder</div>
-      <div class="kpi-compare">
-        <div class="kpi-prev"><span>Forrige md. (Mar. 2026)</span><strong>2.058</strong></div>
-        <div class="kpi-prev"><span>Samme md. i fjor (Apr. 2025)</span><strong>1.024</strong></div>
-      </div>
-      <div class="kpi-delta">Md.: <span class="green-up">&#9660; 1.685</span>&nbsp;|&nbsp;År: <span class="green-up">&#9660; 651</span></div>
-    </div>
-
-    <div class="kpi-card">
-      <div class="kpi-period">Apr. 2026</div>
-      <div class="kpi-label">Konkurser (sæsonkorr.)</div>
-      <div class="kpi-value">135,2</div>
-      <div class="kpi-sub">virksomheder med beskæftigelse</div>
-      <div class="kpi-compare">
-        <div class="kpi-prev"><span>Forrige md. (Mar. 2026)</span><strong>146,1</strong></div>
-        <div class="kpi-prev"><span>Samme md. i fjor (Apr. 2025)</span><strong>171,7</strong></div>
-      </div>
-      <div class="kpi-delta">Md.: <span class="green-up">&#9660; 10,9</span>&nbsp;|&nbsp;År: <span class="green-up">&#9660; 36,5</span></div>
-    </div>
-
-    <div class="kpi-card">
-      <div class="kpi-period">Apr. 2026</div>
-      <div class="kpi-label">Tabte job (konkurser)</div>
-      <div class="kpi-value">782</div>
-      <div class="kpi-sub">fuldtidsstillinger</div>
-      <div class="kpi-compare">
-        <div class="kpi-prev"><span>Forrige md. (Mar. 2026)</span><strong>830</strong></div>
-        <div class="kpi-prev"><span>Samme md. i fjor (Apr. 2025)</span><strong>735</strong></div>
-      </div>
-      <div class="kpi-delta">Md.: <span class="green-up">&#9660; 48</span>&nbsp;|&nbsp;År: <span class="up">&#9650; 47</span></div>
-    </div>
-  </div>
-
-  <div class="section-title">Samfundsøkonomiske indikatorer</div>
-  <div class="kpi-grid">
-    <div class="kpi-card">
-      <div class="kpi-period">Apr. 2026</div>
-      <div class="kpi-label">Forbrugertillidsindikatoren</div>
-      <div class="kpi-value">-18,6</div>
-      <div class="kpi-sub">nettotal</div>
-      <div class="kpi-compare">
-        <div class="kpi-prev"><span>Forrige md. (Mar. 2026)</span><strong>-13,8</strong></div>
-        <div class="kpi-prev"><span>Samme md. i fjor (Apr. 2025)</span><strong>-17,0</strong></div>
-      </div>
-      <div class="kpi-delta">Md.: <span class="up">&#9660; 4,8</span>&nbsp;|&nbsp;År: <span class="up">&#9660; 1,6</span></div>
-    </div>
-
-    <div class="kpi-card">
-      <div class="kpi-period">Apr. 2026</div>
-      <div class="kpi-label">Erhvervstillidsindikator</div>
-      <div class="kpi-value">105,5</div>
-      <div class="kpi-sub">indeks (100 = gns. 1998–2024)</div>
-      <div class="kpi-compare">
-        <div class="kpi-prev"><span>Forrige md. (Mar. 2026)</span><strong>103,9</strong></div>
-        <div class="kpi-prev"><span>Samme md. i fjor (Apr. 2025)</span><strong>103,8</strong></div>
-      </div>
-      <div class="kpi-delta">Md.: <span class="green-up">&#9650; 1,6</span>&nbsp;|&nbsp;År: <span class="green-up">&#9650; 1,7</span></div>
-    </div>
-
-    <div class="kpi-card">
-      <div class="kpi-period">Apr. 2026</div>
-      <div class="kpi-label">Inflation (ÅoÅ)</div>
-      <div class="kpi-value">1,4%</div>
-      <div class="kpi-sub">Kerne: 1,6%</div>
-      <div class="kpi-compare">
-        <div class="kpi-prev"><span>Forrige md. (Mar. 2026)</span><strong>1,2%</strong></div>
-        <div class="kpi-prev"><span>Samme md. i fjor (Apr. 2025)</span><strong>1,6%</strong></div>
-      </div>
-      <div class="kpi-delta">Md.: <span class="up">&#9650; 0,2</span>&nbsp;|&nbsp;År: <span class="green-up">&#9660; 0,2</span></div>
-    </div>
-  </div>
-
-  <div class="section-title">Internationalt</div>
-  <div class="kpi-grid">
-    <div class="kpi-card">
-      <div class="kpi-period">2025-Q4 (sæsonkorr.)</div>
-      <div class="kpi-label">Europa – sæsonkorrigeret ledighed</div>
-      <div style="margin-top:8px">
-        <table class="euro-table">
-          <tr><th>Land</th><th>2025-Q4</th><th>2025-Q3</th></tr>
-          <tr><td>🇩🇰 Danmark</td><td><strong>6,4%</strong></td><td>6,5%</td></tr>
-          <tr><td>🇪🇺 EU-27</td><td><strong>6,0%</strong></td><td>6,1%</td></tr>
-          <tr><td>🇩🇪 Tyskland</td><td><strong>3,9%</strong></td><td>4,0%</td></tr>
-        </table>
+      <div class="table-panel">
+        <h3>Seneste Eurostat-ledighed</h3>
+        <table><thead><tr><th>Land</th><th>Periode</th><th>Ledighed</th></tr></thead><tbody id="euroTable"></tbody></table>
       </div>
     </div>
-    <div class="kpi-card">
-      <div class="kpi-period">Apr. 2026</div>
-      <div class="kpi-label">Forbrugertillid i Europa (nettotal)</div>
-      <div style="margin-top:8px">
-        <table class="euro-table">
-          <tr><th>Land</th><th>Apr. 2026</th><th>Md. før</th><th>År før</th></tr>
-          <tr><td>🇩🇰 Danmark</td><td><strong>-14,2</strong></td><td>-8,3</td><td>-14,3</td></tr>
-          <tr><td>🇩🇪 Tyskland</td><td><strong>-18,0</strong></td><td>-13,9</td><td>-10,5</td></tr>
-          <tr><td>🇫🇷 Frankrig</td><td><strong>-21,8</strong></td><td>-17,2</td><td>-16,3</td></tr>
-          <tr><td>🇸🇪 Sverige</td><td><strong>-7,3</strong></td><td>-4,5</td><td>-13,5</td></tr>
-        </table>
-      </div>
+  </section>
+  <section id="grafer" class="section">
+    <h2>Grafsektioner</h2>
+    <div class="chart-grid">
+      <article class="chart-panel"><h3>Ledighed fordelt på ydelsesgrupper</h3><div class="chart-wrap"><canvas id="unemploymentChart"></canvas></div></article>
+      <article class="chart-panel"><h3>Ledighedsprocent og nyopslåede stillinger</h3><div class="chart-wrap"><canvas id="rateVacanciesChart"></canvas></div></article>
+      <article class="chart-panel"><h3>Lønmodtagere efter sektor</h3><div class="chart-wrap"><canvas id="employeesChart"></canvas></div></article>
+      <article class="chart-panel"><h3>Varslinger, konkurser og tabte job</h3><div class="chart-wrap"><canvas id="riskChart"></canvas></div></article>
+      <article class="chart-panel"><h3>Langtidsledighed</h3><div class="chart-wrap"><canvas id="longTermChart"></canvas></div></article>
+      <article class="chart-panel"><h3>Inflation</h3><div class="chart-wrap"><canvas id="inflationChart"></canvas></div></article>
+      <article class="chart-panel wide"><h3>Tillidsindikatorer</h3><div class="chart-wrap"><canvas id="confidenceChart"></canvas></div></article>
     </div>
-  </div>
-
-  <!-- ===== ALLE GRAFER NEDERST ===== -->
-  <div class="section-title">Grafer – Ledighed og beskæftigelse</div>
-
-  <div class="chart-2col">
-    <div class="chart-card">
-      <h3>Bruttoledighed – sæsonkorrigeret</h3>
-      <div class="chart-wrap"><canvas id="chart-ledighed"></canvas></div>
-      <div class="chart-source">Kilde: Jobindsats · Grafik og databehandling: Danske A-kasser</div>
+  </section>
+  <section id="internationalt" class="section">
+    <h2>Internationalt</h2>
+    <div class="chart-grid">
+      <article class="chart-panel"><h3>Eurostat-ledighed, udvalgte lande</h3><div class="chart-wrap tall"><canvas id="eurostatChart"></canvas></div></article>
+      <article class="chart-panel"><h3>Forbrugertillid i EU-sammenligning</h3><div class="chart-wrap"><canvas id="euConsumerChart"></canvas></div></article>
     </div>
-    <div class="chart-card">
-      <h3>Ledighedsprocent – pct. af arbejdsstyrken (sæsonkorr.)</h3>
-      <div class="chart-wrap"><canvas id="chart-ledighed-pct"></canvas></div>
-      <div class="chart-source">Kilde: Jobindsats · Grafik og databehandling: Danske A-kasser</div>
-    </div>
-  </div>
-
-  <div class="chart-2col">
-    <div class="chart-card">
-      <h3>Dagpengemodtagere og kontanthjælpsmodtagere</h3>
-      <div class="chart-wrap"><canvas id="chart-ydelser"></canvas></div>
-      <div class="chart-source">Kilde: Jobindsats · Grafik og databehandling: Danske A-kasser</div>
-    </div>
-    <div class="chart-card">
-      <h3>Langtidsledige (over 52 uger)</h3>
-      <div class="chart-wrap"><canvas id="chart-langtid"></canvas></div>
-      <div class="chart-source">Kilde: Jobindsats · Grafik og databehandling: Danske A-kasser</div>
-    </div>
-  </div>
-
-  <div class="chart-2col">
-    <div class="chart-card">
-      <h3>Nyopslåede stillinger</h3>
-      <div class="chart-wrap"><canvas id="chart-stillinger"></canvas></div>
-      <div class="chart-source">Kilde: Jobindsats / Jobnet.dk · Grafik og databehandling: Danske A-kasser</div>
-    </div>
-    <div class="chart-card">
-      <h3>Lønmodtagere (sæsonkorrigeret)</h3>
-      <div class="chart-wrap"><canvas id="chart-lonmodtagere"></canvas></div>
-      <div class="chart-source">Kilde: Danmarks Statistik · Grafik og databehandling: Danske A-kasser</div>
-    </div>
-  </div>
-
-  <div class="chart-2col">
-    <div class="chart-card">
-      <h3>Varslede afskedigelser</h3>
-      <div class="chart-wrap"><canvas id="chart-varslinger"></canvas></div>
-      <div class="chart-source">Kilde: Jobindsats · Grafik og databehandling: Danske A-kasser</div>
-    </div>
-    <div class="chart-card">
-      <h3>Tabte job ved konkurser</h3>
-      <div class="chart-wrap"><canvas id="chart-konkurser"></canvas></div>
-      <div class="chart-source">Kilde: Danmarks Statistik · Grafik og databehandling: Danske A-kasser</div>
-    </div>
-  </div>
-
-  <div class="section-title">Grafer – Samfundsøkonomiske indikatorer</div>
-
-  <div class="chart-2col">
-    <div class="chart-card">
-      <h3>Forbrugertillidsindikatoren</h3>
-      <div class="chart-wrap"><canvas id="chart-forbrugertillid"></canvas></div>
-      <div class="chart-source">Kilde: Danmarks Statistik · Grafik og databehandling: Danske A-kasser</div>
-    </div>
-    <div class="chart-card">
-      <h3>Erhvervstillidsindikator</h3>
-      <div class="chart-wrap"><canvas id="chart-erhvervstillid"></canvas></div>
-      <div class="chart-source">Kilde: Danmarks Statistik · Grafik og databehandling: Danske A-kasser</div>
-    </div>
-  </div>
-
-  <div class="chart-card">
-    <h3>Inflation – Forbrugerprisindeks ÅoÅ</h3>
-    <div class="chart-wrap"><canvas id="chart-inflation"></canvas></div>
-    <div class="chart-source">Kilde: Danmarks Statistik · Grafik og databehandling: Danske A-kasser</div>
-  </div>
-
-  <div class="section-title">Grafer – Internationalt</div>
-
-  <div class="chart-2col">
-    <div class="chart-card">
-      <h3>International ledighedssammenligning – tidsserie</h3>
-      <div class="chart-wrap"><canvas id="chart-eurostat-ts"></canvas></div>
-      <div class="chart-source">Kilde: Eurostat · Grafik og databehandling: Danske A-kasser</div>
-    </div>
-    <div class="chart-card">
-      <h3>Ledighed i Europa – 2025-Q4</h3>
-      <div class="chart-wrap" style="height:620px"><canvas id="chart-eurostat-bar"></canvas></div>
-      <div class="chart-source">Kilde: Eurostat · Grafik og databehandling: Danske A-kasser</div>
-    </div>
-  </div>
-
-  <div class="chart-card">
-    <h3>Forbrugertillid – DK, SE, DE, FR</h3>
-    <div class="chart-wrap"><canvas id="chart-forbrugertillid-eu"></canvas></div>
-    <div class="chart-source">Kilde: Eurostat / Danmarks Statistik · Grafik og databehandling: Danske A-kasser</div>
-  </div>
-
-</div>
+    <p class="note">Bemærk: Serierne opdateres ikke nødvendigvis samtidigt. Derfor viser KPI-kort og tabeller den seneste periode for hver enkelt dataserie.</p>
+  </section>
+</main>
 <script>
-(function() {
-  const DATA = {"ledighed":{"labels":["2018M01","2018M02","2018M03","2018M04","2018M05","2018M06","2018M07","2018M08","2018M09","2018M10","2018M11","2018M12","2019M01","2019M02","2019M03","2019M04","2019M05","2019M06","2019M07","2019M08","2019M09","2019M10","2019M11","2019M12","2020M01","2020M02","2020M03","2020M04","2020M05","2020M06","2020M07","2020M08","2020M09","2020M10","2020M11","2020M12","2021M01","2021M02","2021M03","2021M04","2021M05","2021M06","2021M07","2021M08","2021M09","2021M10","2021M11","2021M12","2022M01","2022M02","2022M03","2022M04","2022M05","2022M06","2022M07","2022M08","2022M09","2022M10","2022M11","2022M12","2023M01","2023M02","2023M03","2023M04","2023M05","2023M06","2023M07","2023M08","2023M09","2023M10","2023M11","2023M12","2024M01","2024M02","2024M03","2024M04","2024M05","2024M06","2024M07","2024M08","2024M09","2024M10","2024M11","2024M12","2025M01","2025M02","2025M03","2025M04","2025M05","2025M06","2025M07","2025M08","2025M09","2025M10","2025M11","2025M12","2026M01","2026M02","2026M03","2026M04"],"antal":[122706,121642,118011,106440,105530,103178,99402,103910,101980,103679,104439,106889,113851,113897,109124,98632,99171,100043,98478,103031,100502,102211,104015,107292,115028,114741,123381,143853,149987,146301,139421,134961,129103,127338,125572,128182,140975,145303,134985,123622,110153,103595,101313,96940,88381,82988,77089,69735,83844,81271,76992,73749,71142,73197,77351,77600,72620,72602,74364,72776,89081,90251,86829,83540,79814,80282,83825,85397,80446,80595,81159,78707,95798,95881,92148,87571,83558,83567,87132,88335,83691,83344,83580,80463,95776,96663,92884,87863,83555,84212,87571,88848,84150,83834,84570,82295,99154,104310,97958,91958],"saesonkorr":[112217,110731,111667,110351,108934,107147,106011,106261,106414,106531,105826,105204,104183,103452,103149,102418,102624,103828,103793,104296,105104,105867,106733,106400,104968,103696,116189,150282,157307,152753,142975,135361,136174,133663,131187,128074,127311,130355,126881,120960,114935,108215,103822,97659,93437,87630,80879,76911,75960,73123,72157,72027,73329,75513,77605,76993,76232,76324,77922,79740,81048,81501,81646,82093,82865,83124,83398,84126,84434,84895,85407,85988,86805,86368,86503,86500,86920,86670,86879,87080,87800,87856,87997,87763,86946,87051,87211,86742,86769,87377,87694,87928,88122,88290,88910,89413,90099,93641,91963,92643],"pct":[4.0,3.9,4.0,3.9,3.9,3.8,3.8,3.8,3.8,3.8,3.8,3.7,3.7,3.6,3.6,3.6,3.6,3.7,3.6,3.7,3.7,3.7,3.8,3.7,3.7,3.6,4.1,5.3,5.5,5.3,5.0,4.7,4.8,4.7,4.6,4.5,4.3,4.4,4.3,4.1,3.9,3.7,3.5,3.3,3.2,3.0,2.8,2.6,2.5,2.4,2.4,2.4,2.4,2.5,2.6,2.6,2.5,2.5,2.6,2.7,2.7,2.7,2.7,2.7,2.7,2.8,2.8,2.8,2.8,2.8,2.8,2.9,2.9,2.8,2.9,2.9,2.9,2.9,2.9,2.9,2.9,2.9,2.9,2.9,2.9,2.9,2.9,2.9,2.9,2.9,2.9,2.9,2.9,2.9,2.9,2.9,3.0,3.1,3.0,3.1]},"ydelser":{"labels":["2018M01","2018M02","2018M03","2018M04","2018M05","2018M06","2018M07","2018M08","2018M09","2018M10","2018M11","2018M12","2019M01","2019M02","2019M03","2019M04","2019M05","2019M06","2019M07","2019M08","2019M09","2019M10","2019M11","2019M12","2020M01","2020M02","2020M03","2020M04","2020M05","2020M06","2020M07","2020M08","2020M09","2020M10","2020M11","2020M12","2021M01","2021M02","2021M03","2021M04","2021M05","2021M06","2021M07","2021M08","2021M09","2021M10","2021M11","2021M12","2022M01","2022M02","2022M03","2022M04","2022M05","2022M06","2022M07","2022M08","2022M09","2022M10","2022M11","2022M12","2023M01","2023M02","2023M03","2023M04","2023M05","2023M06","2023M07","2023M08","2023M09","2023M10","2023M11","2023M12","2024M01","2024M02","2024M03","2024M04","2024M05","2024M06","2024M07","2024M08","2024M09","2024M10","2024M11","2024M12","2025M01","2025M02","2025M03","2025M04","2025M05","2025M06","2025M07","2025M08","2025M09","2025M10","2025M11","2025M12","2026M01","2026M02","2026M03","2026M04"],"dagpenge":[89988,88893,85586,75108,75204,73895,72997,77913,75834,77578,77905,80619,87935,87759,83442,74108,75297,76518,76993,81719,79171,80604,81670,85215,93269,93285,101091,117636,122253,119596,115784,113273,108797,107639,105883,108974,120532,124324,114676,104691,92974,88246,87894,84199,76413,71497,65893,59281,73028,70349,66139,62226,57426,58098,62233,62789,58129,57836,59249,57621,73245,74168,71005,67996,65018,66378,70818,72656,67771,67937,68278,65845,82593,82468,78785,74663,71033,71460,75535,76689,71988,71464,71283,68073,82939,83440,79566,74911,71063,71949,75848,76863,72146,71352,70817,67821,83831,88286,81777,76226],"kontanthjælp":[32719,32749,32426,31331,30326,29283,26405,25996,26147,26100,26534,26271,25916,26138,25682,24525,23874,23525,21485,21312,21331,21607,22345,22078,21759,21456,22290,26216,27734,26705,23638,21687,20305,19699,19689,19208,20443,20979,20310,18931,17179,15349,13419,12742,11969,11491,11195,10454,10815,10922,10854,11522,13716,15099,15118,14810,14491,14766,15114,15155,15836,16083,15824,15545,14796,13904,13007,12741,12675,12658,12880,12862,13204,13413,13363,12908,12525,12107,11598,11646,11703,11879,12296,12391,12837,13223,13319,12952,12492,12263,11723,11985,12004,12482,13753,14474,15323,16024,16181,15733]},"langtidsledige":{"labels":["2018M01","2018M02","2018M03","2018M04","2018M05","2018M06","2018M07","2018M08","2018M09","2018M10","2018M11","2018M12","2019M01","2019M02","2019M03","2019M04","2019M05","2019M06","2019M07","2019M08","2019M09","2019M10","2019M11","2019M12","2020M01","2020M02","2020M03","2020M04","2020M05","2020M06","2020M07","2020M08","2020M09","2020M10","2020M11","2020M12","2021M01","2021M02","2021M03","2021M04","2021M05","2021M06","2021M07","2021M08","2021M09","2021M10","2021M11","2021M12","2022M01","2022M02","2022M03","2022M04","2022M05","2022M06","2022M07","2022M08","2022M09","2022M10","2022M11","2022M12","2023M01","2023M02","2023M03","2023M04","2023M05","2023M06","2023M07","2023M08","2023M09","2023M10","2023M11","2023M12","2024M01","2024M02","2024M03","2024M04","2024M05","2024M06","2024M07","2024M08","2024M09","2024M10","2024M11","2024M12","2025M01","2025M02","2025M03","2025M04","2025M05","2025M06","2025M07","2025M08","2025M09","2025M10","2025M11","2025M12","2026M01","2026M02","2026M03"],"total":[30403,29811,29876,29846,30547,30461,28885,28483,26936,26454,26550,26416,26368,25440,25144,24896,25758,25873,25424,25333,23868,23394,23710,23995,24230,23354,23417,25635,28831,30933,32366,32969,32626,33355,34566,36075,38577,39496,39794,40710,39317,37618,35755,33724,30322,27846,25808,23026,21700,19482,17848,16715,15812,15027,13999,13290,12162,11582,11619,11666,12042,12152,12776,13414,13956,14187,14049,14152,13659,13708,14320,14708,15270,15133,15271,15618,16045,16132,15770,15829,15076,15030,15396,15510,16116,15540,15369,15827,16452,16602,16468,16299,15593,15566,15916,16026,16743,16191,15998],"dagpenge":[14602,14211,14217,14359,15262,15540,14891,14792,13639,13419,13700,13973,14167,13644,13522,13548,14570,14853,14906,15092,13912,13644,13982,14479,14958,14513,14702,16680,19559,21529,23071,23755,23602,24401,25696,27362,29636,30663,31048,32142,31117,29907,28739,27084,24189,22101,20418,18092,16987,15108,13731,12852,12148,11579,10792,10165,9134,8686,8766,8852,9085,8808,8774,9019,9419,9681,9580,9667,9174,9241,9874,10266,10739,10698,10890,11314,11874,12055,11753,11731,11029,11066,11461,11567,12190,11596,11385,11836,12476,12607,12521,12254,11512,11505,11816,11919,12544,11979,11750],"kontanthjælp":[15800,15600,15660,15487,15285,14921,13994,13691,13297,13035,12850,12444,12201,11796,11623,11349,11188,11020,10517,10241,9957,9750,9728,9517,9272,8841,8715,8956,9272,9404,9294,9214,9024,8955,8870,8713,8941,8833,8746,8568,8200,7710,7017,6639,6133,5744,5391,4934,4713,4374,4118,3863,3664,3448,3206,3125,3029,2896,2853,2814,2957,3343,4002,4396,4538,4506,4470,4485,4485,4468,4446,4442,4531,4435,4381,4304,4171,4077,4017,4098,4047,3964,3935,3943,3927,3943,3984,3992,3976,3994,3948,4045,4080,4061,4101,4107,4199,4212,4248]},"stillinger":{"labels":["2018M01","2018M02","2018M03","2018M04","2018M05","2018M06","2018M07","2018M08","2018M09","2018M10","2018M11","2018M12","2019M01","2019M02","2019M03","2019M04","2019M05","2019M06","2019M07","2019M08","2019M09","2019M10","2019M11","2019M12","2020M01","2020M02","2020M03","2020M04","2020M05","2020M06","2020M07","2020M08","2020M09","2020M10","2020M11","2020M12","2021M01","2021M02","2021M03","2021M04","2021M05","2021M06","2021M07","2021M08","2021M09","2021M10","2021M11","2021M12","2022M01","2022M02","2022M03","2022M04","2022M05","2022M06","2022M07","2022M08","2022M09","2022M10","2022M11","2022M12","2023M01","2023M02","2023M03","2023M04","2023M05","2023M06","2023M07","2023M08","2023M09","2023M10","2023M11","2023M12","2024M01","2024M02","2024M03","2024M04","2024M05","2024M06","2024M07","2024M08","2024M09","2024M10","2024M11","2024M12","2025M01","2025M02","2025M03","2025M04","2025M05","2025M06","2025M07","2025M08","2025M09","2025M10","2025M11","2025M12","2026M01","2026M02","2026M03","2026M04"],"nyopslåede":[22386,19573,21072,21758,26876,21794,17414,22242,19086,20001,20901,15789,23867,20457,24302,22554,26380,20666,18783,19361,20621,21654,20621,17718,24743,21762,18896,15731,21204,22994,16729,21618,25225,24557,24381,22017,21115,23534,32025,32417,36887,36925,27263,32264,35157,33071,35793,30485,33971,32796,39631,32605,38652,33759,23901,30383,30220,26897,27730,23611,30432,27571,32009,23420,32952,29618,18646,26393,22463,23412,23603,20410,27224,26505,25010,27581,31526,24117,19926,23245,23446,24944,22932,19984,24698,23756,25717,24125,28589,23957,18786,22022,24490,24348,24007,21068,25312,25450,29665,24981],"dagligt_gns":[16297,17979,17913,18532,21346,20918,19067,18387,17359,17087,16861,16447,17934,20149,21036,21436,21011,18847,19269,18721,17929,18980,18159,16764,17682,19550,18323,14384,16310,17652,19204,17645,18812,19662,19774,19312,17420,19741,23248,27317,31322,32606,31510,29202,31274,32010,30928,30099,30483,32338,35375,36015,36660,34574,31386,28451,27871,26856,25192,23763,25064,27110,27884,27662,29038,27201,25483,23355,22945,22477,21579,21313,22678,25650,26800,26107,28016,26675,24768,22475,22599,23665,22934,16457,19500,22559,23956,24216,24656,24336,22323,20949,22089,22983,22578,22933,23375,26174,27508,26199]},"lonmodtagere":{"labels":["2018M01","2018M02","2018M03","2018M04","2018M05","2018M06","2018M07","2018M08","2018M09","2018M10","2018M11","2018M12","2019M01","2019M02","2019M03","2019M04","2019M05","2019M06","2019M07","2019M08","2019M09","2019M10","2019M11","2019M12","2020M01","2020M02","2020M03","2020M04","2020M05","2020M06","2020M07","2020M08","2020M09","2020M10","2020M11","2020M12","2021M01","2021M02","2021M03","2021M04","2021M05","2021M06","2021M07","2021M08","2021M09","2021M10","2021M11","2021M12","2022M01","2022M02","2022M03","2022M04","2022M05","2022M06","2022M07","2022M08","2022M09","2022M10","2022M11","2022M12","2023M01","2023M02","2023M03","2023M04","2023M05","2023M06","2023M07","2023M08","2023M09","2023M10","2023M11","2023M12","2024M01","2024M02","2024M03","2024M04","2024M05","2024M06","2024M07","2024M08","2024M09","2024M10","2024M11","2024M12","2025M01","2025M02","2025M03","2025M04","2025M05","2025M06","2025M07","2025M08","2025M09","2025M10","2025M11","2025M12","2026M01","2026M02"],"total":[2720690,2727183,2732695,2740400,2749266,2755571,2759854,2758062,2759016,2759800,2763211,2766035,2770412,2771995,2778851,2786605,2788541,2789519,2797714,2791615,2790043,2791641,2792483,2797032,2799958,2802416,2785258,2734185,2723997,2735237,2754529,2764456,2772709,2774768,2777520,2777408,2758035,2758707,2762002,2783032,2818103,2841485,2855596,2864602,2877485,2888283,2901611,2914638,2917665,2927264,2940490,2944482,2950108,2955453,2956007,2963181,2967681,2969339,2972723,2975205,2976086,2980737,2985154,2984887,2990609,2996327,2995203,2999519,3000720,3002437,3006211,3005522,3007791,3013833,3015900,3020534,3023197,3023839,3025247,3024944,3028159,3033265,3035726,3038403,3044234,3046389,3049854,3054530,3055752,3057650,3061134,3064367,3068605,3072636,3074341,3078382,3079563,3078456],"offentlig":[824217,827225,828678,829125,829345,829508,834104,829041,830594,830408,830822,831336,831136,832067,833616,834710,835069,835207,841522,836318,834052,834171,834159,833517,835426,834580,831678,829084,832867,834680,836377,838500,842429,844427,846703,848086,846789,849094,849479,855784,858209,859808,861713,862455,862095,860812,862266,866214,866945,867289,868164,867834,867524,868137,868095,869897,870791,871592,872706,873822,875245,875362,876695,876102,877619,878095,877298,877860,877857,878330,878811,877279,878564,880919,880583,882676,882167,881895,882610,882567,882952,883768,883754,883378,886178,885611,886217,886219,887050,887840,888869,890387,891321,892146,892918,895511,895492,895752],"privat":[1896473,1899958,1904018,1911275,1919921,1926062,1925750,1929021,1928422,1929392,1932390,1934699,1939276,1939928,1945235,1951896,1953472,1954312,1956192,1955297,1955992,1957470,1958324,1963515,1964531,1967836,1953580,1905101,1891130,1900556,1918153,1925956,1930280,1930341,1930816,1929322,1911245,1909612,1912523,1927248,1959894,1981677,1993883,2002147,2015390,2027471,2039345,2048424,2050720,2059975,2072326,2076647,2082584,2087316,2087913,2093284,2096889,2097747,2100016,2101384,2100841,2105376,2108459,2108785,2112990,2118232,2117905,2121659,2122863,2124107,2127400,2128243,2129228,2132914,2135317,2137857,2141030,2141944,2142637,2142378,2145207,2149497,2151972,2155025,2158055,2160778,2163638,2168311,2168702,2169811,2172266,2173979,2177284,2180490,2181423,2182871,2184071,2182704]},"varslinger":{"labels":["2018M01","2018M02","2018M03","2018M04","2018M05","2018M06","2018M07","2018M08","2018M09","2018M10","2018M11","2018M12","2019M01","2019M02","2019M03","2019M04","2019M05","2019M06","2019M07","2019M08","2019M09","2019M10","2019M11","2019M12","2020M01","2020M02","2020M03","2020M04","2020M05","2020M06","2020M07","2020M08","2020M09","2020M10","2020M11","2020M12","2021M01","2021M02","2021M03","2021M04","2021M05","2021M06","2021M07","2021M08","2021M09","2021M10","2021M11","2021M12","2022M01","2022M02","2022M03","2022M04","2022M05","2022M06","2022M07","2022M08","2022M09","2022M10","2022M11","2022M12","2023M01","2023M02","2023M03","2023M04","2023M05","2023M06","2023M07","2023M08","2023M09","2023M10","2023M11","2023M12","2024M01","2024M02","2024M03","2024M04","2024M05","2024M06","2024M07","2024M08","2024M09","2024M10","2024M11","2024M12","2025M01","2025M02","2025M03","2025M04","2025M05","2025M06","2025M07","2025M08","2025M09","2025M10","2025M11","2025M12","2026M01","2026M02","2026M03","2026M04"],"personer":[1491,1444,734,1067,713,505,284,473,1979,730,702,61,809,150,512,436,405,875,137,589,869,491,493,287,1069,785,3612,1759,2519,4600,756,3712,1185,825,583,409,278,484,437,87,268,353,113,66,172,199,84,92,271,873,351,null,752,438,null,593,449,504,994,1370,1579,394,408,1156,764,824,572,937,490,471,1245,null,1166,743,500,1658,715,699,null,809,1081,845,482,98,831,394,403,1024,1160,434,119,670,6205,1269,1068,976,1277,676,2058,373],"virksomheder":[21,27,18,29,31,20,6,15,20,25,24,6,25,10,20,15,18,14,4,23,26,25,27,5,28,17,79,59,58,68,12,80,33,36,22,16,9,15,10,8,9,8,5,6,8,7,4,3,8,14,10,null,17,12,null,19,18,17,32,19,20,13,18,12,16,24,12,23,20,14,32,null,41,22,14,16,28,35,null,17,30,20,17,5,26,15,15,22,62,17,5,25,93,37,43,119,64,34,48,15]}};
-  const KONKURSER = {"labels":["2009M01","2009M02","2009M03","2009M04","2009M05","2009M06","2009M07","2009M08","2009M09","2009M10","2009M11","2009M12","2010M01","2010M02","2010M03","2010M04","2010M05","2010M06","2010M07","2010M08","2010M09","2010M10","2010M11","2010M12","2011M01","2011M02","2011M03","2011M04","2011M05","2011M06","2011M07","2011M08","2011M09","2011M10","2011M11","2011M12","2012M01","2012M02","2012M03","2012M04","2012M05","2012M06","2012M07","2012M08","2012M09","2012M10","2012M11","2012M12","2013M01","2013M02","2013M03","2013M04","2013M05","2013M06","2013M07","2013M08","2013M09","2013M10","2013M11","2013M12","2014M01","2014M02","2014M03","2014M04","2014M05","2014M06","2014M07","2014M08","2014M09","2014M10","2014M11","2014M12","2015M01","2015M02","2015M03","2015M04","2015M05","2015M06","2015M07","2015M08","2015M09","2015M10","2015M11","2015M12","2016M01","2016M02","2016M03","2016M04","2016M05","2016M06","2016M07","2016M08","2016M09","2016M10","2016M11","2016M12","2017M01","2017M02","2017M03","2017M04","2017M05","2017M06","2017M07","2017M08","2017M09","2017M10","2017M11","2017M12","2018M01","2018M02","2018M03","2018M04","2018M05","2018M06","2018M07","2018M08","2018M09","2018M10","2018M11","2018M12","2019M01","2019M02","2019M03","2019M04","2019M05","2019M06","2019M07","2019M08","2019M09","2019M10","2019M11","2019M12","2020M01","2020M02","2020M03","2020M04","2020M05","2020M06","2020M07","2020M08","2020M09","2020M10","2020M11","2020M12","2021M01","2021M02","2021M03","2021M04","2021M05","2021M06","2021M07","2021M08","2021M09","2021M10","2021M11","2021M12","2022M01","2022M02","2022M03","2022M04","2022M05","2022M06","2022M07","2022M08","2022M09","2022M10","2022M11","2022M12","2023M01","2023M02","2023M03","2023M04","2023M05","2023M06","2023M07","2023M08","2023M09","2023M10","2023M11","2023M12","2024M01","2024M02","2024M03","2024M04","2024M05","2024M06","2024M07","2024M08","2024M09","2024M10","2024M11","2024M12","2025M01","2025M02","2025M03","2025M04","2025M05","2025M06","2025M07","2025M08","2025M09","2025M10","2025M11","2025M12","2026M01","2026M02","2026M03","2026M04"],"saesonkorr":[221.9,219.9,259.6,255.0,238.2,214.4,223.3,210.8,236.9,247.1,238.8,238.1,250.5,250.5,262.8,245.3,207.2,273.3,248.1,278.1,212.0,186.7,179.1,185.1,186.2,179.9,156.5,185.8,162.0,175.2,168.9,162.8,185.8,170.9,172.0,185.9,179.2,183.9,157.5,159.3,182.4,145.2,196.4,189.1,172.2,172.2,173.8,165.1,146.9,174.2,171.8,149.4,156.9,172.3,146.0,148.2,145.1,154.3,137.4,124.9,137.2,109.3,114.3,101.8,104.4,105.7,118.0,123.8,117.2,129.3,142.0,123.9,134.2,133.3,139.7,155.5,141.3,152.4,125.7,137.1,127.2,133.3,137.8,162.0,143.9,155.4,171.8,237.7,177.3,156.7,156.9,147.5,147.7,119.9,151.5,141.6,165.4,124.2,148.9,141.0,159.1,158.7,166.6,171.8,185.1,184.6,183.0,200.7,179.9,190.7,149.7,191.2,165.9,196.4,203.9,207.3,203.9,145.9,153.4,153.9,169.2,202.7,191.5,189.6,190.0,170.8,185.7,164.3,168.4,206.9,203.6,199.0,180.3,160.9,124.0,178.8,191.7,156.3,175.3,167.5,160.1,138.6,147.1,156.0,198.9,183.2,146.6,136.8,144.8,135.2,128.5,90.4,153.6,167.4,165.6,166.4,155.6,157.4,193.0,198.3,197.6,235.3,187.6,222.9,204.4,220.7,248.0,204.8,249.5,231.6,240.4,214.5,187.4,234.8,241.2,145.0,213.1,226.4,187.8,202.7,179.3,186.5,174.5,246.7,162.5,176.7,180.8,167.0,186.8,159.9,136.6,177.7,180.6,168.1,169.6,171.7,191.5,151.7,167.7,178.8,166.8,163.7,159.0,148.0,144.7,137.1,146.1,135.2],"tabte_job":[1253,2112,1955,3072,1732,2082,1975,1049,1259,1815,1048,1845,1738,1969,2044,1459,1190,1999,1533,1383,1400,1341,1169,1879,1268,2095,1269,1160,1130,1787,1348,1003,1350,1591,1701,1277,851,1268,1318,1027,2641,1052,1197,1205,999,907,1078,800,1282,1426,1280,940,1366,1350,894,1744,830,1588,944,618,690,601,1020,808,623,809,870,517,921,1005,989,753,640,1152,1043,803,944,739,785,706,649,864,698,795,881,934,1132,1111,1198,910,1351,811,587,561,1139,779,1263,927,1068,844,1167,1042,920,898,843,866,1022,836,1240,1819,845,886,1059,967,1205,978,772,900,1027,672,1886,1118,1060,861,1039,783,1150,655,752,1248,1483,791,756,879,1056,2155,894,705,1295,578,1155,867,736,1075,810,773,740,606,733,431,788,331,1248,808,1232,694,555,669,1076,1393,948,1743,1044,893,1242,1505,1456,1149,1301,1476,2200,1114,909,1409,881,656,1025,1662,1009,1078,921,1089,1544,1136,746,950,1010,974,913,1049,775,1003,1100,1175,1264,735,1003,1145,1107,774,1295,918,743,942,740,644,830,782]};
-  const FORBRUGERTILLID = {"labels":["2008M01","2008M02","2008M03","2008M04","2008M05","2008M06","2008M07","2008M08","2008M09","2008M10","2008M11","2008M12","2009M01","2009M02","2009M03","2009M04","2009M05","2009M06","2009M07","2009M08","2009M09","2009M10","2009M11","2009M12","2010M01","2010M02","2010M03","2010M04","2010M05","2010M06","2010M07","2010M08","2010M09","2010M10","2010M11","2010M12","2011M01","2011M02","2011M03","2011M04","2011M05","2011M06","2011M07","2011M08","2011M09","2011M10","2011M11","2011M12","2012M01","2012M02","2012M03","2012M04","2012M05","2012M06","2012M07","2012M08","2012M09","2012M10","2012M11","2012M12","2013M01","2013M02","2013M03","2013M04","2013M05","2013M06","2013M07","2013M08","2013M09","2013M10","2013M11","2013M12","2014M01","2014M02","2014M03","2014M04","2014M05","2014M06","2014M07","2014M08","2014M09","2014M10","2014M11","2014M12","2015M01","2015M02","2015M03","2015M04","2015M05","2015M06","2015M07","2015M08","2015M09","2015M10","2015M11","2015M12","2016M01","2016M02","2016M03","2016M04","2016M05","2016M06","2016M07","2016M08","2016M09","2016M10","2016M11","2016M12","2017M01","2017M02","2017M03","2017M04","2017M05","2017M06","2017M07","2017M08","2017M09","2017M10","2017M11","2017M12","2018M01","2018M02","2018M03","2018M04","2018M05","2018M06","2018M07","2018M08","2018M09","2018M10","2018M11","2018M12","2019M01","2019M02","2019M03","2019M04","2019M05","2019M06","2019M07","2019M08","2019M09","2019M10","2019M11","2019M12","2020M01","2020M02","2020M03","2020M04","2020M05","2020M06","2020M07","2020M08","2020M09","2020M10","2020M11","2020M12","2021M01","2021M02","2021M03","2021M04","2021M05","2021M06","2021M07","2021M08","2021M09","2021M10","2021M11","2021M12","2022M01","2022M02","2022M03","2022M04","2022M05","2022M06","2022M07","2022M08","2022M09","2022M10","2022M11","2022M12","2023M01","2023M02","2023M03","2023M04","2023M05","2023M06","2023M07","2023M08","2023M09","2023M10","2023M11","2023M12","2024M01","2024M02","2024M03","2024M04","2024M05","2024M06","2024M07","2024M08","2024M09","2024M10","2024M11","2024M12","2025M01","2025M02","2025M03","2025M04","2025M05","2025M06","2025M07","2025M08","2025M09","2025M10","2025M11","2025M12","2026M01","2026M02","2026M03","2026M04"],"values":[-1.1,-2.5,-1.3,-3.1,-3.5,-6.6,-9.7,-12.2,-11.1,-16.6,-11.5,-13.5,-9.1,-11.3,-11.7,-4.4,-4.7,-5.5,-3.2,-2.6,-1.1,-0.9,-2.4,-3.6,1.1,1.8,-1.0,4.2,3.0,-1.5,4.1,4.4,2.3,0.6,3.6,-0.7,3.3,-0.5,-0.8,2.0,2.6,3.0,-0.6,-2.2,-3.6,-6.6,-9.2,-9.8,-7.0,-4.8,-0.4,0.6,-0.4,-2.6,0.1,0.0,-2.2,-5.5,-1.3,-4.7,-2.7,-2.0,-2.1,-2.8,-2.6,3.4,3.7,5.9,4.7,4.6,4.0,2.9,6.3,4.2,5.0,5.5,7.8,9.3,10.6,11.4,7.1,8.2,6.3,6.0,9.0,9.1,13.9,13.7,13.0,9.8,9.5,9.2,5.0,3.0,5.6,6.1,4.6,4.0,3.6,5.5,3.2,4.4,3.1,4.8,1.8,1.2,0.9,-0.3,4.5,4.8,6.2,7.4,5.8,7.1,10.5,7.6,7.3,7.1,7.6,6.5,8.2,8.5,8.5,7.1,9.3,10.6,9.7,7.8,6.9,5.1,4.3,2.9,3.9,3.3,3.8,3.7,5.9,5.8,2.9,6.3,4.3,1.7,1.4,2.5,4.5,3.3,0.4,-11.9,-8.8,-3.1,-2.9,-5.5,-7.4,-6.2,-7.6,-3.8,-4.1,-5.2,-5.0,-1.1,2.8,2.3,2.6,4.4,8.2,3.3,-2.0,-2.1,-1.5,-3.2,-14.4,-20.9,-22.4,-24.8,-25.6,-25.1,-32.1,-37.0,-30.4,-28.9,-26.1,-25.1,-23.1,-18.2,-15.1,-10.9,-10.1,-10.9,-13.0,-11.8,-10.3,-13.0,-8.4,-7.4,-7.6,-8.6,-6.5,-4.4,-5.4,-7.4,-6.8,-8.9,-9.3,-13.1,-11.7,-14.5,-15.5,-17.0,-18.4,-15.1,-15.7,-17.2,-18.7,-19.5,-20.1,-17.3,-13.4,-13.1,-13.8,-18.6]};
-  const ERHVERVSTILLID = {"labels":["2008M01","2008M02","2008M03","2008M04","2008M05","2008M06","2008M07","2008M08","2008M09","2008M10","2008M11","2008M12","2009M01","2009M02","2009M03","2009M04","2009M05","2009M06","2009M07","2009M08","2009M09","2009M10","2009M11","2009M12","2010M01","2010M02","2010M03","2010M04","2010M05","2010M06","2010M07","2010M08","2010M09","2010M10","2010M11","2010M12","2011M01","2011M02","2011M03","2011M04","2011M05","2011M06","2011M07","2011M08","2011M09","2011M10","2011M11","2011M12","2012M01","2012M02","2012M03","2012M04","2012M05","2012M06","2012M07","2012M08","2012M09","2012M10","2012M11","2012M12","2013M01","2013M02","2013M03","2013M04","2013M05","2013M06","2013M07","2013M08","2013M09","2013M10","2013M11","2013M12","2014M01","2014M02","2014M03","2014M04","2014M05","2014M06","2014M07","2014M08","2014M09","2014M10","2014M11","2014M12","2015M01","2015M02","2015M03","2015M04","2015M05","2015M06","2015M07","2015M08","2015M09","2015M10","2015M11","2015M12","2016M01","2016M02","2016M03","2016M04","2016M05","2016M06","2016M07","2016M08","2016M09","2016M10","2016M11","2016M12","2017M01","2017M02","2017M03","2017M04","2017M05","2017M06","2017M07","2017M08","2017M09","2017M10","2017M11","2017M12","2018M01","2018M02","2018M03","2018M04","2018M05","2018M06","2018M07","2018M08","2018M09","2018M10","2018M11","2018M12","2019M01","2019M02","2019M03","2019M04","2019M05","2019M06","2019M07","2019M08","2019M09","2019M10","2019M11","2019M12","2020M01","2020M02","2020M03","2020M04","2020M05","2020M06","2020M07","2020M08","2020M09","2020M10","2020M11","2020M12","2021M01","2021M02","2021M03","2021M04","2021M05","2021M06","2021M07","2021M08","2021M09","2021M10","2021M11","2021M12","2022M01","2022M02","2022M03","2022M04","2022M05","2022M06","2022M07","2022M08","2022M09","2022M10","2022M11","2022M12","2023M01","2023M02","2023M03","2023M04","2023M05","2023M06","2023M07","2023M08","2023M09","2023M10","2023M11","2023M12","2024M01","2024M02","2024M03","2024M04","2024M05","2024M06","2024M07","2024M08","2024M09","2024M10","2024M11","2024M12","2025M01","2025M02","2025M03","2025M04","2025M05","2025M06","2025M07","2025M08","2025M09","2025M10","2025M11","2025M12","2026M01","2026M02","2026M03","2026M04"],"values":[102.4,103.5,101.8,98.1,98.7,98.3,93.2,90.7,85.6,80.4,74.6,70.5,64.9,60.9,63.1,63.9,72.4,72.1,74.7,80.3,78.7,81.9,85.8,86.4,89.6,88.6,94.0,97.9,98.1,95.7,95.7,96.3,95.3,94.3,93.2,93.4,98.0,99.5,99.8,100.9,107.0,105.9,106.9,101.6,97.1,90.3,90.1,89.9,89.1,94.1,91.2,95.5,92.7,88.2,90.2,91.8,91.1,88.0,89.6,89.8,86.9,89.1,91.5,90.9,91.7,95.9,96.5,99.1,100.1,102.6,102.3,101.5,103.1,99.8,102.8,103.2,100.9,102.2,100.5,104.8,102.4,103.5,101.3,99.4,99.9,101.1,101.3,105.1,104.2,105.0,107.0,105.1,106.7,110.0,106.9,105.6,106.8,105.7,104.8,104.0,104.8,105.7,104.3,103.8,102.5,101.2,100.5,101.5,107.0,105.0,104.3,106.9,105.8,107.6,107.6,107.0,107.0,109.4,111.4,110.8,109.7,111.1,107.7,107.4,110.0,108.8,108.0,109.1,106.3,107.4,106.2,107.7,106.4,103.9,106.1,105.4,105.4,103.0,102.4,103.1,102.3,101.6,102.9,102.4,103.9,104.0,98.1,54.4,55.9,68.5,79.2,82.7,86.5,89.2,89.3,97.6,92.9,92.3,98.8,104.5,108.1,109.1,110.8,110.4,113.3,116.2,116.3,112.8,109.4,113.7,112.2,108.0,105.4,102.2,100.1,99.8,98.0,92.9,93.4,90.7,91.3,91.6,94.1,95.9,100.9,102.1,102.9,100.8,98.1,99.1,97.1,98.9,95.7,102.3,100.3,102.9,104.7,106.2,105.2,102.6,104.8,105.8,105.0,104.7,102.9,106.6,104.0,103.8,102.5,102.7,104.5,102.8,103.6,102.1,101.1,102.3,102.2,103.3,103.9,105.5]};
-  const INFLATION = {"labels":["2008M01","2008M02","2008M03","2008M04","2008M05","2008M06","2008M07","2008M08","2008M09","2008M10","2008M11","2008M12","2009M01","2009M02","2009M03","2009M04","2009M05","2009M06","2009M07","2009M08","2009M09","2009M10","2009M11","2009M12","2010M01","2010M02","2010M03","2010M04","2010M05","2010M06","2010M07","2010M08","2010M09","2010M10","2010M11","2010M12","2011M01","2011M02","2011M03","2011M04","2011M05","2011M06","2011M07","2011M08","2011M09","2011M10","2011M11","2011M12","2012M01","2012M02","2012M03","2012M04","2012M05","2012M06","2012M07","2012M08","2012M09","2012M10","2012M11","2012M12","2013M01","2013M02","2013M03","2013M04","2013M05","2013M06","2013M07","2013M08","2013M09","2013M10","2013M11","2013M12","2014M01","2014M02","2014M03","2014M04","2014M05","2014M06","2014M07","2014M08","2014M09","2014M10","2014M11","2014M12","2015M01","2015M02","2015M03","2015M04","2015M05","2015M06","2015M07","2015M08","2015M09","2015M10","2015M11","2015M12","2016M01","2016M02","2016M03","2016M04","2016M05","2016M06","2016M07","2016M08","2016M09","2016M10","2016M11","2016M12","2017M01","2017M02","2017M03","2017M04","2017M05","2017M06","2017M07","2017M08","2017M09","2017M10","2017M11","2017M12","2018M01","2018M02","2018M03","2018M04","2018M05","2018M06","2018M07","2018M08","2018M09","2018M10","2018M11","2018M12","2019M01","2019M02","2019M03","2019M04","2019M05","2019M06","2019M07","2019M08","2019M09","2019M10","2019M11","2019M12","2020M01","2020M02","2020M03","2020M04","2020M05","2020M06","2020M07","2020M08","2020M09","2020M10","2020M11","2020M12","2021M01","2021M02","2021M03","2021M04","2021M05","2021M06","2021M07","2021M08","2021M09","2021M10","2021M11","2021M12","2022M01","2022M02","2022M03","2022M04","2022M05","2022M06","2022M07","2022M08","2022M09","2022M10","2022M11","2022M12","2023M01","2023M02","2023M03","2023M04","2023M05","2023M06","2023M07","2023M08","2023M09","2023M10","2023M11","2023M12","2024M01","2024M02","2024M03","2024M04","2024M05","2024M06","2024M07","2024M08","2024M09","2024M10","2024M11","2024M12","2025M01","2025M02","2025M03","2025M04","2025M05","2025M06","2025M07","2025M08","2025M09","2025M10","2025M11","2025M12","2026M01","2026M02","2026M03","2026M04"],"total":[2.9,3.1,3.1,3.2,3.4,3.8,4.0,4.4,4.2,3.7,2.7,2.4,1.8,1.9,1.7,1.3,1.3,1.2,1.0,1.1,0.8,1.0,1.3,1.4,2.0,2.0,2.3,2.5,2.1,1.8,2.3,2.4,2.6,2.4,2.5,2.8,2.7,2.7,2.7,2.9,3.1,3.0,3.0,2.6,2.5,2.8,2.6,2.5,2.8,2.8,2.7,2.3,2.2,2.2,2.3,2.7,2.6,2.3,2.3,2.0,1.2,1.2,0.9,0.8,0.9,0.9,0.7,0.4,0.5,0.6,0.6,0.8,1.0,0.5,0.4,0.7,0.5,0.6,0.7,0.5,0.5,0.5,0.5,0.3,-0.1,0.3,0.6,0.6,0.6,0.6,0.7,0.6,0.5,0.4,0.3,0.5,0.6,0.3,-0.1,0.0,0.2,0.3,0.3,0.3,0.0,0.3,0.4,0.5,0.9,1.0,1.0,1.1,0.8,0.6,1.5,1.5,1.6,1.5,1.3,0.9,0.7,0.6,0.6,0.8,1.1,1.1,1.1,1.0,0.6,0.8,0.8,0.8,1.3,1.0,1.2,0.9,0.7,0.5,0.3,0.4,0.5,0.5,0.7,0.8,0.7,0.8,0.4,0.0,-0.1,0.3,0.5,0.5,0.5,0.4,0.5,0.5,0.5,0.6,0.9,1.4,1.8,1.8,1.6,1.8,2.2,2.9,3.4,3.1,4.4,4.8,5.4,6.7,7.4,8.2,8.7,8.9,10.0,10.2,8.9,8.7,7.7,7.6,6.8,5.3,2.9,2.4,3.2,2.4,0.9,0.0,0.6,0.7,1.2,0.8,0.9,0.7,2.1,1.8,1.1,1.4,1.3,1.6,1.7,1.9,1.5,2.0,1.5,1.6,1.6,1.8,2.2,2.0,2.2,2.1,2.1,1.9,0.8,0.7,1.2,1.4],"kerne":[2.4,2.7,2.7,2.6,2.8,2.9,3.0,3.4,3.4,3.0,2.8,2.7,2.5,2.3,2.3,2.1,2.2,2.1,2.2,1.9,1.7,1.8,1.5,1.5,1.6,1.7,1.6,1.8,1.4,1.3,1.6,1.9,2.0,1.8,2.0,2.0,1.9,2.1,2.1,2.3,2.5,2.4,2.4,2.0,1.9,2.1,2.0,2.0,2.6,2.5,2.4,2.3,2.3,2.3,2.3,2.4,2.4,2.3,2.3,2.0,1.2,1.1,1.1,0.9,0.9,0.9,0.7,0.7,0.7,0.9,0.8,0.9,1.2,0.8,0.7,0.8,0.7,0.6,0.9,0.6,0.7,0.6,0.6,0.8,0.8,1.0,1.2,1.2,1.1,1.2,1.3,1.3,1.2,1.2,1.2,1.2,1.0,0.8,0.5,0.4,0.6,0.8,0.9,0.7,0.3,0.4,0.4,0.2,0.6,0.6,0.7,0.9,0.8,0.8,1.6,1.6,1.5,1.4,1.2,1.1,0.8,0.9,0.7,0.8,0.8,0.7,0.8,0.6,0.4,0.6,0.7,0.7,1.3,0.9,1.1,0.8,0.8,0.7,0.4,0.6,0.7,0.8,0.8,0.8,0.6,0.9,0.7,0.8,0.6,0.8,0.9,0.9,0.9,0.9,1.1,1.0,1.1,0.7,0.8,0.9,1.3,1.3,0.9,1.0,1.4,1.5,1.6,1.6,2.0,2.8,3.1,3.6,4.4,4.8,5.5,5.9,5.9,6.2,6.1,6.6,6.5,6.7,6.4,6.1,5.0,4.9,5.3,4.3,3.7,3.3,2.9,2.6,2.5,1.7,1.6,1.4,1.6,1.3,1.0,1.2,1.5,1.4,1.2,1.4,1.4,1.8,1.6,1.7,1.7,1.9,2.2,2.2,2.2,2.3,2.3,2.3,1.9,1.8,1.7,1.6]};
-  const EUROSTAT = {"labels":["2009-Q1","2009-Q2","2009-Q3","2009-Q4","2010-Q1","2010-Q2","2010-Q3","2010-Q4","2011-Q1","2011-Q2","2011-Q3","2011-Q4","2012-Q1","2012-Q2","2012-Q3","2012-Q4","2013-Q1","2013-Q2","2013-Q3","2013-Q4","2014-Q1","2014-Q2","2014-Q3","2014-Q4","2015-Q1","2015-Q2","2015-Q3","2015-Q4","2016-Q1","2016-Q2","2016-Q3","2016-Q4","2017-Q1","2017-Q2","2017-Q3","2017-Q4","2018-Q1","2018-Q2","2018-Q3","2018-Q4","2019-Q1","2019-Q2","2019-Q3","2019-Q4","2020-Q1","2020-Q2","2020-Q3","2020-Q4","2021-Q1","2021-Q2","2021-Q3","2021-Q4","2022-Q1","2022-Q2","2022-Q3","2022-Q4","2023-Q1","2023-Q2","2023-Q3","2023-Q4","2024-Q1","2024-Q2","2024-Q3","2024-Q4","2025-Q1","2025-Q2","2025-Q3","2025-Q4"],"dk":[5.4,6.5,6.7,7.1,7.9,7.7,7.6,7.8,8.1,7.5,7.6,7.9,7.9,8.2,7.8,7.3,7.7,7.5,7.4,7.0,7.2,6.8,7.0,6.7,6.4,6.4,6.2,6.1,6.1,6.0,6.0,5.9,6.2,5.9,5.9,5.4,5.2,5.2,4.8,5.2,5.2,5.0,4.8,5.1,4.9,5.5,6.3,5.9,6.1,5.1,4.8,4.5,4.3,4.3,4.6,4.6,4.7,4.9,4.9,5.9,5.8,6.1,6.4,6.5,6.4,6.3,6.5,6.4],"eu27":[8.8,9.3,9.6,9.8,10.1,10.1,10.0,10.0,9.9,9.9,10.1,10.4,10.7,11.0,11.2,11.4,11.7,11.7,11.5,11.4,11.4,11.0,10.9,10.8,10.6,10.3,10.0,9.9,9.6,9.4,9.1,8.9,8.7,8.3,8.2,7.9,7.7,7.5,7.2,7.2,7.0,6.8,6.8,6.7,6.6,7.0,7.9,7.5,7.5,7.3,6.9,6.5,6.2,6.2,6.2,6.1,6.1,6.0,6.1,6.1,6.1,6.0,5.9,5.8,6.0,6.0,6.1,6.0],"se":[7.6,8.4,8.9,9.1,9.0,8.8,8.7,8.3,8.0,7.9,7.8,8.0,7.8,7.9,8.2,8.4,8.2,8.1,8.1,8.2,8.2,8.0,7.9,8.0,7.9,7.7,7.2,7.2,7.3,6.9,7.0,7.0,6.8,6.8,6.8,6.7,6.3,6.4,6.6,6.6,6.9,6.6,7.2,7.0,7.3,8.6,9.4,8.8,9.2,9.2,8.9,8.2,7.7,7.8,7.1,7.4,7.4,7.6,7.8,8.1,8.3,8.3,8.5,8.4,8.8,8.6,8.8,9.1],"de":[7.3,7.4,7.5,7.2,7.1,6.6,6.3,6.3,5.9,5.5,5.4,5.2,5.2,5.1,5.1,5.0,5.1,5.0,4.8,4.8,4.8,4.7,4.6,4.6,4.5,4.4,4.2,4.3,4.0,4.0,3.8,3.7,3.7,3.6,3.5,3.4,3.2,3.3,3.1,3.1,3.0,2.9,2.9,3.0,3.3,3.6,3.9,3.7,3.9,3.7,3.4,3.4,3.1,3.1,3.2,3.1,3.0,3.0,3.1,3.2,3.3,3.4,3.5,3.4,3.7,3.8,4.0,3.9],"bar_labels":["CZ","BG","PL","MT","DE","NL","CY","SI","HU","NO","IE","HR","CH","IT","SK","PT","AT","RO","BE","EA20","EA21","DK","EE","LT","LV","LU","FR","TR","EL","RS","SE","ES","FI","BA","MK"],"bar_values":[3.0,3.2,3.2,3.4,3.9,4.0,4.1,4.1,4.4,4.5,4.6,4.8,5.1,5.6,5.6,5.7,5.8,6.2,6.3,6.3,6.3,6.4,6.5,6.6,6.9,7.2,7.9,8.3,8.4,8.9,9.1,10.1,10.5,11.2,11.4],"latest_quarter":"2025-Q4","dk_value":6.4,"eu_value":6.0,"de_value":3.9};
-  const FORBRUGERTILLID_EU = {"labels":["2008M01","2008M02","2008M03","2008M04","2008M05","2008M06","2008M07","2008M08","2008M09","2008M10","2008M11","2008M12","2009M01","2009M02","2009M03","2009M04","2009M05","2009M06","2009M07","2009M08","2009M09","2009M10","2009M11","2009M12","2010M01","2010M02","2010M03","2010M04","2010M05","2010M06","2010M07","2010M08","2010M09","2010M10","2010M11","2010M12","2011M01","2011M02","2011M03","2011M04","2011M05","2011M06","2011M07","2011M08","2011M09","2011M10","2011M11","2011M12","2012M01","2012M02","2012M03","2012M04","2012M05","2012M06","2012M07","2012M08","2012M09","2012M10","2012M11","2012M12","2013M01","2013M02","2013M03","2013M04","2013M05","2013M06","2013M07","2013M08","2013M09","2013M10","2013M11","2013M12","2014M01","2014M02","2014M03","2014M04","2014M05","2014M06","2014M07","2014M08","2014M09","2014M10","2014M11","2014M12","2015M01","2015M02","2015M03","2015M04","2015M05","2015M06","2015M07","2015M08","2015M09","2015M10","2015M11","2015M12","2016M01","2016M02","2016M03","2016M04","2016M05","2016M06","2016M07","2016M08","2016M09","2016M10","2016M11","2016M12","2017M01","2017M02","2017M03","2017M04","2017M05","2017M06","2017M07","2017M08","2017M09","2017M10","2017M11","2017M12","2018M01","2018M02","2018M03","2018M04","2018M05","2018M06","2018M07","2018M08","2018M09","2018M10","2018M11","2018M12","2019M01","2019M02","2019M03","2019M04","2019M05","2019M06","2019M07","2019M08","2019M09","2019M10","2019M11","2019M12","2020M01","2020M02","2020M03","2020M04","2020M05","2020M06","2020M07","2020M08","2020M09","2020M10","2020M11","2020M12","2021M01","2021M02","2021M03","2021M04","2021M05","2021M06","2021M07","2021M08","2021M09","2021M10","2021M11","2021M12","2022M01","2022M02","2022M03","2022M04","2022M05","2022M06","2022M07","2022M08","2022M09","2022M10","2022M11","2022M12","2023M01","2023M02","2023M03","2023M04","2023M05","2023M06","2023M07","2023M08","2023M09","2023M10","2023M11","2023M12","2024M01","2024M02","2024M03","2024M04","2024M05","2024M06","2024M07","2024M08","2024M09","2024M10","2024M11","2024M12","2025M01","2025M02","2025M03","2025M04","2025M05","2025M06","2025M07","2025M08","2025M09","2025M10","2025M11","2025M12","2026M01","2026M02","2026M03","2026M04"],"dk":[0.6,0.9,2.3,-0.4,0.5,-3.6,-3.9,-4.7,-3.8,-5.1,1.2,1.2,0.0,0.5,0.5,3.2,6.1,3.7,6.0,4.9,6.6,6.2,4.9,5.7,6.8,7.8,6.2,8.2,6.7,3.0,7.2,5.3,5.6,5.3,6.7,5.0,4.3,3.7,3.5,4.2,4.4,4.7,2.1,-0.6,2.3,-2.0,-5.3,-4.0,-3.0,-0.7,2.8,2.6,0.3,-0.4,2.2,1.1,1.3,-0.9,3.2,0.5,-0.5,2.1,1.5,1.5,0.5,4.6,3.5,5.2,5.8,6.8,5.3,5.7,6.2,4.4,5.3,4.3,6.1,7.9,9.5,9.9,6.9,8.6,7.0,8.6,8.2,8.3,11.6,10.5,9.7,7.6,7.7,7.0,4.3,4.4,6.0,6.5,2.6,3.8,2.9,4.9,3.0,3.9,2.7,3.7,2.4,2.5,2.2,0.2,4.1,5.4,6.1,6.7,4.7,5.2,8.3,5.7,6.8,8.2,8.7,7.0,7.4,8.3,7.2,4.6,6.5,7.8,8.2,4.8,6.6,4.7,5.3,3.6,3.0,3.1,4.6,3.4,6.5,5.3,1.3,5.6,3.8,3.0,4.0,4.5,3.7,4.9,0.2,-7.3,-1.9,2.8,2.4,0.1,1.0,1.7,-0.3,3.6,3.2,3.6,4.0,7.0,6.9,7.0,6.6,6.7,10.4,6.3,1.3,1.4,0.6,0.6,-11.3,-14.7,-15.5,-17.5,-18.1,-14.7,-20.0,-23.5,-17.7,-16.2,-13.5,-12.7,-11.5,-8.7,-6.5,-4.8,-5.3,-5.4,-7.1,-6.8,-5.2,-6.7,-4.8,-3.6,-4.8,-6.2,-3.4,-2.7,-3.9,-4.9,-3.8,-5.7,-5.1,-8.3,-8.4,-11.2,-11.9,-14.3,-14.3,-13.4,-12.8,-14.0,-14.5,-12.8,-12.8,-11.2,-7.8,-8.0,-8.3,-14.2],"de":[-8.1,-8.9,-9.2,-8.8,-11.0,-13.2,-16.1,-16.9,-16.0,-18.0,-17.2,-19.8,-19.6,-19.9,-20.6,-19.3,-18.7,-17.8,-15.7,-13.1,-11.5,-9.9,-11.4,-9.5,-11.4,-10.4,-9.1,-5.9,-8.4,-7.2,-4.0,-2.3,-0.4,-0.6,1.2,0.7,0.4,0.9,0.1,-1.0,-1.4,-0.5,-0.9,-3.8,-3.0,-5.1,-4.9,-4.0,-4.3,-4.8,-4.8,-4.6,-5.4,-4.6,-5.5,-6.1,-7.1,-7.2,-6.5,-6.7,-5.4,-5.4,-5.2,-4.8,-4.7,-4.6,-3.8,-4.0,-3.0,-2.6,-1.8,-1.3,-0.4,0.0,-0.6,-0.4,0.0,-0.5,-0.1,-1.5,-2.2,-1.3,-1.9,-1.4,-0.5,-0.1,0.5,0.7,0.1,-0.2,-0.6,-1.0,-2.1,-3.2,-3.3,-1.8,-2.2,-2.2,-2.6,-1.7,-2.0,-1.1,-1.5,-1.2,-1.5,-1.7,-0.9,-0.3,-0.1,-1.4,-0.5,0.4,1.3,2.0,2.0,1.4,1.3,1.6,1.5,1.4,2.3,2.3,1.6,1.4,1.1,1.4,0.2,0.6,0.2,-0.1,0.0,-0.8,0.0,-0.3,-0.2,-0.5,-0.9,-2.9,-2.6,-3.3,-2.1,-3.9,-2.2,-3.6,-2.5,-2.4,-8.4,-18.1,-15.5,-11.4,-10.4,-8.1,-8.4,-9.2,-9.7,-8.7,-11.3,-9.6,-6.8,-8.2,-4.9,-1.7,-2.6,-3.9,-0.8,-2.6,-4.4,-6.4,-4.9,-6.3,-15.4,-18.6,-18.8,-20.4,-24.6,-23.5,-28.0,-26.6,-24.3,-22.0,-19.9,-16.8,-17.8,-14.4,-14.0,-14.2,-14.0,-14.8,-15.3,-15.2,-16.3,-13.8,-16.5,-13.7,-13.1,-10.3,-10.5,-10.4,-8.5,-10.0,-10.8,-8.9,-10.7,-10.2,-11.3,-11.2,-10.3,-10.5,-9.1,-9.8,-8.8,-10.5,-9.2,-10.8,-11.5,-12.1,-10.1,-11.2,-13.9,-18.0],"fr":[-14.6,-13.7,-14.5,-15.5,-17.6,-20.5,-19.9,-18.3,-17.2,-19.8,-16.9,-18.3,-18.1,-19.1,-20.0,-15.5,-15.4,-14.0,-13.3,-15.8,-11.6,-10.4,-8.5,-9.1,-8.3,-10.7,-12.6,-12.2,-14.8,-15.6,-14.8,-12.9,-13.7,-12.5,-9.4,-12.4,-14.5,-14.9,-16.0,-16.4,-15.4,-16.1,-15.0,-19.0,-18.7,-16.2,-19.0,-19.8,-18.8,-16.9,-13.3,-13.4,-11.3,-12.2,-15.7,-16.0,-18.9,-19.3,-18.3,-18.1,-19.3,-19.0,-19.9,-19.2,-22.1,-22.0,-19.2,-16.3,-15.1,-14.8,-18.1,-16.7,-16.1,-16.2,-15.3,-16.0,-16.7,-18.0,-16.4,-16.5,-17.6,-17.0,-16.2,-14.2,-13.6,-11.3,-10.8,-9.9,-11.9,-11.8,-12.9,-11.1,-10.2,-9.9,-9.2,-9.5,-8.4,-10.7,-12.1,-11.7,-9.5,-12.0,-11.7,-11.0,-9.6,-9.4,-7.9,-6.9,-7.4,-8.3,-8.4,-7.2,-6.7,-1.9,-4.2,-5.8,-7.2,-7.3,-4.2,-3.1,-4.2,-7.2,-6.9,-7.8,-8.7,-10.5,-9.7,-10.4,-13.8,-11.3,-13.6,-16.9,-12.2,-10.7,-10.0,-10.1,-8.2,-8.2,-6.6,-7.5,-6.1,-6.6,-5.8,-9.6,-8.9,-7.7,-12.6,-21.6,-17.7,-12.3,-11.7,-12.1,-10.9,-13.4,-18.0,-10.8,-13.6,-14.4,-9.8,-9.6,-5.3,-0.1,-3.1,-6.4,-2.8,-6.2,-6.9,-8.5,-9.5,-8.7,-21.2,-19.1,-18.9,-21.2,-21.7,-18.8,-22.3,-20.8,-18.8,-20.6,-20.6,-21.6,-20.7,-18.7,-17.0,-14.7,-14.1,-14.8,-15.8,-16.7,-13.5,-13.5,-11.7,-14.8,-13.5,-15.3,-13.6,-14.4,-15.2,-12.9,-11.5,-12.8,-15.3,-17.7,-14.1,-13.2,-14.8,-16.3,-17.5,-17.4,-16.8,-18.5,-19.3,-15.5,-15.8,-16.3,-15.7,-14.3,-17.2,-21.8],"se":[-1.1,-3.4,-1.3,-3.0,-4.4,-8.1,-10.6,-8.5,-7.2,-9.0,-7.5,-7.3,-5.4,-3.4,-4.6,-6.6,-0.7,0.2,1.6,4.6,5.4,6.6,6.8,5.8,4.0,6.8,6.7,7.5,5.9,7.0,6.3,6.5,7.8,6.0,6.2,5.7,6.6,6.5,4.5,3.7,3.2,2.8,1.4,-3.2,-4.6,-3.9,-4.5,-4.0,-1.2,-2.0,1.0,1.7,1.1,-0.4,0.9,0.1,-1.7,-2.5,-1.5,-4.1,0.0,-0.7,1.3,1.5,0.1,-0.4,2.5,1.8,0.3,1.0,3.6,3.2,2.9,1.8,1.9,1.6,2.2,2.4,2.5,0.6,1.0,-1.1,-2.5,-0.5,-0.4,-1.4,0.2,-0.9,0.1,-0.5,-0.3,0.1,-2.2,-3.3,-4.5,-2.0,-1.9,-2.2,-0.3,-1.2,-1.5,-1.2,-1.8,-2.1,0.2,0.9,1.5,0.4,0.6,0.7,1.5,1.4,2.6,0.5,0.5,0.1,-0.3,1.0,2.0,0.8,2.3,0.3,0.6,0.0,0.6,-2.0,-2.0,0.3,1.0,-1.9,-1.3,-2.3,-3.2,-3.5,-1.7,-0.7,-3.5,-3.6,-1.4,-3.2,-4.6,-3.3,-3.9,-2.5,-3.6,-2.3,-4.2,-6.9,-7.4,-3.0,-1.5,-0.6,1.3,1.5,-1.0,1.8,2.6,5.3,4.5,6.0,9.1,7.8,7.5,6.7,6.1,4.8,2.4,2.6,-2.4,-1.8,-11.0,-10.0,-13.5,-15.2,-20.3,-20.4,-26.6,-27.5,-23.3,-23.8,-23.5,-20.6,-20.8,-17.7,-15.2,-14.0,-15.0,-17.7,-18.6,-18.0,-15.9,-13.0,-8.7,-6.9,-4.8,-4.3,-1.4,-0.3,-0.5,0.2,1.5,0.6,1.8,-1.6,0.2,-2.6,-7.7,-13.5,-10.1,-8.0,-6.0,-6.8,-5.0,-3.6,-3.3,-3.7,-2.1,-2.6,-4.5,-7.3]};
-
-  const charts = {};
-  const GREEN='#6B9E78', DARK_GREEN='#3d6b47', ORANGE='#E07A40', BLUE='#4A90C4', PURPLE='#9B59B6';
-
-  function fmtLabel(lbl) {
-    const m={'01':'jan','02':'feb','03':'mar','04':'apr','05':'maj','06':'jun',
-              '07':'jul','08':'aug','09':'sep','10':'okt','11':'nov','12':'dec'};
-    if (lbl && lbl.includes('M')) {
-      const [yr, mo] = lbl.split('M');
-      return m[mo]+' '+yr.slice(2);
+const dashboardData = {"generatedAt":"2026-06-15 11:30","sourceModified":"2026-06-14 17:54 UTC","coverage":{"monthlyLatest":"maj 2026","unemployment":"apr. 2026","vacancies":"maj 2026","employees":"mar. 2026","inflation":"maj 2026","eurostat":"1. kvt. 2026"},"kpis":[{"title":"Ledige i alt","unit":"personer","decimals":0,"lowerIsBetter":true,"period":"apr. 2026","value":92643.0,"previous":91963.0,"previousPeriod":"mar. 2026","yearAgo":86742.0,"yearAgoPeriod":"apr. 2025","monthlyDelta":680.0,"yearlyDelta":5901.0},{"title":"Ledighedsprocent","unit":"pct.","decimals":1,"lowerIsBetter":true,"period":"apr. 2026","value":3.1,"previous":3.0,"previousPeriod":"mar. 2026","yearAgo":2.9,"yearAgoPeriod":"apr. 2025","monthlyDelta":0.10000000000000009,"yearlyDelta":0.20000000000000018},{"title":"Nyopslåede stillinger","unit":"stillinger","decimals":0,"lowerIsBetter":false,"period":"maj 2026","value":29640.0,"previous":24981.0,"previousPeriod":"apr. 2026","yearAgo":28589.0,"yearAgoPeriod":"maj 2025","monthlyDelta":4659.0,"yearlyDelta":1051.0},{"title":"Lønmodtagere","unit":"personer","decimals":0,"lowerIsBetter":false,"period":"mar. 2026","value":3084607.0,"previous":3080716.0,"previousPeriod":"feb. 2026","yearAgo":3049545.0,"yearAgoPeriod":"mar. 2025","monthlyDelta":3891.0,"yearlyDelta":35062.0},{"title":"Varslede afskedigelser","unit":"personer","decimals":0,"lowerIsBetter":true,"period":"maj 2026","value":1183.0,"previous":421.0,"previousPeriod":"apr. 2026","yearAgo":1160.0,"yearAgoPeriod":"maj 2025","monthlyDelta":762.0,"yearlyDelta":23.0},{"title":"Langtidsledige","unit":"personer","decimals":0,"lowerIsBetter":true,"period":"apr. 2026","value":16795.0,"previous":16216.0,"previousPeriod":"mar. 2026","yearAgo":15823.0,"yearAgoPeriod":"apr. 2025","monthlyDelta":579.0,"yearlyDelta":972.0},{"title":"Inflation","unit":"pct.","decimals":1,"lowerIsBetter":true,"period":"maj 2026","value":1.9,"previous":1.4,"previousPeriod":"apr. 2026","yearAgo":1.6,"yearAgoPeriod":"maj 2025","monthlyDelta":0.5,"yearlyDelta":0.2999999999999998},{"title":"Forbrugertillid","unit":"nettotal","decimals":1,"lowerIsBetter":false,"period":"maj 2026","value":-19.8,"previous":-18.6,"previousPeriod":"apr. 2026","yearAgo":-18.4,"yearAgoPeriod":"maj 2025","monthlyDelta":-1.1999999999999993,"yearlyDelta":-1.4000000000000021},{"title":"Erhvervstillid","unit":"indeks","decimals":1,"lowerIsBetter":false,"period":"maj 2026","value":104.1,"previous":105.5,"previousPeriod":"apr. 2026","yearAgo":102.5,"yearAgoPeriod":"maj 2025","monthlyDelta":-1.4000000000000057,"yearlyDelta":1.5999999999999943},{"title":"DK ledighed Eurostat","unit":"pct.","decimals":1,"lowerIsBetter":true,"period":"1. kvt. 2026","value":7.0,"previous":6.4,"previousPeriod":"4. kvt. 2025","yearAgo":6.3,"yearAgoPeriod":"1. kvt. 2025","monthlyDelta":0.5999999999999996,"yearlyDelta":0.7000000000000002}],"charts":{"unemployment":{"labels":["nov. 2024","dec. 2024","jan. 2025","feb. 2025","mar. 2025","apr. 2025","maj 2025","jun. 2025","jul. 2025","aug. 2025","sep. 2025","okt. 2025","nov. 2025","dec. 2025","jan. 2026","feb. 2026","mar. 2026","apr. 2026"],"series":{"Ledige i alt":[87997.0,87763.0,86946.0,87051.0,87211.0,86742.0,86769.0,87377.0,87694.0,87928.0,88122.0,88290.0,88910.0,89413.0,90099.0,93641.0,91963.0,92643.0],"A-dagpenge":[75550.0,75306.0,74558.0,74621.0,74691.0,74375.0,74506.0,75028.0,75267.0,75236.0,75379.0,75254.0,75094.0,75002.0,75345.0,78731.0,76901.0,77252.0],"Kontanthjælp":[12448.0,12457.0,12389.0,12429.0,12520.0,12368.0,12263.0,12350.0,12427.0,12691.0,12743.0,13036.0,13816.0,14411.0,14754.0,14909.0,15062.0,15391.0]}},"rateVacancies":{"labels":["nov. 2024","dec. 2024","jan. 2025","feb. 2025","mar. 2025","apr. 2025","maj 2025","jun. 2025","jul. 2025","aug. 2025","sep. 2025","okt. 2025","nov. 2025","dec. 2025","jan. 2026","feb. 2026","mar. 2026","apr. 2026"],"series":{"Ledighedsprocent":[2.9,2.9,2.9,2.9,2.9,2.9,2.9,2.9,2.9,2.9,2.9,2.9,2.9,2.9,3.0,3.1,3.0,3.1],"Nyopslåede stillinger":[19984.0,24698.0,23756.0,25717.0,24125.0,28589.0,23957.0,18786.0,22022.0,24490.0,24348.0,24007.0,21068.0,25312.0,25450.0,29665.0,24981.0,29640.0]}},"employees":{"labels":["okt. 2024","nov. 2024","dec. 2024","jan. 2025","feb. 2025","mar. 2025","apr. 2025","maj 2025","jun. 2025","jul. 2025","aug. 2025","sep. 2025","okt. 2025","nov. 2025","dec. 2025","jan. 2026","feb. 2026","mar. 2026"],"series":{"I alt":[3033405.0,3036033.0,3039047.0,3044829.0,3046697.0,3049545.0,3054386.0,3055113.0,3057091.0,3060740.0,3064218.0,3068574.0,3072715.0,3074637.0,3078851.0,3080408.0,3080716.0,3084607.0],"Privat":[2149570.0,2152183.0,2155513.0,2158667.0,2161106.0,2163386.0,2168333.0,2168091.0,2169312.0,2171937.0,2173865.0,2177240.0,2180492.0,2181587.0,2183407.0,2184534.0,2184101.0,2187391.0],"Offentlig":[883835.0,883850.0,883534.0,886162.0,885591.0,886159.0,886053.0,887023.0,887779.0,888803.0,891334.0,891334.0,892224.0,893050.0,895444.0,895874.0,896615.0,897215.0]}},"risk":{"labels":["dec. 2024","jan. 2025","feb. 2025","mar. 2025","apr. 2025","maj 2025","jun. 2025","jul. 2025","aug. 2025","sep. 2025","okt. 2025","nov. 2025","dec. 2025","jan. 2026","feb. 2026","mar. 2026","apr. 2026","maj 2026"],"series":{"Varslede afskedigelser":[98.0,831.0,394.0,403.0,1024.0,1160.0,434.0,119.0,670.0,6173.0,1256.0,1068.0,969.0,1247.0,676.0,1885.0,421.0,1183.0],"Konkurser, sæsonkorr.":[176.7,179.2,166.7,167.8,169.7,204.8,152.7,167.5,178.6,166.1,163.0,158.4,146.8,143.6,135.9,144.5,133.2,132.3],"Tabte job ved konkurser":[1003.0,1100.0,1175.0,1264.0,735.0,1003.0,1145.0,1107.0,774.0,1295.0,918.0,743.0,942.0,740.0,644.0,830.0,782.0,971.0]}},"longTerm":{"labels":["nov. 2024","dec. 2024","jan. 2025","feb. 2025","mar. 2025","apr. 2025","maj 2025","jun. 2025","jul. 2025","aug. 2025","sep. 2025","okt. 2025","nov. 2025","dec. 2025","jan. 2026","feb. 2026","mar. 2026","apr. 2026"],"series":{"Langtidsledige i alt":[15396.0,15502.0,16113.0,15535.0,15364.0,15823.0,16448.0,16596.0,16465.0,16293.0,15585.0,15563.0,15911.0,16022.0,16738.0,16189.0,16216.0,16795.0],"A-dagpenge":[11463.0,11569.0,12191.0,11597.0,11385.0,11835.0,12476.0,12604.0,12518.0,12251.0,11511.0,11507.0,11817.0,11921.0,12541.0,11978.0,11929.0,12447.0]}},"inflation":{"labels":["dec. 2024","jan. 2025","feb. 2025","mar. 2025","apr. 2025","maj 2025","jun. 2025","jul. 2025","aug. 2025","sep. 2025","okt. 2025","nov. 2025","dec. 2025","jan. 2026","feb. 2026","mar. 2026","apr. 2026","maj 2026"],"series":{"Samlet inflation":[1.9,1.5,2.0,1.5,1.6,1.6,1.8,2.2,2.0,2.2,2.1,2.1,1.9,0.8,0.7,1.2,1.4,1.9],"Fødevarer":[4.4,4.2,5.3,4.6,3.9,4.5,4.8,5.7,5.2,4.5,4.1,3.0,3.2,3.3,2.2,1.6,1.7,-0.4]}},"confidence":{"labels":["dec. 2024","jan. 2025","feb. 2025","mar. 2025","apr. 2025","maj 2025","jun. 2025","jul. 2025","aug. 2025","sep. 2025","okt. 2025","nov. 2025","dec. 2025","jan. 2026","feb. 2026","mar. 2026","apr. 2026","maj 2026"],"series":{"Forbrugertillid":[-13.1,-11.7,-14.5,-15.5,-17.0,-18.4,-15.1,-15.7,-17.2,-18.7,-19.5,-20.1,-17.3,-13.4,-13.1,-13.8,-18.6,-19.8],"Erhvervstillid":[104.7,102.9,106.6,104.0,103.7,102.5,102.6,104.5,102.8,103.6,102.1,101.1,102.2,102.2,103.2,103.8,105.5,104.1],"Industri":[104.4,104.5,106.5,106.2,103.6,95.5,98.2,98.9,100.2,92.2,92.7,89.6,90.6,93.1,92.5,94.0,100.7,93.5],"Bygge og anlæg":[105.2,102.7,102.5,99.7,100.0,100.2,101.3,99.8,100.5,100.6,101.6,101.5,101.1,101.7,99.7,102.2,100.7,101.0]}},"eurostat":{"Tyskland":[{"period":"2023-Q2","label":"2. kvt. 2023","value":3.0},{"period":"2023-Q3","label":"3. kvt. 2023","value":3.1},{"period":"2023-Q4","label":"4. kvt. 2023","value":3.2},{"period":"2024-Q1","label":"1. kvt. 2024","value":3.3},{"period":"2024-Q2","label":"2. kvt. 2024","value":3.4},{"period":"2024-Q3","label":"3. kvt. 2024","value":3.5},{"period":"2024-Q4","label":"4. kvt. 2024","value":3.5},{"period":"2025-Q1","label":"1. kvt. 2025","value":3.7},{"period":"2025-Q2","label":"2. kvt. 2025","value":3.9},{"period":"2025-Q3","label":"3. kvt. 2025","value":4.0},{"period":"2025-Q4","label":"4. kvt. 2025","value":3.9},{"period":"2026-Q1","label":"1. kvt. 2026","value":3.8}],"Danmark":[{"period":"2023-Q2","label":"2. kvt. 2023","value":4.9},{"period":"2023-Q3","label":"3. kvt. 2023","value":4.9},{"period":"2023-Q4","label":"4. kvt. 2023","value":5.9},{"period":"2024-Q1","label":"1. kvt. 2024","value":5.8},{"period":"2024-Q2","label":"2. kvt. 2024","value":6.1},{"period":"2024-Q3","label":"3. kvt. 2024","value":6.4},{"period":"2024-Q4","label":"4. kvt. 2024","value":6.5},{"period":"2025-Q1","label":"1. kvt. 2025","value":6.3},{"period":"2025-Q2","label":"2. kvt. 2025","value":6.3},{"period":"2025-Q3","label":"3. kvt. 2025","value":6.5},{"period":"2025-Q4","label":"4. kvt. 2025","value":6.4},{"period":"2026-Q1","label":"1. kvt. 2026","value":7.0}],"EU-27":[{"period":"2023-Q2","label":"2. kvt. 2023","value":6.0},{"period":"2023-Q3","label":"3. kvt. 2023","value":6.1},{"period":"2023-Q4","label":"4. kvt. 2023","value":6.1},{"period":"2024-Q1","label":"1. kvt. 2024","value":6.1},{"period":"2024-Q2","label":"2. kvt. 2024","value":6.0},{"period":"2024-Q3","label":"3. kvt. 2024","value":6.0},{"period":"2024-Q4","label":"4. kvt. 2024","value":5.9},{"period":"2025-Q1","label":"1. kvt. 2025","value":6.0},{"period":"2025-Q2","label":"2. kvt. 2025","value":6.0},{"period":"2025-Q3","label":"3. kvt. 2025","value":6.1},{"period":"2025-Q4","label":"4. kvt. 2025","value":6.0},{"period":"2026-Q1","label":"1. kvt. 2026","value":6.0}],"Frankrig":[{"period":"2023-Q2","label":"2. kvt. 2023","value":7.3},{"period":"2023-Q3","label":"3. kvt. 2023","value":7.4},{"period":"2023-Q4","label":"4. kvt. 2023","value":7.6},{"period":"2024-Q1","label":"1. kvt. 2024","value":7.5},{"period":"2024-Q2","label":"2. kvt. 2024","value":7.4},{"period":"2024-Q3","label":"3. kvt. 2024","value":7.5},{"period":"2024-Q4","label":"4. kvt. 2024","value":7.4},{"period":"2025-Q1","label":"1. kvt. 2025","value":7.5},{"period":"2025-Q2","label":"2. kvt. 2025","value":7.6},{"period":"2025-Q3","label":"3. kvt. 2025","value":7.8},{"period":"2025-Q4","label":"4. kvt. 2025","value":8.0},{"period":"2026-Q1","label":"1. kvt. 2026","value":8.1}],"Sverige":[{"period":"2023-Q2","label":"2. kvt. 2023","value":7.6},{"period":"2023-Q3","label":"3. kvt. 2023","value":7.8},{"period":"2023-Q4","label":"4. kvt. 2023","value":8.0},{"period":"2024-Q1","label":"1. kvt. 2024","value":8.3},{"period":"2024-Q2","label":"2. kvt. 2024","value":8.3},{"period":"2024-Q3","label":"3. kvt. 2024","value":8.5},{"period":"2024-Q4","label":"4. kvt. 2024","value":8.4},{"period":"2025-Q1","label":"1. kvt. 2025","value":8.8},{"period":"2025-Q2","label":"2. kvt. 2025","value":8.6},{"period":"2025-Q3","label":"3. kvt. 2025","value":8.8},{"period":"2025-Q4","label":"4. kvt. 2025","value":9.1},{"period":"2026-Q1","label":"1. kvt. 2026","value":8.6}]}},"euConsumer":{"Tyskland":[{"period":"2024-06","label":"jun. 2024","value":-10.4},{"period":"2024-07","label":"jul. 2024","value":-8.5},{"period":"2024-08","label":"aug. 2024","value":-10.0},{"period":"2024-09","label":"sep. 2024","value":-10.8},{"period":"2024-10","label":"okt. 2024","value":-8.9},{"period":"2024-11","label":"nov. 2024","value":-10.7},{"period":"2024-12","label":"dec. 2024","value":-10.2},{"period":"2025-01","label":"jan. 2025","value":-11.3},{"period":"2025-02","label":"feb. 2025","value":-11.2},{"period":"2025-03","label":"mar. 2025","value":-10.3},{"period":"2025-04","label":"apr. 2025","value":-10.5},{"period":"2025-05","label":"maj 2025","value":-9.1},{"period":"2025-06","label":"jun. 2025","value":-9.8},{"period":"2025-07","label":"jul. 2025","value":-8.9},{"period":"2025-08","label":"aug. 2025","value":-10.5},{"period":"2025-09","label":"sep. 2025","value":-9.2},{"period":"2025-10","label":"okt. 2025","value":-10.7},{"period":"2025-11","label":"nov. 2025","value":-11.5},{"period":"2025-12","label":"dec. 2025","value":-12.0},{"period":"2026-01","label":"jan. 2026","value":-9.9},{"period":"2026-02","label":"feb. 2026","value":-11.1},{"period":"2026-03","label":"mar. 2026","value":-13.6},{"period":"2026-04","label":"apr. 2026","value":-17.7},{"period":"2026-05","label":"maj 2026","value":-16.1}],"Danmark":[{"period":"2024-06","label":"jun. 2024","value":-2.7},{"period":"2024-07","label":"jul. 2024","value":-3.8},{"period":"2024-08","label":"aug. 2024","value":-4.9},{"period":"2024-09","label":"sep. 2024","value":-3.8},{"period":"2024-10","label":"okt. 2024","value":-5.7},{"period":"2024-11","label":"nov. 2024","value":-5.1},{"period":"2024-12","label":"dec. 2024","value":-8.3},{"period":"2025-01","label":"jan. 2025","value":-8.4},{"period":"2025-02","label":"feb. 2025","value":-11.2},{"period":"2025-03","label":"mar. 2025","value":-11.9},{"period":"2025-04","label":"apr. 2025","value":-14.3},{"period":"2025-05","label":"maj 2025","value":-14.3},{"period":"2025-06","label":"jun. 2025","value":-13.3},{"period":"2025-07","label":"jul. 2025","value":-12.8},{"period":"2025-08","label":"aug. 2025","value":-14.0},{"period":"2025-09","label":"sep. 2025","value":-14.5},{"period":"2025-10","label":"okt. 2025","value":-12.8},{"period":"2025-11","label":"nov. 2025","value":-12.8},{"period":"2025-12","label":"dec. 2025","value":-11.2},{"period":"2026-01","label":"jan. 2026","value":-7.9},{"period":"2026-02","label":"feb. 2026","value":-8.0},{"period":"2026-03","label":"mar. 2026","value":-8.3},{"period":"2026-04","label":"apr. 2026","value":-14.3},{"period":"2026-05","label":"maj 2026","value":-15.5}],"EU-27":[{"period":"2024-06","label":"jun. 2024","value":-12.1},{"period":"2024-07","label":"jul. 2024","value":-11.4},{"period":"2024-08","label":"aug. 2024","value":-11.7},{"period":"2024-09","label":"sep. 2024","value":-11.4},{"period":"2024-10","label":"okt. 2024","value":-11.0},{"period":"2024-11","label":"nov. 2024","value":-11.8},{"period":"2024-12","label":"dec. 2024","value":-12.4},{"period":"2025-01","label":"jan. 2025","value":-12.5},{"period":"2025-02","label":"feb. 2025","value":-12.6},{"period":"2025-03","label":"mar. 2025","value":-13.4},{"period":"2025-04","label":"apr. 2025","value":-15.2},{"period":"2025-05","label":"maj 2025","value":-13.7},{"period":"2025-06","label":"jun. 2025","value":-14.0},{"period":"2025-07","label":"jul. 2025","value":-13.7},{"period":"2025-08","label":"aug. 2025","value":-14.2},{"period":"2025-09","label":"sep. 2025","value":-13.6},{"period":"2025-10","label":"okt. 2025","value":-12.7},{"period":"2025-11","label":"nov. 2025","value":-12.9},{"period":"2025-12","label":"dec. 2025","value":-13.1},{"period":"2026-01","label":"jan. 2026","value":-12.5},{"period":"2026-02","label":"feb. 2026","value":-12.2},{"period":"2026-03","label":"mar. 2026","value":-15.9},{"period":"2026-04","label":"apr. 2026","value":-19.9},{"period":"2026-05","label":"maj 2026","value":-18.2}],"Frankrig":[{"period":"2024-06","label":"jun. 2024","value":-14.4},{"period":"2024-07","label":"jul. 2024","value":-15.2},{"period":"2024-08","label":"aug. 2024","value":-12.9},{"period":"2024-09","label":"sep. 2024","value":-11.5},{"period":"2024-10","label":"okt. 2024","value":-12.8},{"period":"2024-11","label":"nov. 2024","value":-15.3},{"period":"2024-12","label":"dec. 2024","value":-17.7},{"period":"2025-01","label":"jan. 2025","value":-14.1},{"period":"2025-02","label":"feb. 2025","value":-13.2},{"period":"2025-03","label":"mar. 2025","value":-14.8},{"period":"2025-04","label":"apr. 2025","value":-16.3},{"period":"2025-05","label":"maj 2025","value":-17.5},{"period":"2025-06","label":"jun. 2025","value":-17.4},{"period":"2025-07","label":"jul. 2025","value":-16.8},{"period":"2025-08","label":"aug. 2025","value":-18.5},{"period":"2025-09","label":"sep. 2025","value":-19.3},{"period":"2025-10","label":"okt. 2025","value":-15.5},{"period":"2025-11","label":"nov. 2025","value":-15.8},{"period":"2025-12","label":"dec. 2025","value":-16.3},{"period":"2026-01","label":"jan. 2026","value":-15.7},{"period":"2026-02","label":"feb. 2026","value":-14.3},{"period":"2026-03","label":"mar. 2026","value":-17.2},{"period":"2026-04","label":"apr. 2026","value":-21.8},{"period":"2026-05","label":"maj 2026","value":-21.2}],"Sverige":[{"period":"2024-06","label":"jun. 2024","value":-0.3},{"period":"2024-07","label":"jul. 2024","value":-0.5},{"period":"2024-08","label":"aug. 2024","value":0.2},{"period":"2024-09","label":"sep. 2024","value":1.5},{"period":"2024-10","label":"okt. 2024","value":0.6},{"period":"2024-11","label":"nov. 2024","value":1.8},{"period":"2024-12","label":"dec. 2024","value":-1.6},{"period":"2025-01","label":"jan. 2025","value":0.2},{"period":"2025-02","label":"feb. 2025","value":-2.6},{"period":"2025-03","label":"mar. 2025","value":-7.7},{"period":"2025-04","label":"apr. 2025","value":-13.5},{"period":"2025-05","label":"maj 2025","value":-10.1},{"period":"2025-06","label":"jun. 2025","value":-8.1},{"period":"2025-07","label":"jul. 2025","value":-6.0},{"period":"2025-08","label":"aug. 2025","value":-6.8},{"period":"2025-09","label":"sep. 2025","value":-5.0},{"period":"2025-10","label":"okt. 2025","value":-3.6},{"period":"2025-11","label":"nov. 2025","value":-3.3},{"period":"2025-12","label":"dec. 2025","value":-3.7},{"period":"2026-01","label":"jan. 2026","value":-2.1},{"period":"2026-02","label":"feb. 2026","value":-2.6},{"period":"2026-03","label":"mar. 2026","value":-4.5},{"period":"2026-04","label":"apr. 2026","value":-7.3},{"period":"2026-05","label":"maj 2026","value":-5.7}]}},"tables":{"euroLatest":[{"country":"Montenegro","code":"ME","period":"4. kvt. 2020","value":20.8},{"country":"Nordmakedonien","code":"MK","period":"1. kvt. 2026","value":11.4},{"country":"Bosnien-Hercegovina","code":"BA","period":"1. kvt. 2026","value":11.3},{"country":"Finland","code":"FI","period":"1. kvt. 2026","value":10.4},{"country":"Spanien","code":"ES","period":"1. kvt. 2026","value":10.3},{"country":"Grækenland","code":"EL","period":"1. kvt. 2026","value":9.5},{"country":"Serbien","code":"RS","period":"1. kvt. 2026","value":8.7},{"country":"Sverige","code":"SE","period":"1. kvt. 2026","value":8.6},{"country":"Tyrkiet","code":"TR","period":"1. kvt. 2026","value":8.2},{"country":"Frankrig","code":"FR","period":"1. kvt. 2026","value":8.1},{"country":"Litauen","code":"LT","period":"1. kvt. 2026","value":7.3},{"country":"Luxembourg","code":"LU","period":"1. kvt. 2026","value":7.2},{"country":"Danmark","code":"DK","period":"1. kvt. 2026","value":7.0},{"country":"Estland","code":"EE","period":"1. kvt. 2026","value":6.9},{"country":"Letland","code":"LV","period":"1. kvt. 2026","value":6.8},{"country":"Belgien","code":"BE","period":"1. kvt. 2026","value":6.4},{"country":"Rumænien","code":"RO","period":"1. kvt. 2026","value":6.4},{"country":"Euroområdet","code":"EA20","period":"1. kvt. 2026","value":6.3}]}};
+const palette = ["#6B9E78","#E07A40","#4A90C4","#9B59B6","#3d6b47","#8A8F55"];
+const da = new Intl.NumberFormat("da-DK");
+const da1 = new Intl.NumberFormat("da-DK", {minimumFractionDigits:1, maximumFractionDigits:1});
+function formatValue(value, decimals=0, unit="") {
+  if (value === null || value === undefined) return "mangler";
+  const n = decimals ? da1.format(value) : da.format(Math.round(value));
+  return unit === "pct." ? `${n} %` : `${n} ${unit}`.trim();
+}
+function formatDelta(value, decimals=0, unit="", lowerIsBetter=false) {
+  if (value === null || value === undefined) return "mangler";
+  const cls = value === 0 ? "" : ((lowerIsBetter ? value < 0 : value > 0) ? "good" : "bad");
+  const sign = value > 0 ? "+" : "";
+  const n = decimals ? da1.format(value) : da.format(Math.round(value));
+  const suffix = unit === "pct." ? " pct.point" : "";
+  return `<span class="delta ${cls}">${sign}${n}${suffix}</span>`;
+}
+function renderKpis() {
+  const grid = document.getElementById("kpiGrid");
+  grid.innerHTML = dashboardData.kpis.map(k => `
+    <article class="kpi-card">
+      <div class="kpi-title">${k.title}</div>
+      <div class="kpi-period">${k.period}</div>
+      <div class="kpi-value">${formatValue(k.value,k.decimals,k.unit)}</div>
+      <div class="kpi-sub">
+        <div>Forrige: ${formatValue(k.previous,k.decimals,k.unit)} ${k.previousPeriod ? "(" + k.previousPeriod + ")" : ""}</div>
+        <div>Måned/kvartal: ${formatDelta(k.monthlyDelta,k.decimals,k.unit,k.lowerIsBetter)}</div>
+        <div>År: ${formatDelta(k.yearlyDelta,k.decimals,k.unit,k.lowerIsBetter)}</div>
+      </div>
+    </article>`).join("");
+}
+function renderTables() {
+  const coverage = dashboardData.coverage;
+  document.getElementById("coverageTable").innerHTML = [
+    ["Ledighed", coverage.unemployment],["Nyopslåede stillinger", coverage.vacancies],["Lønmodtagere", coverage.employees],["Inflation", coverage.inflation],["Eurostat-ledighed", coverage.eurostat]
+  ].map(r => `<tr><td>${r[0]}</td><td>${r[1]}</td></tr>`).join("");
+  document.getElementById("euroTable").innerHTML = dashboardData.tables.euroLatest.map(r => `<tr><td>${r.country}</td><td>${r.period}</td><td>${da1.format(r.value)} %</td></tr>`).join("");
+}
+function datasetLines(obj, yAxisID="y") {
+  return Object.entries(obj.series).map(([label, values], i) => ({label, data: values, borderColor: palette[i%palette.length], backgroundColor: palette[i%palette.length], tension:.25, pointRadius:0, borderWidth:2, yAxisID}));
+}
+function lineChart(id, chart, options={}) {
+  new Chart(document.getElementById(id), {type:"line", data:{labels:chart.labels, datasets:datasetLines(chart)}, options: baseOptions(options)});
+}
+function baseOptions(extra={}) {
+  return {responsive:true, maintainAspectRatio:false, interaction:{mode:"index",intersect:false}, plugins:{legend:{position:"bottom",labels:{boxWidth:12}}, tooltip:{callbacks:{label: c => `${c.dataset.label}: ${da.format(c.parsed.y)}`}}}, scales:{x:{grid:{display:false}, ticks:{maxTicksLimit:8}}, y:{grid:{color:"#E8EBE8"}}}, ...extra};
+}
+function twoAxisChart(id, chart) {
+  const labels = chart.labels;
+  const entries = Object.entries(chart.series);
+  const datasets = entries.map(([label, values], i) => ({
+    label, data: values, borderColor: palette[i%palette.length], backgroundColor: palette[i%palette.length],
+    tension:.25, pointRadius:0, borderWidth:2, yAxisID:i===0 ? "y" : "y1"
+  }));
+  const options = baseOptions({
+    scales:{
+      x:{grid:{display:false},ticks:{maxTicksLimit:8}},
+      y:{type:"linear",position:"left",grid:{color:"#E8EBE8"}},
+      y1:{type:"linear",position:"right",grid:{drawOnChartArea:false}}
     }
-    return lbl; // kvartaler: "2025-Q4" vises som-is
-  }
-
-  function slice(arr, n) {
-    return n >= arr.length ? arr : arr.slice(-n);
-  }
-
-  // X-akse der viser labels med passende interval
-  function xAxis(autoSkip) {
-    return {
-      ticks: {
-        font: { size: 12 },
-        maxRotation: 45,
-        autoSkip: autoSkip,
-        maxTicksLimit: autoSkip ? 12 : undefined,
-        callback: function(val, idx) {
-          const labels = this.chart.data.labels;
-          if (!labels) return '';
-          const lbl = labels[idx];
-          if (!lbl) return '';
-          const n = labels.length;
-          if (!autoSkip) {
-            const step = n <= 24 ? 3 : n <= 60 ? 6 : 12;
-            if ((n - 1 - idx) % step !== 0) return '';
-          }
-          return fmtLabel(lbl);
-        }
-      },
-      grid: { color: '#E8EBE8' }
-    };
-  }
-
-  function yAxis(min) {
-    return {
-      min: min,
-      ticks: { font: { size: 12 }, callback: v => typeof v==='number' ? v.toLocaleString('da-DK') : v },
-      grid: { color: '#E8EBE8' }
-    };
-  }
-
-  function makeOpts(ymin) {
-    return {
-      responsive: true, maintainAspectRatio: false,
-      interaction: { mode: 'index', intersect: false },
-      plugins: {
-        legend: { position: 'top', labels: { font: { size: 12 }, boxWidth: 14 } },
-        tooltip: { callbacks: { title: ctx => fmtLabel(ctx[0].label) } }
-      },
-      scales: { x: xAxis(false), y: yAxis(ymin) }
-    };
-  }
-
-  function line(id, labels, datasets, ymin) {
-    if (charts[id]) charts[id].destroy();
-    charts[id] = new Chart(document.getElementById(id), {
-      type: 'line', data: { labels, datasets }, options: makeOpts(ymin)
-    });
-  }
-
-  function barChart(id, labels, datasets) {
-    if (charts[id]) charts[id].destroy();
-    charts[id] = new Chart(document.getElementById(id), {
-      type: 'bar',
-      data: { labels, datasets },
-      options: makeOpts(undefined)
-    });
-  }
-
-  function hbarChart(id, labels, datasets) {
-    if (charts[id]) charts[id].destroy();
-    charts[id] = new Chart(document.getElementById(id), {
-      type: 'bar',
-      data: { labels, datasets },
-      options: {
-        responsive: true, maintainAspectRatio: false,
-        indexAxis: 'y',
-        plugins: {
-          legend: { display: false },
-          tooltip: { callbacks: { title: ctx => ctx[0].label } }
-        },
-        scales: {
-          x: { ticks: { font:{size:12}, callback: v => v+'%' }, grid:{color:'#E8EBE8'} },
-          y: { ticks: { font:{size:11} }, grid:{color:'#E8EBE8'} }
-        }
-      }
-    });
-  }
-
-  function ds(label, data, color, fill=false) {
-    return { label, data, borderColor:color, backgroundColor:color+'33',
-      pointRadius:3, pointBackgroundColor:color, borderWidth:2, fill, tension:0.2 };
-  }
-
-  function drawAll(n) {
-    // --- y-min=undefined: automatisk skalering ---
-    // --- y-min=0: start ved nul ---
-
-    line('chart-ledighed',     slice(DATA.ledighed.labels,n),
-      [ds('Bruttoledige (sæsonkorr.)', slice(DATA.ledighed.saesonkorr,n), GREEN)]);
-
-    line('chart-ledighed-pct', slice(DATA.ledighed.labels,n),
-      [ds('Ledighedsprocent', slice(DATA.ledighed.pct,n), DARK_GREEN)], 0);
-
-    line('chart-ydelser',      slice(DATA.ydelser.labels,n), [
-      ds('A-dagpengemodtagere',    slice(DATA.ydelser.dagpenge,n),    GREEN),
-      ds('Kontanthjælpsmodtagere', slice(DATA.ydelser.kontanthjælp,n), ORANGE)
-    ], 0);
-
-    line('chart-langtid',      slice(DATA.langtidsledige.labels,n), [
-      ds('I alt',        slice(DATA.langtidsledige.total,n),       GREEN),
-      ds('A-dagpenge',   slice(DATA.langtidsledige.dagpenge,n),    DARK_GREEN),
-      ds('Kontanthjælp', slice(DATA.langtidsledige.kontanthjælp,n), ORANGE)
-    ], 0);
-
-    line('chart-stillinger',   slice(DATA.stillinger.labels,n), [
-      ds('Nyopslåede stillinger', slice(DATA.stillinger.nyopslåede,n), GREEN),
-      ds('Dagligt gns.',          slice(DATA.stillinger.dagligt_gns,n), ORANGE)
-    ], 0);
-
-    line('chart-lonmodtagere', slice(DATA.lonmodtagere.labels,n), [
-      ds('I alt',      slice(DATA.lonmodtagere.total,n),     GREEN),
-      ds('Offentlig',  slice(DATA.lonmodtagere.offentlig,n), BLUE),
-      ds('Privat',     slice(DATA.lonmodtagere.privat,n),    ORANGE)
-    ]);
-
-    barChart('chart-varslinger', slice(DATA.varslinger.labels,n),
-      [{ label:'Varslede personer', data:slice(DATA.varslinger.personer,n),
-         backgroundColor:GREEN+'AA', borderColor:GREEN, borderWidth:1 }]);
-
-    barChart('chart-konkurser', slice(KONKURSER.labels,n),
-      [{ label:'Tabte job', data:slice(KONKURSER.tabte_job,n),
-         backgroundColor:ORANGE+'AA', borderColor:ORANGE, borderWidth:1 }]);
-
-    line('chart-forbrugertillid', slice(FORBRUGERTILLID.labels,n),
-      [ds('Forbrugertillidsindikatoren', slice(FORBRUGERTILLID.values,n), BLUE, true)]);
-
-    line('chart-erhvervstillid',  slice(ERHVERVSTILLID.labels,n),
-      [ds('Erhvervstillidsindikator', slice(ERHVERVSTILLID.values,n), GREEN)]);
-
-    line('chart-inflation', slice(INFLATION.labels,n), [
-      ds('Samlet inflation (%)',  slice(INFLATION.total,n),  ORANGE),
-      ds('Kerneinflation (%)',    slice(INFLATION.kerne,n),  GREEN)
-    ]);
-
-    // Eurostat tidsserie – y-min=0
-    const en = Math.min(n, EUROSTAT.labels.length);
-    line('chart-eurostat-ts', EUROSTAT.labels.slice(-en), [
-      ds('Danmark', EUROSTAT.dk.slice(-en),   GREEN),
-      ds('EU-27',   EUROSTAT.eu27.slice(-en), BLUE),
-      ds('Sverige', EUROSTAT.se.slice(-en),   ORANGE),
-      ds('Tyskland',EUROSTAT.de.slice(-en),   PURPLE)
-    ], 0);
-
-    // Eurostat søjlediagram med fulde landenavne
-    const countryNames = {
-      'AT':'Østrig','BA':'Bosnien-Hercegovina','BE':'Belgien','BG':'Bulgarien',
-      'CH':'Schweiz','CY':'Cypern','CZ':'Tjekkiet','DE':'Tyskland','DK':'Danmark',
-      'EA20':'Eurozonen (20)','EA21':'Eurozonen (21)','EE':'Estland','EL':'Grækenland',
-      'ES':'Spanien','EU27_2020':'EU-27','FI':'Finland','FR':'Frankrig','HR':'Kroatien',
-      'HU':'Ungarn','IE':'Irland','IS':'Island','IT':'Italien','LT':'Litauen',
-      'LU':'Luxembourg','LV':'Letland','ME':'Montenegro','MK':'Nordmakedonien',
-      'MT':'Malta','NL':'Holland','NO':'Norge','PL':'Polen','PT':'Portugal',
-      'RO':'Rumænien','RS':'Serbien','SE':'Sverige','SI':'Slovenien','SK':'Slovakiet','TR':'Tyrkiet'
-    };
-    const barNames   = EUROSTAT.bar_labels.map(l => countryNames[l] || l);
-    const barColors  = EUROSTAT.bar_labels.map(l => l==='DK' ? GREEN : l==='EU27_2020' ? BLUE : '#bbb');
-    hbarChart('chart-eurostat-bar', barNames,
-      [{ label:'Ledighed %', data:EUROSTAT.bar_values,
-         backgroundColor:barColors, borderColor:barColors, borderWidth:1 }]);
-
-    // Forbrugertillid EU
-    const fn = Math.min(n, FORBRUGERTILLID_EU.labels.length);
-    line('chart-forbrugertillid-eu', FORBRUGERTILLID_EU.labels.slice(-fn), [
-      ds('Danmark',  FORBRUGERTILLID_EU.dk.slice(-fn), GREEN),
-      ds('Tyskland', FORBRUGERTILLID_EU.de.slice(-fn), PURPLE),
-      ds('Frankrig', FORBRUGERTILLID_EU.fr.slice(-fn), ORANGE),
-      ds('Sverige',  FORBRUGERTILLID_EU.se.slice(-fn), BLUE)
-    ]);
-  }
-
-  window.setPeriod = function(n, btn) {
-    document.querySelectorAll('.period-btn').forEach(b => b.classList.remove('active'));
-    btn.classList.add('active');
-    drawAll(n);
-  };
-
-  drawAll(36);
-})();
+  });
+  new Chart(document.getElementById(id), {type:"line", data:{labels, datasets}, options});
+}
+function countryChart(id, grouped) {
+  const entries = Object.entries(grouped);
+  const labels = entries[0]?.[1].map(x => x.label) || [];
+  const datasets = entries.map(([label, values], i) => ({
+    label, data: values.map(x => x.value), borderColor: palette[i%palette.length],
+    backgroundColor: palette[i%palette.length], tension:.25, pointRadius:0, borderWidth:2
+  }));
+  new Chart(document.getElementById(id), {type:"line", data:{labels, datasets}, options:baseOptions()});
+}
+renderKpis();
+renderTables();
+lineChart("unemploymentChart", dashboardData.charts.unemployment);
+twoAxisChart("rateVacanciesChart", dashboardData.charts.rateVacancies);
+lineChart("employeesChart", dashboardData.charts.employees);
+twoAxisChart("riskChart", dashboardData.charts.risk);
+lineChart("longTermChart", dashboardData.charts.longTerm);
+lineChart("inflationChart", dashboardData.charts.inflation);
+lineChart("confidenceChart", dashboardData.charts.confidence);
+countryChart("eurostatChart", dashboardData.charts.eurostat);
+countryChart("euConsumerChart", dashboardData.charts.euConsumer);
 </script>
 </body>
 </html>
