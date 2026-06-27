@@ -3,587 +3,670 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Analytisk overblik – Arbejdsmarkedet</title>
-<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<title>Spin &amp; Skandale · Krisemanageren</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@300;500;600;700&family=Inter:wght@400;500;600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
 <style>
-*{box-sizing:border-box;margin:0;padding:0}
-body{font-family:'Segoe UI',Arial,sans-serif;background:#f5f7f5;color:#1a2e1a}
-#dak-dashboard{max-width:1400px;margin:0 auto;padding:16px}
-.dash-header{background:linear-gradient(135deg,#0F2B36,#1a4a5e);color:#fff;padding:20px 24px;border-radius:10px;margin-bottom:20px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px}
-.dash-header h1{font-size:22px;font-weight:700;letter-spacing:-0.3px}
-.dash-header p{font-size:13px;opacity:0.8;margin-top:4px}
-.period-btns{display:flex;gap:8px;flex-wrap:wrap}
-.period-btns button{background:rgba(255,255,255,0.15);border:1px solid rgba(255,255,255,0.3);color:#fff;padding:6px 14px;border-radius:20px;cursor:pointer;font-size:13px;transition:all .2s}
-.period-btns button:hover,.period-btns button.active{background:#6B9E78;border-color:#6B9E78}
-.section-title{font-size:16px;font-weight:700;color:#0F2B36;margin:20px 0 12px;padding-left:10px;border-left:4px solid #6B9E78}
-.kpi-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:12px;margin-bottom:16px}
-.kpi-card{background:#fff;border-radius:10px;padding:14px 16px;box-shadow:0 1px 4px rgba(0,0,0,0.08);border:1px solid #e8ebe8;transition:box-shadow .2s}
-.kpi-card:hover{box-shadow:0 3px 10px rgba(0,0,0,0.12)}
-.kpi-period{font-size:11px;color:#6B9E78;font-weight:600;text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px}
-.kpi-label{font-size:13px;color:#555;margin-bottom:6px;line-height:1.3}
-.kpi-value{font-size:28px;font-weight:700;color:#0F2B36;letter-spacing:-0.5px;margin-bottom:4px}
-.kpi-sub{font-size:11px;color:#888;margin-bottom:10px;line-height:1.3}
-.kpi-compare{display:flex;flex-direction:column;gap:4px;margin-bottom:8px}
-.kpi-prev{display:flex;justify-content:space-between;align-items:baseline;gap:8px}
-.kpi-prev span{font-size:11px;color:#888}
-.kpi-prev strong{font-size:13px;color:#333;white-space:nowrap}
-.kpi-delta{font-size:12px;color:#555;padding-top:8px;border-top:1px solid #f0f0f0}
-.delta-bad{color:#c0392b;font-weight:600}
-.delta-good{color:#27ae60;font-weight:600}
-.kpi-table-card{grid-column:span 2}
-.kpi-table-scroll{max-height:300px;overflow-y:auto;margin-top:8px}
-.kpi-table{width:100%;border-collapse:collapse;font-size:12px}
-.kpi-table td{padding:3px 6px;border-bottom:1px solid #f0f0f0}
-.kpi-table tr:nth-child(even){background:#f9fbf9}
-.chart-2col{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px}
-.chart-box{background:#fff;border-radius:10px;padding:14px 16px;box-shadow:0 1px 4px rgba(0,0,0,0.08);border:1px solid #e8ebe8}
-.chart-box h3{font-size:14px;font-weight:600;color:#0F2B36;margin-bottom:12px}
-.chart-box .chart-source{font-size:10px;color:#aaa;margin-top:6px;text-align:right}
-.chart-container{position:relative;height:400px}
-.chart-container.tall{height:620px}
-@media(max-width:900px){.chart-2col{grid-template-columns:1fr}.kpi-table-card{grid-column:span 1}}
+  :root{
+    --ink:#14181c; --ink-2:#1b2127; --ink-3:#222a31;
+    --paper:#f2eee3; --paper-2:#e7e1d2;
+    --text:#1c1a17; --muted:#8a8f94; --muted-paper:#7a7464;
+    --green:#6b9e78; --green-dk:#4d7a59;
+    --red:#d13b2e; --red-dk:#a82d23;
+    --gold:#c9a24b;
+    --line:#2c353d; --line-paper:#d4cdbb;
+    --shadow:0 24px 60px -18px rgba(0,0,0,.65);
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%}
+  body{
+    font-family:'Inter',system-ui,sans-serif;
+    background:
+      radial-gradient(1200px 600px at 70% -10%, #1f272e 0%, transparent 60%),
+      radial-gradient(900px 500px at 0% 110%, #11181d 0%, transparent 55%),
+      var(--ink);
+    color:var(--paper);min-height:100%;
+    display:flex;flex-direction:column;align-items:center;
+    padding:18px 16px 40px;-webkit-font-smoothing:antialiased;
+  }
+  .stage{width:100%;max-width:640px;display:flex;flex-direction:column;gap:14px}
+
+  header.bar{display:flex;align-items:baseline;justify-content:space-between;gap:12px;padding:2px 4px;flex-wrap:wrap}
+  .brand{display:flex;align-items:baseline;gap:10px;line-height:1}
+  .brand .logo{font-family:'Oswald',sans-serif;font-weight:700;font-size:22px;letter-spacing:.5px;text-transform:uppercase}
+  .brand .logo .amp{color:var(--red);font-style:italic}
+  .brand .tag{font-family:'Space Mono',monospace;font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:2px}
+  .casecount{font-family:'Space Mono',monospace;font-size:12px;color:var(--gold);letter-spacing:1px;white-space:nowrap}
+
+  .record{display:flex;align-items:center;gap:10px;background:var(--ink-2);border:1px solid var(--line);border-radius:12px;padding:11px 14px}
+  .segs{display:flex;gap:5px;flex:1}
+  .seg{flex:1;height:18px;border-radius:4px;background:#0d1115;display:grid;place-items:center;font-family:'Space Mono',monospace;font-size:11px;font-weight:700;color:#fff;line-height:1;transition:background .4s,box-shadow .2s}
+  .seg.r{background:var(--green)} .seg.w{background:var(--red)}
+  .seg.cur{box-shadow:0 0 0 2px var(--gold)}
+  .rec-lbl{font-family:'Space Mono',monospace;font-size:11.5px;color:#aeb4ba;white-space:nowrap;letter-spacing:.5px}
+  .rec-lbl b{color:var(--green)}
+
+  .panel{position:relative}
+  .card{background:url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxNjAiIGhlaWdodD0iMTYwIj48ZmlsdGVyIGlkPSJuIj48ZmVUdXJidWxlbmNlIHR5cGU9ImZyYWN0YWxOb2lzZSIgYmFzZUZyZXF1ZW5jeT0iMC44IiBudW1PY3RhdmVzPSIyIiBzdGl0Y2hUaWxlcz0ic3RpdGNoIi8+PGZlQ29sb3JNYXRyaXggdHlwZT0ic2F0dXJhdGUiIHZhbHVlcz0iMCIvPjwvZmlsdGVyPjxyZWN0IHdpZHRoPSIxNjAiIGhlaWdodD0iMTYwIiBmaWx0ZXI9InVybCgjbikiIG9wYWNpdHk9IjAuNSIvPjwvc3ZnPg=="),linear-gradient(180deg,var(--paper) 0%,var(--paper-2) 100%);background-blend-mode:soft-light;color:var(--text);border-radius:6px;padding:26px 24px 24px;box-shadow:var(--shadow);position:relative;overflow:hidden;border:1px solid var(--line-paper)}
+  .card > *{position:relative;z-index:1}
+  .card > .stamp{position:absolute;z-index:3}
+  .card::before{content:"";position:absolute;top:0;left:0;right:0;height:7px;background:repeating-linear-gradient(90deg,var(--red) 0 22px,#b5b0a2 22px 30px);opacity:.85;z-index:2}
+  .card::after{content:"FORTROLIGT";position:absolute;top:50%;left:50%;transform:translate(-50%,-50%) rotate(-20deg);font-family:'Oswald',sans-serif;font-weight:700;font-size:clamp(48px,15vw,80px);letter-spacing:8px;color:rgba(168,45,35,.06);white-space:nowrap;pointer-events:none;z-index:0}
+  .stamp{position:absolute;top:18px;right:-6px;transform:rotate(7deg);font-family:'Oswald',sans-serif;font-weight:700;font-size:13px;letter-spacing:3px;text-transform:uppercase;color:var(--red);border:2.5px solid var(--red);border-radius:4px;padding:4px 10px;opacity:.78}
+  .stamp.land{animation:stampIn .55s cubic-bezier(.18,1.25,.3,1) both}
+  @keyframes stampIn{0%{opacity:0;transform:rotate(7deg) scale(2.7)}55%{opacity:.85;transform:rotate(7deg) scale(.9)}75%{transform:rotate(7deg) scale(1.05)}100%{opacity:.78;transform:rotate(7deg) scale(1)}}
+  .meta{font-family:'Space Mono',monospace;font-size:11px;color:var(--muted-paper);letter-spacing:1px;text-transform:uppercase;margin:6px 0 2px}
+  .case-title{font-family:'Oswald',sans-serif;font-weight:700;font-size:clamp(26px,7vw,38px);line-height:1.02;text-transform:uppercase;letter-spacing:.3px;margin:2px 0 12px;color:#16140f}
+  .situation{font-size:15.5px;line-height:1.55;color:#2c2823}
+  .question{font-size:16px;line-height:1.45;color:#2c2823;font-weight:500;margin:0 0 14px}
+  .answer{margin:4px 0 0;padding:12px 14px;background:rgba(107,158,120,.14);border-left:3px solid var(--green);border-radius:4px;font-size:14.5px;line-height:1.5;color:#2a2620}
+  .answer .alab{font-family:'Space Mono',monospace;font-size:10.5px;letter-spacing:1.2px;text-transform:uppercase;color:var(--green-dk);display:block;margin-bottom:6px}
+  .prompt{font-family:'Oswald',sans-serif;font-weight:600;font-size:13px;letter-spacing:1.5px;text-transform:uppercase;color:#6b6457;margin:20px 0 10px;display:flex;align-items:center;gap:8px}
+  .prompt::after{content:"";flex:1;height:1px;background:var(--line-paper)}
+
+  .choices{display:flex;flex-direction:column;gap:10px}
+  .choice{text-align:left;width:100%;cursor:pointer;background:#fbf9f3;border:1.5px solid var(--line-paper);border-radius:6px;padding:14px 16px;display:flex;gap:13px;align-items:flex-start;font-family:inherit;font-size:14.5px;line-height:1.45;color:#2a2620;transition:transform .12s ease,border-color .15s,background .15s,box-shadow .15s}
+  .choice:hover{transform:translateY(-1px);border-color:#9c9482;background:#fff;box-shadow:0 6px 16px -10px rgba(0,0,0,.4)}
+  .choice:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
+  .choice .key{font-family:'Oswald',sans-serif;font-weight:700;font-size:18px;width:30px;height:30px;flex:none;border-radius:50%;display:grid;place-items:center;background:var(--ink);color:var(--paper)}
+
+  .verdict{display:flex;align-items:center;gap:11px;font-family:'Oswald',sans-serif;font-weight:700;font-size:clamp(24px,7vw,30px);text-transform:uppercase;letter-spacing:1px;margin-bottom:4px}
+  .verdict .dot{width:15px;height:15px;border-radius:50%;flex:none}
+  .verdict.good{color:var(--green-dk)} .verdict.good .dot{background:var(--green)}
+  .verdict.bad{color:var(--red-dk)} .verdict.bad .dot{background:var(--red)}
+  .vsub{font-family:'Space Mono',monospace;font-size:12px;letter-spacing:.5px;color:#6b6457;margin-bottom:14px}
+  .consequence{font-size:15px;line-height:1.55;color:#2c2823}
+  .truth{margin-top:16px;padding:13px 15px;background:rgba(0,0,0,.05);border-left:3px solid var(--gold);border-radius:4px;font-size:13.5px;line-height:1.5;color:#4a443a}
+  .truth .lab{font-family:'Space Mono',monospace;font-size:10.5px;letter-spacing:1.2px;text-transform:uppercase;color:var(--muted-paper);display:block;margin-bottom:7px}
+  .country{display:inline-block;font-family:'Oswald',sans-serif;font-weight:700;font-size:12px;letter-spacing:2.5px;text-transform:uppercase;color:var(--paper);background:#2c2823;padding:4px 11px;border-radius:4px;margin:2px 0 9px}
+  .cardsub{font-family:'Space Mono',monospace;font-size:11px;color:var(--muted-paper);letter-spacing:.5px;margin:-4px 0 14px}
+  .cover-title{font-family:'Oswald',sans-serif;font-weight:700;font-size:clamp(34px,9vw,52px);line-height:.98;text-transform:uppercase;letter-spacing:.5px;color:#16140f;margin:6px 0 2px}
+  .cover-title .amp{color:var(--red);font-style:italic}
+  .cover-sub{font-family:'Oswald',sans-serif;font-weight:300;font-size:clamp(15px,4vw,19px);letter-spacing:5px;text-transform:uppercase;color:var(--muted-paper);margin-bottom:16px}
+  .dossier{border-top:1px solid var(--line-paper);border-bottom:1px solid var(--line-paper);padding:12px 0;margin:0 0 16px;display:flex;flex-direction:column;gap:8px}
+  .drow{display:flex;gap:12px;align-items:center;font-size:13.5px}
+  .dk{font-family:'Space Mono',monospace;font-size:10.5px;letter-spacing:1.2px;text-transform:uppercase;color:var(--muted-paper);width:92px;flex:none}
+  .dv{color:#2c2823}
+  .redact{display:inline-block;height:15px;background:#1c1a17;border-radius:2px}
+  .truth .tag{display:inline-block;font-family:'Space Mono',monospace;font-size:11px;font-weight:700;letter-spacing:.3px;padding:3px 9px;border-radius:20px;margin-bottom:8px}
+  .truth .tag.right{background:rgba(107,158,120,.2);color:var(--green-dk)}
+  .truth .tag.wrong{background:rgba(209,59,46,.16);color:var(--red-dk)}
+  .truth .cmp{color:var(--muted-paper);font-weight:400}
+  .qbox{margin-top:14px;padding:12px 15px;background:rgba(28,38,46,.05);border-left:3px solid var(--gold);border-radius:4px}
+  .qbox .qlab{font-family:'Space Mono',monospace;font-size:10px;letter-spacing:1.2px;text-transform:uppercase;color:var(--muted-paper);margin-bottom:5px}
+  .qbox .qt{font-size:14.5px;line-height:1.55;color:#3f3a31;font-style:italic}
+  .qbox .qk{margin-top:7px;font-family:'Space Mono',monospace;font-size:11px;letter-spacing:.4px;color:var(--muted-paper)}
+  .rekord{font-family:'Space Mono',monospace;font-size:12px;letter-spacing:.5px;margin:6px 0 0}
+  .sharegrid{font-size:20px;letter-spacing:3px;margin:14px 0 2px}
+
+  .actions{margin-top:18px;display:flex;justify-content:flex-end}
+  .btn{font-family:'Oswald',sans-serif;font-weight:600;font-size:15px;letter-spacing:1px;text-transform:uppercase;cursor:pointer;border:none;border-radius:6px;padding:13px 24px;background:var(--ink);color:var(--paper);transition:transform .12s,box-shadow .15s,background .15s}
+  .btn:hover{transform:translateY(-1px);box-shadow:0 8px 20px -10px rgba(0,0,0,.6)}
+  .btn:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
+  .btn.go{background:var(--green-dk)} .btn.go:hover{background:var(--green)}
+  .btn.big{font-size:18px;padding:16px 32px}
+
+  .screen{background:var(--ink-2);border:1px solid var(--line);border-radius:12px;padding:34px 28px;box-shadow:var(--shadow)}
+  .kicker{font-family:'Space Mono',monospace;font-size:12px;letter-spacing:3px;text-transform:uppercase;color:var(--gold);margin-bottom:14px}
+  .hero-title{font-family:'Oswald',sans-serif;font-weight:700;font-size:clamp(34px,10vw,56px);line-height:.96;text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px}
+  .hero-title .amp{color:var(--red);font-style:italic}
+  .hero-sub{font-family:'Oswald',sans-serif;font-weight:300;font-size:clamp(16px,4vw,20px);letter-spacing:4px;text-transform:uppercase;color:var(--muted);margin-bottom:22px}
+  .lede{font-size:15.5px;line-height:1.6;color:#cfd4d8;max-width:54ch}
+  .lede + .lede{margin-top:12px}
+  .lede strong{color:var(--paper)}
+  .phone{font-size:46px;line-height:1;margin-bottom:8px;animation:ring 1.6s ease-in-out infinite}
+  @keyframes ring{0%,60%,100%{transform:rotate(0)}10%,30%,50%{transform:rotate(-12deg)}20%,40%{transform:rotate(12deg)}}
+
+  .rank-badge{font-family:'Oswald',sans-serif;font-weight:700;font-size:clamp(26px,7vw,40px);text-transform:uppercase;letter-spacing:.5px;margin:6px 0 10px;line-height:1.05}
+  .bigscore{font-family:'Oswald',sans-serif;font-weight:700;font-size:54px;line-height:1;margin:18px 0 2px}
+  .scoreline{font-family:'Space Mono',monospace;font-size:13px;color:var(--muted);margin-top:4px}
+
+  .art-banner{border-radius:10px;overflow:hidden;border:1px solid var(--line);margin:12px 0 2px;line-height:0;background:#0d141a}
+  .art-banner svg{display:block;width:100%}
+  .league{margin-top:24px;border-top:1px solid var(--line);padding-top:18px;text-align:left}
+  .league h3{font-family:'Oswald',sans-serif;font-weight:600;font-size:13px;letter-spacing:1.5px;text-transform:uppercase;color:var(--paper);margin-bottom:4px}
+  .league .lsub{font-size:13px;color:#9aa0a6;margin-bottom:14px;line-height:1.45}
+  .leg{display:flex;gap:12px;padding:11px 13px;border-radius:9px;background:var(--ink-3);margin-bottom:8px;border:1px solid transparent}
+  .leg.me{border-color:var(--gold);background:rgba(201,162,75,.12)}
+  .leg .rk{font-family:'Oswald',sans-serif;font-weight:700;font-size:18px;color:var(--gold);width:22px;flex:none;text-align:center;line-height:1.35}
+  .leg .nm{font-family:'Oswald',sans-serif;font-weight:600;font-size:15px;color:var(--paper);display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+  .leg .nm .you{font-family:'Space Mono',monospace;font-size:9px;letter-spacing:1px;background:var(--gold);color:var(--ink);padding:2px 7px;border-radius:10px;text-transform:uppercase}
+  .leg .ds{font-size:12.5px;line-height:1.45;color:#aab0b6;margin-top:3px}
+
+  .fade{animation:fade .45s ease}
+  @keyframes fade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+
+  .footer{text-align:center;font-family:'Space Mono',monospace;font-size:10.5px;color:#566069;letter-spacing:.5px;line-height:1.6;margin-top:4px}
+  .footer span{color:var(--green)}
+
+  @keyframes shake{
+    0%,100%{transform:translateX(0)}
+    10%{transform:translateX(-6px) rotate(-0.5deg)}
+    20%{transform:translateX(5px) rotate(0.4deg)}
+    30%{transform:translateX(-4px) rotate(-0.3deg)}
+    40%{transform:translateX(4px) rotate(0.3deg)}
+    50%{transform:translateX(-3px)}
+    60%{transform:translateX(2px)}
+    70%{transform:translateX(-1px)}
+  }
+  .shake{animation:shake .45s ease-out}
+
+  .portrait{float:right;width:52px;height:52px;margin:-2px -2px 6px 12px;border-radius:50%;overflow:hidden;border:2px solid var(--line-paper);flex:none;background:#2c2823;position:relative}
+  .portrait img{display:block;width:100%;height:100%;object-fit:cover;filter:grayscale(1) contrast(1.15) brightness(1.05)}
+  .portrait::after{content:"";position:absolute;inset:0;border-radius:50%;box-shadow:inset 0 0 8px 2px rgba(0,0,0,.35)}
+
+  @media (max-width:430px){
+    .card{padding:24px 18px 20px}
+    .screen{padding:26px 20px}
+  }
+  @media (prefers-reduced-motion:reduce){*{animation:none !important;transition:none !important}}
 </style>
 </head>
 <body>
-<div id="dak-dashboard">
+<div class="stage" id="stage">
 
-<div class="dash-header">
-  <div>
-    <h1>Analytisk overblik – Arbejdsmarkedet</h1>
-    <p>Danske A-kasser · Nøgletal om det danske arbejdsmarked</p>
-    <p style="margin-top:2px;opacity:0.65;font-size:12px">Udarbejdet af Michel Klos</p>
-  </div>
-  <div class="period-btns">
-    <button onclick="setPeriod(24,this)">2 år</button>
-    <button onclick="setPeriod(36,this)" class="active">3 år</button>
-    <button onclick="setPeriod(60,this)">5 år</button>
-    <button onclick="setPeriod(0,this)">Alle</button>
-  </div>
-</div>
+  <header class="bar">
+    <div class="brand">
+      <span class="logo">Spin <span class="amp">&amp;</span> Skandale</span>
+      <span class="tag">Krisemanageren</span>
+    </div>
+    <span class="casecount" id="casecount"></span>
+  </header>
 
-<!-- SEKTION 1: LEDIGHED OG BESKÆFTIGELSE -->
-<div class="section-title">Ledighed og beskæftigelse</div>
-<div class="kpi-grid">
-<div class="kpi-card">
-  <div class="kpi-period">Maj 2026</div>
-  <div class="kpi-label">Bruttoledige</div>
-  <div class="kpi-value">87.839</div>
-  <div class="kpi-sub">Antal bruttoledige fuldtidspersoner</div>
-  <div class="kpi-compare">
-    <div class="kpi-prev"><span>Forrige md. (Apr. 2026)</span><strong>93.778</strong></div>
-    <div class="kpi-prev"><span>Samme md. i fjor (Maj 2025)</span><strong>83.557</strong></div>
+  <div class="record" id="record" style="display:none">
+    <div class="segs" id="segs"></div>
+    <span class="rec-lbl" id="rec-lbl"><b>0</b> rigtige</span>
   </div>
-  <div class="kpi-delta">Md.: <span class="delta-good">▼ 5.939</span>&nbsp;|&nbsp;År: <span class="delta-bad">▲ 4.282</span></div>
-</div>
-<div class="kpi-card">
-  <div class="kpi-period">Maj 2026</div>
-  <div class="kpi-label">Bruttoledige (sæsonkorr.)</div>
-  <div class="kpi-value">93.305</div>
-  <div class="kpi-sub">Sæsonkorrigeret antal</div>
-  <div class="kpi-compare">
-    <div class="kpi-prev"><span>Forrige md. (Apr. 2026)</span><strong>92.522</strong></div>
-    <div class="kpi-prev"><span>Samme md. i fjor (Maj 2025)</span><strong>86.767</strong></div>
-  </div>
-  <div class="kpi-delta">Md.: <span class="delta-bad">▲ 783</span>&nbsp;|&nbsp;År: <span class="delta-bad">▲ 6.538</span></div>
-</div>
-<div class="kpi-card">
-  <div class="kpi-period">Maj 2026</div>
-  <div class="kpi-label">Ledighedsprocent</div>
-  <div class="kpi-value">3,1%</div>
-  <div class="kpi-sub">Sæsonkorr. pct. af arbejdsstyrken</div>
-  <div class="kpi-compare">
-    <div class="kpi-prev"><span>Forrige md. (Apr. 2026)</span><strong>3,0%</strong></div>
-    <div class="kpi-prev"><span>Samme md. i fjor (Maj 2025)</span><strong>2,9%</strong></div>
-  </div>
-  <div class="kpi-delta">Md.: <span class="delta-bad">▲ 0,1%</span>&nbsp;|&nbsp;År: <span class="delta-bad">▲ 0,2%</span></div>
-</div>
-<div class="kpi-card">
-  <div class="kpi-period">Maj 2026</div>
-  <div class="kpi-label">Dagpengemodtagere</div>
-  <div class="kpi-value">72.345</div>
-  <div class="kpi-sub">Bruttoledige på dagpenge</div>
-  <div class="kpi-compare">
-    <div class="kpi-prev"><span>Forrige md. (Apr. 2026)</span><strong>77.784</strong></div>
-    <div class="kpi-prev"><span>Samme md. i fjor (Maj 2025)</span><strong>71.066</strong></div>
-  </div>
-  <div class="kpi-delta">Md.: <span class="delta-good">▼ 5.439</span>&nbsp;|&nbsp;År: <span class="delta-bad">▲ 1.279</span></div>
-</div>
-<div class="kpi-card">
-  <div class="kpi-period">Maj 2026</div>
-  <div class="kpi-label">Kontanthjælpsmodtagere</div>
-  <div class="kpi-value">15.494</div>
-  <div class="kpi-sub">Bruttoledige på kontanthjælp</div>
-  <div class="kpi-compare">
-    <div class="kpi-prev"><span>Forrige md. (Apr. 2026)</span><strong>15.995</strong></div>
-    <div class="kpi-prev"><span>Samme md. i fjor (Maj 2025)</span><strong>12.491</strong></div>
-  </div>
-  <div class="kpi-delta">Md.: <span class="delta-good">▼ 501</span>&nbsp;|&nbsp;År: <span class="delta-bad">▲ 3.003</span></div>
-</div>
-<div class="kpi-card">
-  <div class="kpi-period">Maj 2026</div>
-  <div class="kpi-label">Nyopslåede stillinger</div>
-  <div class="kpi-value">29.640</div>
-  <div class="kpi-sub">Nyopslåede stillinger i måneden</div>
-  <div class="kpi-compare">
-    <div class="kpi-prev"><span>Forrige md. (Apr. 2026)</span><strong>24.981</strong></div>
-    <div class="kpi-prev"><span>Samme md. i fjor (Maj 2025)</span><strong>28.589</strong></div>
-  </div>
-  <div class="kpi-delta">Md.: <span class="delta-good">▲ 4.659</span>&nbsp;|&nbsp;År: <span class="delta-good">▲ 1.051</span></div>
-</div>
-<div class="kpi-card">
-  <div class="kpi-period">Apr. 2026</div>
-  <div class="kpi-label">Lønmodtagere i alt</div>
-  <div class="kpi-value">3.085.275</div>
-  <div class="kpi-sub">Sæsonkorrigeret</div>
-  <div class="kpi-compare">
-    <div class="kpi-prev"><span>Forrige md. (Mar. 2026)</span><strong>3.084.471</strong></div>
-    <div class="kpi-prev"><span>Samme md. i fjor (Apr. 2025)</span><strong>3.053.563</strong></div>
-  </div>
-  <div class="kpi-delta">Md.: <span class="delta-good">▲ 804</span>&nbsp;|&nbsp;År: <span class="delta-good">▲ 31.712</span></div>
-</div>
-<div class="kpi-card">
-  <div class="kpi-period">Maj 2026</div>
-  <div class="kpi-label">Varslede afskedigelser</div>
-  <div class="kpi-value">1.183</div>
-  <div class="kpi-sub">Antal varslede personer</div>
-  <div class="kpi-compare">
-    <div class="kpi-prev"><span>Forrige md. (Apr. 2026)</span><strong>421</strong></div>
-    <div class="kpi-prev"><span>Samme md. i fjor (Maj 2025)</span><strong>1.160</strong></div>
-  </div>
-  <div class="kpi-delta">Md.: <span class="delta-bad">▲ 762</span>&nbsp;|&nbsp;År: <span class="delta-bad">▲ 23</span></div>
-</div>
-<div class="kpi-card">
-  <div class="kpi-period">Maj 2026</div>
-  <div class="kpi-label">Langtidsledige i alt</div>
-  <div class="kpi-value">17.106</div>
-  <div class="kpi-sub">Langtidsledige fuldtidspersoner</div>
-  <div class="kpi-compare">
-    <div class="kpi-prev"><span>Forrige md. (Apr. 2026)</span><strong>17.007</strong></div>
-    <div class="kpi-prev"><span>Samme md. i fjor (Maj 2025)</span><strong>16.448</strong></div>
-  </div>
-  <div class="kpi-delta">Md.: <span class="delta-bad">▲ 99</span>&nbsp;|&nbsp;År: <span class="delta-bad">▲ 658</span></div>
-</div>
-<div class="kpi-card">
-  <div class="kpi-period">Maj 2026</div>
-  <div class="kpi-label">Konkurser</div>
-  <div class="kpi-value">104</div>
-  <div class="kpi-sub">Erklærede konkurser</div>
-  <div class="kpi-compare">
-    <div class="kpi-prev"><span>Forrige md. (Apr. 2026)</span><strong>125</strong></div>
-    <div class="kpi-prev"><span>Samme md. i fjor (Maj 2025)</span><strong>176</strong></div>
-  </div>
-  <div class="kpi-delta">Md.: <span class="delta-good">▼ 21</span>&nbsp;|&nbsp;År: <span class="delta-good">▼ 72</span></div>
-</div>
-<div class="kpi-card">
-  <div class="kpi-period">Maj 2026</div>
-  <div class="kpi-label">Tabte job ved konkurser</div>
-  <div class="kpi-value">971</div>
-  <div class="kpi-sub">Job tabt som følge af konkurser</div>
-  <div class="kpi-compare">
-    <div class="kpi-prev"><span>Forrige md. (Apr. 2026)</span><strong>782</strong></div>
-    <div class="kpi-prev"><span>Samme md. i fjor (Maj 2025)</span><strong>1.003</strong></div>
-  </div>
-  <div class="kpi-delta">Md.: <span class="delta-bad">▲ 189</span>&nbsp;|&nbsp;År: <span class="delta-good">▼ 32</span></div>
-</div>
-</div>
 
-<!-- SEKTION 2: SAMFUNDSØKONOMISKE INDIKATORER -->
-<div class="section-title">Samfundsøkonomiske indikatorer</div>
-<div class="kpi-grid">
-<div class="kpi-card">
-  <div class="kpi-period">Maj 2026</div>
-  <div class="kpi-label">Inflation (samlet)</div>
-  <div class="kpi-value">1,9%</div>
-  <div class="kpi-sub">ÅoÅ pct.-ændring</div>
-  <div class="kpi-compare">
-    <div class="kpi-prev"><span>Forrige md. (Apr. 2026)</span><strong>1,4%</strong></div>
-    <div class="kpi-prev"><span>Samme md. i fjor (Maj 2025)</span><strong>1,6%</strong></div>
-  </div>
-  <div class="kpi-delta">Md.: <span class="delta-bad">▲ 0,5%</span>&nbsp;|&nbsp;År: <span class="delta-bad">▲ 0,3%</span></div>
-</div>
-<div class="kpi-card">
-  <div class="kpi-period">Jun. 2026</div>
-  <div class="kpi-label">Forbrugertillidsindikator</div>
-  <div class="kpi-value">-14,0</div>
-  <div class="kpi-sub">Nettotal</div>
-  <div class="kpi-compare">
-    <div class="kpi-prev"><span>Forrige md. (Maj 2026)</span><strong>-19,8</strong></div>
-    <div class="kpi-prev"><span>Samme md. i fjor (Jun. 2025)</span><strong>-15,1</strong></div>
-  </div>
-  <div class="kpi-delta">Md.: <span class="delta-bad">▲ 5,8</span>&nbsp;|&nbsp;År: <span class="delta-bad">▲ 1,1</span></div>
-</div>
-<div class="kpi-card">
-  <div class="kpi-period">Jun. 2026</div>
-  <div class="kpi-label">Erhvervstillidsindikator</div>
-  <div class="kpi-value">101,0</div>
-  <div class="kpi-sub">Nettotal</div>
-  <div class="kpi-compare">
-    <div class="kpi-prev"><span>Forrige md. (Maj 2026)</span><strong>104,1</strong></div>
-    <div class="kpi-prev"><span>Samme md. i fjor (Jun. 2025)</span><strong>102,6</strong></div>
-  </div>
-  <div class="kpi-delta">Md.: <span class="delta-bad">▼ 3,1</span>&nbsp;|&nbsp;År: <span class="delta-bad">▼ 1,6</span></div>
-</div>
-</div>
+  <div id="app"></div>
 
-<!-- SEKTION 3: INTERNATIONALT -->
-<div class="section-title">Internationalt</div>
-<div class="kpi-grid">
-<div class="kpi-card kpi-table-card">
-  <div class="kpi-period">2026-Q1</div>
-  <div class="kpi-label">Ledighed – internationale sammenligninger</div>
-  <div class="kpi-value">7,0%</div>
-  <div class="kpi-sub">Danmark · Sæsonkorr. pct. af arbejdsstyrken (15–74 år)</div>
-  <div class="kpi-table-scroll">
-  <table class="kpi-table"><tbody><tr><td>Bulgarien</td><td style="text-align:right;font-weight:600">3,0%</td></tr><tr><td>Polen</td><td style="text-align:right;font-weight:600">3,0%</td></tr><tr><td>Tjekkiet</td><td style="text-align:right;font-weight:600">3,1%</td></tr><tr><td>Malta</td><td style="text-align:right;font-weight:600">3,5%</td></tr><tr><td>Cypern</td><td style="text-align:right;font-weight:600">3,7%</td></tr><tr><td>Tyskland</td><td style="text-align:right;font-weight:600">3,8%</td></tr><tr><td>Holland</td><td style="text-align:right;font-weight:600">4,0%</td></tr><tr><td>Slovenien</td><td style="text-align:right;font-weight:600">4,0%</td></tr><tr><td>Ungarn</td><td style="text-align:right;font-weight:600">4,6%</td></tr><tr><td>Norge</td><td style="text-align:right;font-weight:600">4,7%</td></tr><tr><td>Italien</td><td style="text-align:right;font-weight:600">4,9%</td></tr><tr><td>Irland</td><td style="text-align:right;font-weight:600">4,9%</td></tr><tr><td>Schweiz</td><td style="text-align:right;font-weight:600">5,0%</td></tr><tr><td>Kroatien</td><td style="text-align:right;font-weight:600">5,1%</td></tr><tr><td>Slovakiet</td><td style="text-align:right;font-weight:600">5,8%</td></tr><tr><td>Østrig</td><td style="text-align:right;font-weight:600">5,8%</td></tr><tr><td>Portugal</td><td style="text-align:right;font-weight:600">5,9%</td></tr><tr><td>EU-27</td><td style="text-align:right;font-weight:600">6,0%</td></tr><tr><td>Eurozonen (20)</td><td style="text-align:right;font-weight:600">6,3%</td></tr><tr><td>Eurozonen (21)</td><td style="text-align:right;font-weight:600">6,3%</td></tr><tr><td>Belgien</td><td style="text-align:right;font-weight:600">6,4%</td></tr><tr><td>Rumænien</td><td style="text-align:right;font-weight:600">6,4%</td></tr><tr><td>Letland</td><td style="text-align:right;font-weight:600">6,8%</td></tr><tr><td>Estland</td><td style="text-align:right;font-weight:600">6,9%</td></tr><tr style="background:#e8f4ec;font-weight:700"><td>🇩🇰 Danmark</td><td style="text-align:right;font-weight:700;color:#3d6b47">7,0%</td></tr><tr><td>Luxembourg</td><td style="text-align:right;font-weight:600">7,2%</td></tr><tr><td>Litauen</td><td style="text-align:right;font-weight:600">7,3%</td></tr><tr><td>Frankrig</td><td style="text-align:right;font-weight:600">8,1%</td></tr><tr><td>Tyrkiet</td><td style="text-align:right;font-weight:600">8,2%</td></tr><tr><td>Sverige</td><td style="text-align:right;font-weight:600">8,6%</td></tr><tr><td>Serbien</td><td style="text-align:right;font-weight:600">8,7%</td></tr><tr><td>Grækenland</td><td style="text-align:right;font-weight:600">9,5%</td></tr><tr><td>Spanien</td><td style="text-align:right;font-weight:600">10,3%</td></tr><tr><td>Finland</td><td style="text-align:right;font-weight:600">10,4%</td></tr><tr><td>Bosnien-Hercegovina</td><td style="text-align:right;font-weight:600">11,3%</td></tr><tr><td>Nordmakedonien</td><td style="text-align:right;font-weight:600">11,4%</td></tr></tbody></table>
+  <div class="footer">
+    Satire · alle sager bygger på virkelige politiske skandaler<br>
+    Spil og koncept · <span>Krisemanageren</span>
   </div>
 </div>
-<div class="kpi-card">
-  <div class="kpi-period">2026-05</div>
-  <div class="kpi-label">Forbrugertillid – internationalt</div>
-  <div class="kpi-sub">Nettotal, seneste måned</div>
-  <div class="kpi-compare" style="flex-direction:column;gap:4px">
-    <div class="kpi-prev"><span>Danmark</span><strong>-15,5</strong></div>
-    <div class="kpi-prev"><span>Sverige</span><strong>-5,7</strong></div>
-    <div class="kpi-prev"><span>Tyskland</span><strong>-16,1</strong></div>
-    <div class="kpi-prev"><span>Frankrig</span><strong>-21,2</strong></div>
-    <div class="kpi-prev"><span>EU-27</span><strong>-18,2</strong></div>
-  </div>
-</div>
-</div>
-
-<!-- GRAFER: LEDIGHED OG BESKÆFTIGELSE -->
-<div class="section-title">Grafer – Ledighed og beskæftigelse</div>
-
-<div class="chart-2col">
-  <div class="chart-box">
-    <h3>Bruttoledige – antal</h3>
-    <div class="chart-container"><canvas id="c_brutto"></canvas></div>
-    <div class="chart-source">Kilde: Danmarks Statistik · Grafik og databehandling: Danske A-kasser</div>
-  </div>
-  <div class="chart-box">
-    <h3>Ledighedsprocent (sæsonkorrigeret)</h3>
-    <div class="chart-container"><canvas id="c_pct"></canvas></div>
-    <div class="chart-source">Kilde: Danmarks Statistik · Grafik og databehandling: Danske A-kasser</div>
-  </div>
-</div>
-
-<div class="chart-2col">
-  <div class="chart-box">
-    <h3>Dagpengemodtagere og kontanthjælpsmodtagere</h3>
-    <div class="chart-container"><canvas id="c_ydelser"></canvas></div>
-    <div class="chart-source">Kilde: Danmarks Statistik · Grafik og databehandling: Danske A-kasser</div>
-  </div>
-  <div class="chart-box">
-    <h3>Langtidsledige</h3>
-    <div class="chart-container"><canvas id="c_lang"></canvas></div>
-    <div class="chart-source">Kilde: Danmarks Statistik · Grafik og databehandling: Danske A-kasser</div>
-  </div>
-</div>
-
-<div class="chart-2col">
-  <div class="chart-box">
-    <h3>Nyopslåede stillinger</h3>
-    <div class="chart-container"><canvas id="c_still"></canvas></div>
-    <div class="chart-source">Kilde: Danmarks Statistik · Grafik og databehandling: Danske A-kasser</div>
-  </div>
-  <div class="chart-box">
-    <h3>Lønmodtagere (sæsonkorrigeret)</h3>
-    <div class="chart-container"><canvas id="c_loem"></canvas></div>
-    <div class="chart-source">Kilde: Danmarks Statistik · Grafik og databehandling: Danske A-kasser</div>
-  </div>
-</div>
-
-<div class="chart-2col">
-  <div class="chart-box">
-    <h3>Varslede afskedigelser (antal personer)</h3>
-    <div class="chart-container"><canvas id="c_vars"></canvas></div>
-    <div class="chart-source">Kilde: Danmarks Statistik · Grafik og databehandling: Danske A-kasser</div>
-  </div>
-  <div class="chart-box">
-    <h3>Konkurser og tabte job</h3>
-    <div class="chart-container"><canvas id="c_konk"></canvas></div>
-    <div class="chart-source">Kilde: Danmarks Statistik · Grafik og databehandling: Danske A-kasser</div>
-  </div>
-</div>
-
-<!-- GRAFER: SAMFUNDSØKONOMISKE INDIKATORER -->
-<div class="section-title">Grafer – Samfundsøkonomiske indikatorer</div>
-
-<div class="chart-2col">
-  <div class="chart-box">
-    <h3>Inflation (ÅoÅ pct.-ændring)</h3>
-    <div class="chart-container"><canvas id="c_infl"></canvas></div>
-    <div class="chart-source">Kilde: Danmarks Statistik · Grafik og databehandling: Danske A-kasser</div>
-  </div>
-  <div class="chart-box">
-    <h3>Forbrugertillidsindikator</h3>
-    <div class="chart-container"><canvas id="c_forb"></canvas></div>
-    <div class="chart-source">Kilde: Danmarks Statistik · Grafik og databehandling: Danske A-kasser</div>
-  </div>
-</div>
-
-<div class="chart-2col">
-  <div class="chart-box">
-    <h3>Erhvervstillidsindikator</h3>
-    <div class="chart-container"><canvas id="c_erh"></canvas></div>
-    <div class="chart-source">Kilde: Danmarks Statistik · Grafik og databehandling: Danske A-kasser</div>
-  </div>
-</div>
-
-<!-- GRAFER: INTERNATIONALT -->
-<div class="section-title">Grafer – Internationalt</div>
-
-<div class="chart-2col">
-  <div class="chart-box">
-    <h3>Ledighed kvartalsvis – DK, DE, SE, EU-27</h3>
-    <div class="chart-container"><canvas id="c_euro_ts"></canvas></div>
-    <div class="chart-source">Kilde: Eurostat · Grafik og databehandling: Danske A-kasser</div>
-  </div>
-  <div class="chart-box">
-    <h3>Forbrugertillid – DK, DE, FR, SE, EU-27</h3>
-    <div class="chart-container"><canvas id="c_forb_eu"></canvas></div>
-    <div class="chart-source">Kilde: Europa-Kommissionen · Grafik og databehandling: Danske A-kasser</div>
-  </div>
-</div>
-
-<div class="chart-box" style="margin-bottom:16px">
-  <h3>Ledighed på tværs af lande – 2026-Q1 (sæsonkorr., pct.)</h3>
-  <div class="chart-container tall"><canvas id="c_euro_bar"></canvas></div>
-  <div class="chart-source">Kilde: Eurostat · Grafik og databehandling: Danske A-kasser</div>
-</div>
-
-</div><!-- end dak-dashboard -->
 
 <script>
-(function() {
-  const DATA = {
-    ledige_labels: ["2018M01", "2018M02", "2018M03", "2018M04", "2018M05", "2018M06", "2018M07", "2018M08", "2018M09", "2018M10", "2018M11", "2018M12", "2019M01", "2019M02", "2019M03", "2019M04", "2019M05", "2019M06", "2019M07", "2019M08", "2019M09", "2019M10", "2019M11", "2019M12", "2020M01", "2020M02", "2020M03", "2020M04", "2020M05", "2020M06", "2020M07", "2020M08", "2020M09", "2020M10", "2020M11", "2020M12", "2021M01", "2021M02", "2021M03", "2021M04", "2021M05", "2021M06", "2021M07", "2021M08", "2021M09", "2021M10", "2021M11", "2021M12", "2022M01", "2022M02", "2022M03", "2022M04", "2022M05", "2022M06", "2022M07", "2022M08", "2022M09", "2022M10", "2022M11", "2022M12", "2023M01", "2023M02", "2023M03", "2023M04", "2023M05", "2023M06", "2023M07", "2023M08", "2023M09", "2023M10", "2023M11", "2023M12", "2024M01", "2024M02", "2024M03", "2024M04", "2024M05", "2024M06", "2024M07", "2024M08", "2024M09", "2024M10", "2024M11", "2024M12", "2025M01", "2025M02", "2025M03", "2025M04", "2025M05", "2025M06", "2025M07", "2025M08", "2025M09", "2025M10", "2025M11", "2025M12", "2026M01", "2026M02", "2026M03", "2026M04", "2026M05"],
-    brutto_antal:  [122692, 121627, 117999, 106431, 105523, 103173, 99398, 103905, 101974, 103673, 104431, 106879, 113842, 113887, 109113, 98622, 99160, 100035, 98475, 103027, 100495, 102202, 104004, 107283, 115020, 114734, 123371, 143843, 149982, 146302, 139423, 134963, 129103, 127338, 125573, 128183, 140976, 145304, 134986, 123622, 110154, 103596, 101314, 96940, 88381, 82988, 77089, 69734, 83844, 81271, 76993, 73748, 71142, 73198, 77351, 77599, 72618, 72601, 74362, 72774, 89080, 90247, 86827, 83538, 79813, 80284, 83825, 85396, 80445, 80593, 81158, 78705, 95795, 95878, 92144, 87568, 83556, 83565, 87131, 88335, 83692, 83346, 83582, 80463, 95776, 96663, 92884, 87864, 83557, 84215, 87568, 88850, 84158, 83842, 84575, 82302, 99167, 104315, 98011, 93778, 87839],
-    brutto_saeson: [112195, 110704, 111735, 110376, 108937, 107194, 106056, 106258, 106354, 106414, 105694, 105163, 104206, 103469, 103237, 102493, 102619, 103902, 103771, 104281, 104999, 105717, 106585, 106357, 105024, 103776, 116377, 150284, 157478, 152918, 142916, 135303, 136028, 133509, 131096, 128004, 127378, 130397, 126982, 121131, 115014, 108306, 104005, 97585, 93300, 87527, 80856, 76856, 75989, 73157, 72221, 72078, 73390, 75510, 77580, 76922, 76144, 76291, 77964, 79674, 81066, 81541, 81708, 82154, 82925, 83115, 83342, 84087, 84340, 84881, 85412, 86069, 86788, 86405, 86525, 86551, 86938, 86632, 86814, 87029, 87714, 87866, 88014, 87816, 86919, 87099, 87215, 86824, 86767, 87342, 87605, 87861, 88057, 88321, 88955, 89449, 90082, 93723, 91990, 92522, 93305],
-    brutto_pct:    [4.0, 3.9, 4.0, 3.9, 3.9, 3.8, 3.8, 3.8, 3.8, 3.8, 3.8, 3.7, 3.7, 3.6, 3.6, 3.6, 3.6, 3.7, 3.6, 3.7, 3.7, 3.7, 3.7, 3.7, 3.7, 3.6, 4.1, 5.3, 5.5, 5.4, 5.0, 4.7, 4.8, 4.7, 4.6, 4.5, 4.3, 4.4, 4.3, 4.1, 3.9, 3.7, 3.5, 3.3, 3.2, 3.0, 2.8, 2.6, 2.5, 2.4, 2.4, 2.4, 2.5, 2.5, 2.6, 2.6, 2.5, 2.5, 2.6, 2.7, 2.7, 2.7, 2.7, 2.7, 2.8, 2.8, 2.8, 2.8, 2.8, 2.8, 2.8, 2.9, 2.9, 2.8, 2.9, 2.9, 2.9, 2.9, 2.9, 2.9, 2.9, 2.9, 2.9, 2.9, 2.9, 2.9, 2.9, 2.9, 2.9, 2.9, 2.9, 2.9, 2.9, 2.9, 2.9, 2.9, 3.0, 3.1, 3.0, 3.0, 3.1],
-    dag_antal:     [89973, 88878, 85573, 75100, 75197, 73890, 72993, 77909, 75827, 77572, 77897, 80608, 87927, 87749, 83431, 74098, 75287, 76509, 76990, 81714, 79163, 80595, 81659, 85204, 93261, 93278, 101081, 117627, 122248, 119597, 115784, 113274, 108798, 107639, 105884, 108974, 120533, 124325, 114676, 104691, 92975, 88247, 87895, 84199, 76413, 71497, 65893, 59281, 73028, 70350, 66139, 62227, 57427, 58099, 62234, 62790, 58129, 57835, 59249, 57620, 73245, 74167, 71004, 67995, 65018, 66379, 70817, 72655, 67770, 67937, 68279, 65844, 82592, 82467, 78783, 74662, 71033, 71460, 75535, 76689, 71990, 71468, 71286, 68075, 82940, 83443, 79568, 74913, 71066, 71953, 75849, 76867, 72149, 71353, 70818, 67823, 83836, 88277, 81794, 77784, 72345],
-    kontant_antal: [32719, 32749, 32426, 31331, 30326, 29283, 26405, 25996, 26147, 26100, 26534, 26271, 25916, 26138, 25682, 24525, 23874, 23525, 21485, 21313, 21331, 21607, 22345, 22078, 21759, 21456, 22290, 26216, 27734, 26705, 23638, 21688, 20305, 19699, 19689, 19208, 20443, 20979, 20310, 18931, 17179, 15349, 13419, 12741, 11969, 11491, 11195, 10453, 10815, 10922, 10854, 11520, 13715, 15099, 15117, 14810, 14490, 14766, 15114, 15154, 15836, 16080, 15822, 15543, 14795, 13905, 13007, 12741, 12675, 12657, 12879, 12861, 13202, 13411, 13361, 12905, 12524, 12106, 11596, 11645, 11702, 11878, 12296, 12389, 12836, 13220, 13317, 12952, 12491, 12262, 11719, 11983, 12008, 12489, 13756, 14479, 15331, 16038, 16217, 15995, 15494],
-    still_labels:  ["2018M01", "2018M02", "2018M03", "2018M04", "2018M05", "2018M06", "2018M07", "2018M08", "2018M09", "2018M10", "2018M11", "2018M12", "2019M01", "2019M02", "2019M03", "2019M04", "2019M05", "2019M06", "2019M07", "2019M08", "2019M09", "2019M10", "2019M11", "2019M12", "2020M01", "2020M02", "2020M03", "2020M04", "2020M05", "2020M06", "2020M07", "2020M08", "2020M09", "2020M10", "2020M11", "2020M12", "2021M01", "2021M02", "2021M03", "2021M04", "2021M05", "2021M06", "2021M07", "2021M08", "2021M09", "2021M10", "2021M11", "2021M12", "2022M01", "2022M02", "2022M03", "2022M04", "2022M05", "2022M06", "2022M07", "2022M08", "2022M09", "2022M10", "2022M11", "2022M12", "2023M01", "2023M02", "2023M03", "2023M04", "2023M05", "2023M06", "2023M07", "2023M08", "2023M09", "2023M10", "2023M11", "2023M12", "2024M01", "2024M02", "2024M03", "2024M04", "2024M05", "2024M06", "2024M07", "2024M08", "2024M09", "2024M10", "2024M11", "2024M12", "2025M01", "2025M02", "2025M03", "2025M04", "2025M05", "2025M06", "2025M07", "2025M08", "2025M09", "2025M10", "2025M11", "2025M12", "2026M01", "2026M02", "2026M03", "2026M04", "2026M05"],
-    still_antal:   [22386, 19573, 21072, 21758, 26876, 21794, 17414, 22242, 19086, 20001, 20901, 15789, 23867, 20457, 24302, 22554, 26380, 20666, 18783, 19361, 20621, 21654, 20621, 17718, 24743, 21762, 18896, 15731, 21204, 22994, 16729, 21618, 25225, 24557, 24381, 22017, 21115, 23534, 32025, 32417, 36887, 36925, 27263, 32264, 35157, 33071, 35793, 30485, 33971, 32796, 39631, 32605, 38652, 33759, 23901, 30383, 30220, 26897, 27730, 23611, 30432, 27571, 32009, 23420, 32952, 29618, 18646, 26393, 22463, 23412, 23603, 20410, 27224, 26505, 25010, 27581, 31526, 24117, 19926, 23245, 23446, 24944, 22932, 19984, 24698, 23756, 25717, 24125, 28589, 23957, 18786, 22022, 24490, 24348, 24007, 21068, 25312, 25450, 29665, 24981, 29640],
-    loem_labels:   ["2018M01", "2018M02", "2018M03", "2018M04", "2018M05", "2018M06", "2018M07", "2018M08", "2018M09", "2018M10", "2018M11", "2018M12", "2019M01", "2019M02", "2019M03", "2019M04", "2019M05", "2019M06", "2019M07", "2019M08", "2019M09", "2019M10", "2019M11", "2019M12", "2020M01", "2020M02", "2020M03", "2020M04", "2020M05", "2020M06", "2020M07", "2020M08", "2020M09", "2020M10", "2020M11", "2020M12", "2021M01", "2021M02", "2021M03", "2021M04", "2021M05", "2021M06", "2021M07", "2021M08", "2021M09", "2021M10", "2021M11", "2021M12", "2022M01", "2022M02", "2022M03", "2022M04", "2022M05", "2022M06", "2022M07", "2022M08", "2022M09", "2022M10", "2022M11", "2022M12", "2023M01", "2023M02", "2023M03", "2023M04", "2023M05", "2023M06", "2023M07", "2023M08", "2023M09", "2023M10", "2023M11", "2023M12", "2024M01", "2024M02", "2024M03", "2024M04", "2024M05", "2024M06", "2024M07", "2024M08", "2024M09", "2024M10", "2024M11", "2024M12", "2025M01", "2025M02", "2025M03", "2025M04", "2025M05", "2025M06", "2025M07", "2025M08", "2025M09", "2025M10", "2025M11", "2025M12", "2026M01", "2026M02", "2026M03", "2026M04"],
-    loem_total:    [2720690, 2727183, 2732695, 2740400, 2749266, 2755571, 2759854, 2758062, 2759016, 2759800, 2763211, 2766035, 2770412, 2771995, 2778851, 2786605, 2788541, 2789519, 2797714, 2791615, 2790043, 2791641, 2792483, 2797032, 2799958, 2802416, 2785258, 2734185, 2723997, 2735237, 2754529, 2764456, 2772709, 2774768, 2777520, 2777408, 2758035, 2758707, 2762002, 2783032, 2818103, 2841485, 2855596, 2864602, 2877485, 2888283, 2901611, 2914638, 2917907, 2927320, 2940321, 2944350, 2949998, 2955297, 2955979, 2963174, 2967528, 2969351, 2972770, 2975489, 2976550, 2980976, 2985088, 2984566, 2990474, 2996031, 2995014, 2999428, 3000559, 3002441, 3006316, 3005987, 3008501, 3014194, 3015779, 3019859, 3022948, 3023514, 3025063, 3024875, 3028098, 3033237, 3035966, 3038984, 3045033, 3046773, 3049662, 3053563, 3055361, 3057307, 3061009, 3064410, 3068635, 3073207, 3075197, 3079365, 3080450, 3080698, 3084471, 3085275],
-    loem_off:      [824217, 827225, 828678, 829125, 829345, 829508, 834104, 829041, 830594, 830408, 830822, 831336, 831136, 832067, 833616, 834710, 835069, 835207, 841522, 836318, 834052, 834171, 834159, 833517, 835426, 834580, 831678, 829084, 832867, 834680, 836377, 838500, 842429, 844427, 846703, 848086, 846789, 849094, 849479, 855784, 858209, 859808, 861713, 862455, 862095, 860812, 862266, 866214, 866840, 867251, 868047, 867740, 867500, 868117, 868099, 869977, 870858, 871672, 872767, 873883, 875167, 875296, 876619, 876049, 877621, 878075, 877269, 877907, 877877, 878386, 878909, 877375, 878529, 880877, 880501, 882578, 882138, 881852, 882589, 882584, 882961, 883844, 883906, 883535, 886170, 885575, 886138, 886019, 886954, 887757, 888858, 890423, 891364, 892248, 893002, 895354, 895949, 896605, 897337, 897938],
-    loem_priv:     [1896473, 1899958, 1904018, 1911275, 1919921, 1926062, 1925750, 1929021, 1928422, 1929392, 1932390, 1934699, 1939276, 1939928, 1945235, 1951896, 1953472, 1954312, 1956192, 1955297, 1955992, 1957470, 1958324, 1963515, 1964531, 1967836, 1953580, 1905101, 1891130, 1900556, 1918153, 1925956, 1930280, 1930341, 1930816, 1929322, 1911245, 1909612, 1912523, 1927248, 1959894, 1981677, 1993883, 2002147, 2015390, 2027471, 2039345, 2048424, 2051067, 2060069, 2072275, 2076610, 2082498, 2087180, 2087881, 2093197, 2096671, 2097679, 2100003, 2101606, 2101383, 2105680, 2108469, 2108517, 2112853, 2117956, 2117745, 2121521, 2122682, 2124054, 2127407, 2128613, 2129972, 2133317, 2135278, 2137281, 2140810, 2141661, 2142474, 2142291, 2145137, 2149392, 2152060, 2155449, 2158863, 2161198, 2163524, 2167544, 2168407, 2169550, 2172151, 2173987, 2177271, 2180959, 2182195, 2184011, 2184501, 2184093, 2187135, 2187337],
-    vars_labels:   ["2018M01", "2018M02", "2018M03", "2018M04", "2018M05", "2018M06", "2018M07", "2018M08", "2018M09", "2018M10", "2018M11", "2018M12", "2019M01", "2019M02", "2019M03", "2019M04", "2019M05", "2019M06", "2019M07", "2019M08", "2019M09", "2019M10", "2019M11", "2019M12", "2020M01", "2020M02", "2020M03", "2020M04", "2020M05", "2020M06", "2020M07", "2020M08", "2020M09", "2020M10", "2020M11", "2020M12", "2021M01", "2021M02", "2021M03", "2021M04", "2021M05", "2021M06", "2021M07", "2021M08", "2021M09", "2021M10", "2021M11", "2021M12", "2022M01", "2022M02", "2022M03", "2022M04", "2022M05", "2022M06", "2022M07", "2022M08", "2022M09", "2022M10", "2022M11", "2022M12", "2023M01", "2023M02", "2023M03", "2023M04", "2023M05", "2023M06", "2023M07", "2023M08", "2023M09", "2023M10", "2023M11", "2023M12", "2024M01", "2024M02", "2024M03", "2024M04", "2024M05", "2024M06", "2024M07", "2024M08", "2024M09", "2024M10", "2024M11", "2024M12", "2025M01", "2025M02", "2025M03", "2025M04", "2025M05", "2025M06", "2025M07", "2025M08", "2025M09", "2025M10", "2025M11", "2025M12", "2026M01", "2026M02", "2026M03", "2026M04", "2026M05"],
-    vars_antal:    [1491, 1444, 734, 1067, 713, 505, 284, 473, 1979, 730, 702, 61, 809, 150, 512, 436, 405, 875, 137, 589, 869, 491, 493, 287, 1069, 785, 3612, 1759, 2519, 4600, 756, 3712, 1185, 825, 583, 409, 278, 484, 437, 87, 268, 353, 113, 66, 172, 199, 84, 92, 271, 873, 351, null, 752, 438, null, 593, 449, 504, 994, 1370, 1579, 394, 408, 1156, 764, 824, 572, 937, 490, 471, 1245, null, 1166, 743, 500, 1658, 715, 699, null, 809, 1081, 845, 482, 98, 831, 394, 403, 1024, 1160, 434, 119, 670, 6173, 1256, 1068, 969, 1247, 676, 1885, 421, 1183],
-    konk_labels:   ["2009M01", "2009M02", "2009M03", "2009M04", "2009M05", "2009M06", "2009M07", "2009M08", "2009M09", "2009M10", "2009M11", "2009M12", "2010M01", "2010M02", "2010M03", "2010M04", "2010M05", "2010M06", "2010M07", "2010M08", "2010M09", "2010M10", "2010M11", "2010M12", "2011M01", "2011M02", "2011M03", "2011M04", "2011M05", "2011M06", "2011M07", "2011M08", "2011M09", "2011M10", "2011M11", "2011M12", "2012M01", "2012M02", "2012M03", "2012M04", "2012M05", "2012M06", "2012M07", "2012M08", "2012M09", "2012M10", "2012M11", "2012M12", "2013M01", "2013M02", "2013M03", "2013M04", "2013M05", "2013M06", "2013M07", "2013M08", "2013M09", "2013M10", "2013M11", "2013M12", "2014M01", "2014M02", "2014M03", "2014M04", "2014M05", "2014M06", "2014M07", "2014M08", "2014M09", "2014M10", "2014M11", "2014M12", "2015M01", "2015M02", "2015M03", "2015M04", "2015M05", "2015M06", "2015M07", "2015M08", "2015M09", "2015M10", "2015M11", "2015M12", "2016M01", "2016M02", "2016M03", "2016M04", "2016M05", "2016M06", "2016M07", "2016M08", "2016M09", "2016M10", "2016M11", "2016M12", "2017M01", "2017M02", "2017M03", "2017M04", "2017M05", "2017M06", "2017M07", "2017M08", "2017M09", "2017M10", "2017M11", "2017M12", "2018M01", "2018M02", "2018M03", "2018M04", "2018M05", "2018M06", "2018M07", "2018M08", "2018M09", "2018M10", "2018M11", "2018M12", "2019M01", "2019M02", "2019M03", "2019M04", "2019M05", "2019M06", "2019M07", "2019M08", "2019M09", "2019M10", "2019M11", "2019M12", "2020M01", "2020M02", "2020M03", "2020M04", "2020M05", "2020M06", "2020M07", "2020M08", "2020M09", "2020M10", "2020M11", "2020M12", "2021M01", "2021M02", "2021M03", "2021M04", "2021M05", "2021M06", "2021M07", "2021M08", "2021M09", "2021M10", "2021M11", "2021M12", "2022M01", "2022M02", "2022M03", "2022M04", "2022M05", "2022M06", "2022M07", "2022M08", "2022M09", "2022M10", "2022M11", "2022M12", "2023M01", "2023M02", "2023M03", "2023M04", "2023M05", "2023M06", "2023M07", "2023M08", "2023M09", "2023M10", "2023M11", "2023M12", "2024M01", "2024M02", "2024M03", "2024M04", "2024M05", "2024M06", "2024M07", "2024M08", "2024M09", "2024M10", "2024M11", "2024M12", "2025M01", "2025M02", "2025M03", "2025M04", "2025M05", "2025M06", "2025M07", "2025M08", "2025M09", "2025M10", "2025M11", "2025M12", "2026M01", "2026M02", "2026M03", "2026M04", "2026M05"],
-    konk_antal:    [213, 229, 271, 264, 256, 226, 242, 173, 238, 259, 219, 212, 229, 263, 289, 238, 223, 301, 267, 228, 216, 185, 174, 172, 165, 190, 181, 181, 180, 191, 168, 143, 184, 167, 178, 178, 166, 203, 183, 142, 206, 161, 184, 177, 156, 179, 189, 133, 144, 181, 188, 133, 187, 179, 141, 140, 123, 171, 152, 98, 132, 111, 124, 100, 122, 101, 117, 108, 102, 145, 153, 105, 126, 133, 152, 160, 152, 155, 124, 115, 115, 149, 144, 149, 128, 158, 204, 239, 191, 173, 144, 126, 138, 122, 171, 145, 147, 127, 178, 142, 174, 165, 150, 151, 174, 187, 212, 186, 165, 201, 178, 177, 194, 189, 181, 177, 187, 160, 179, 136, 159, 216, 212, 189, 210, 151, 171, 138, 152, 246, 240, 169, 170, 180, 134, 184, 190, 141, 166, 125, 158, 173, 165, 151, 177, 190, 169, 130, 137, 130, 120, 66, 159, 201, 198, 168, 136, 158, 237, 187, 173, 243, 163, 170, 217, 266, 310, 215, 229, 222, 296, 189, 164, 244, 206, 117, 231, 274, 240, 189, 172, 185, 200, 206, 154, 166, 165, 135, 192, 218, 169, 151, 176, 152, 187, 155, 176, 132, 165, 135, 183, 223, 186, 134, 139, 123, 158, 125, 104],
-    konk_saeson:   [222, 219, 260, 254, 238, 213, 223, 211, 237, 247, 238, 238, 251, 250, 262, 245, 207, 271, 247, 278, 211, 187, 179, 184, 186, 179, 156, 185, 161, 174, 169, 162, 185, 171, 172, 186, 179, 183, 157, 159, 183, 144, 196, 189, 172, 172, 173, 165, 146, 174, 172, 149, 156, 171, 145, 148, 145, 154, 137, 125, 137, 109, 114, 101, 104, 105, 118, 124, 117, 129, 142, 123, 134, 133, 139, 155, 142, 151, 125, 137, 127, 133, 137, 161, 144, 155, 172, 237, 177, 155, 157, 147, 147, 119, 151, 141, 165, 124, 148, 141, 158, 158, 166, 171, 185, 184, 182, 201, 180, 191, 149, 191, 166, 196, 204, 207, 204, 145, 153, 153, 169, 202, 191, 189, 189, 171, 185, 164, 168, 206, 203, 199, 180, 161, 123, 178, 192, 156, 175, 167, 160, 138, 147, 155, 199, 183, 146, 136, 146, 135, 128, 90, 153, 167, 165, 165, 155, 157, 192, 197, 202, 235, 187, 222, 204, 220, 247, 203, 248, 230, 239, 213, 195, 235, 240, 144, 212, 226, 186, 202, 178, 185, 173, 244, 172, 177, 180, 166, 186, 159, 136, 176, 179, 166, 167, 169, 204, 152, 167, 178, 166, 163, 158, 146, 143, 135, 144, 133, 132],
-    tabte_job:     [1253, 2112, 1955, 3072, 1732, 2082, 1975, 1049, 1259, 1815, 1048, 1845, 1738, 1969, 2044, 1459, 1190, 1999, 1533, 1383, 1400, 1341, 1169, 1879, 1268, 2095, 1269, 1160, 1130, 1787, 1348, 1003, 1350, 1591, 1701, 1277, 851, 1268, 1318, 1027, 2641, 1052, 1197, 1205, 999, 907, 1078, 800, 1282, 1426, 1280, 940, 1366, 1350, 894, 1744, 830, 1588, 944, 618, 690, 601, 1020, 808, 623, 809, 870, 517, 921, 1005, 989, 753, 640, 1152, 1043, 803, 944, 739, 785, 706, 649, 864, 698, 795, 881, 934, 1132, 1111, 1198, 910, 1351, 811, 587, 561, 1139, 779, 1263, 927, 1068, 844, 1167, 1042, 920, 898, 843, 866, 1022, 836, 1240, 1819, 845, 886, 1059, 967, 1205, 978, 772, 900, 1027, 672, 1886, 1118, 1060, 861, 1039, 783, 1150, 655, 752, 1248, 1483, 791, 756, 879, 1056, 2155, 894, 705, 1295, 578, 1155, 867, 736, 1075, 810, 773, 740, 606, 733, 431, 788, 331, 1248, 808, 1232, 694, 555, 669, 1076, 1393, 948, 1743, 1044, 893, 1242, 1505, 1456, 1149, 1301, 1476, 2200, 1114, 909, 1409, 881, 656, 1025, 1662, 1009, 1078, 921, 1089, 1544, 1136, 746, 950, 1010, 974, 913, 1049, 775, 1003, 1100, 1175, 1264, 735, 1003, 1145, 1107, 774, 1295, 918, 743, 942, 740, 644, 830, 782, 971],
-    lang_labels:   ["2018M01", "2018M02", "2018M03", "2018M04", "2018M05", "2018M06", "2018M07", "2018M08", "2018M09", "2018M10", "2018M11", "2018M12", "2019M01", "2019M02", "2019M03", "2019M04", "2019M05", "2019M06", "2019M07", "2019M08", "2019M09", "2019M10", "2019M11", "2019M12", "2020M01", "2020M02", "2020M03", "2020M04", "2020M05", "2020M06", "2020M07", "2020M08", "2020M09", "2020M10", "2020M11", "2020M12", "2021M01", "2021M02", "2021M03", "2021M04", "2021M05", "2021M06", "2021M07", "2021M08", "2021M09", "2021M10", "2021M11", "2021M12", "2022M01", "2022M02", "2022M03", "2022M04", "2022M05", "2022M06", "2022M07", "2022M08", "2022M09", "2022M10", "2022M11", "2022M12", "2023M01", "2023M02", "2023M03", "2023M04", "2023M05", "2023M06", "2023M07", "2023M08", "2023M09", "2023M10", "2023M11", "2023M12", "2024M01", "2024M02", "2024M03", "2024M04", "2024M05", "2024M06", "2024M07", "2024M08", "2024M09", "2024M10", "2024M11", "2024M12", "2025M01", "2025M02", "2025M03", "2025M04", "2025M05", "2025M06", "2025M07", "2025M08", "2025M09", "2025M10", "2025M11", "2025M12", "2026M01", "2026M02", "2026M03", "2026M04", "2026M05"],
-    lang_total:    [30397, 29806, 29872, 29842, 30545, 30457, 28884, 28482, 26935, 26450, 26546, 26413, 26363, 25435, 25140, 24893, 25755, 25870, 25420, 25329, 23864, 23389, 23703, 23991, 24227, 23352, 23415, 25632, 28830, 30933, 32366, 32969, 32625, 33355, 34566, 36075, 38576, 39497, 39795, 40710, 39318, 37618, 35757, 33725, 30323, 27846, 25808, 23024, 21695, 19483, 17848, 16712, 15810, 15025, 13997, 13286, 12159, 11579, 11617, 11664, 12040, 12149, 12775, 13414, 13953, 14184, 14045, 14146, 13653, 13699, 14312, 14698, 15262, 15128, 15265, 15606, 16036, 16129, 15767, 15829, 15072, 15029, 15398, 15503, 16114, 15535, 15365, 15824, 16448, 16596, 16466, 16296, 15587, 15565, 15912, 16028, 16742, 16188, 16217, 17007, 17106],
-    lang_dag:      [14596, 14206, 14212, 14355, 15259, 15537, 14890, 14791, 13638, 13415, 13695, 13969, 14163, 13639, 13517, 13544, 14566, 14850, 14903, 15088, 13908, 13638, 13974, 14475, 14955, 14512, 14700, 16677, 19558, 21529, 23071, 23755, 23601, 24401, 25696, 27362, 29635, 30664, 31049, 32142, 31118, 29908, 28740, 27085, 24190, 22102, 20418, 18093, 16986, 15110, 13732, 12850, 12148, 11579, 10792, 10165, 9133, 8687, 8767, 8853, 9086, 8809, 8774, 9019, 9418, 9681, 9580, 9667, 9174, 9239, 9873, 10265, 10738, 10697, 10888, 11310, 11872, 12056, 11755, 11734, 11032, 11071, 11466, 11572, 12193, 11600, 11388, 11838, 12479, 12607, 12522, 12255, 11515, 11510, 11821, 11926, 12544, 11975, 11925, 12619, 12749],
-    lang_kontant:  [15800, 15600, 15660, 15487, 15285, 14921, 13994, 13691, 13297, 13035, 12850, 12444, 12201, 11796, 11623, 11349, 11188, 11020, 10517, 10241, 9957, 9750, 9728, 9517, 9272, 8841, 8715, 8956, 9272, 9404, 9294, 9214, 9024, 8955, 8870, 8713, 8941, 8833, 8746, 8568, 8200, 7710, 7017, 6639, 6133, 5744, 5390, 4931, 4709, 4373, 4116, 3862, 3662, 3446, 3205, 3121, 3025, 2892, 2850, 2811, 2954, 3340, 4000, 4395, 4535, 4503, 4464, 4479, 4479, 4459, 4439, 4433, 4524, 4430, 4377, 4296, 4165, 4073, 4012, 4095, 4040, 3958, 3933, 3931, 3920, 3935, 3978, 3986, 3969, 3990, 3944, 4041, 4072, 4055, 4091, 4102, 4198, 4214, 4293, 4388, 4357],
-    infl_labels:   ["2008M01", "2008M02", "2008M03", "2008M04", "2008M05", "2008M06", "2008M07", "2008M08", "2008M09", "2008M10", "2008M11", "2008M12", "2009M01", "2009M02", "2009M03", "2009M04", "2009M05", "2009M06", "2009M07", "2009M08", "2009M09", "2009M10", "2009M11", "2009M12", "2010M01", "2010M02", "2010M03", "2010M04", "2010M05", "2010M06", "2010M07", "2010M08", "2010M09", "2010M10", "2010M11", "2010M12", "2011M01", "2011M02", "2011M03", "2011M04", "2011M05", "2011M06", "2011M07", "2011M08", "2011M09", "2011M10", "2011M11", "2011M12", "2012M01", "2012M02", "2012M03", "2012M04", "2012M05", "2012M06", "2012M07", "2012M08", "2012M09", "2012M10", "2012M11", "2012M12", "2013M01", "2013M02", "2013M03", "2013M04", "2013M05", "2013M06", "2013M07", "2013M08", "2013M09", "2013M10", "2013M11", "2013M12", "2014M01", "2014M02", "2014M03", "2014M04", "2014M05", "2014M06", "2014M07", "2014M08", "2014M09", "2014M10", "2014M11", "2014M12", "2015M01", "2015M02", "2015M03", "2015M04", "2015M05", "2015M06", "2015M07", "2015M08", "2015M09", "2015M10", "2015M11", "2015M12", "2016M01", "2016M02", "2016M03", "2016M04", "2016M05", "2016M06", "2016M07", "2016M08", "2016M09", "2016M10", "2016M11", "2016M12", "2017M01", "2017M02", "2017M03", "2017M04", "2017M05", "2017M06", "2017M07", "2017M08", "2017M09", "2017M10", "2017M11", "2017M12", "2018M01", "2018M02", "2018M03", "2018M04", "2018M05", "2018M06", "2018M07", "2018M08", "2018M09", "2018M10", "2018M11", "2018M12", "2019M01", "2019M02", "2019M03", "2019M04", "2019M05", "2019M06", "2019M07", "2019M08", "2019M09", "2019M10", "2019M11", "2019M12", "2020M01", "2020M02", "2020M03", "2020M04", "2020M05", "2020M06", "2020M07", "2020M08", "2020M09", "2020M10", "2020M11", "2020M12", "2021M01", "2021M02", "2021M03", "2021M04", "2021M05", "2021M06", "2021M07", "2021M08", "2021M09", "2021M10", "2021M11", "2021M12", "2022M01", "2022M02", "2022M03", "2022M04", "2022M05", "2022M06", "2022M07", "2022M08", "2022M09", "2022M10", "2022M11", "2022M12", "2023M01", "2023M02", "2023M03", "2023M04", "2023M05", "2023M06", "2023M07", "2023M08", "2023M09", "2023M10", "2023M11", "2023M12", "2024M01", "2024M02", "2024M03", "2024M04", "2024M05", "2024M06", "2024M07", "2024M08", "2024M09", "2024M10", "2024M11", "2024M12", "2025M01", "2025M02", "2025M03", "2025M04", "2025M05", "2025M06", "2025M07", "2025M08", "2025M09", "2025M10", "2025M11", "2025M12", "2026M01", "2026M02", "2026M03", "2026M04", "2026M05"],
-    infl_samlet:   [2.9, 3.1, 3.1, 3.2, 3.4, 3.8, 4.0, 4.4, 4.2, 3.7, 2.7, 2.4, 1.8, 1.9, 1.7, 1.3, 1.3, 1.2, 1.0, 1.1, 0.8, 1.0, 1.3, 1.4, 2.0, 2.0, 2.3, 2.5, 2.1, 1.8, 2.3, 2.4, 2.6, 2.4, 2.5, 2.8, 2.7, 2.7, 2.7, 2.9, 3.1, 3.0, 3.0, 2.6, 2.5, 2.8, 2.6, 2.5, 2.8, 2.8, 2.7, 2.3, 2.2, 2.2, 2.3, 2.7, 2.6, 2.3, 2.3, 2.0, 1.2, 1.2, 0.9, 0.8, 0.9, 0.9, 0.7, 0.4, 0.5, 0.6, 0.6, 0.8, 1.0, 0.5, 0.4, 0.7, 0.5, 0.6, 0.7, 0.5, 0.5, 0.5, 0.5, 0.3, -0.1, 0.3, 0.6, 0.6, 0.6, 0.6, 0.7, 0.6, 0.5, 0.4, 0.3, 0.5, 0.6, 0.3, -0.1, 0.0, 0.2, 0.3, 0.3, 0.3, 0.0, 0.3, 0.4, 0.5, 0.9, 1.0, 1.0, 1.1, 0.8, 0.6, 1.5, 1.5, 1.6, 1.5, 1.3, 0.9, 0.7, 0.6, 0.6, 0.8, 1.1, 1.1, 1.1, 1.0, 0.6, 0.8, 0.8, 0.8, 1.3, 1.0, 1.2, 0.9, 0.7, 0.5, 0.3, 0.4, 0.5, 0.5, 0.7, 0.8, 0.7, 0.8, 0.4, 0.0, -0.1, 0.3, 0.5, 0.5, 0.5, 0.4, 0.5, 0.5, 0.5, 0.6, 0.9, 1.4, 1.8, 1.8, 1.6, 1.8, 2.2, 2.9, 3.4, 3.1, 4.4, 4.8, 5.4, 6.7, 7.4, 8.2, 8.7, 8.9, 10.0, 10.2, 8.9, 8.7, 7.7, 7.6, 6.8, 5.3, 2.9, 2.4, 3.2, 2.4, 0.9, 0.0, 0.6, 0.7, 1.2, 0.8, 0.9, 0.7, 2.1, 1.8, 1.1, 1.4, 1.3, 1.6, 1.7, 1.9, 1.5, 2.0, 1.5, 1.6, 1.6, 1.8, 2.2, 2.0, 2.2, 2.1, 2.1, 1.9, 0.8, 0.7, 1.2, 1.4, 1.9],
-    infl_kerne:    [2.4, 2.7, 2.7, 2.6, 2.8, 2.9, 3.0, 3.4, 3.4, 3.0, 2.8, 2.7, 2.5, 2.3, 2.3, 2.1, 2.2, 2.1, 2.2, 1.9, 1.7, 1.8, 1.5, 1.5, 1.6, 1.7, 1.6, 1.8, 1.4, 1.3, 1.6, 1.9, 2.0, 1.8, 2.0, 2.0, 1.9, 2.1, 2.1, 2.3, 2.5, 2.4, 2.4, 2.0, 1.9, 2.1, 2.0, 2.0, 2.6, 2.5, 2.4, 2.3, 2.3, 2.3, 2.3, 2.4, 2.4, 2.3, 2.3, 2.0, 1.2, 1.1, 1.1, 0.9, 0.9, 0.9, 0.7, 0.7, 0.7, 0.9, 0.8, 0.9, 1.2, 0.8, 0.7, 0.8, 0.7, 0.6, 0.9, 0.6, 0.7, 0.6, 0.6, 0.8, 0.8, 1.0, 1.2, 1.2, 1.1, 1.2, 1.3, 1.3, 1.2, 1.2, 1.2, 1.2, 1.0, 0.8, 0.5, 0.4, 0.6, 0.8, 0.9, 0.7, 0.3, 0.4, 0.4, 0.2, 0.6, 0.6, 0.7, 0.9, 0.8, 0.8, 1.6, 1.6, 1.5, 1.4, 1.2, 1.1, 0.8, 0.9, 0.7, 0.8, 0.8, 0.7, 0.8, 0.6, 0.4, 0.6, 0.7, 0.7, 1.3, 0.9, 1.1, 0.8, 0.8, 0.7, 0.4, 0.6, 0.7, 0.8, 0.8, 0.8, 0.6, 0.9, 0.7, 0.8, 0.6, 0.8, 0.9, 0.9, 0.9, 0.9, 1.1, 1.0, 1.1, 0.7, 0.8, 0.9, 1.3, 1.3, 0.9, 1.0, 1.4, 1.5, 1.6, 1.6, 2.0, 2.8, 3.1, 3.6, 4.4, 4.8, 5.5, 5.9, 5.9, 6.2, 6.1, 6.6, 6.5, 6.7, 6.4, 6.1, 5.0, 4.9, 5.3, 4.3, 3.7, 3.3, 2.9, 2.6, 2.5, 1.7, 1.6, 1.4, 1.6, 1.3, 1.0, 1.2, 1.5, 1.4, 1.2, 1.4, 1.4, 1.8, 1.6, 1.7, 1.7, 1.9, 2.2, 2.2, 2.2, 2.3, 2.3, 2.3, 1.9, 1.8, 1.7, 1.6, 2.1],
-    forb_labels:   ["2008M01", "2008M02", "2008M03", "2008M04", "2008M05", "2008M06", "2008M07", "2008M08", "2008M09", "2008M10", "2008M11", "2008M12", "2009M01", "2009M02", "2009M03", "2009M04", "2009M05", "2009M06", "2009M07", "2009M08", "2009M09", "2009M10", "2009M11", "2009M12", "2010M01", "2010M02", "2010M03", "2010M04", "2010M05", "2010M06", "2010M07", "2010M08", "2010M09", "2010M10", "2010M11", "2010M12", "2011M01", "2011M02", "2011M03", "2011M04", "2011M05", "2011M06", "2011M07", "2011M08", "2011M09", "2011M10", "2011M11", "2011M12", "2012M01", "2012M02", "2012M03", "2012M04", "2012M05", "2012M06", "2012M07", "2012M08", "2012M09", "2012M10", "2012M11", "2012M12", "2013M01", "2013M02", "2013M03", "2013M04", "2013M05", "2013M06", "2013M07", "2013M08", "2013M09", "2013M10", "2013M11", "2013M12", "2014M01", "2014M02", "2014M03", "2014M04", "2014M05", "2014M06", "2014M07", "2014M08", "2014M09", "2014M10", "2014M11", "2014M12", "2015M01", "2015M02", "2015M03", "2015M04", "2015M05", "2015M06", "2015M07", "2015M08", "2015M09", "2015M10", "2015M11", "2015M12", "2016M01", "2016M02", "2016M03", "2016M04", "2016M05", "2016M06", "2016M07", "2016M08", "2016M09", "2016M10", "2016M11", "2016M12", "2017M01", "2017M02", "2017M03", "2017M04", "2017M05", "2017M06", "2017M07", "2017M08", "2017M09", "2017M10", "2017M11", "2017M12", "2018M01", "2018M02", "2018M03", "2018M04", "2018M05", "2018M06", "2018M07", "2018M08", "2018M09", "2018M10", "2018M11", "2018M12", "2019M01", "2019M02", "2019M03", "2019M04", "2019M05", "2019M06", "2019M07", "2019M08", "2019M09", "2019M10", "2019M11", "2019M12", "2020M01", "2020M02", "2020M03", "2020M04", "2020M05", "2020M06", "2020M07", "2020M08", "2020M09", "2020M10", "2020M11", "2020M12", "2021M01", "2021M02", "2021M03", "2021M04", "2021M05", "2021M06", "2021M07", "2021M08", "2021M09", "2021M10", "2021M11", "2021M12", "2022M01", "2022M02", "2022M03", "2022M04", "2022M05", "2022M06", "2022M07", "2022M08", "2022M09", "2022M10", "2022M11", "2022M12", "2023M01", "2023M02", "2023M03", "2023M04", "2023M05", "2023M06", "2023M07", "2023M08", "2023M09", "2023M10", "2023M11", "2023M12", "2024M01", "2024M02", "2024M03", "2024M04", "2024M05", "2024M06", "2024M07", "2024M08", "2024M09", "2024M10", "2024M11", "2024M12", "2025M01", "2025M02", "2025M03", "2025M04", "2025M05", "2025M06", "2025M07", "2025M08", "2025M09", "2025M10", "2025M11", "2025M12", "2026M01", "2026M02", "2026M03", "2026M04", "2026M05", "2026M06"],
-    forb_tillid:   [-1.1, -2.5, -1.3, -3.1, -3.5, -6.6, -9.7, -12.2, -11.1, -16.6, -11.5, -13.5, -9.1, -11.3, -11.7, -4.4, -4.7, -5.5, -3.2, -2.6, -1.1, -0.9, -2.4, -3.6, 1.1, 1.8, -1.0, 4.2, 3.0, -1.5, 4.1, 4.4, 2.3, 0.6, 3.6, -0.7, 3.3, -0.5, -0.8, 2.0, 2.6, 3.0, -0.6, -2.2, -3.6, -6.6, -9.2, -9.8, -7.0, -4.8, -0.4, 0.6, -0.4, -2.6, 0.1, 0.0, -2.2, -5.5, -1.3, -4.7, -2.7, -2.0, -2.1, -2.8, -2.6, 3.4, 3.7, 5.9, 4.7, 4.6, 4.0, 2.9, 6.3, 4.2, 5.0, 5.5, 7.8, 9.3, 10.6, 11.4, 7.1, 8.2, 6.3, 6.0, 9.0, 9.1, 13.9, 13.7, 13.0, 9.8, 9.5, 9.2, 5.0, 3.0, 5.6, 6.1, 4.6, 4.0, 3.6, 5.5, 3.2, 4.4, 3.1, 4.8, 1.8, 1.2, 0.9, -0.3, 4.5, 4.8, 6.2, 7.4, 5.8, 7.1, 10.5, 7.6, 7.3, 7.1, 7.6, 6.5, 8.2, 8.5, 8.5, 7.1, 9.3, 10.6, 9.7, 7.8, 6.9, 5.1, 4.3, 2.9, 3.9, 3.3, 3.8, 3.7, 5.9, 5.8, 2.9, 6.3, 4.3, 1.7, 1.4, 2.5, 4.5, 3.3, 0.4, -11.9, -8.8, -3.1, -2.9, -5.5, -7.4, -6.2, -7.6, -3.8, -4.1, -5.2, -5.0, -1.1, 2.8, 2.3, 2.6, 4.4, 8.2, 3.3, -2.0, -2.1, -1.5, -3.2, -14.4, -20.9, -22.4, -24.8, -25.6, -25.1, -32.1, -37.0, -30.4, -28.9, -26.1, -25.1, -23.1, -18.2, -15.1, -10.9, -10.1, -10.9, -13.0, -11.8, -10.3, -13.0, -8.4, -7.4, -7.6, -8.6, -6.5, -4.4, -5.4, -7.4, -6.8, -8.9, -9.3, -13.1, -11.7, -14.5, -15.5, -17.0, -18.4, -15.1, -15.7, -17.2, -18.7, -19.5, -20.1, -17.3, -13.4, -13.1, -13.8, -18.6, -19.8, -14.0],
-    erh_labels:    ["2008M01", "2008M02", "2008M03", "2008M04", "2008M05", "2008M06", "2008M07", "2008M08", "2008M09", "2008M10", "2008M11", "2008M12", "2009M01", "2009M02", "2009M03", "2009M04", "2009M05", "2009M06", "2009M07", "2009M08", "2009M09", "2009M10", "2009M11", "2009M12", "2010M01", "2010M02", "2010M03", "2010M04", "2010M05", "2010M06", "2010M07", "2010M08", "2010M09", "2010M10", "2010M11", "2010M12", "2011M01", "2011M02", "2011M03", "2011M04", "2011M05", "2011M06", "2011M07", "2011M08", "2011M09", "2011M10", "2011M11", "2011M12", "2012M01", "2012M02", "2012M03", "2012M04", "2012M05", "2012M06", "2012M07", "2012M08", "2012M09", "2012M10", "2012M11", "2012M12", "2013M01", "2013M02", "2013M03", "2013M04", "2013M05", "2013M06", "2013M07", "2013M08", "2013M09", "2013M10", "2013M11", "2013M12", "2014M01", "2014M02", "2014M03", "2014M04", "2014M05", "2014M06", "2014M07", "2014M08", "2014M09", "2014M10", "2014M11", "2014M12", "2015M01", "2015M02", "2015M03", "2015M04", "2015M05", "2015M06", "2015M07", "2015M08", "2015M09", "2015M10", "2015M11", "2015M12", "2016M01", "2016M02", "2016M03", "2016M04", "2016M05", "2016M06", "2016M07", "2016M08", "2016M09", "2016M10", "2016M11", "2016M12", "2017M01", "2017M02", "2017M03", "2017M04", "2017M05", "2017M06", "2017M07", "2017M08", "2017M09", "2017M10", "2017M11", "2017M12", "2018M01", "2018M02", "2018M03", "2018M04", "2018M05", "2018M06", "2018M07", "2018M08", "2018M09", "2018M10", "2018M11", "2018M12", "2019M01", "2019M02", "2019M03", "2019M04", "2019M05", "2019M06", "2019M07", "2019M08", "2019M09", "2019M10", "2019M11", "2019M12", "2020M01", "2020M02", "2020M03", "2020M04", "2020M05", "2020M06", "2020M07", "2020M08", "2020M09", "2020M10", "2020M11", "2020M12", "2021M01", "2021M02", "2021M03", "2021M04", "2021M05", "2021M06", "2021M07", "2021M08", "2021M09", "2021M10", "2021M11", "2021M12", "2022M01", "2022M02", "2022M03", "2022M04", "2022M05", "2022M06", "2022M07", "2022M08", "2022M09", "2022M10", "2022M11", "2022M12", "2023M01", "2023M02", "2023M03", "2023M04", "2023M05", "2023M06", "2023M07", "2023M08", "2023M09", "2023M10", "2023M11", "2023M12", "2024M01", "2024M02", "2024M03", "2024M04", "2024M05", "2024M06", "2024M07", "2024M08", "2024M09", "2024M10", "2024M11", "2024M12", "2025M01", "2025M02", "2025M03", "2025M04", "2025M05", "2025M06", "2025M07", "2025M08", "2025M09", "2025M10", "2025M11", "2025M12", "2026M01", "2026M02", "2026M03", "2026M04", "2026M05", "2026M06"],
-    erh_tillid:    [102.4, 103.5, 101.8, 98.1, 98.7, 98.3, 93.2, 90.7, 85.6, 80.4, 74.5, 70.5, 64.9, 60.8, 63.1, 63.8, 72.3, 72.1, 74.6, 80.3, 78.7, 81.9, 85.8, 86.4, 89.6, 88.6, 94.0, 97.9, 98.1, 95.7, 95.7, 96.4, 95.3, 94.3, 93.2, 93.4, 98.0, 99.5, 99.8, 100.9, 107.0, 105.8, 106.9, 101.6, 97.0, 90.2, 90.0, 89.8, 89.0, 94.0, 91.1, 95.5, 92.7, 88.1, 90.2, 91.8, 91.0, 87.9, 89.5, 89.8, 86.8, 89.0, 91.4, 90.8, 91.7, 95.9, 96.4, 99.1, 100.0, 102.5, 102.3, 101.4, 103.0, 99.8, 102.7, 103.1, 100.8, 102.1, 100.5, 104.8, 102.4, 103.4, 101.3, 99.3, 99.9, 101.1, 101.3, 105.1, 104.1, 105.0, 107.0, 105.1, 106.7, 110.0, 106.9, 105.6, 106.8, 105.6, 104.7, 103.9, 104.8, 105.7, 104.3, 103.8, 102.5, 101.1, 100.4, 101.5, 107.0, 105.0, 104.3, 106.8, 105.8, 107.6, 107.6, 107.0, 107.0, 109.4, 111.4, 110.9, 109.7, 111.1, 107.7, 107.4, 110.0, 108.8, 108.0, 109.1, 106.3, 107.4, 106.2, 107.7, 106.3, 103.9, 106.1, 105.3, 105.4, 103.0, 102.4, 103.0, 102.2, 101.6, 102.8, 102.3, 103.9, 104.0, 98.1, 54.2, 55.7, 68.3, 79.1, 82.6, 86.4, 89.1, 89.2, 97.5, 92.8, 92.2, 98.7, 104.5, 108.1, 109.1, 110.7, 110.4, 113.3, 116.2, 116.3, 112.8, 109.4, 113.7, 112.2, 108.0, 105.4, 102.1, 100.1, 99.8, 98.0, 92.8, 93.3, 90.5, 91.2, 91.5, 94.1, 95.9, 100.8, 102.1, 102.8, 100.7, 98.1, 99.0, 97.1, 98.8, 95.7, 102.3, 100.3, 102.9, 104.7, 106.2, 105.1, 102.6, 104.8, 105.7, 105.0, 104.7, 102.9, 106.6, 104.0, 103.7, 102.5, 102.6, 104.5, 102.8, 103.6, 102.0, 101.1, 102.3, 102.2, 103.2, 103.9, 105.5, 104.1, 101.0],
-    euro_labels:   ["2003-Q1", "2003-Q2", "2003-Q3", "2003-Q4", "2004-Q1", "2004-Q2", "2004-Q3", "2004-Q4", "2005-Q1", "2005-Q2", "2005-Q3", "2005-Q4", "2006-Q1", "2006-Q2", "2006-Q3", "2006-Q4", "2007-Q1", "2007-Q2", "2007-Q3", "2007-Q4", "2008-Q1", "2008-Q2", "2008-Q3", "2008-Q4", "2009-Q1", "2009-Q2", "2009-Q3", "2009-Q4", "2010-Q1", "2010-Q2", "2010-Q3", "2010-Q4", "2011-Q1", "2011-Q2", "2011-Q3", "2011-Q4", "2012-Q1", "2012-Q2", "2012-Q3", "2012-Q4", "2013-Q1", "2013-Q2", "2013-Q3", "2013-Q4", "2014-Q1", "2014-Q2", "2014-Q3", "2014-Q4", "2015-Q1", "2015-Q2", "2015-Q3", "2015-Q4", "2016-Q1", "2016-Q2", "2016-Q3", "2016-Q4", "2017-Q1", "2017-Q2", "2017-Q3", "2017-Q4", "2018-Q1", "2018-Q2", "2018-Q3", "2018-Q4", "2019-Q1", "2019-Q2", "2019-Q3", "2019-Q4", "2020-Q1", "2020-Q2", "2020-Q3", "2020-Q4", "2021-Q1", "2021-Q2", "2021-Q3", "2021-Q4", "2022-Q1", "2022-Q2", "2022-Q3", "2022-Q4", "2023-Q1", "2023-Q2", "2023-Q3", "2023-Q4", "2024-Q1", "2024-Q2", "2024-Q3", "2024-Q4", "2025-Q1", "2025-Q2", "2025-Q3", "2025-Q4", "2026-Q1"],
-    euro_dk:       [null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, 5.4, 6.5, 6.7, 7.1, 7.9, 7.7, 7.6, 7.8, 8.1, 7.5, 7.6, 7.9, 7.9, 8.2, 7.8, 7.3, 7.7, 7.5, 7.4, 7.0, 7.2, 6.8, 7.0, 6.7, 6.4, 6.4, 6.2, 6.1, 6.1, 6.0, 6.0, 5.9, 6.2, 5.9, 5.9, 5.4, 5.2, 5.2, 4.8, 5.2, 5.2, 5.0, 4.8, 5.1, 4.9, 5.5, 6.3, 5.9, 6.1, 5.1, 4.8, 4.5, 4.3, 4.3, 4.6, 4.6, 4.7, 4.9, 4.9, 5.9, 5.8, 6.1, 6.4, 6.5, 6.3, 6.3, 6.5, 6.4, 7.0],
-    euro_de:       [null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, 7.3, 7.4, 7.5, 7.1, 7.1, 6.6, 6.3, 6.3, 5.9, 5.5, 5.4, 5.2, 5.2, 5.1, 5.1, 5.0, 5.1, 5.0, 4.8, 4.8, 4.8, 4.7, 4.6, 4.6, 4.5, 4.4, 4.2, 4.3, 4.1, 4.0, 3.8, 3.7, 3.7, 3.6, 3.5, 3.4, 3.2, 3.3, 3.1, 3.1, 3.0, 2.9, 2.9, 3.0, 3.3, 3.6, 3.9, 3.7, 3.9, 3.7, 3.4, 3.4, 3.1, 3.1, 3.2, 3.1, 3.0, 3.0, 3.1, 3.2, 3.3, 3.4, 3.5, 3.5, 3.7, 3.9, 4.0, 3.9, 3.8],
-    euro_se:       [null, null, null, null, null, null, null, null, 7.9, 8.0, 8.0, 7.8, 7.6, 7.4, 7.0, 6.7, 6.5, 6.2, 6.2, 6.1, 6.0, 6.1, 6.3, 6.8, 7.6, 8.4, 8.9, 9.1, 9.1, 8.8, 8.7, 8.3, 8.0, 7.9, 7.8, 8.0, 7.8, 7.9, 8.2, 8.4, 8.2, 8.1, 8.1, 8.2, 8.2, 8.0, 7.9, 8.0, 7.9, 7.7, 7.2, 7.2, 7.3, 7.0, 7.0, 7.0, 6.8, 6.8, 6.8, 6.7, 6.3, 6.4, 6.6, 6.5, 6.9, 6.6, 7.1, 7.0, 7.3, 8.6, 9.4, 8.8, 9.2, 9.2, 8.9, 8.2, 7.7, 7.8, 7.1, 7.4, 7.4, 7.6, 7.8, 8.0, 8.3, 8.3, 8.5, 8.4, 8.8, 8.6, 8.8, 9.1, 8.6],
-    euro_eu:       [null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, 8.8, 9.3, 9.6, 9.8, 10.1, 10.1, 10.0, 10.0, 9.9, 9.9, 10.1, 10.4, 10.7, 11.0, 11.2, 11.4, 11.7, 11.7, 11.5, 11.4, 11.4, 11.0, 10.9, 10.8, 10.6, 10.3, 10.0, 9.9, 9.6, 9.4, 9.1, 8.9, 8.7, 8.3, 8.2, 7.9, 7.7, 7.5, 7.2, 7.2, 7.0, 6.8, 6.8, 6.7, 6.6, 7.0, 7.9, 7.5, 7.5, 7.3, 6.9, 6.5, 6.2, 6.2, 6.2, 6.1, 6.1, 6.0, 6.1, 6.1, 6.1, 6.0, 6.0, 5.9, 6.0, 6.0, 6.1, 6.0, 6.0],
-    bar_labels:    ["Bulgarien", "Polen", "Tjekkiet", "Malta", "Cypern", "Tyskland", "Holland", "Slovenien", "Ungarn", "Norge", "Italien", "Irland", "Schweiz", "Kroatien", "Slovakiet", "Østrig", "Portugal", "EU-27", "Eurozonen (20)", "Eurozonen (21)", "Belgien", "Rumænien", "Letland", "Estland", "Danmark", "Luxembourg", "Litauen", "Frankrig", "Tyrkiet", "Sverige", "Serbien", "Grækenland", "Spanien", "Finland", "Bosnien-Hercegovina", "Nordmakedonien"],
-    bar_values:    [3.0, 3.0, 3.1, 3.5, 3.7, 3.8, 4.0, 4.0, 4.6, 4.7, 4.9, 4.9, 5.0, 5.1, 5.8, 5.8, 5.9, 6.0, 6.3, 6.3, 6.4, 6.4, 6.8, 6.9, 7.0, 7.2, 7.3, 8.1, 8.2, 8.6, 8.7, 9.5, 10.3, 10.4, 11.3, 11.4],
-    eu_labels:     ["2008-01", "2008-02", "2008-03", "2008-04", "2008-05", "2008-06", "2008-07", "2008-08", "2008-09", "2008-10", "2008-11", "2008-12", "2009-01", "2009-02", "2009-03", "2009-04", "2009-05", "2009-06", "2009-07", "2009-08", "2009-09", "2009-10", "2009-11", "2009-12", "2010-01", "2010-02", "2010-03", "2010-04", "2010-05", "2010-06", "2010-07", "2010-08", "2010-09", "2010-10", "2010-11", "2010-12", "2011-01", "2011-02", "2011-03", "2011-04", "2011-05", "2011-06", "2011-07", "2011-08", "2011-09", "2011-10", "2011-11", "2011-12", "2012-01", "2012-02", "2012-03", "2012-04", "2012-05", "2012-06", "2012-07", "2012-08", "2012-09", "2012-10", "2012-11", "2012-12", "2013-01", "2013-02", "2013-03", "2013-04", "2013-05", "2013-06", "2013-07", "2013-08", "2013-09", "2013-10", "2013-11", "2013-12", "2014-01", "2014-02", "2014-03", "2014-04", "2014-05", "2014-06", "2014-07", "2014-08", "2014-09", "2014-10", "2014-11", "2014-12", "2015-01", "2015-02", "2015-03", "2015-04", "2015-05", "2015-06", "2015-07", "2015-08", "2015-09", "2015-10", "2015-11", "2015-12", "2016-01", "2016-02", "2016-03", "2016-04", "2016-05", "2016-06", "2016-07", "2016-08", "2016-09", "2016-10", "2016-11", "2016-12", "2017-01", "2017-02", "2017-03", "2017-04", "2017-05", "2017-06", "2017-07", "2017-08", "2017-09", "2017-10", "2017-11", "2017-12", "2018-01", "2018-02", "2018-03", "2018-04", "2018-05", "2018-06", "2018-07", "2018-08", "2018-09", "2018-10", "2018-11", "2018-12", "2019-01", "2019-02", "2019-03", "2019-04", "2019-05", "2019-06", "2019-07", "2019-08", "2019-09", "2019-10", "2019-11", "2019-12", "2020-01", "2020-02", "2020-03", "2020-04", "2020-05", "2020-06", "2020-07", "2020-08", "2020-09", "2020-10", "2020-11", "2020-12", "2021-01", "2021-02", "2021-03", "2021-04", "2021-05", "2021-06", "2021-07", "2021-08", "2021-09", "2021-10", "2021-11", "2021-12", "2022-01", "2022-02", "2022-03", "2022-04", "2022-05", "2022-06", "2022-07", "2022-08", "2022-09", "2022-10", "2022-11", "2022-12", "2023-01", "2023-02", "2023-03", "2023-04", "2023-05", "2023-06", "2023-07", "2023-08", "2023-09", "2023-10", "2023-11", "2023-12", "2024-01", "2024-02", "2024-03", "2024-04", "2024-05", "2024-06", "2024-07", "2024-08", "2024-09", "2024-10", "2024-11", "2024-12", "2025-01", "2025-02", "2025-03", "2025-04", "2025-05", "2025-06", "2025-07", "2025-08", "2025-09", "2025-10", "2025-11", "2025-12", "2026-01", "2026-02", "2026-03", "2026-04", "2026-05"],
-    eu_dk:         [0.6, 0.9, 2.3, -0.4, 0.5, -3.6, -3.9, -4.7, -3.8, -5.1, 1.2, 1.2, 0.0, 0.5, 0.5, 3.2, 6.1, 3.7, 6.0, 4.9, 6.6, 6.2, 4.9, 5.7, 6.8, 7.8, 6.1, 8.1, 6.7, 3.0, 7.2, 5.3, 5.6, 5.3, 6.7, 5.0, 4.2, 3.7, 3.5, 4.2, 4.4, 4.7, 2.2, -0.6, 2.3, -2.0, -5.3, -4.0, -3.0, -0.7, 2.8, 2.6, 0.4, -0.4, 2.2, 1.1, 1.3, -0.9, 3.2, 0.5, -0.5, 2.1, 1.4, 1.5, 0.5, 4.6, 3.5, 5.2, 5.8, 6.8, 5.3, 5.7, 6.2, 4.4, 5.2, 4.3, 6.1, 7.9, 9.5, 9.9, 6.9, 8.6, 7.0, 8.5, 8.2, 8.3, 11.6, 10.5, 9.7, 7.6, 7.7, 7.1, 4.3, 4.4, 6.0, 6.4, 2.6, 3.8, 2.9, 4.9, 3.0, 3.9, 2.7, 3.7, 2.5, 2.5, 2.2, 0.2, 4.1, 5.4, 6.1, 6.7, 4.7, 5.2, 8.3, 5.7, 6.8, 8.2, 8.7, 7.0, 7.4, 8.3, 7.2, 4.6, 6.5, 7.8, 8.3, 4.8, 6.6, 4.7, 5.2, 3.6, 3.0, 3.1, 4.5, 3.4, 6.5, 5.3, 1.3, 5.6, 3.8, 3.0, 4.0, 4.5, 3.7, 4.8, 0.1, -7.3, -1.9, 2.8, 2.4, 0.1, 1.0, 1.7, -0.3, 3.6, 3.2, 3.6, 4.0, 6.9, 7.0, 7.1, 6.6, 6.7, 10.4, 6.3, 1.3, 1.4, 0.6, 0.6, -11.3, -14.7, -15.5, -17.5, -18.1, -14.7, -20.0, -23.5, -17.7, -16.2, -13.5, -12.8, -11.5, -8.7, -6.5, -4.8, -5.3, -5.4, -7.1, -6.8, -5.2, -6.7, -4.8, -3.7, -4.8, -6.2, -3.3, -2.7, -3.8, -4.9, -3.8, -5.7, -5.1, -8.3, -8.4, -11.2, -11.9, -14.3, -14.3, -13.3, -12.8, -14.0, -14.5, -12.8, -12.8, -11.2, -7.9, -8.0, -8.3, -14.3, -15.5],
-    eu_de:         [-8.1, -8.9, -9.2, -8.8, -11.0, -13.3, -16.1, -16.9, -16.0, -18.0, -17.2, -19.8, -19.6, -19.9, -20.6, -19.3, -18.7, -17.8, -15.7, -13.1, -11.5, -10.0, -11.4, -9.5, -11.4, -10.4, -9.1, -5.9, -8.4, -7.2, -4.1, -2.3, -0.4, -0.6, 1.2, 0.7, 0.4, 0.9, 0.1, -1.0, -1.4, -0.5, -0.9, -3.8, -3.0, -5.1, -4.9, -4.0, -4.3, -4.8, -4.8, -4.7, -5.4, -4.6, -5.6, -6.1, -7.1, -7.2, -6.5, -6.7, -5.4, -5.4, -5.2, -4.8, -4.7, -4.6, -3.8, -3.9, -3.0, -2.6, -1.8, -1.3, -0.4, -0.1, -0.6, -0.4, 0.0, -0.5, -0.1, -1.5, -2.1, -1.3, -1.9, -1.4, -0.5, -0.1, 0.5, 0.7, 0.1, -0.2, -0.6, -1.0, -2.1, -3.2, -3.2, -1.8, -2.2, -2.2, -2.6, -1.7, -2.0, -1.1, -1.5, -1.2, -1.5, -1.7, -0.9, -0.3, -0.1, -1.4, -0.4, 0.4, 1.3, 2.0, 2.0, 1.4, 1.3, 1.6, 1.5, 1.4, 2.3, 2.3, 1.6, 1.4, 1.1, 1.4, 0.2, 0.6, 0.2, -0.1, 0.0, -0.8, 0.0, -0.3, -0.2, -0.5, -0.9, -2.9, -2.6, -3.3, -2.1, -3.9, -2.2, -3.6, -2.5, -2.4, -8.4, -18.1, -15.5, -11.4, -10.4, -8.1, -8.5, -9.1, -9.7, -8.7, -11.3, -9.5, -6.8, -8.2, -4.9, -1.7, -2.6, -3.9, -0.8, -2.6, -4.4, -6.4, -4.9, -6.3, -15.4, -18.6, -18.8, -20.4, -24.6, -23.5, -28.0, -26.6, -24.3, -22.0, -19.9, -16.8, -17.8, -14.4, -14.0, -14.2, -14.0, -14.8, -15.3, -15.2, -16.3, -13.8, -16.5, -13.7, -13.1, -10.3, -10.5, -10.4, -8.5, -10.0, -10.8, -8.9, -10.7, -10.2, -11.3, -11.2, -10.3, -10.5, -9.1, -9.8, -8.9, -10.5, -9.2, -10.7, -11.5, -12.0, -9.9, -11.1, -13.6, -17.7, -16.1],
-    eu_fr:         [-14.6, -13.7, -14.5, -15.5, -17.6, -20.5, -19.9, -18.3, -17.2, -19.8, -16.9, -18.3, -18.1, -19.1, -20.0, -15.5, -15.4, -14.0, -13.3, -15.8, -11.6, -10.4, -8.5, -9.1, -8.3, -10.7, -12.6, -12.2, -14.8, -15.6, -14.8, -12.9, -13.7, -12.5, -9.4, -12.4, -14.5, -14.9, -16.0, -16.4, -15.4, -16.1, -15.0, -19.0, -18.7, -16.2, -19.0, -19.8, -18.8, -16.9, -13.3, -13.4, -11.3, -12.2, -15.7, -16.0, -18.9, -19.3, -18.3, -18.1, -19.3, -19.0, -19.9, -19.2, -22.1, -22.0, -19.2, -16.3, -15.1, -14.8, -18.1, -16.7, -16.1, -16.2, -15.3, -16.0, -16.7, -18.0, -16.4, -16.5, -17.6, -17.0, -16.2, -14.2, -13.6, -11.3, -10.8, -9.9, -11.9, -11.8, -12.9, -11.1, -10.2, -9.9, -9.2, -9.5, -8.4, -10.7, -12.1, -11.7, -9.5, -12.0, -11.7, -11.0, -9.6, -9.4, -7.9, -6.9, -7.4, -8.3, -8.4, -7.2, -6.7, -1.9, -4.2, -5.8, -7.2, -7.3, -4.2, -3.1, -4.2, -7.2, -6.9, -7.8, -8.7, -10.5, -9.7, -10.4, -13.8, -11.3, -13.6, -16.9, -12.2, -10.7, -10.0, -10.1, -8.2, -8.2, -6.6, -7.5, -6.1, -6.6, -5.8, -9.6, -8.9, -7.7, -12.6, -21.6, -17.7, -12.3, -11.7, -12.1, -10.9, -13.4, -18.0, -10.8, -13.6, -14.4, -9.8, -9.6, -5.3, -0.1, -3.1, -6.4, -2.8, -6.3, -6.9, -8.5, -9.5, -8.7, -21.2, -19.1, -18.9, -21.2, -21.7, -18.8, -22.3, -20.8, -18.8, -20.6, -20.6, -21.6, -20.7, -18.7, -17.0, -14.7, -14.1, -14.8, -15.8, -16.7, -13.5, -13.5, -11.7, -14.8, -13.5, -15.3, -13.6, -14.4, -15.2, -12.9, -11.5, -12.8, -15.3, -17.7, -14.1, -13.2, -14.8, -16.3, -17.5, -17.4, -16.8, -18.5, -19.3, -15.5, -15.8, -16.3, -15.7, -14.3, -17.2, -21.8, -21.2],
-    eu_se:         [-1.1, -3.4, -1.3, -3.0, -4.4, -8.1, -10.6, -8.6, -7.2, -9.0, -7.5, -7.3, -5.4, -3.4, -4.5, -6.6, -0.7, 0.2, 1.6, 4.6, 5.4, 6.5, 6.8, 5.8, 4.0, 6.8, 6.7, 7.5, 5.9, 7.0, 6.3, 6.5, 7.8, 6.0, 6.2, 5.7, 6.6, 6.5, 4.5, 3.7, 3.2, 2.8, 1.4, -3.2, -4.6, -3.9, -4.5, -4.0, -1.2, -1.9, 1.1, 1.7, 1.1, -0.4, 0.9, 0.1, -1.7, -2.5, -1.5, -4.1, 0.0, -0.7, 1.4, 1.5, 0.1, -0.4, 2.5, 1.8, 0.3, 1.0, 3.6, 3.2, 2.9, 1.8, 1.9, 1.6, 2.2, 2.4, 2.5, 0.6, 1.0, -1.1, -2.5, -0.5, -0.4, -1.4, 0.2, -0.9, 0.1, -0.5, -0.3, 0.1, -2.2, -3.3, -4.5, -2.0, -1.9, -2.2, -0.3, -1.2, -1.5, -1.2, -1.8, -2.1, 0.2, 0.9, 1.5, 0.4, 0.6, 0.7, 1.5, 1.4, 2.6, 0.5, 0.5, 0.0, -0.3, 1.0, 2.0, 0.8, 2.3, 0.3, 0.6, 0.0, 0.6, -2.0, -2.0, 0.3, 1.0, -1.9, -1.3, -2.3, -3.2, -3.4, -1.7, -0.7, -3.5, -3.6, -1.4, -3.2, -4.6, -3.3, -3.9, -2.5, -3.6, -2.3, -4.2, -6.9, -7.4, -3.0, -1.5, -0.6, 1.3, 1.5, -1.0, 1.8, 2.7, 5.3, 4.5, 6.0, 9.1, 7.7, 7.5, 6.7, 6.1, 4.8, 2.4, 2.6, -2.4, -1.8, -11.0, -10.0, -13.5, -15.2, -20.3, -20.4, -26.6, -27.5, -23.3, -23.8, -23.5, -20.6, -20.8, -17.7, -15.2, -14.0, -15.0, -17.7, -18.6, -18.0, -15.9, -12.9, -8.7, -6.9, -4.8, -4.3, -1.4, -0.3, -0.5, 0.2, 1.5, 0.6, 1.8, -1.6, 0.2, -2.6, -7.7, -13.5, -10.1, -8.1, -6.0, -6.8, -5.0, -3.6, -3.3, -3.7, -2.1, -2.6, -4.5, -7.3, -5.7],
-    eu_eu:         [-11.8, -11.9, -12.0, -12.5, -13.9, -17.3, -19.2, -17.2, -15.9, -18.4, -18.3, -19.4, -19.3, -20.5, -20.7, -18.4, -16.9, -15.8, -14.5, -12.9, -11.4, -10.4, -10.4, -9.9, -10.7, -12.2, -12.4, -11.2, -14.3, -15.1, -13.2, -11.0, -10.8, -11.3, -10.1, -11.2, -12.0, -11.5, -12.6, -13.6, -13.4, -13.1, -13.0, -15.4, -16.0, -17.0, -16.4, -17.4, -17.5, -16.7, -15.7, -16.6, -17.1, -17.1, -17.2, -17.8, -19.3, -18.9, -19.0, -19.7, -18.1, -17.6, -17.7, -16.9, -17.7, -16.7, -15.8, -14.4, -12.8, -13.2, -12.5, -12.0, -11.2, -11.1, -9.9, -9.8, -9.4, -9.4, -9.4, -10.5, -11.1, -10.3, -10.5, -9.8, -8.5, -6.5, -5.1, -5.2, -6.1, -6.7, -7.6, -6.7, -6.8, -6.3, -5.6, -4.9, -5.2, -6.2, -7.0, -6.4, -7.0, -6.6, -7.0, -6.9, -6.8, -5.9, -5.1, -4.8, -4.4, -5.7, -4.7, -4.2, -4.4, -3.6, -3.3, -3.1, -2.9, -2.1, -1.8, -1.2, -1.3, -2.2, -2.6, -2.5, -3.7, -3.8, -3.7, -3.8, -4.5, -3.9, -4.3, -5.8, -5.1, -5.1, -4.4, -4.9, -4.7, -5.1, -4.7, -5.4, -5.1, -5.4, -4.9, -5.8, -5.6, -4.8, -10.2, -23.3, -18.9, -13.2, -12.9, -12.5, -11.4, -12.9, -15.2, -10.9, -12.4, -11.8, -8.7, -8.3, -4.3, -1.5, -3.0, -4.2, -3.0, -4.6, -7.7, -8.7, -9.3, -9.1, -21.1, -21.2, -20.9, -23.7, -26.5, -24.6, -28.3, -27.3, -23.8, -22.1, -20.7, -18.9, -18.8, -16.6, -16.5, -15.4, -14.4, -15.1, -16.8, -16.7, -15.7, -13.9, -14.3, -13.9, -13.0, -12.6, -12.5, -12.1, -11.4, -11.7, -11.4, -11.0, -11.8, -12.4, -12.5, -12.6, -13.4, -15.2, -13.7, -14.0, -13.7, -14.2, -13.6, -12.7, -12.9, -13.1, -12.5, -12.2, -15.9, -19.9, -18.2]
-  };
+/* =========================================================
+   LYDEFFEKTER — Web Audio API, ingen eksterne filer
+   ========================================================= */
+const SFX = (function(){
+  let ctx;
+  function getCtx(){
+    if(!ctx) ctx = new (window.AudioContext || window.webkitAudioContext)();
+    if(ctx.state === 'suspended') ctx.resume();
+    return ctx;
+  }
 
-  const charts = {};
-  const GREEN='#6B9E78', DARK_GREEN='#3d6b47', ORANGE='#E07A40', BLUE='#4A90C4', PURPLE='#9B59B6', RED='#c0392b';
-
-  function fmtLabel(lbl) {
-    if (!lbl) return '';
-    if (/^\d{4}M\d{2}$/.test(lbl)) {
-      const months=['','jan','feb','mar','apr','maj','jun','jul','aug','sep','okt','nov','dec'];
-      const [y,m] = lbl.split('M');
-      return months[parseInt(m)]+' '+y.slice(2);
+  function correct(){
+    /* Kort, snappy kamera-klik */
+    const c = getCtx();
+    const t = c.currentTime;
+    /* Klik: kort hvid støj burst */
+    const buf = c.createBuffer(1, Math.floor(c.sampleRate * 0.035), c.sampleRate);
+    const data = buf.getChannelData(0);
+    for(let i = 0; i < data.length; i++){
+      const env = 1 - (i / data.length);
+      data[i] = (Math.random() * 2 - 1) * env * env;
     }
-    return lbl;
+    const src = c.createBufferSource();
+    src.buffer = buf;
+    /* Båndpas for at gøre det mere mekanisk */
+    const bp = c.createBiquadFilter();
+    bp.type = 'bandpass'; bp.frequency.value = 3200; bp.Q.value = 1.8;
+    const gain = c.createGain();
+    gain.gain.setValueAtTime(0.35, t);
+    gain.gain.exponentialRampToValueAtTime(0.001, t + 0.06);
+    src.connect(bp); bp.connect(gain); gain.connect(c.destination);
+    src.start(t); src.stop(t + 0.06);
+
+    /* Lille "pling" ovenpå */
+    const osc = c.createOscillator();
+    osc.type = 'sine'; osc.frequency.value = 1400;
+    const g2 = c.createGain();
+    g2.gain.setValueAtTime(0.12, t + 0.02);
+    g2.gain.exponentialRampToValueAtTime(0.001, t + 0.12);
+    osc.connect(g2); g2.connect(c.destination);
+    osc.start(t + 0.02); osc.stop(t + 0.12);
   }
 
-  function slice(arr, n) {
-    if (!n || n <= 0 || n >= arr.length) return arr;
-    return arr.slice(arr.length - n);
+  function wrong(){
+    /* Dump bonk-lyd */
+    const c = getCtx();
+    const t = c.currentTime;
+    const osc = c.createOscillator();
+    osc.type = 'sine';
+    osc.frequency.setValueAtTime(220, t);
+    osc.frequency.exponentialRampToValueAtTime(80, t + 0.18);
+    const g = c.createGain();
+    g.gain.setValueAtTime(0.35, t);
+    g.gain.exponentialRampToValueAtTime(0.001, t + 0.22);
+    osc.connect(g); g.connect(c.destination);
+    osc.start(t); osc.stop(t + 0.22);
+
+    /* Kort støj-lag for tekstur */
+    const buf = c.createBuffer(1, Math.floor(c.sampleRate * 0.05), c.sampleRate);
+    const data = buf.getChannelData(0);
+    for(let i = 0; i < data.length; i++){
+      data[i] = (Math.random() * 2 - 1) * (1 - i/data.length) * 0.6;
+    }
+    const src = c.createBufferSource();
+    src.buffer = buf;
+    const lp = c.createBiquadFilter();
+    lp.type = 'lowpass'; lp.frequency.value = 600;
+    const g2 = c.createGain();
+    g2.gain.setValueAtTime(0.18, t);
+    g2.gain.exponentialRampToValueAtTime(0.001, t + 0.08);
+    src.connect(lp); lp.connect(g2); g2.connect(c.destination);
+    src.start(t); src.stop(t + 0.08);
   }
 
-  function xAxis() {
-    return {
-      ticks: {
-        font: { size: 12 }, maxRotation: 45,
-        autoSkip: true,
-        maxTicksLimit: 10,
-        callback: function(val, idx) {
-          return fmtLabel(this.getLabelForValue(val));
-        }
-      },
-      grid: { color: '#E8EBE8' }
-    };
-  }
-
-  function yAxis(min) {
-    return {
-      min: min,
-      ticks: { font: { size: 12 }, callback: v => v.toLocaleString('da-DK') },
-      grid: { color: '#E8EBE8' }
-    };
-  }
-
-  function makeOpts(ymin) {
-    return {
-      responsive: true, maintainAspectRatio: false,
-      plugins: {
-        legend: { labels: { font: { size: 13 }, boxWidth: 12 } },
-        tooltip: { callbacks: { label: ctx => ctx.dataset.label+': '+ctx.parsed.y?.toLocaleString('da-DK') } }
-      },
-      scales: { x: xAxis(), y: yAxis(ymin) }
-    };
-  }
-
-  function ds(label, data, color, fill) {
-    return {
-      label, data, borderColor: color, backgroundColor: fill || color+'22',
-      fill: !!fill, tension: 0.3, borderWidth: 2,
-      pointBackgroundColor: color, pointRadius: 2, pointHoverRadius: 5
-    };
-  }
-
-  function line(id, labels, datasets, ymin) {
-    if (charts[id]) charts[id].destroy();
-    charts[id] = new Chart(document.getElementById(id), {
-      type: 'line',
-      data: { labels, datasets },
-      options: makeOpts(ymin)
+  function rekord(){
+    /* Cha-ching: stigende tretonet fanfare */
+    const c = getCtx();
+    const t = c.currentTime;
+    const notes = [523, 659, 784]; /* C5, E5, G5 */
+    notes.forEach(function(freq, i){
+      const osc = c.createOscillator();
+      osc.type = 'triangle';
+      osc.frequency.value = freq;
+      const g = c.createGain();
+      const start = t + i * 0.1;
+      g.gain.setValueAtTime(0, start);
+      g.gain.linearRampToValueAtTime(0.22, start + 0.02);
+      g.gain.setValueAtTime(0.22, start + 0.08);
+      g.gain.exponentialRampToValueAtTime(0.001, start + 0.35);
+      osc.connect(g); g.connect(c.destination);
+      osc.start(start); osc.stop(start + 0.35);
     });
+    /* Lille shimmer ovenpå */
+    const buf = c.createBuffer(1, Math.floor(c.sampleRate * 0.08), c.sampleRate);
+    const data = buf.getChannelData(0);
+    for(let i = 0; i < data.length; i++){
+      data[i] = (Math.random() * 2 - 1) * (1 - i/data.length);
+    }
+    const src = c.createBufferSource();
+    src.buffer = buf;
+    const hp = c.createBiquadFilter();
+    hp.type = 'highpass'; hp.frequency.value = 6000;
+    const g2 = c.createGain();
+    g2.gain.setValueAtTime(0.08, t + 0.05);
+    g2.gain.exponentialRampToValueAtTime(0.001, t + 0.3);
+    src.connect(hp); hp.connect(g2); g2.connect(c.destination);
+    src.start(t + 0.05); src.stop(t + 0.3);
   }
 
-  function barChart(id, labels, datasets, ymin) {
-    if (charts[id]) charts[id].destroy();
-    charts[id] = new Chart(document.getElementById(id), {
-      type: 'bar',
-      data: { labels, datasets },
-      options: makeOpts(ymin)
-    });
-  }
-
-  function hbarChart(id, labels, datasets) {
-    if (charts[id]) charts[id].destroy();
-    charts[id] = new Chart(document.getElementById(id), {
-      type: 'bar',
-      data: { labels, datasets },
-      options: {
-        responsive: true, maintainAspectRatio: false,
-        indexAxis: 'y',
-        plugins: {
-          legend: { display: false },
-          tooltip: { callbacks: { title: ctx => ctx[0].label, label: ctx => ctx.parsed.x+'%' } }
-        },
-        scales: {
-          x: { ticks: { font:{size:12}, callback: v => v+'%' }, grid:{color:'#E8EBE8'} },
-          y: { ticks: { font:{size:11} }, grid:{color:'#E8EBE8'} }
-        }
-      }
-    });
-  }
-
-  function drawAll(n) {
-    const D = DATA;
-    // Brutto antal
-    line('c_brutto', slice(D.ledige_labels,n),
-      [ds('Bruttoledige (antal)', slice(D.brutto_antal,n), GREEN),
-       ds('Sæsonkorrigeret', slice(D.brutto_saeson,n), DARK_GREEN)]);
-
-    // Ledighedspct
-    line('c_pct', slice(D.ledige_labels,n),
-      [ds('Ledighedsprocent', slice(D.brutto_pct,n), RED)], 0);
-
-    // Dagpenge + kontant
-    line('c_ydelser', slice(D.ledige_labels,n),
-      [ds('Dagpengemodtagere', slice(D.dag_antal,n), GREEN),
-       ds('Kontanthjælpsmodtagere', slice(D.kontant_antal,n), ORANGE)], 0);
-
-    // Langtidsledige
-    line('c_lang', slice(D.lang_labels,n),
-      [ds('I alt', slice(D.lang_total,n), GREEN),
-       ds('A-dagpenge', slice(D.lang_dag,n), DARK_GREEN),
-       ds('Kontanthjælp', slice(D.lang_kontant,n), ORANGE)], 0);
-
-    // Stillinger
-    line('c_still', slice(D.still_labels,n),
-      [ds('Nyopslåede stillinger', slice(D.still_antal,n), GREEN)], 0);
-
-    // Lønmodtagere
-    line('c_loem', slice(D.loem_labels,n),
-      [ds('I alt', slice(D.loem_total,n), GREEN),
-       ds('Privat', slice(D.loem_priv,n), BLUE),
-       ds('Offentlig', slice(D.loem_off,n), ORANGE)]);
-
-    // Varslinger
-    barChart('c_vars', slice(D.vars_labels,n),
-      [{label:'Varslede personer', data:slice(D.vars_antal,n),
-        backgroundColor:ORANGE+'99', borderColor:ORANGE, borderWidth:1}]);
-
-    // Konkurser
-    line('c_konk', slice(D.konk_labels,n),
-      [ds('Konkurser (antal)', slice(D.konk_antal,n), RED),
-       ds('Tabte job', slice(D.tabte_job,n), ORANGE)]);
-
-    // Inflation
-    line('c_infl', slice(D.infl_labels,n),
-      [ds('Samlet inflation', slice(D.infl_samlet,n), ORANGE),
-       ds('Kerneinflation', slice(D.infl_kerne,n), BLUE)]);
-
-    // Forbrugertillid
-    line('c_forb', slice(D.forb_labels,n),
-      [ds('Forbrugertillidsindikator', slice(D.forb_tillid,n), PURPLE)]);
-
-    // Erhvervstillid
-    line('c_erh', slice(D.erh_labels,n),
-      [ds('Erhvervstillidsindikator', slice(D.erh_tillid,n), GREEN)]);
-
-    // Eurostat tidsserie
-    line('c_euro_ts', slice(D.euro_labels,n),
-      [ds('Danmark', slice(D.euro_dk,n), GREEN),
-       ds('Tyskland', slice(D.euro_de,n), ORANGE),
-       ds('Sverige', slice(D.euro_se,n), BLUE),
-       ds('EU-27', slice(D.euro_eu,n), PURPLE)], 0);
-
-    // Forbrugertillid EU
-    line('c_forb_eu', slice(D.eu_labels,n),
-      [ds('Danmark', slice(D.eu_dk,n), GREEN),
-       ds('Sverige', slice(D.eu_se,n), BLUE),
-       ds('Tyskland', slice(D.eu_de,n), ORANGE),
-       ds('Frankrig', slice(D.eu_fr,n), RED),
-       ds('EU-27', slice(D.eu_eu,n), PURPLE)]);
-
-    // Eurostat bar
-    hbarChart('c_euro_bar', D.bar_labels,
-      [{label:'Ledighedsprocent', data:D.bar_values,
-        backgroundColor: D.bar_labels.map(l => l==='Danmark' ? DARK_GREEN : GREEN+'99'),
-        borderColor: D.bar_labels.map(l => l==='Danmark' ? DARK_GREEN : GREEN),
-        borderWidth:1}]);
-  }
-
-  window.setPeriod = function(n, btn) {
-    document.querySelectorAll('.period-btns button').forEach(b => b.classList.remove('active'));
-    if (btn) btn.classList.add('active');
-    drawAll(n);
-  };
-
-  drawAll(36);
+  return { correct:correct, wrong:wrong, rekord:rekord };
 })();
+
+/* Skærm-ryst */
+function screenShake(){
+  if(window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  const el = document.getElementById('stage');
+  el.classList.remove('shake');
+  void el.offsetWidth; /* force reflow */
+  el.classList.add('shake');
+  el.addEventListener('animationend', function(){ el.classList.remove('shake'); }, {once:true});
+}
+
+/* ---------------------------------------------------------
+   SPILLOGIK
+--------------------------------------------------------- */
+const LEVELS = [
+  { sag:"01", titel:"Watergate", based:"USA \u00b7 Richard Nixon \u00b7 1972-74",
+    situation:"Folk med forbindelse til pr\u00e6sidentens kampagne tages i et indbrud i oppositionens hovedkvarter. Sporene peger opad, og der findes lydb\u00e5nd fra Det Ovale V\u00e6relse.",
+    spm:"Hvad gjorde Nixon, da sporene begyndte at pege mod Det Hvide Hus?",
+    svar:[
+      {t:"Han fors\u00f8gte at d\u00e6kke over sagen og bremse FBI\u2019s efterforskning, og holdt p\u00e5 lydb\u00e5ndene til det sidste.", ok:true},
+      {t:"Han gav et par medarbejdere skylden, h\u00e6vdede intet kendskab og fortsatte, som om intet var h\u00e6ndt.", ok:false},
+      {t:"Han udpegede straks en uvildig s\u00e6ranklager og udleverede alle lydb\u00e5nd frivilligt.", ok:false}
+    ],
+    forklaring:"M\u00f8rkl\u00e6gningen, ikke selve indbruddet, blev hans fald. I n\u00e6sten to \u00e5r fors\u00f8gte Nixon at bremse efterforskningen, men de hemmelige lydb\u00e5nd fra Det Ovale V\u00e6relse afsl\u00f8rede, at han havde v\u00e6ret med til at d\u00e6kke over sagen n\u00e6sten fra begyndelsen. Da H\u00f8jesteret tvang ham til at udlevere b\u00e5ndene, og en rigsretssag rykkede t\u00e6ttere p\u00e5, tr\u00e5dte han tilbage i 1974 som den eneste amerikanske pr\u00e6sident nogensinde. Hans efterf\u00f8lger, Gerald Ford, ben\u00e5dede ham kort efter for samtlige forhold." },
+
+  { sag:"02", titel:"Lewinsky-sagen", based:"USA \u00b7 Bill Clinton \u00b7 1998",
+    situation:"Det kommer frem, at pr\u00e6sidenten har haft et forhold til en ung praktikant i Det Hvide Hus. Han bliver afkr\u00e6vet svar, ogs\u00e5 under ed.",
+    spm:"Hvordan reagerede Bill Clinton, da forholdet kom frem?",
+    svar:[
+      {t:"Han ben\u00e6gtede det offentligt og under ed, indtil beviserne tvang en indr\u00f8mmelse frem.", ok:true},
+      {t:"Han erkendte forholdet med det samme i en tale og bad offentligheden om tilgivelse.", ok:false},
+      {t:"Han afviste at svare p\u00e5 private sp\u00f8rgsm\u00e5l og lod sine advokater tage alle henvendelser.", ok:false}
+    ],
+    forklaring:"Det var l\u00f8gnen under ed, ikke selve aff\u00e6ren, der blev det alvorlige. Clinton afviste i m\u00e5nedsvis ethvert forhold, blandt andet med den ber\u00f8mte forsikring om, at han ikke havde haft seksuelle relationer til praktikanten, men de fysiske beviser efterlod til sidst ingen tvivl. Repr\u00e6sentanternes Hus stillede ham for en rigsret for mened og forhindring af rettens arbejde. Senatet frikendte ham, og han sad pr\u00e6sidentperioden ud med us\u00e6dvanligt h\u00f8je popularitetstal." },
+
+  { sag:"03", titel:"Svinebugten", based:"USA \u00b7 John F. Kennedy \u00b7 1961",
+    situation:"En hemmelig invasion, som den nye pr\u00e6sident godkendte, er sl\u00e5et fuldst\u00e6ndig fejl og er blevet en offentlig ydmygelse.",
+    spm:"Hvad gjorde Kennedy, efter invasionen var sl\u00e5et fejl?",
+    svar:[
+      {t:"Han tog det fulde ansvar offentligt, selvom CIA havde planlagt operationen.", ok:true},
+      {t:"Han lagde ansvaret p\u00e5 CIA og milit\u00e6ret og lovede en grundig intern unders\u00f8gelse.", ok:false},
+      {t:"Han nedtonede fiaskoen og afviste, at USA overhovedet havde st\u00e5et bag.", ok:false}
+    ],
+    forklaring:"I stedet for at skubbe skylden videre tog Kennedy det fulde, offentlige ansvar og slog fast, at sejre har mange f\u00e6dre, mens nederlag er for\u00e6ldrel\u00f8se. Paradoksalt nok steg hans popularitet til omkring 80 procent bagefter, fordi v\u00e6lgerne bel\u00f8nnede \u00e6rligheden. Internt mistede han tilliden til de milit\u00e6re og efterretningsm\u00e6ssige r\u00e5dgivere, der havde anbefalet operationen. Den nyvundne skepsis tilskrives ofte hans mere k\u00f8lige og kontrollerede h\u00e5ndtering af Cuba-krisen \u00e5ret efter." },
+
+  { sag:"04", titel:"Profumo-sagen", based:"Storbritannien \u00b7 John Profumo \u00b7 1963",
+    situation:"Krigsministeren har haft en aff\u00e6re med en ung kvinde, der samtidig omgikkes en sovjetisk diplomat midt under den kolde krig.",
+    spm:"Hvad gjorde Profumo, da aff\u00e6ren blev bragt op i Underhuset?",
+    svar:[
+      {t:"Han ben\u00e6gtede enhver upassende forbindelse direkte over for parlamentet.", ok:true},
+      {t:"Han indr\u00f8mmede aff\u00e6ren med det samme og bad Underhuset om tilgivelse.", ok:false},
+      {t:"Han afviste at udtale sig af hensyn til rigets sikkerhed.", ok:false}
+    ],
+    forklaring:"L\u00f8gnen over for parlamentet, ikke aff\u00e6ren i sig selv, blev afg\u00f8rende. Da det kom frem, at Profumo havde talt usandt i Underhuset, m\u00e5tte han tr\u00e6de tilbage f\u00e5 uger senere i dyb van\u00e6re. Sagen, krydret med spionfrygt under den kolde krig, rystede Macmillan-regeringen, og de konservative mistede magten ved valget \u00e5ret efter. Profumo brugte resten af sit liv p\u00e5 velg\u00f8renhedsarbejde i Londons fattige East End og fik aldrig comeback i politik." },
+
+  { sag:"05", titel:"Partygate", based:"Storbritannien \u00b7 Boris Johnson \u00b7 2020-22",
+    situation:"Mens landet er lukket ned under strenge corona-regler, har der v\u00e6ret fester i regeringschefens egen embedsbolig.",
+    spm:"Hvad gjorde Boris Johnson, da festerne kom frem?",
+    svar:[
+      {t:"Han afviste l\u00e6nge, at reglerne var brudt, og forsikrede parlamentet om det modsatte.", ok:true},
+      {t:"Han erkendte straks fejlene, betalte b\u00f8de og undskyldte uforbeholdent i parlamentet.", ok:false},
+      {t:"Han gav embedsv\u00e6rket skylden for at have arrangeret sammenkomsterne uden hans viden.", ok:false}
+    ],
+    forklaring:"Ben\u00e6gtelserne holdt ikke. En intern unders\u00f8gelse og politiets b\u00f8derunde dokumenterede en stribe sammenkomster i strid med reglerne, og Johnson blev den f\u00f8rste siddende britiske premierminister, der er straffet for at have brudt loven. Et parlamentarisk udvalg konkluderede senere, at han bevidst havde vildledt Underhuset. Kombineret med en r\u00e6kke andre sager kostede det ham posten som premierminister, og han forlod til sidst helt sin plads i parlamentet." },
+
+  { sag:"06", titel:"Cahuzac-sagen", based:"Frankrig \u00b7 J\u00e9r\u00f4me Cahuzac \u00b7 2013",
+    situation:"Budgetministeren, der st\u00e5r i spidsen for kampen mod skattesnyd, anklages for selv at have en hemmelig konto i udlandet.",
+    spm:"Hvad gjorde Cahuzac, da anklagen kom frem?",
+    svar:[
+      {t:"Han ben\u00e6gtede blankt over for Nationalforsamlingen, at kontoen fandtes.", ok:true},
+      {t:"Han indr\u00f8mmede kontoen straks og trak sig samme dag, sagen blev kendt.", ok:false},
+      {t:"Han kaldte det en politisk hetz og kr\u00e6vede en unders\u00f8gelse af sine anklagere.", ok:false}
+    ],
+    forklaring:"Den kategoriske ben\u00e6gtelse gjorde faldet meget h\u00e5rdere. Da det blev bevist, at budgetministeren med ansvar for skattekontrol selv havde skjult penge i udlandet, tilstod han, tr\u00e5dte tilbage og udl\u00f8ste en alvorlig tillidskrise for pr\u00e6sident Hollandes regering. Han blev senere id\u00f8mt f\u00e6ngsel for skattesvig. Sagen f\u00f8rte i Frankrig til sk\u00e6rpede regler om, at ministre skal offentligg\u00f8re deres formue." },
+
+  { sag:"07", titel:"Wulff-sagen", based:"Tyskland \u00b7 Christian Wulff \u00b7 2011-12",
+    situation:"Forbundspr\u00e6sidenten er ramt af en sag om et privat l\u00e5n, og en stor avis er p\u00e5 vej med historien.",
+    spm:"Hvad gjorde Wulff for at h\u00e5ndtere historien?",
+    svar:[
+      {t:"Han lagde en truende besked p\u00e5 chefredakt\u00f8rens telefonsvarer for at f\u00e5 historien stoppet.", ok:true},
+      {t:"Han indkaldte til pressem\u00f8de og svarede \u00e5bent p\u00e5 alle sp\u00f8rgsm\u00e5l om l\u00e5net.", ok:false},
+      {t:"Han lod sin advokat sende en h\u00f8flig anmodning om at udskyde offentligg\u00f8relsen.", ok:false}
+    ],
+    forklaring:"Det var ikke l\u00e5net, men fors\u00f8get p\u00e5 at kv\u00e6le pressehistorien, der blev sagen. Beskeden til chefredakt\u00f8ren blev opfattet som et angreb p\u00e5 pressefriheden fra landets statsoverhoved og udl\u00f8ste et ramaskrig. Wulff tr\u00e5dte tilbage som forbundspr\u00e6sident efter under to \u00e5r i embedet. En domstol frikendte ham senere for de oprindelige anklager om bestikkelse, men hans omd\u00f8mme var allerede \u00f8delagt." },
+
+  { sag:"08", titel:"Guttenberg-sagen", based:"Tyskland \u00b7 Karl-Theodor zu Guttenberg \u00b7 2011",
+    situation:"Den popul\u00e6re forsvarsminister beskyldes for at have afskrevet store dele af sin juridiske doktorafhandling uden kilder.",
+    spm:"Hvad gjorde zu Guttenberg, da plagiatet kom frem?",
+    svar:[
+      {t:"Han kaldte f\u00f8rst anklagerne absurde og fastholdt, at afhandlingen var hans egen.", ok:true},
+      {t:"Han erkendte straks plagiatet og lagde frivilligt sin doktortitel fra sig.", ok:false},
+      {t:"Han h\u00e6vdede, at en research-assistent havde beg\u00e5et fejlene uden hans viden.", ok:false}
+    ],
+    forklaring:"Han kaldte f\u00f8rst anklagerne absurde, men dokumentationen for de afskrevne passager voksede dag for dag p\u00e5 en \u00e5ben platform, hvor frivillige fink\u00e6mmede afhandlingen. Universitetet i Bayreuth fratog ham doktortitlen, og presset blev for stort. Den ellers st\u00e6rkt popul\u00e6re minister tr\u00e5dte tilbage og forlod tysk politik. Han flyttede efterf\u00f8lgende til USA og arbejdede som r\u00e5dgiver og investor." },
+
+  { sag:"09", titel:"Rob Ford-sagen", based:"Canada \u00b7 Rob Ford, Toronto \u00b7 2013",
+    situation:"Der spredes rygter om en video, hvor byens borgmester ryger crack. Han bliver spurgt igen og igen, om den findes.",
+    spm:"Hvad gjorde Rob Ford, mens rygterne om videoen voksede?",
+    svar:[
+      {t:"Han ben\u00e6gtede gentagne gange, at videoen overhovedet fandtes.", ok:true},
+      {t:"Han erkendte et misbrug, gik i behandling og trak sig midlertidigt fra posten.", ok:false},
+      {t:"Han indr\u00f8mmede et enkelst\u00e5ende fejltrin og lovede fuld \u00e5benhed om sit helbred.", ok:false}
+    ],
+    forklaring:"Ben\u00e6gtelserne hobede sig op, indtil politiet oplyste, at de var i besiddelse af videoen. F\u00f8rst da indr\u00f8mmede Ford, at han havde r\u00f8get crack, sandsynligvis i en af sine berusede stunder, som han selv formulerede det. Han n\u00e6gtede at g\u00e5 af, s\u00e5 byr\u00e5det fratog ham st\u00f8rstedelen af borgmesterens bef\u00f8jelser. Han stillede op igen i 2014, men trak sig p\u00e5 grund af kr\u00e6ft og d\u00f8de \u00e5ret efter." },
+
+  { sag:"10", titel:"Nkandla-sagen", based:"Sydafrika \u00b7 Jacob Zuma \u00b7 2014-16",
+    situation:"Det kommer frem, at et trecifret millionbel\u00f8b af offentlige midler er brugt p\u00e5 pr\u00e6sidentens private hjem, blandt andet en swimmingpool.",
+    spm:"Hvad gjorde Zuma, da forbruget kom frem?",
+    svar:[
+      {t:"Han afviste enhver fejl og fastholdt, at ogs\u00e5 poolen var et n\u00f8dvendigt sikkerhedsan\u00e6lg.", ok:true},
+      {t:"Han tilbagebetalte straks pengene og undskyldte for det manglende opsyn.", ok:false},
+      {t:"Han gav entrepren\u00f8rerne skylden for at have pyntet projektet uden hans viden.", ok:false}
+    ],
+    forklaring:"Bortforklaringerne, ikke mindst at en swimmingpool var et brandsikkerhedsan\u00e6lg, blev til landsd\u00e6kkende satire. F\u00f8rst en uafh\u00e6ngig ombudsperson og siden forfatningsdomstolen fastslog i 2016, at Zuma havde svigtet forfatningen ved ikke at betale en del af pengene tilbage, og han blev p\u00e5lagt at g\u00f8re det. Nkandla blev et af de st\u00e6rkeste symboler p\u00e5 korruption under hans styre. I 2018 trak han sig som pr\u00e6sident under pres fra sit eget parti." }
+];
+
+const SLOTS = ["A","B","C"];
+
+const LEGENDS = [
+  { navn:"Grigorij Rasputin", pron:"han", flavor:"den sibiriske mystiker, der hviskede tsarer i \u00f8ret og styrede udn\u00e6vnelser fra kulissen",
+    desc:"Sibirisk mystiker, der fik hypnotisk indflydelse p\u00e5 den russiske tsarfamilie i starten af 1900-tallet og reelt styrede politiske udn\u00e6vnelser i kulissen, indtil han blev snigmyrdet." },
+  { navn:"Steve Bannon", pron:"han", flavor:"kaos-ingen\u00f8ren bag Trumps 2016-sejr",
+    desc:"Den h\u00f8jrepopulistiske, ideologiske bulldozer bag Donald Trumps valgsejr i 2016. Brugte aggressiv kulturkamp, internet-memes og bevidst kaos til at ryste det politiske etablissement." },
+  { navn:"Alastair Campbell", pron:"han", flavor:"Blairs frygtede pressechef, manden bag selve ordet \u2019spin\u2019",
+    desc:"Tony Blairs frygtede pressechef, der i 90\u2019erne og 00\u2019erne lagde navn til begrebet \u201Dspin\u201D. Kendt for sit aggressive temperament og et jerngreb om den britiske presse." },
+  { navn:"Dominic Cummings", pron:"han", flavor:"Brexit-hjernen med foragt for embedsv\u00e6rket",
+    desc:"Den uortodokse, systemkritiske hjerne bag Brexit-kampagnen og topr\u00e5dgiver for Boris Johnson. Styrede Downing Street med en kaotisk, disruptiv filosofi og foragt for embedsv\u00e6rket." },
+  { navn:"Karl Rove", pron:"han", flavor:"\u2019Bush\u2019s Brain\u2019 \u2014 datadrevet og n\u00e5desl\u00f8s",
+    desc:"Manden bag George W. Bush, kendt som \u201DBush\u2019s Brain\u201D. Revolutionerede amerikansk politik ved at bruge avanceret datastyring og aggressive, langsigtede strategier til at knuse modstanderne." },
+  { navn:"Judy Smith", pron:"hun", flavor:"Washingtons mester i at begrave skandaler \u2014 forbilledet for tv-serien Scandal",
+    desc:"USA\u2019s mest kendte krise-PR-ekspert og tidligere pressechef i Det Hvide Hus. Lever af at begrave topskandaler for politikere og var inspirationen til tv-serien Scandal." },
+  { navn:"Martin Rossen", pron:"han", flavor:"Mette Frederiksens tidligere stabschef",
+    desc:"Mette Frederiksens t\u00e6tte stabschef under hendes f\u00f8rste regering. Fik hidtil uset formel magt i regeringens topudvalg og blev af oppositionen udr\u00e5bt som landets m\u00e6gtigste, uvalgte politiker." }
+];
+
+const CITATER = {
+  "01":{ t:"Magt korrumperer, og absolut magt korrumperer absolut.", k:"Lord Acton" },
+  "02":{ t:"Taler du sandt, beh\u00f8ver du ikke huske p\u00e5 noget.", k:"Mark Twain" },
+  "03":{ t:"Storhedens pris er ansvar.", k:"Winston Churchill" },
+  "04":{ t:"Alle ser, hvad du synes at v\u00e6re; f\u00e5 m\u00e6rker, hvad du i virkeligheden er.", k:"Niccol\u00f2 Machiavelli" },
+  "05":{ t:"Alle dyr er lige, men nogle dyr er mere lige end andre.", k:"George Orwell" },
+  "06":{ t:"Hykleri er den hyldest, lasten yder dyden.", k:"Fran\u00e7ois de La Rochefoucauld" },
+  "07":{ t:"Vores frihed afh\u00e6nger af pressefriheden, og den kan ikke begr\u00e6nses uden at g\u00e5 tabt.", k:"Thomas Jefferson" },
+  "08":{ t:"Umodne digtere efterligner; modne digtere stj\u00e6ler.", k:"T.S. Eliot" },
+  "09":{ t:"Intet er lettere end selvbedrag, for vi tror gerne det, vi \u00f8nsker.", k:"Demosthenes" },
+  "10":{ t:"Jo mere ford\u00e6rvet en stat er, jo flere love har den.", k:"Tacitus" }
+};
+
+/* Portrætfotos — læg billederne i images/ */
+const FOTO = {
+  "01":"images/nixon.jpg","02":"images/clinton.jpg","03":"images/kennedy.jpg",
+  "04":"images/profumo.jpg","05":"images/johnson.jpg","06":"images/cahuzac.jpg",
+  "07":"images/wulff.jpg","08":"images/guttenberg.jpg","09":"images/ford.jpg",
+  "10":"images/zuma.jpg"
+};
+
+let state = { i:0, history:[], rigtige:0, slots:{}, started:false };
+const app = document.getElementById('app');
+const recordEl = document.getElementById('record');
+const segsEl = document.getElementById('segs');
+const recLbl = document.getElementById('rec-lbl');
+const caseCount = document.getElementById('casecount');
+
+segsEl.innerHTML = LEVELS.map((_,i)=>`<span class="seg" id="seg-${i}"></span>`).join('');
+
+function renderRecord(){
+  LEVELS.forEach((_,i)=>{
+    const seg = document.getElementById('seg-'+i);
+    seg.className = 'seg' + (state.history[i]===true?' r':state.history[i]===false?' w':'');
+    seg.textContent = state.history[i]===true ? '\u2713' : state.history[i]===false ? '\u2717' : '';
+    if(i===state.i && state.history[i]===undefined) seg.classList.add('cur');
+  });
+  recLbl.innerHTML = `<b>${state.rigtige}</b> rigtige`;
+}
+
+function intro(){
+  recordEl.style.display = 'none';
+  caseCount.textContent = '';
+  app.innerHTML = `
+    <div class="panel fade">
+      <div class="card">
+        <div class="stamp land">Klassificeret</div>
+        <div class="meta">Sagsmappe // kun til dine \u00f8jne</div>
+        <h1 class="cover-title">Spin <span class="amp">&amp;</span> Skandale</h1>
+        <div class="cover-sub">Krisemanageren</div>
+        <div class="dossier">
+          <div class="drow"><span class="dk">Klient</span><span class="redact" style="width:150px"></span></div>
+          <div class="drow"><span class="dk">Din status</span><span class="dv">Praktikant uden referencer</span></div>
+          <div class="drow"><span class="dk">Opgave</span><span class="dv">10 sager. Kend sandheden.</span></div>
+        </div>
+        <p class="situation">Du er fuldst\u00e6ndig ny i branchen, en gr\u00f8n praktikant i krisekommunikationens skyggeverden. Inden spindoktor-ligaen vil bruge dig, s\u00e6tter de dig p\u00e5 pr\u00f8ve: kender du overhovedet din krisehistorie?</p>
+        <p class="situation" style="margin-top:12px">Ti ber\u00f8mte skandaler. For hver skal du svare p\u00e5, hvad der rent faktisk skete. Tre svarmuligheder, alle plausible, men kun \u00e9t er sandt. Jo flere du rammer, jo mere legendarisk en mentor ringer til sidst.</p>
+        <button class="btn go big" id="start" style="margin-top:18px">\ud83d\udcde Tag telefonen \u25b8</button>
+      </div>
+    </div>`;
+  document.getElementById('start').onclick = startGame;
+}
+
+function startGame(){
+  state = { i:0, history:[], rigtige:0, slots:{}, started:true, deck:shuffle([...Array(LEVELS.length).keys()]) };
+  recordEl.style.display = 'flex';
+  renderRecord();
+  showCase();
+}
+
+function shuffle(a){ a=a.slice(); for(let i=a.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]]; } return a; }
+function parseBased(b){ const p=b.split('\u00b7').map(s=>s.trim()); return {land:p[0]||'', person:p[1]||'', aar:p[p.length-1]||''}; }
+
+function showCase(){
+  const lv = LEVELS[state.deck[state.i]];
+  const b = parseBased(lv.based);
+  const nr = String(state.i+1).padStart(2,'0');
+  const ord = shuffle([0,1,2]);
+  state.slots = ord;
+  caseCount.textContent = 'SAG ' + (state.i+1) + ' / 10';
+  renderRecord();
+
+  const buttons = ord.map((optIdx,slot)=>{
+    const o = lv.svar[optIdx];
+    return `<button class="choice" data-slot="${slot}"><span class="key">${SLOTS[slot]}</span><span>${o.t}</span></button>`;
+  }).join('');
+
+  app.innerHTML = `
+    <div class="panel fade">
+      <div class="card">
+        <div class="stamp">Aktiv sag</div>
+        <div class="portrait"><img src="${FOTO[lv.sag]}" alt="${lv.titel}"></div>
+        <div class="meta">Sag nr. ${nr}</div>
+        <div class="country">${b.land}</div>
+        <h2 class="case-title">${lv.titel}</h2>
+        <div class="cardsub">${b.person} \u00b7 ${b.aar}</div>
+        <p class="situation">${lv.situation}</p>
+        <div class="prompt">Sp\u00f8rgsm\u00e5l</div>
+        <p class="question">${lv.spm}</p>
+        <div class="choices">${buttons}</div>
+      </div>
+    </div>`;
+  app.querySelectorAll('.choice').forEach(b=>{ b.onclick = ()=> choose(parseInt(b.dataset.slot,10)); });
+}
+
+function choose(slot){
+  const lv = LEVELS[state.deck[state.i]];
+  const b = parseBased(lv.based);
+  const nr = String(state.i+1).padStart(2,'0');
+  const picked = lv.svar[ state.slots[slot] ];
+  const good = !!picked.ok;
+  const correct = lv.svar.find(o=>o.ok);
+  const q = CITATER[lv.sag];
+
+  state.history[state.i] = good;
+  if(good) state.rigtige++;
+  renderRecord();
+
+  /* === Lydeffekter og skærm-ryst === */
+  try {
+    if(good){ SFX.correct(); }
+    else { SFX.wrong(); screenShake(); }
+  } catch(e){}
+
+  app.innerHTML = `
+    <div class="panel fade">
+      <div class="card">
+        <div class="stamp land" style="${good?'color:var(--green);border-color:var(--green)':''}">${good ? 'Rigtigt' : 'Forkert'}</div>
+        <div class="portrait"><img src="${FOTO[lv.sag]}" alt="${lv.titel}"></div>
+        <div class="meta">Sag nr. ${nr} \u00b7 dit svar</div>
+        <div class="country">${b.land}</div>
+        <h2 class="case-title">${lv.titel}</h2>
+        <div class="verdict ${good?'good':'bad'}"><span class="dot"></span>${good ? 'Rigtigt svar' : 'Forkert svar'}</div>
+        ${good ? '' : `<div class="vsub">Du svarede: ${picked.t}</div>`}
+        <div class="answer"><span class="alab">Det rigtige svar</span>${correct.t}</div>
+        <div class="truth"><span class="lab">S\u00e5dan gik det i virkeligheden \u00b7 ${b.aar}</span>${lv.forklaring}</div>
+        <div class="qbox"><div class="qlab">Til eftertanke</div><div class="qt">${q.t}</div><div class="qk">${q.k}</div></div>
+        <div class="actions" id="act"></div>
+      </div>
+    </div>`;
+
+  const act = document.getElementById('act');
+  if(state.i === LEVELS.length - 1){
+    act.innerHTML = `<button class="btn go big" id="next">Se dit jobtilbud \u25b8</button>`;
+    document.getElementById('next').onclick = ending;
+  } else {
+    act.innerHTML = `<button class="btn big" id="next">N\u00e6ste sag \u25b8</button>`;
+    document.getElementById('next').onclick = ()=>{ state.i++; showCase(); };
+  }
+}
+
+const OIL_ART = `<svg width="100%" viewBox="0 0 680 300" role="img" xmlns="http://www.w3.org/2000/svg"><title>Olieboring ud for Gr\u00f8nland med isbj\u00f8rne der flygter</title><desc>Satirisk nat-arktisk scene med boreplatform, oliep\u00f8l og tre isbj\u00f8rne p\u00e5 revnet is under nordlys.</desc><defs><linearGradient id="oilsky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#0d141a"/><stop offset="1" stop-color="#16242a"/></linearGradient></defs><rect x="0" y="0" width="680" height="198" fill="url(#oilsky)"/><path d="M0 58 C140 30,260 78,400 52 C520 32,610 70,680 50 L680 96 C600 70,520 104,400 82 C260 60,140 96,0 100 Z" fill="#6b9e78" opacity="0.12"/><path d="M0 72 C160 50,300 88,460 66 C560 52,640 78,680 66 L680 86 C620 72,560 96,460 80 C300 64,160 96,0 96 Z" fill="#7fb98e" opacity="0.08"/><circle cx="96" cy="56" r="30" fill="#e9eeec" opacity="0.10"/><circle cx="96" cy="56" r="21" fill="#e7ecea"/><circle cx="210" cy="30" r="1.3" fill="#cdd6d6" opacity="0.8"/><circle cx="268" cy="48" r="1.1" fill="#cdd6d6" opacity="0.7"/><circle cx="350" cy="26" r="1.3" fill="#cdd6d6" opacity="0.8"/><circle cx="438" cy="42" r="1.1" fill="#cdd6d6" opacity="0.7"/><circle cx="556" cy="30" r="1.2" fill="#cdd6d6" opacity="0.8"/><circle cx="624" cy="120" r="1.1" fill="#cdd6d6" opacity="0.6"/><path d="M0 198 L70 191 L150 196 L230 190 L320 197 L320 199 L0 199 Z" fill="#34474f" opacity="0.55"/><path d="M360 198 L430 192 L520 196 L600 191 L680 197 L680 199 L360 199 Z" fill="#34474f" opacity="0.45"/><rect x="0" y="198" width="680" height="102" fill="#11202a"/><rect x="0" y="197" width="680" height="2" fill="#26424d"/><path d="M470 201 L468 248" stroke="#243842" stroke-width="5" opacity="0.4"/><path d="M516 201 L516 252" stroke="#243842" stroke-width="5" opacity="0.4"/><path d="M562 201 L564 248" stroke="#243842" stroke-width="5" opacity="0.4"/><ellipse cx="514" cy="252" rx="104" ry="14" fill="#0a1014" opacity="0.85"/><ellipse cx="512" cy="249" rx="80" ry="8" fill="#2c5e52" opacity="0.20"/><ellipse cx="560" cy="140" rx="120" ry="92" fill="#d49a4a" opacity="0.05"/><path d="M448 201 L441 270" stroke="#3c4a54" stroke-width="4" fill="none"/><path d="M496 201 L491 270" stroke="#3c4a54" stroke-width="4" fill="none"/><path d="M540 201 L545 270" stroke="#3c4a54" stroke-width="4" fill="none"/><path d="M586 201 L592 270" stroke="#3c4a54" stroke-width="4" fill="none"/><path d="M448 214 L491 248 M496 214 L443 248 M540 214 L592 248 M586 214 L546 248" stroke="#4c5b63" stroke-width="1.2" fill="none"/><rect x="432" y="191" width="160" height="10" fill="#3c4a54"/><rect x="450" y="194" width="4" height="4" fill="#f4c64e"/><rect x="486" y="194" width="4" height="4" fill="#f4c64e"/><rect x="556" y="194" width="4" height="4" fill="#f4c64e"/><path d="M500 191 L516 78 M548 191 L532 78" stroke="#4a5860" stroke-width="2.5" fill="none"/><path d="M500 188 L548 168 L502 150 L546 132 L504 114 L544 96 L516 80" stroke="#62727a" stroke-width="1.2" fill="none"/><rect x="513" y="72" width="22" height="7" fill="#4a5860"/><circle cx="524" cy="71" r="6" fill="#ff5a4a" opacity="0.25"/><circle cx="524" cy="71" r="2.4" fill="#ff6a5a"/><path d="M540 96 L612 78" stroke="#4a5860" stroke-width="3" fill="none"/><ellipse cx="622" cy="40" rx="8" ry="6" fill="#6a7178" opacity="0.18"/><ellipse cx="632" cy="26" rx="11" ry="8" fill="#6a7178" opacity="0.13"/><ellipse cx="645" cy="12" rx="14" ry="10" fill="#6a7178" opacity="0.09"/><path d="M612 80 C606 64,618 60,614 44 C624 58,622 70,620 80 Z" fill="#d23b2e"/><path d="M613 80 C609 66,617 62,615 50 C621 62,619 72,618 80 Z" fill="#ee7a2e"/><path d="M614 80 C611 70,616 66,615 58 C619 68,617 74,617 80 Z" fill="#f4c64e"/><polygon points="216,260 270,254 330,258 328,273 260,277 218,270" fill="#cdd9dd"/><polygon points="216,260 270,254 330,258 328,261 270,257 218,263" fill="#eef4f5"/><polygon points="218,270 260,277 328,273 328,279 260,283 218,276" fill="#9fb1b7"/><polygon points="8,256 60,250 150,251 200,256 198,270 120,276 30,274 6,266" fill="#cdd9dd"/><polygon points="8,256 60,250 150,251 200,256 196,259 150,255 60,254 10,259" fill="#eef4f5"/><polygon points="6,266 30,274 120,276 198,270 198,277 120,282 30,280 6,272" fill="#9fb1b7"/><path d="M150 251 L156 262 L150 270" stroke="#7e9097" stroke-width="1.4" fill="none" opacity="0.7"/><g transform="translate(36,210)"><ellipse cx="34" cy="40" rx="30" ry="4" fill="#0a1116" opacity="0.35"/><rect x="45" y="24" width="7" height="16" rx="3" fill="#c9d3d2"/><rect x="15" y="24" width="7" height="16" rx="3" fill="#c9d3d2"/><ellipse cx="34" cy="19" rx="26" ry="13" fill="#eef1ec"/><ellipse cx="24" cy="11" rx="13" ry="10" fill="#eef1ec"/><polygon points="12,14 2,21 13,26 21,19" fill="#eef1ec"/><ellipse cx="8" cy="22" rx="8" ry="6.5" fill="#eef1ec"/><ellipse cx="1" cy="24" rx="5" ry="3.6" fill="#e4e9e7"/><circle cx="11" cy="14" r="2.6" fill="#eef1ec"/><rect x="22" y="25" width="7" height="15" rx="3" fill="#f5f7f4"/><rect x="51" y="25" width="7" height="15" rx="3" fill="#f5f7f4"/><ellipse cx="34" cy="27" rx="22" ry="6" fill="#d9e0e0" opacity="0.55"/><circle cx="-3" cy="24" r="1.3" fill="#20272b"/></g><g transform="translate(118,214) scale(0.9)"><ellipse cx="34" cy="40" rx="30" ry="4" fill="#0a1116" opacity="0.32"/><rect x="45" y="24" width="7" height="16" rx="3" fill="#c9d3d2"/><rect x="15" y="24" width="7" height="16" rx="3" fill="#c9d3d2"/><ellipse cx="34" cy="19" rx="26" ry="13" fill="#eef1ec"/><ellipse cx="24" cy="11" rx="13" ry="10" fill="#eef1ec"/><polygon points="12,14 2,21 13,26 21,19" fill="#eef1ec"/><ellipse cx="8" cy="22" rx="8" ry="6.5" fill="#eef1ec"/><ellipse cx="1" cy="24" rx="5" ry="3.6" fill="#e4e9e7"/><circle cx="11" cy="14" r="2.6" fill="#eef1ec"/><rect x="22" y="25" width="7" height="15" rx="3" fill="#f5f7f4"/><rect x="51" y="25" width="7" height="15" rx="3" fill="#f5f7f4"/><ellipse cx="34" cy="27" rx="22" ry="6" fill="#d9e0e0" opacity="0.55"/><circle cx="-3" cy="24" r="1.3" fill="#20272b"/></g><g transform="translate(252,216) scale(0.82)"><ellipse cx="34" cy="40" rx="30" ry="4" fill="#0a1116" opacity="0.30"/><rect x="45" y="24" width="7" height="16" rx="3" fill="#c9d3d2"/><rect x="15" y="24" width="7" height="16" rx="3" fill="#c9d3d2"/><ellipse cx="34" cy="19" rx="26" ry="13" fill="#eef1ec"/><ellipse cx="24" cy="11" rx="13" ry="10" fill="#eef1ec"/><polygon points="12,14 2,21 13,26 21,19" fill="#eef1ec"/><ellipse cx="8" cy="22" rx="8" ry="6.5" fill="#eef1ec"/><ellipse cx="1" cy="24" rx="5" ry="3.6" fill="#e4e9e7"/><circle cx="11" cy="14" r="2.6" fill="#eef1ec"/><rect x="22" y="25" width="7" height="15" rx="3" fill="#f5f7f4"/><rect x="51" y="25" width="7" height="15" rx="3" fill="#f5f7f4"/><ellipse cx="34" cy="27" rx="22" ry="6" fill="#d9e0e0" opacity="0.55"/><circle cx="-3" cy="24" r="1.3" fill="#20272b"/></g></svg>`;
+
+const COAL_ART = `<svg width="100%" viewBox="0 0 680 300" role="img" xmlns="http://www.w3.org/2000/svg"><title>Kulkraftv\u00e6rk med rygende k\u00f8let\u00e5rne</title><desc>Stiliseret industriscene med kulkraftv\u00e6rk, k\u00f8let\u00e5rne og skorstene under en forurenet himmel.</desc><defs><linearGradient id="coalsky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#211d18"/><stop offset="1" stop-color="#5a4a36"/></linearGradient></defs><rect x="0" y="0" width="680" height="235" fill="url(#coalsky)"/><circle cx="558" cy="72" r="50" fill="#d49a4a" opacity="0.12"/><circle cx="558" cy="72" r="30" fill="#d49a4a" opacity="0.34"/><rect x="0" y="198" width="680" height="37" fill="#6a583f" opacity="0.4"/><rect x="0" y="235" width="680" height="65" fill="#17140f"/><rect x="0" y="234" width="680" height="2" fill="#2c2418"/><ellipse cx="300" cy="236" rx="250" ry="28" fill="#d49a4a" opacity="0.06"/><path d="M598 235 L612 120 M634 235 L620 120" stroke="#20262b" stroke-width="2" fill="none"/><path d="M600 150 L632 150 M596 168 L636 168 M612 120 L620 120" stroke="#20262b" stroke-width="2" fill="none"/><path d="M600 168 L632 150 M632 168 L600 150 M602 200 L630 170 M630 200 L602 170 M604 235 L628 200 M628 235 L604 200" stroke="#20262b" stroke-width="1" fill="none"/><path d="M600 150 Q 460 186 320 166" stroke="#15120e" stroke-width="1" fill="none" opacity="0.5"/><path d="M596 168 Q 470 202 344 184" stroke="#15120e" stroke-width="1" fill="none" opacity="0.45"/><path d="M634 150 Q 660 158 680 153" stroke="#15120e" stroke-width="1" fill="none" opacity="0.45"/><path d="M134 98 C138 120,144 132,144 152 C144 184,120 208,120 235 L240 235 C240 208,216 184,216 152 C216 132,222 120,226 98 Z" fill="#2c3137"/><ellipse cx="180" cy="98" rx="46" ry="8" fill="#3a4047"/><ellipse cx="180" cy="98" rx="40" ry="6" fill="#14181c"/><path d="M294 116 C298 134,302 148,302 164 C302 192,282 212,282 235 L382 235 C382 212,362 192,362 164 C362 148,366 134,370 116 Z" fill="#2c3137"/><ellipse cx="332" cy="116" rx="38" ry="7" fill="#3a4047"/><ellipse cx="332" cy="116" rx="33" ry="5" fill="#14181c"/><ellipse cx="185" cy="82" rx="30" ry="17" fill="#d9d3c5" opacity="0.5"/><ellipse cx="200" cy="60" rx="27" ry="17" fill="#d9d3c5" opacity="0.36"/><ellipse cx="216" cy="40" rx="24" ry="16" fill="#d9d3c5" opacity="0.24"/><ellipse cx="232" cy="22" rx="20" ry="14" fill="#d9d3c5" opacity="0.14"/><ellipse cx="332" cy="102" rx="22" ry="13" fill="#d9d3c5" opacity="0.42"/><ellipse cx="344" cy="84" rx="19" ry="12" fill="#d9d3c5" opacity="0.3"/><ellipse cx="356" cy="68" rx="16" ry="11" fill="#d9d3c5" opacity="0.2"/><ellipse cx="368" cy="54" rx="13" ry="9" fill="#d9d3c5" opacity="0.12"/><rect x="430" y="66" width="16" height="169" fill="#2a2f34"/><rect x="430" y="68" width="16" height="9" fill="#c0392b"/><rect x="430" y="80" width="16" height="6" fill="#e3ddd0"/><rect x="430" y="89" width="16" height="9" fill="#c0392b"/><rect x="466" y="92" width="12" height="143" fill="#2a2f34"/><rect x="466" y="94" width="12" height="7" fill="#c0392b"/><ellipse cx="442" cy="56" rx="15" ry="11" fill="#4a4640" opacity="0.5"/><ellipse cx="456" cy="40" rx="19" ry="13" fill="#4a4640" opacity="0.38"/><ellipse cx="472" cy="24" rx="23" ry="15" fill="#4a4640" opacity="0.26"/><ellipse cx="490" cy="12" rx="26" ry="16" fill="#4a4640" opacity="0.15"/><ellipse cx="474" cy="84" rx="12" ry="9" fill="#4a4640" opacity="0.4"/><ellipse cx="484" cy="70" rx="15" ry="10" fill="#4a4640" opacity="0.28"/><ellipse cx="496" cy="56" rx="17" ry="11" fill="#4a4640" opacity="0.16"/><rect x="96" y="206" width="430" height="30" fill="#20262b"/><rect x="120" y="214" width="5" height="7" fill="#c9a24b" opacity="0.7"/><rect x="148" y="214" width="5" height="7" fill="#c9a24b" opacity="0.7"/><rect x="176" y="214" width="5" height="7" fill="#c9a24b" opacity="0.45"/><rect x="204" y="214" width="5" height="7" fill="#c9a24b" opacity="0.7"/><rect x="262" y="214" width="5" height="7" fill="#c9a24b" opacity="0.6"/><rect x="300" y="214" width="5" height="7" fill="#c9a24b" opacity="0.7"/><rect x="338" y="214" width="5" height="7" fill="#c9a24b" opacity="0.45"/><rect x="406" y="214" width="5" height="7" fill="#c9a24b" opacity="0.7"/><rect x="448" y="214" width="5" height="7" fill="#c9a24b" opacity="0.6"/><rect x="492" y="214" width="5" height="7" fill="#c9a24b" opacity="0.7"/><polygon points="6,272 26,250 56,240 92,244 122,256 132,272" fill="#0d0c0b"/><polygon points="26,250 56,240 92,244 90,247 56,243 28,253" fill="#2a2620" opacity="0.7"/></svg>`;
+
+function ending(){
+  const r = state.rigtige;
+  const recIdx = (r >= 5) ? (10 - r) : 6;
+  const rec = LEGENDS[recIdx];
+  const grid = state.history.map(h => h ? '\ud83d\udfe9' : '\ud83d\udfe5').join('');
+  let rekord = 0;
+  try { rekord = parseInt(localStorage.getItem('spin_rekord')||'0',10) || 0; } catch(e){}
+  const nyRekord = r > rekord;
+  if(nyRekord){ rekord = r; try { localStorage.setItem('spin_rekord', String(r)); } catch(e){} }
+
+  /* === Cha-ching ved ny rekord === */
+  if(nyRekord){ try { SFX.rekord(); } catch(e){} }
+
+  const farve  = (r >= 5) ? "var(--green)" : "var(--red)";
+  const border = (r >= 5) ? "var(--green-dk)" : "var(--red-dk)";
+
+  let txt;
+  if(r >= 5){
+    const S = rec.pron==='hun' ? 'Hun' : 'Han';
+    const s = rec.pron==='hun' ? 'hun' : 'han';
+    txt = `Din telefon ringer. Det er <b>${rec.navn}</b>, ${rec.flavor}. ${S} har fulgt din h\u00e5ndtering af alle ti sager og er imponeret: ${r} ud af 10 reddet. Nu vil ${s} have dig p\u00e5 en opgave. En virksomhed skal have den gr\u00f8nlandske regering til at \u00e5bne et ellers fredet omr\u00e5de, s\u00e5 der kan suges olie op, og de mangler pr\u00e6cis din slags t\u00e6ft. L\u00f8nnen er astronomisk. Samvittigheden er valgfri.`;
+  } else {
+    txt = `Din telefon ringer, men det er ikke en af de helt store legender. Det er <b>Martin Rossen</b>. Du imponerede ikke ligaen denne gang: ${r} ud af 10 rakte ikke til de internationale stjerner. Til geng\u00e6ld kan Rossen bruge dig, han skal have kulkraft tilbage p\u00e5 sporet i EU, og det kr\u00e6ver en, der ikke stiller for mange sp\u00f8rgsm\u00e5l. Velkommen i maskinrummet. Diskret, som altid.`;
+  }
+
+  const banner = '<div class="art-banner">' + (r >= 5 ? OIL_ART : COAL_ART) + '</div>';
+  const leagueRows = LEGENDS.map((L,i)=>`
+    <div class="leg${i===recIdx?' me':''}">
+      <div class="rk">${i+1}</div>
+      <div>
+        <div class="nm">${L.navn}${i===recIdx?'<span class="you">Ringede til dig</span>':''}</div>
+        <div class="ds">${L.desc}</div>
+      </div>
+    </div>`).join('');
+
+  caseCount.textContent = 'AUDITION SLUT';
+  app.innerHTML = `
+    <div class="screen fade" style="border-color:${border}">
+      <div class="kicker" style="color:${farve}">Ligaen har set dig</div>
+      <div class="bigscore" style="color:${farve}">${r} / 10</div>
+      <div class="scoreline">sager reddet</div>
+      <div class="sharegrid">${grid}</div>
+      <div class="rekord" style="color:${nyRekord ? 'var(--gold)' : 'var(--muted-paper)'}">${nyRekord ? 'Ny rekord! ' : ''}Din bedste hidtil: ${rekord} / 10</div>
+      <h2 class="rank-badge" style="color:${farve};margin-top:18px">${rec.navn} ringer</h2>
+      <p class="lede">${txt}</p>
+      ${banner}
+      <div class="league">
+        <h3>Spindoktor-ligaen</h3>
+        <div class="lsub">Jo flere sager du redder, jo h\u00f8jere i ligaen r\u00e6kker du. Her er de andre, du kunne have imponeret, eller skuffet.</div>
+        ${leagueRows}
+      </div>
+      <div class="actions" style="justify-content:flex-start;margin-top:22px;flex-wrap:wrap;gap:10px"><button class="btn go big" id="again">${r >= 5 ? 'Tag en ny runde' : 'Se om du kan f\u00e5 det gode tilbud'} \u25b8</button><button class="btn big" id="share">Del resultat \u25b8</button></div>
+    </div>`;
+  document.getElementById('again').onclick = startGame;
+  const shareBtn = document.getElementById('share');
+  shareBtn.onclick = ()=>{
+    const text = 'Spin & Skandale: Krisemanageren\n' + r + '/10, rekrutteret af ' + rec.navn + '\n' + grid + '\nKan du sl\u00e5 mig?';
+    if(navigator.share){
+      navigator.share({title:'Spin & Skandale', text:text, url:location.href}).catch(()=>{});
+    } else if(navigator.clipboard){
+      navigator.clipboard.writeText(text + '\n' + location.href).then(()=>{
+        shareBtn.textContent = 'Kopieret \u2713';
+        setTimeout(()=>{ shareBtn.textContent = 'Del resultat \u25b8'; }, 2000);
+      }).catch(()=>{});
+    }
+  };
+}
+
+document.addEventListener('keydown', e=>{
+  if(!state.started) return;
+  const idx = SLOTS.indexOf(e.key.toUpperCase());
+  if(idx >= 0){
+    const btn = app.querySelector('.choice[data-slot="'+idx+'"]');
+    if(btn) btn.click();
+  }
+});
+
+intro();
 </script>
 </body>
 </html>
