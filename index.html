@@ -1,1 +1,526 @@
-<!doctype html><html lang="da"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Dashboard - Analytisk overblik</title><script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script><style>:root{--g:#6B9E78;--dg:#3d6b47;--h:#0F2B36;--o:#E07A40;--b:#4A90C4;--p:#9B59B6;--grid:#E8EBE8;--bg:#F6F8F6;--m:#637079;--r:#B84A34}*{box-sizing:border-box}body{margin:0;background:var(--bg);font-family:Segoe UI,Arial,sans-serif;color:#17313b}.dak-dashboard{max-width:1420px;margin:auto;padding:28px 22px 48px}header{display:flex;justify-content:space-between;gap:22px;align-items:flex-start}h1{margin:0;color:var(--h);font-size:34px}p{color:var(--m);line-height:1.5}.meta{text-align:right;color:var(--m);font-size:14px;line-height:1.6;min-width:280px}nav{display:flex;flex-wrap:wrap;gap:8px;margin:18px 0 26px}nav a{color:var(--dg);background:white;border:1px solid #dce7df;border-radius:8px;padding:9px 12px;text-decoration:none}section{margin-top:34px}h2{color:var(--h);font-size:23px}.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}.kpi,.panel{background:white;border:1px solid var(--grid);border-radius:8px;padding:16px}.kt{font-size:13px;color:var(--m);font-weight:700;text-transform:uppercase}.kp{font-size:13px;color:var(--m);margin-top:5px}.kv{font-size:29px;color:var(--h);font-weight:750;margin-top:12px}.ks{margin-top:10px;font-size:13px;color:#53626b;display:grid;gap:4px}.good{color:var(--dg);font-weight:700}.bad{color:var(--r);font-weight:700}.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px}.wrap{height:400px}.tall{height:620px}.wide{grid-column:1/-1}table{width:100%;border-collapse:collapse;font-size:14px}th,td{padding:8px;border-bottom:1px solid var(--grid);text-align:right}th:first-child,td:first-child{text-align:left}th{color:var(--m);font-size:12px;text-transform:uppercase}@media(max-width:1000px){header,.grid{display:block}.kpis{grid-template-columns:repeat(2,1fr)}.meta{text-align:left}.panel{margin-bottom:16px}}@media(max-width:640px){.kpis{grid-template-columns:1fr}.dak-dashboard{padding:20px 14px}h1{font-size:27px}}</style></head><body><main class="dak-dashboard"><header><div><h1>Danske A-kasser: Analytisk overblik</h1><p>Interaktivt arbejdsmarkedsdashboard baseret på det faste Drive-regneark. KPI'er viser seneste datapunkt samt ændring fra forrige datapunkt og samme periode året før.</p></div><div class="meta"><b>Genereret:</b> <span id="gen"></span><br><b>Kilde ændret:</b> <span id="src"></span><br><b>Datagrundlag:</b> Samlet overblik.xlsx</div></header><nav><a href="#ledighed">Ledighed og beskæftigelse</a><a href="#okonomi">Samfundsøkonomi</a><a href="#internationalt">Internationalt</a><a href="#grafer">Grafer</a></nav><section id="ledighed"><h2>Ledighed og beskæftigelse</h2><div class="kpis" id="kpis"></div></section><section id="okonomi"><h2>Samfundsøkonomiske indikatorer</h2><div class="grid"><div class="panel"><h3>Datadækning</h3><table id="coverage"></table></div><div class="panel"><h3>Datastatus</h3><p>Kilden er en Excel-fil i Google Drive, ikke et native Google Sheet. Direkte Sheets-skrivning og API-feltvedligeholdelse via Sheets API er derfor ikke understøttet i denne filtilstand.</p></div></div></section><section id="internationalt"><h2>Internationalt</h2><div class="grid"><div class="panel"><h3>Eurostat ledighed</h3><table id="euro"></table></div><div class="panel"><h3>Forbrugertillid</h3><table id="conf"></table></div></div></section><section id="grafer"><h2>Grafer</h2><div class="grid"><div class="panel"><h3>Ledighedsprocent</h3><div class="wrap"><canvas id="c1"></canvas></div></div><div class="panel"><h3>Ledige efter type</h3><div class="wrap"><canvas id="c2"></canvas></div></div><div class="panel"><h3>Stillinger og lønmodtagere</h3><div class="wrap"><canvas id="c3"></canvas></div></div><div class="panel"><h3>Varslinger, konkurser og tabte job</h3><div class="wrap"><canvas id="c4"></canvas></div></div><div class="panel"><h3>Inflation</h3><div class="wrap"><canvas id="c5"></canvas></div></div><div class="panel"><h3>Tillidsindikatorer</h3><div class="wrap"><canvas id="c6"></canvas></div></div><div class="panel wide"><h3>Eurostat ledighed på tværs af lande</h3><div class="wrap tall"><canvas id="c7"></canvas></div></div><div class="panel wide"><h3>Forbrugertillid i udvalgte lande</h3><div class="wrap"><canvas id="c8"></canvas></div></div></div></section></main><script>const D={"generated":"29.06.2026 kl. 09:17 CEST","sourceModified":"23.06.2026 kl. 10:27 CEST","sourceFileState":"Excel-fil i Google Drive, ikke native Google Sheet","kpis":[{"title":"Ledighedsprocent","period":"maj 2026","value":"3,1 pct.","deltaPrev":"+0,1 pct.point","deltaYear":"+0,2 pct.point","prevGood":false,"yearGood":false},{"title":"Ledige fuldtidspersoner","period":"maj 2026","value":"93.305","deltaPrev":"+783","deltaYear":"+6.538","prevGood":false,"yearGood":false},{"title":"Nyopslåede stillinger","period":"maj 2026","value":"29.640","deltaPrev":"+4.659","deltaYear":"+1.051","prevGood":true,"yearGood":true},{"title":"Lønmodtagere i alt","period":"apr. 2026","value":"3.085.275","deltaPrev":"+804","deltaYear":"+31.712","prevGood":true,"yearGood":true},{"title":"Langtidsledige","period":"maj 2026","value":"17.106","deltaPrev":"+99","deltaYear":"+658","prevGood":false,"yearGood":false},{"title":"Varslede afskedigelser","period":"maj 2026","value":"1.183","deltaPrev":"+762","deltaYear":"+23","prevGood":false,"yearGood":false},{"title":"Konkurser, sæsonkorrigeret","period":"maj 2026","value":"132,3","deltaPrev":"-0,9","deltaYear":"-72,5","prevGood":true,"yearGood":true},{"title":"Inflation","period":"maj 2026","value":"1,9 pct.","deltaPrev":"+0,5 pct.point","deltaYear":"+0,3 pct.point","prevGood":false,"yearGood":false},{"title":"Forbrugertillid","period":"jun. 2026","value":"-14,0","deltaPrev":"+5,8","deltaYear":"+1,1","prevGood":true,"yearGood":true},{"title":"Erhvervstillid","period":"jun. 2026","value":"101,0","deltaPrev":"-3,1","deltaYear":"-1,6","prevGood":false,"yearGood":false},{"title":"Eurostat ledighed, Danmark","period":"1. kvt. 2026","value":"7,0 pct.","deltaPrev":"+0,6 pct.point","deltaYear":"+0,7 pct.point","prevGood":false,"yearGood":false}],"coverage":{"Ledighed":"maj 2026","Nyopslåede stillinger":"maj 2026","Lønmodtagere":"apr. 2026","Varslede afskedigelser":"maj 2026","Konkurser og tabte job":"maj 2026","Langtidsledighed":"maj 2026","Inflation":"maj 2026","Forbrugerforventninger":"jun. 2026","Erhvervstillid":"jun. 2026","Eurostat ledighed":"1. kvt. 2026","EU-forbrugertillid":"maj 2026"},"series":{"ledighed_pct":{"name":"Ledighedsprocent","data":[{"period":"2025M06","label":"jun. 2025","value":2.9},{"period":"2025M07","label":"jul. 2025","value":2.9},{"period":"2025M08","label":"aug. 2025","value":2.9},{"period":"2025M09","label":"sep. 2025","value":2.9},{"period":"2025M10","label":"okt. 2025","value":2.9},{"period":"2025M11","label":"nov. 2025","value":2.9},{"period":"2025M12","label":"dec. 2025","value":2.9},{"period":"2026M01","label":"jan. 2026","value":3.0},{"period":"2026M02","label":"feb. 2026","value":3.1},{"period":"2026M03","label":"mar. 2026","value":3.0},{"period":"2026M04","label":"apr. 2026","value":3.0},{"period":"2026M05","label":"maj 2026","value":3.1}]},"ledige_samlet":{"name":"Ledige fuldtidspersoner","data":[{"period":"2025M06","label":"jun. 2025","value":87342.0},{"period":"2025M07","label":"jul. 2025","value":87605.0},{"period":"2025M08","label":"aug. 2025","value":87861.0},{"period":"2025M09","label":"sep. 2025","value":88057.0},{"period":"2025M10","label":"okt. 2025","value":88321.0},{"period":"2025M11","label":"nov. 2025","value":88955.0},{"period":"2025M12","label":"dec. 2025","value":89449.0},{"period":"2026M01","label":"jan. 2026","value":90082.0},{"period":"2026M02","label":"feb. 2026","value":93723.0},{"period":"2026M03","label":"mar. 2026","value":91990.0},{"period":"2026M04","label":"apr. 2026","value":92522.0},{"period":"2026M05","label":"maj 2026","value":93305.0}]},"kontanthjaelp":{"name":"Kontanthjælp","data":[{"period":"2025M06","label":"jun. 2025","value":12337.0},{"period":"2025M07","label":"jul. 2025","value":12411.0},{"period":"2025M08","label":"aug. 2025","value":12676.0},{"period":"2025M09","label":"sep. 2025","value":12713.0},{"period":"2025M10","label":"okt. 2025","value":13044.0},{"period":"2025M11","label":"nov. 2025","value":13819.0},{"period":"2025M12","label":"dec. 2025","value":14413.0},{"period":"2026M01","label":"jan. 2026","value":14748.0},{"period":"2026M02","label":"feb. 2026","value":14939.0},{"period":"2026M03","label":"mar. 2026","value":15109.0},{"period":"2026M04","label":"apr. 2026","value":15315.0},{"period":"2026M05","label":"maj 2026","value":15719.0}]},"adagpenge":{"name":"A-dagpenge","data":[{"period":"2025M06","label":"jun. 2025","value":75005.0},{"period":"2025M07","label":"jul. 2025","value":75194.0},{"period":"2025M08","label":"aug. 2025","value":75185.0},{"period":"2025M09","label":"sep. 2025","value":75344.0},{"period":"2025M10","label":"okt. 2025","value":75277.0},{"period":"2025M11","label":"nov. 2025","value":75136.0},{"period":"2025M12","label":"dec. 2025","value":75037.0},{"period":"2026M01","label":"jan. 2026","value":75334.0},{"period":"2026M02","label":"feb. 2026","value":78785.0},{"period":"2026M03","label":"mar. 2026","value":76881.0},{"period":"2026M04","label":"apr. 2026","value":77207.0},{"period":"2026M05","label":"maj 2026","value":77586.0}]},"stillinger":{"name":"Nyopslåede stillinger","data":[{"period":"2025M06","label":"jun. 2025","value":23957.0},{"period":"2025M07","label":"jul. 2025","value":18786.0},{"period":"2025M08","label":"aug. 2025","value":22022.0},{"period":"2025M09","label":"sep. 2025","value":24490.0},{"period":"2025M10","label":"okt. 2025","value":24348.0},{"period":"2025M11","label":"nov. 2025","value":24007.0},{"period":"2025M12","label":"dec. 2025","value":21068.0},{"period":"2026M01","label":"jan. 2026","value":25312.0},{"period":"2026M02","label":"feb. 2026","value":25450.0},{"period":"2026M03","label":"mar. 2026","value":29665.0},{"period":"2026M04","label":"apr. 2026","value":24981.0},{"period":"2026M05","label":"maj 2026","value":29640.0}]},"varslede":{"name":"Varslede afskedigelser","data":[{"period":"2025M06","label":"jun. 2025","value":434.0},{"period":"2025M07","label":"jul. 2025","value":119.0},{"period":"2025M08","label":"aug. 2025","value":670.0},{"period":"2025M09","label":"sep. 2025","value":6173.0},{"period":"2025M10","label":"okt. 2025","value":1256.0},{"period":"2025M11","label":"nov. 2025","value":1068.0},{"period":"2025M12","label":"dec. 2025","value":969.0},{"period":"2026M01","label":"jan. 2026","value":1247.0},{"period":"2026M02","label":"feb. 2026","value":676.0},{"period":"2026M03","label":"mar. 2026","value":1885.0},{"period":"2026M04","label":"apr. 2026","value":421.0},{"period":"2026M05","label":"maj 2026","value":1183.0}]},"langtid":{"name":"Langtidsledige","data":[{"period":"2025M06","label":"jun. 2025","value":16596.0},{"period":"2025M07","label":"jul. 2025","value":16466.0},{"period":"2025M08","label":"aug. 2025","value":16296.0},{"period":"2025M09","label":"sep. 2025","value":15587.0},{"period":"2025M10","label":"okt. 2025","value":15565.0},{"period":"2025M11","label":"nov. 2025","value":15912.0},{"period":"2025M12","label":"dec. 2025","value":16028.0},{"period":"2026M01","label":"jan. 2026","value":16742.0},{"period":"2026M02","label":"feb. 2026","value":16188.0},{"period":"2026M03","label":"mar. 2026","value":16217.0},{"period":"2026M04","label":"apr. 2026","value":17007.0},{"period":"2026M05","label":"maj 2026","value":17106.0}]},"lon_total":{"name":"Lønmodtagere i alt","data":[{"period":"2025M05","label":"maj 2025","value":3055361.0},{"period":"2025M06","label":"jun. 2025","value":3057307.0},{"period":"2025M07","label":"jul. 2025","value":3061009.0},{"period":"2025M08","label":"aug. 2025","value":3064410.0},{"period":"2025M09","label":"sep. 2025","value":3068635.0},{"period":"2025M10","label":"okt. 2025","value":3073207.0},{"period":"2025M11","label":"nov. 2025","value":3075197.0},{"period":"2025M12","label":"dec. 2025","value":3079365.0},{"period":"2026M01","label":"jan. 2026","value":3080450.0},{"period":"2026M02","label":"feb. 2026","value":3080698.0},{"period":"2026M03","label":"mar. 2026","value":3084471.0},{"period":"2026M04","label":"apr. 2026","value":3085275.0}]},"konkurser":{"name":"Konkurser, sæsonkorrigeret","data":[{"period":"2025M06","label":"jun. 2025","value":152.7},{"period":"2025M07","label":"jul. 2025","value":167.5},{"period":"2025M08","label":"aug. 2025","value":178.6},{"period":"2025M09","label":"sep. 2025","value":166.1},{"period":"2025M10","label":"okt. 2025","value":163.0},{"period":"2025M11","label":"nov. 2025","value":158.4},{"period":"2025M12","label":"dec. 2025","value":146.8},{"period":"2026M01","label":"jan. 2026","value":143.6},{"period":"2026M02","label":"feb. 2026","value":135.9},{"period":"2026M03","label":"mar. 2026","value":144.5},{"period":"2026M04","label":"apr. 2026","value":133.2},{"period":"2026M05","label":"maj 2026","value":132.3}]},"tabte_job":{"name":"Tabte job ved konkurser","data":[{"period":"2025M06","label":"jun. 2025","value":1145.0},{"period":"2025M07","label":"jul. 2025","value":1107.0},{"period":"2025M08","label":"aug. 2025","value":774.0},{"period":"2025M09","label":"sep. 2025","value":1295.0},{"period":"2025M10","label":"okt. 2025","value":918.0},{"period":"2025M11","label":"nov. 2025","value":743.0},{"period":"2025M12","label":"dec. 2025","value":942.0},{"period":"2026M01","label":"jan. 2026","value":740.0},{"period":"2026M02","label":"feb. 2026","value":644.0},{"period":"2026M03","label":"mar. 2026","value":830.0},{"period":"2026M04","label":"apr. 2026","value":782.0},{"period":"2026M05","label":"maj 2026","value":971.0}]},"inflation":{"name":"Inflation","data":[{"period":"2025M06","label":"jun. 2025","value":1.8},{"period":"2025M07","label":"jul. 2025","value":2.2},{"period":"2025M08","label":"aug. 2025","value":2.0},{"period":"2025M09","label":"sep. 2025","value":2.2},{"period":"2025M10","label":"okt. 2025","value":2.1},{"period":"2025M11","label":"nov. 2025","value":2.1},{"period":"2025M12","label":"dec. 2025","value":1.9},{"period":"2026M01","label":"jan. 2026","value":0.8},{"period":"2026M02","label":"feb. 2026","value":0.7},{"period":"2026M03","label":"mar. 2026","value":1.2},{"period":"2026M04","label":"apr. 2026","value":1.4},{"period":"2026M05","label":"maj 2026","value":1.9}]},"kerneinflation":{"name":"Kerneinflation","data":[{"period":"2025M06","label":"jun. 2025","value":1.9},{"period":"2025M07","label":"jul. 2025","value":2.2},{"period":"2025M08","label":"aug. 2025","value":2.2},{"period":"2025M09","label":"sep. 2025","value":2.2},{"period":"2025M10","label":"okt. 2025","value":2.3},{"period":"2025M11","label":"nov. 2025","value":2.3},{"period":"2025M12","label":"dec. 2025","value":2.3},{"period":"2026M01","label":"jan. 2026","value":1.9},{"period":"2026M02","label":"feb. 2026","value":1.8},{"period":"2026M03","label":"mar. 2026","value":1.7},{"period":"2026M04","label":"apr. 2026","value":1.6},{"period":"2026M05","label":"maj 2026","value":2.1}]},"forbrugertillid":{"name":"Forbrugertillid","data":[{"period":"2025M07","label":"jul. 2025","value":-15.7},{"period":"2025M08","label":"aug. 2025","value":-17.2},{"period":"2025M09","label":"sep. 2025","value":-18.7},{"period":"2025M10","label":"okt. 2025","value":-19.5},{"period":"2025M11","label":"nov. 2025","value":-20.1},{"period":"2025M12","label":"dec. 2025","value":-17.3},{"period":"2026M01","label":"jan. 2026","value":-13.4},{"period":"2026M02","label":"feb. 2026","value":-13.1},{"period":"2026M03","label":"mar. 2026","value":-13.8},{"period":"2026M04","label":"apr. 2026","value":-18.6},{"period":"2026M05","label":"maj 2026","value":-19.8},{"period":"2026M06","label":"jun. 2026","value":-14.0}]},"erhvervstillid":{"name":"Erhvervstillid","data":[{"period":"2025M07","label":"jul. 2025","value":104.5},{"period":"2025M08","label":"aug. 2025","value":102.8},{"period":"2025M09","label":"sep. 2025","value":103.6},{"period":"2025M10","label":"okt. 2025","value":102.0},{"period":"2025M11","label":"nov. 2025","value":101.1},{"period":"2025M12","label":"dec. 2025","value":102.3},{"period":"2026M01","label":"jan. 2026","value":102.2},{"period":"2026M02","label":"feb. 2026","value":103.2},{"period":"2026M03","label":"mar. 2026","value":103.9},{"period":"2026M04","label":"apr. 2026","value":105.5},{"period":"2026M05","label":"maj 2026","value":104.1},{"period":"2026M06","label":"jun. 2026","value":101.0}]}},"euro":{"period":"1. kvt. 2026","latest":[{"country":"Tyskland","code":"DE","value":3.8},{"country":"EU-27","code":"EU27_2020","value":6.0},{"country":"Danmark","code":"DK","value":7.0},{"country":"Frankrig","code":"FR","value":8.1},{"country":"Sverige","code":"SE","value":8.6}],"selected":{"DK":{"name":"Danmark","data":[{"period":"2024-Q2","label":"2. kvt. 2024","value":6.1},{"period":"2024-Q3","label":"3. kvt. 2024","value":6.4},{"period":"2024-Q4","label":"4. kvt. 2024","value":6.5},{"period":"2025-Q1","label":"1. kvt. 2025","value":6.3},{"period":"2025-Q2","label":"2. kvt. 2025","value":6.3},{"period":"2025-Q3","label":"3. kvt. 2025","value":6.5},{"period":"2025-Q4","label":"4. kvt. 2025","value":6.4},{"period":"2026-Q1","label":"1. kvt. 2026","value":7.0}]},"DE":{"name":"Tyskland","data":[{"period":"2024-Q2","label":"2. kvt. 2024","value":3.4},{"period":"2024-Q3","label":"3. kvt. 2024","value":3.5},{"period":"2024-Q4","label":"4. kvt. 2024","value":3.5},{"period":"2025-Q1","label":"1. kvt. 2025","value":3.7},{"period":"2025-Q2","label":"2. kvt. 2025","value":3.9},{"period":"2025-Q3","label":"3. kvt. 2025","value":4.0},{"period":"2025-Q4","label":"4. kvt. 2025","value":3.9},{"period":"2026-Q1","label":"1. kvt. 2026","value":3.8}]},"SE":{"name":"Sverige","data":[{"period":"2024-Q2","label":"2. kvt. 2024","value":8.3},{"period":"2024-Q3","label":"3. kvt. 2024","value":8.5},{"period":"2024-Q4","label":"4. kvt. 2024","value":8.4},{"period":"2025-Q1","label":"1. kvt. 2025","value":8.8},{"period":"2025-Q2","label":"2. kvt. 2025","value":8.6},{"period":"2025-Q3","label":"3. kvt. 2025","value":8.8},{"period":"2025-Q4","label":"4. kvt. 2025","value":9.1},{"period":"2026-Q1","label":"1. kvt. 2026","value":8.6}]},"FR":{"name":"Frankrig","data":[{"period":"2024-Q2","label":"2. kvt. 2024","value":7.4},{"period":"2024-Q3","label":"3. kvt. 2024","value":7.5},{"period":"2024-Q4","label":"4. kvt. 2024","value":7.4},{"period":"2025-Q1","label":"1. kvt. 2025","value":7.5},{"period":"2025-Q2","label":"2. kvt. 2025","value":7.6},{"period":"2025-Q3","label":"3. kvt. 2025","value":7.8},{"period":"2025-Q4","label":"4. kvt. 2025","value":8.0},{"period":"2026-Q1","label":"1. kvt. 2026","value":8.1}]},"EU27_2020":{"name":"EU-27","data":[{"period":"2024-Q2","label":"2. kvt. 2024","value":6.0},{"period":"2024-Q3","label":"3. kvt. 2024","value":6.0},{"period":"2024-Q4","label":"4. kvt. 2024","value":5.9},{"period":"2025-Q1","label":"1. kvt. 2025","value":6.0},{"period":"2025-Q2","label":"2. kvt. 2025","value":6.0},{"period":"2025-Q3","label":"3. kvt. 2025","value":6.1},{"period":"2025-Q4","label":"4. kvt. 2025","value":6.0},{"period":"2026-Q1","label":"1. kvt. 2026","value":6.0}]}}},"euConfidence":{"period":"maj 2026","latest":[{"country":"Sverige","code":"SE","value":-5.7},{"country":"Danmark","code":"DK","value":-15.5},{"country":"Tyskland","code":"DE","value":-16.1},{"country":"EU-27","code":"EU27_2020","value":-18.2},{"country":"Frankrig","code":"FR","value":-21.2}],"selected":{"DE":{"name":"Tyskland","data":[{"period":"2025-10","label":"okt. 2025","value":-10.7},{"period":"2025-11","label":"nov. 2025","value":-11.5},{"period":"2025-12","label":"dec. 2025","value":-12.0},{"period":"2026-01","label":"jan. 2026","value":-9.9},{"period":"2026-02","label":"feb. 2026","value":-11.1},{"period":"2026-03","label":"mar. 2026","value":-13.6},{"period":"2026-04","label":"apr. 2026","value":-17.7},{"period":"2026-05","label":"maj 2026","value":-16.1}]},"DK":{"name":"Danmark","data":[{"period":"2025-10","label":"okt. 2025","value":-12.8},{"period":"2025-11","label":"nov. 2025","value":-12.8},{"period":"2025-12","label":"dec. 2025","value":-11.2},{"period":"2026-01","label":"jan. 2026","value":-7.9},{"period":"2026-02","label":"feb. 2026","value":-8.0},{"period":"2026-03","label":"mar. 2026","value":-8.3},{"period":"2026-04","label":"apr. 2026","value":-14.3},{"period":"2026-05","label":"maj 2026","value":-15.5}]},"EU27_2020":{"name":"EU-27","data":[{"period":"2025-10","label":"okt. 2025","value":-12.7},{"period":"2025-11","label":"nov. 2025","value":-12.9},{"period":"2025-12","label":"dec. 2025","value":-13.1},{"period":"2026-01","label":"jan. 2026","value":-12.5},{"period":"2026-02","label":"feb. 2026","value":-12.2},{"period":"2026-03","label":"mar. 2026","value":-15.9},{"period":"2026-04","label":"apr. 2026","value":-19.9},{"period":"2026-05","label":"maj 2026","value":-18.2}]},"FR":{"name":"Frankrig","data":[{"period":"2025-10","label":"okt. 2025","value":-15.5},{"period":"2025-11","label":"nov. 2025","value":-15.8},{"period":"2025-12","label":"dec. 2025","value":-16.3},{"period":"2026-01","label":"jan. 2026","value":-15.7},{"period":"2026-02","label":"feb. 2026","value":-14.3},{"period":"2026-03","label":"mar. 2026","value":-17.2},{"period":"2026-04","label":"apr. 2026","value":-21.8},{"period":"2026-05","label":"maj 2026","value":-21.2}]},"SE":{"name":"Sverige","data":[{"period":"2025-10","label":"okt. 2025","value":-3.6},{"period":"2025-11","label":"nov. 2025","value":-3.3},{"period":"2025-12","label":"dec. 2025","value":-3.7},{"period":"2026-01","label":"jan. 2026","value":-2.1},{"period":"2026-02","label":"feb. 2026","value":-2.6},{"period":"2026-03","label":"mar. 2026","value":-4.5},{"period":"2026-04","label":"apr. 2026","value":-7.3},{"period":"2026-05","label":"maj 2026","value":-5.7}]}}}},C=['#6B9E78','#4A90C4','#E07A40','#9B59B6','#3d6b47','#B84A34'],N=new Intl.NumberFormat('da-DK');gen.textContent=D.generated;src.textContent=D.sourceModified;function tbl(rows,heads){return '<thead><tr>'+heads.map(h=>`<th>${h}</th>`).join('')+'</tr></thead><tbody>'+rows.map(r=>'<tr>'+r.map(c=>`<td>${c}</td>`).join('')+'</tr>').join('')+'</tbody>'}kpis.innerHTML=D.kpis.map(k=>`<div class=kpi><div class=kt>${k.title}</div><div class=kp>${k.period}</div><div class=kv>${k.value}</div><div class=ks><div>Forrige periode: <span class=${k.prevGood?'good':k.prevGood===false?'bad':''}>${k.deltaPrev}</span></div><div>Samme periode året før: <span class=${k.yearGood?'good':k.yearGood===false?'bad':''}>${k.deltaYear}</span></div></div></div>`).join('');coverage.innerHTML=tbl(Object.entries(D.coverage),['Serie','Seneste periode']);euro.innerHTML=tbl(D.euro.latest.map(r=>[r.country,D.euro.period,N.format(r.value)+' pct.']),['Land','Periode','Ledighed']);conf.innerHTML=tbl(D.euConfidence.latest.map(r=>[r.country,D.euConfidence.period,N.format(r.value)]),['Land','Periode','Nettotal']);function lab(s){return s.data.map(d=>d.label)}function val(s){return s.data.map(d=>d.value)}function ds(s,i,ax='y'){return {label:s.name,data:val(s),borderColor:C[i%C.length],backgroundColor:C[i%C.length],tension:.25,pointRadius:0,yAxisID:ax}}function ch(id,type,l,d,opt={}){new Chart(document.getElementById(id),{type,data:{labels:l,datasets:d},options:Object.assign({responsive:true,maintainAspectRatio:false,interaction:{mode:'index',intersect:false},plugins:{legend:{position:'bottom'}},scales:{x:{grid:{display:false}},y:{grid:{color:'#E8EBE8'}}}},opt)})}ch('c1','line',lab(D.series.ledighed_pct),[ds(D.series.ledighed_pct,0)]);ch('c2','line',lab(D.series.ledige_samlet),[ds(D.series.ledige_samlet,0),ds(D.series.adagpenge,1),ds(D.series.kontanthjaelp,2),ds(D.series.langtid,3)]);ch('c3','line',lab(D.series.stillinger),[ds(D.series.stillinger,2,'y'),ds(D.series.lon_total,1,'y1')],{scales:{x:{grid:{display:false}},y:{position:'left',grid:{color:'#E8EBE8'}},y1:{position:'right',grid:{drawOnChartArea:false}}}});ch('c4','line',lab(D.series.varslede),[ds(D.series.varslede,2),ds(D.series.konkurser,4),ds(D.series.tabte_job,5)]);ch('c5','line',lab(D.series.inflation),[ds(D.series.inflation,2),ds(D.series.kerneinflation,4)]);ch('c6','line',lab(D.series.forbrugertillid),[ds(D.series.forbrugertillid,1),ds(D.series.erhvervstillid,0,'y1')],{scales:{x:{grid:{display:false}},y:{position:'left',grid:{color:'#E8EBE8'}},y1:{position:'right',grid:{drawOnChartArea:false}}}});ch('c7','bar',D.euro.latest.map(r=>r.country),[{label:D.euro.period,data:D.euro.latest.map(r=>r.value),backgroundColor:'#6B9E78'}],{indexAxis:'y',plugins:{legend:{display:false}}});let E=D.euConfidence.selected,K=Object.keys(E);ch('c8','line',E[K[0]].data.map(d=>d.label),K.map((k,i)=>ds(E[k],i)));</script></body></html>
+<!DOCTYPE html>
+<html lang="da">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dashboard – Analytisk overblik – Arbejdsmarkedet</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<style>
+  #dak-dashboard {
+    font-family: 'Segoe UI', Arial, sans-serif;
+    color: #0F2B36;
+    background: transparent;
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 8px;
+  }
+  #dak-dashboard * { box-sizing: border-box; }
+  #dak-dashboard .dash-header {
+    display: flex; flex-wrap: wrap; align-items: baseline;
+    justify-content: space-between; gap: 10px; margin-bottom: 10px;
+  }
+  #dak-dashboard h1 { font-size: 26px; margin: 0; color: #0F2B36; }
+  #dak-dashboard .period-btns { display: flex; gap: 6px; }
+  #dak-dashboard .period-btns button {
+    border: 1px solid #6B9E78; background: #fff; color: #3d6b47;
+    padding: 5px 14px; border-radius: 16px; cursor: pointer; font-size: 13px;
+    font-family: inherit;
+  }
+  #dak-dashboard .period-btns button.active { background: #6B9E78; color: #fff; font-weight: 600; }
+  #dak-dashboard .section-title {
+    font-size: 18px; font-weight: 700; color: #3d6b47;
+    border-bottom: 2px solid #6B9E78; padding-bottom: 4px; margin: 18px 0 10px;
+  }
+  #dak-dashboard .kpi-grid {
+    display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+    gap: 10px;
+  }
+  #dak-dashboard .kpi-card {
+    background: #fff; border: 1px solid #dfe6df; border-radius: 8px;
+    padding: 10px 12px; box-shadow: 0 1px 3px rgba(15,43,54,.06);
+    display: flex; flex-direction: column;
+  }
+  #dak-dashboard .kpi-period { font-size: 11px; text-transform: uppercase; letter-spacing: .5px; color: #6B9E78; font-weight: 700; }
+  #dak-dashboard .kpi-label { font-size: 13px; font-weight: 600; margin: 2px 0; min-height: 32px; }
+  #dak-dashboard .kpi-value { font-size: 28px; font-weight: 700; color: #3d6b47; line-height: 1.1; }
+  #dak-dashboard .kpi-sub { font-size: 11px; color: #5a6e75; margin-bottom: 6px; }
+  #dak-dashboard .kpi-compare { border-top: 1px solid #eef2ee; padding-top: 5px; font-size: 11px; }
+  #dak-dashboard .kpi-prev { display: flex; justify-content: space-between; gap: 6px; color: #5a6e75; }
+  #dak-dashboard .kpi-prev strong { color: #0F2B36; }
+  #dak-dashboard .kpi-delta { font-size: 12px; margin-top: 5px; font-weight: 600; }
+  #dak-dashboard .delta-good { color: #2e7d46; }
+  #dak-dashboard .delta-bad { color: #c0392b; }
+  #dak-dashboard .delta-neutral { color: #5a6e75; }
+  #dak-dashboard .kpi-table-card .kpi-table-scroll { max-height: 220px; overflow-y: auto; margin-top: 4px; }
+  #dak-dashboard .kpi-table { width: 100%; border-collapse: collapse; font-size: 12px; }
+  #dak-dashboard .kpi-table td { padding: 3px 4px; border-bottom: 1px solid #f0f3f0; }
+  #dak-dashboard .chart-2col { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  @media (max-width: 900px) { #dak-dashboard .chart-2col { grid-template-columns: 1fr; } }
+  #dak-dashboard .chart-card {
+    background: #fff; border: 1px solid #dfe6df; border-radius: 8px;
+    padding: 12px; margin-bottom: 12px; box-shadow: 0 1px 3px rgba(15,43,54,.06);
+  }
+  #dak-dashboard .chart-title { font-size: 16px; font-weight: 700; margin-bottom: 6px; color: #0F2B36; }
+  #dak-dashboard .chart-wrap { position: relative; }
+  #dak-dashboard .chart-source { font-size: 11px; color: #5a6e75; margin-top: 6px; }
+</style>
+</head>
+<body>
+<div id="dak-dashboard">
+  <div class="dash-header">
+    <h1>Analytisk overblik – Arbejdsmarkedet</h1>
+    <div class="period-btns">
+      <button onclick="setPeriod(12, this)">12 mdr.</button>
+      <button onclick="setPeriod(24, this)">24 mdr.</button>
+      <button class="active" onclick="setPeriod(36, this)">36 mdr.</button>
+      <button onclick="setPeriod(0, this)">Alle</button>
+    </div>
+  </div>
+
+  <div class="section-title">Ledighed og beskæftigelse</div>
+  <div class="kpi-grid"><div class="kpi-card">
+  <div class="kpi-period">Maj 2026</div>
+  <div class="kpi-label">Bruttoledighed (sæsonkorr.)</div>
+  <div class="kpi-value">93.305</div>
+  <div class="kpi-sub">Fuldtidspersoner · 3,1% af arbejdsstyrken</div>
+  <div class="kpi-compare">
+    <div class="kpi-prev"><span>Forrige md. (Apr. 2026)</span><strong>92.522</strong></div>
+    <div class="kpi-prev"><span>Samme md. i fjor (Maj 2025)</span><strong>86.767</strong></div>
+  </div>
+  <div class="kpi-delta">Md.: <span class="delta-bad">▲ 783</span>&nbsp;|&nbsp;År: <span class="delta-bad">▲ 6.538</span></div>
+</div><div class="kpi-card">
+  <div class="kpi-period">Maj 2026</div>
+  <div class="kpi-label">A-dagpengemodtagere (sæsonkorr.)</div>
+  <div class="kpi-value">77.586</div>
+  <div class="kpi-sub">Ledige fuldtidspersoner på dagpenge</div>
+  <div class="kpi-compare">
+    <div class="kpi-prev"><span>Forrige md. (Apr. 2026)</span><strong>77.207</strong></div>
+    <div class="kpi-prev"><span>Samme md. i fjor (Maj 2025)</span><strong>74.490</strong></div>
+  </div>
+  <div class="kpi-delta">Md.: <span class="delta-bad">▲ 379</span>&nbsp;|&nbsp;År: <span class="delta-bad">▲ 3.096</span></div>
+</div><div class="kpi-card">
+  <div class="kpi-period">Maj 2026</div>
+  <div class="kpi-label">Langtidsledige</div>
+  <div class="kpi-value">17.106</div>
+  <div class="kpi-sub">Bruttoledige i mindst 80 pct. af det seneste år</div>
+  <div class="kpi-compare">
+    <div class="kpi-prev"><span>Forrige md. (Apr. 2026)</span><strong>17.007</strong></div>
+    <div class="kpi-prev"><span>Samme md. i fjor (Maj 2025)</span><strong>16.448</strong></div>
+  </div>
+  <div class="kpi-delta">Md.: <span class="delta-bad">▲ 99</span>&nbsp;|&nbsp;År: <span class="delta-bad">▲ 658</span></div>
+</div><div class="kpi-card">
+  <div class="kpi-period">Jun. 2026</div>
+  <div class="kpi-label">Nyopslåede stillinger</div>
+  <div class="kpi-value">27.773</div>
+  <div class="kpi-sub">Jobnet, hele landet</div>
+  <div class="kpi-compare">
+    <div class="kpi-prev"><span>Forrige md. (Maj 2026)</span><strong>29.640</strong></div>
+    <div class="kpi-prev"><span>Samme md. i fjor (Jun. 2025)</span><strong>23.957</strong></div>
+  </div>
+  <div class="kpi-delta">Md.: <span class="delta-bad">▼ 1.867</span>&nbsp;|&nbsp;År: <span class="delta-good">▲ 3.816</span></div>
+</div><div class="kpi-card">
+  <div class="kpi-period">Apr. 2026</div>
+  <div class="kpi-label">Lønmodtagere (sæsonkorr.)</div>
+  <div class="kpi-value">3.085.275</div>
+  <div class="kpi-sub">Personer med lønmodtagerjob, alle sektorer</div>
+  <div class="kpi-compare">
+    <div class="kpi-prev"><span>Forrige md. (Mar. 2026)</span><strong>3.084.471</strong></div>
+    <div class="kpi-prev"><span>Samme md. i fjor (Apr. 2025)</span><strong>3.053.563</strong></div>
+  </div>
+  <div class="kpi-delta">Md.: <span class="delta-good">▲ 804</span>&nbsp;|&nbsp;År: <span class="delta-good">▲ 31.712</span></div>
+</div><div class="kpi-card">
+  <div class="kpi-period">Maj 2026</div>
+  <div class="kpi-label">Varslede afskedigelser</div>
+  <div class="kpi-value">1.183</div>
+  <div class="kpi-sub">Antal varslede personer</div>
+  <div class="kpi-compare">
+    <div class="kpi-prev"><span>Forrige md. (Apr. 2026)</span><strong>421</strong></div>
+    <div class="kpi-prev"><span>Samme md. i fjor (Maj 2025)</span><strong>1.160</strong></div>
+  </div>
+  <div class="kpi-delta">Md.: <span class="delta-bad">▲ 762</span>&nbsp;|&nbsp;År: <span class="delta-bad">▲ 23</span></div>
+</div><div class="kpi-card">
+  <div class="kpi-period">Jun. 2026</div>
+  <div class="kpi-label">Tabte job ved konkurser</div>
+  <div class="kpi-value">736</div>
+  <div class="kpi-sub">122 konkurser i virksomheder med beskæftigelse</div>
+  <div class="kpi-compare">
+    <div class="kpi-prev"><span>Forrige md. (Maj 2026)</span><strong>971</strong></div>
+    <div class="kpi-prev"><span>Samme md. i fjor (Jun. 2025)</span><strong>1.145</strong></div>
+  </div>
+  <div class="kpi-delta">Md.: <span class="delta-good">▼ 235</span>&nbsp;|&nbsp;År: <span class="delta-good">▼ 409</span></div>
+</div></div>
+
+  <div class="section-title">Samfundsøkonomiske indikatorer</div>
+  <div class="kpi-grid"><div class="kpi-card">
+  <div class="kpi-period">Jun. 2026</div>
+  <div class="kpi-label">Forbrugertillid</div>
+  <div class="kpi-value">-14,0</div>
+  <div class="kpi-sub">Forbrugertillidsindikatoren, nettotal</div>
+  <div class="kpi-compare">
+    <div class="kpi-prev"><span>Forrige md. (Maj 2026)</span><strong>-19,8</strong></div>
+    <div class="kpi-prev"><span>Samme md. i fjor (Jun. 2025)</span><strong>-15,1</strong></div>
+  </div>
+  <div class="kpi-delta">Md.: <span class="delta-good">▲ 5,8</span>&nbsp;|&nbsp;År: <span class="delta-good">▲ 1,1</span></div>
+</div><div class="kpi-card">
+  <div class="kpi-period">Jun. 2026</div>
+  <div class="kpi-label">Erhvervstillid</div>
+  <div class="kpi-value">101,0</div>
+  <div class="kpi-sub">Erhvervstillidsindikator (indeks)</div>
+  <div class="kpi-compare">
+    <div class="kpi-prev"><span>Forrige md. (Maj 2026)</span><strong>104,1</strong></div>
+    <div class="kpi-prev"><span>Samme md. i fjor (Jun. 2025)</span><strong>102,6</strong></div>
+  </div>
+  <div class="kpi-delta">Md.: <span class="delta-bad">▼ 3,1</span>&nbsp;|&nbsp;År: <span class="delta-bad">▼ 1,6</span></div>
+</div><div class="kpi-card">
+  <div class="kpi-period">Maj 2026</div>
+  <div class="kpi-label">Inflation (ÅoÅ)</div>
+  <div class="kpi-value">1,9%</div>
+  <div class="kpi-sub">Kerneinflation: 2,1%</div>
+  <div class="kpi-compare">
+    <div class="kpi-prev"><span>Forrige md. (Apr. 2026)</span><strong>1,4%</strong></div>
+    <div class="kpi-prev"><span>Samme md. i fjor (Maj 2025)</span><strong>1,6%</strong></div>
+  </div>
+  <div class="kpi-delta">Md.: <span class="delta-bad">▲ 0,5</span>&nbsp;|&nbsp;År: <span class="delta-bad">▲ 0,3</span></div>
+</div></div>
+
+  <div class="section-title">Internationalt</div>
+  <div class="kpi-grid"><div class="kpi-card kpi-table-card">
+  <div class="kpi-period">2026-Q1</div>
+  <div class="kpi-label">Ledighed – internationale sammenligninger</div>
+  <div class="kpi-value">7,0%</div>
+  <div class="kpi-sub">Danmark · Sæsonkorr. pct. af arbejdsstyrken (15–74 år)</div>
+  <div class="kpi-table-scroll"><table class="kpi-table"><tbody><tr><td>Tyskland</td><td style="text-align:right;font-weight:600">3,8%</td></tr><tr><td>EU-27</td><td style="text-align:right;font-weight:600">6,0%</td></tr><tr style="background:#e8f4ec;font-weight:700"><td>🇩🇰 Danmark</td><td style="text-align:right;font-weight:700;color:#3d6b47">7,0%</td></tr><tr><td>Sverige</td><td style="text-align:right;font-weight:600">8,6%</td></tr></tbody></table></div>
+</div><div class="kpi-card kpi-table-card">
+  <div class="kpi-period">Jun. 2026</div>
+  <div class="kpi-label">Forbrugertillid – EU-sammenligning</div>
+  <div class="kpi-value">-12,0</div>
+  <div class="kpi-sub">Danmark · Forbrugertillidsindikator, nettotal (DG ECFIN)</div>
+  <div class="kpi-table-scroll"><table class="kpi-table"><tbody><tr><td>Sverige</td><td style="text-align:right;font-weight:600">-5,1</td></tr><tr style="background:#e8f4ec;font-weight:700"><td>🇩🇰 Danmark</td><td style="text-align:right;font-weight:700;color:#3d6b47">-12,0</td></tr><tr><td>Tyskland</td><td style="text-align:right;font-weight:600">-14,6</td></tr><tr><td>EU-27</td><td style="text-align:right;font-weight:600">-17,0</td></tr><tr><td>Frankrig</td><td style="text-align:right;font-weight:600">-19,3</td></tr></tbody></table></div>
+</div></div>
+
+  <div class="section-title">Grafer – Ledighed og beskæftigelse</div>
+  <div class="chart-2col"><div class="chart-card">
+  <div class="chart-title">Bruttoledighed – faktisk og sæsonkorrigeret</div>
+  <div class="chart-wrap" style="height:400px"><canvas id="c_brutto"></canvas></div>
+  <div class="chart-source">Kilde: Danmarks Statistik / Jobindsats.dk<br>Grafik og databehandling: Danske A-kasser</div>
+</div><div class="chart-card">
+  <div class="chart-title">Ledighed i pct. af arbejdsstyrken (sæsonkorr.)</div>
+  <div class="chart-wrap" style="height:400px"><canvas id="c_pct"></canvas></div>
+  <div class="chart-source">Kilde: Danmarks Statistik / Jobindsats.dk<br>Grafik og databehandling: Danske A-kasser</div>
+</div></div><div class="chart-2col"><div class="chart-card">
+  <div class="chart-title">Dagpenge- og kontanthjælpsmodtagere (sæsonkorr.)</div>
+  <div class="chart-wrap" style="height:400px"><canvas id="c_ydelse"></canvas></div>
+  <div class="chart-source">Kilde: Danmarks Statistik / Jobindsats.dk<br>Grafik og databehandling: Danske A-kasser</div>
+</div><div class="chart-card">
+  <div class="chart-title">Langtidsledige fordelt på ydelse</div>
+  <div class="chart-wrap" style="height:400px"><canvas id="c_lang"></canvas></div>
+  <div class="chart-source">Kilde: Jobindsats.dk<br>Grafik og databehandling: Danske A-kasser</div>
+</div></div><div class="chart-2col"><div class="chart-card">
+  <div class="chart-title">Nyopslåede stillinger på Jobnet</div>
+  <div class="chart-wrap" style="height:400px"><canvas id="c_stil"></canvas></div>
+  <div class="chart-source">Kilde: Jobindsats.dk<br>Grafik og databehandling: Danske A-kasser</div>
+</div><div class="chart-card">
+  <div class="chart-title">Lønmodtagere (sæsonkorrigeret)</div>
+  <div class="chart-wrap" style="height:400px"><canvas id="c_lon"></canvas></div>
+  <div class="chart-source">Kilde: Danmarks Statistik<br>Grafik og databehandling: Danske A-kasser</div>
+</div></div><div class="chart-2col"><div class="chart-card">
+  <div class="chart-title">Varslede afskedigelser (personer)</div>
+  <div class="chart-wrap" style="height:400px"><canvas id="c_var"></canvas></div>
+  <div class="chart-source">Kilde: Jobindsats.dk<br>Grafik og databehandling: Danske A-kasser</div>
+</div><div class="chart-card">
+  <div class="chart-title">Konkurser (sæsonkorr.) og tabte job</div>
+  <div class="chart-wrap" style="height:400px"><canvas id="c_konk"></canvas></div>
+  <div class="chart-source">Kilde: Danmarks Statistik<br>Grafik og databehandling: Danske A-kasser</div>
+</div></div>
+
+  <div class="section-title">Grafer – Samfundsøkonomiske indikatorer</div>
+  <div class="chart-2col"><div class="chart-card">
+  <div class="chart-title">Forbrugertillidsindikatoren</div>
+  <div class="chart-wrap" style="height:400px"><canvas id="c_ft"></canvas></div>
+  <div class="chart-source">Kilde: Danmarks Statistik<br>Grafik og databehandling: Danske A-kasser</div>
+</div><div class="chart-card">
+  <div class="chart-title">Erhvervstillidsindikator</div>
+  <div class="chart-wrap" style="height:400px"><canvas id="c_et"></canvas></div>
+  <div class="chart-source">Kilde: Danmarks Statistik<br>Grafik og databehandling: Danske A-kasser</div>
+</div></div><div class="chart-card">
+  <div class="chart-title">Inflation – samlet og kerneinflation (ændring ÅoÅ)</div>
+  <div class="chart-wrap" style="height:400px"><canvas id="c_inf"></canvas></div>
+  <div class="chart-source">Kilde: Danmarks Statistik<br>Grafik og databehandling: Danske A-kasser</div>
+</div>
+
+  <div class="section-title">Grafer – Internationalt</div>
+  <div class="chart-card">
+  <div class="chart-title">Ledighed i pct. af arbejdsstyrken – udvalgte lande (kvartalsvis)</div>
+  <div class="chart-wrap" style="height:400px"><canvas id="c_euro_ts"></canvas></div>
+  <div class="chart-source">Kilde: Eurostat<br>Grafik og databehandling: Danske A-kasser</div>
+</div><div class="chart-card">
+  <div class="chart-title">Ledighed på tværs af Europa, 2026-Q1</div>
+  <div class="chart-wrap" style="height:620px"><canvas id="c_euro_bar"></canvas></div>
+  <div class="chart-source">Kilde: Eurostat<br>Grafik og databehandling: Danske A-kasser</div>
+</div><div class="chart-card">
+  <div class="chart-title">Forbrugertillid – Danmark og udvalgte EU-lande</div>
+  <div class="chart-wrap" style="height:400px"><canvas id="c_fteu"></canvas></div>
+  <div class="chart-source">Kilde: Europa-Kommissionen (DG ECFIN) via Danmarks Statistik<br>Grafik og databehandling: Danske A-kasser</div>
+</div>
+</div>
+
+<script>
+(function() {
+  const DATA = {
+    led_labels: ["2018M01", "2018M02", "2018M03", "2018M04", "2018M05", "2018M06", "2018M07", "2018M08", "2018M09", "2018M10", "2018M11", "2018M12", "2019M01", "2019M02", "2019M03", "2019M04", "2019M05", "2019M06", "2019M07", "2019M08", "2019M09", "2019M10", "2019M11", "2019M12", "2020M01", "2020M02", "2020M03", "2020M04", "2020M05", "2020M06", "2020M07", "2020M08", "2020M09", "2020M10", "2020M11", "2020M12", "2021M01", "2021M02", "2021M03", "2021M04", "2021M05", "2021M06", "2021M07", "2021M08", "2021M09", "2021M10", "2021M11", "2021M12", "2022M01", "2022M02", "2022M03", "2022M04", "2022M05", "2022M06", "2022M07", "2022M08", "2022M09", "2022M10", "2022M11", "2022M12", "2023M01", "2023M02", "2023M03", "2023M04", "2023M05", "2023M06", "2023M07", "2023M08", "2023M09", "2023M10", "2023M11", "2023M12", "2024M01", "2024M02", "2024M03", "2024M04", "2024M05", "2024M06", "2024M07", "2024M08", "2024M09", "2024M10", "2024M11", "2024M12", "2025M01", "2025M02", "2025M03", "2025M04", "2025M05", "2025M06", "2025M07", "2025M08", "2025M09", "2025M10", "2025M11", "2025M12", "2026M01", "2026M02", "2026M03", "2026M04", "2026M05"],
+    brutto: [122692.0, 121627.0, 117999.0, 106431.0, 105523.0, 103173.0, 99398.0, 103905.0, 101974.0, 103673.0, 104431.0, 106879.0, 113842.0, 113887.0, 109113.0, 98622.0, 99160.0, 100035.0, 98475.0, 103027.0, 100495.0, 102202.0, 104004.0, 107283.0, 115020.0, 114734.0, 123371.0, 143843.0, 149982.0, 146302.0, 139423.0, 134963.0, 129103.0, 127338.0, 125573.0, 128183.0, 140976.0, 145304.0, 134986.0, 123622.0, 110154.0, 103596.0, 101314.0, 96940.0, 88381.0, 82988.0, 77089.0, 69734.0, 83844.0, 81271.0, 76993.0, 73748.0, 71142.0, 73198.0, 77351.0, 77599.0, 72618.0, 72601.0, 74362.0, 72774.0, 89080.0, 90247.0, 86827.0, 83538.0, 79813.0, 80284.0, 83825.0, 85396.0, 80445.0, 80593.0, 81158.0, 78705.0, 95795.0, 95878.0, 92144.0, 87568.0, 83556.0, 83565.0, 87131.0, 88335.0, 83692.0, 83346.0, 83582.0, 80463.0, 95776.0, 96663.0, 92884.0, 87864.0, 83557.0, 84215.0, 87568.0, 88850.0, 84158.0, 83842.0, 84575.0, 82302.0, 99167.0, 104315.0, 98011.0, 93778.0, 87839.0],
+    brutto_sk: [112195.0, 110704.0, 111735.0, 110376.0, 108937.0, 107194.0, 106056.0, 106258.0, 106354.0, 106414.0, 105694.0, 105163.0, 104206.0, 103469.0, 103237.0, 102493.0, 102619.0, 103902.0, 103771.0, 104281.0, 104999.0, 105717.0, 106585.0, 106357.0, 105024.0, 103776.0, 116377.0, 150284.0, 157478.0, 152918.0, 142916.0, 135303.0, 136028.0, 133509.0, 131096.0, 128004.0, 127378.0, 130397.0, 126982.0, 121131.0, 115014.0, 108306.0, 104005.0, 97585.0, 93300.0, 87527.0, 80856.0, 76856.0, 75989.0, 73157.0, 72221.0, 72078.0, 73390.0, 75510.0, 77580.0, 76922.0, 76144.0, 76291.0, 77964.0, 79674.0, 81066.0, 81541.0, 81708.0, 82154.0, 82925.0, 83115.0, 83342.0, 84087.0, 84340.0, 84881.0, 85412.0, 86069.0, 86788.0, 86405.0, 86525.0, 86551.0, 86938.0, 86632.0, 86814.0, 87029.0, 87714.0, 87866.0, 88014.0, 87816.0, 86919.0, 87099.0, 87215.0, 86824.0, 86767.0, 87342.0, 87605.0, 87861.0, 88057.0, 88321.0, 88955.0, 89449.0, 90082.0, 93723.0, 91990.0, 92522.0, 93305.0],
+    pct_sk: [4.0, 3.9, 4.0, 3.9, 3.9, 3.8, 3.8, 3.8, 3.8, 3.8, 3.8, 3.7, 3.7, 3.6, 3.6, 3.6, 3.6, 3.7, 3.6, 3.7, 3.7, 3.7, 3.7, 3.7, 3.7, 3.6, 4.1, 5.3, 5.5, 5.4, 5.0, 4.7, 4.8, 4.7, 4.6, 4.5, 4.3, 4.4, 4.3, 4.1, 3.9, 3.7, 3.5, 3.3, 3.2, 3.0, 2.8, 2.6, 2.5, 2.4, 2.4, 2.4, 2.5, 2.5, 2.6, 2.6, 2.5, 2.5, 2.6, 2.7, 2.7, 2.7, 2.7, 2.7, 2.8, 2.8, 2.8, 2.8, 2.8, 2.8, 2.8, 2.9, 2.9, 2.8, 2.9, 2.9, 2.9, 2.9, 2.9, 2.9, 2.9, 2.9, 2.9, 2.9, 2.9, 2.9, 2.9, 2.9, 2.9, 2.9, 2.9, 2.9, 2.9, 2.9, 2.9, 2.9, 3.0, 3.1, 3.0, 3.0, 3.1],
+    dp_sk: [80205.0, 79629.0, 81104.0, 80175.0, 79340.0, 78219.0, 77731.0, 78288.0, 78678.0, 79370.0, 79268.0, 79136.0, 78899.0, 78697.0, 78895.0, 78850.0, 79274.0, 80594.0, 80858.0, 81532.0, 82432.0, 83245.0, 84169.0, 84336.0, 83786.0, 83491.0, 95327.0, 125284.0, 130467.0, 126383.0, 118244.0, 112357.0, 114372.0, 112757.0, 111045.0, 108619.0, 107653.0, 110770.0, 107926.0, 103121.0, 98269.0, 93051.0, 89930.0, 84194.0, 80613.0, 75484.0, 69466.0, 66280.0, 65494.0, 62861.0, 61950.0, 61049.0, 59994.0, 60536.0, 61860.0, 61449.0, 60871.0, 60929.0, 62707.0, 64379.0, 65587.0, 66280.0, 66695.0, 67214.0, 68421.0, 69230.0, 69653.0, 70702.0, 70962.0, 71679.0, 72366.0, 73095.0, 74001.0, 73758.0, 73957.0, 74146.0, 74640.0, 74484.0, 74604.0, 74762.0, 75325.0, 75461.0, 75571.0, 75367.0, 74535.0, 74659.0, 74686.0, 74401.0, 74490.0, 75005.0, 75194.0, 75185.0, 75344.0, 75277.0, 75136.0, 75037.0, 75334.0, 78785.0, 76881.0, 77207.0, 77586.0],
+    kh_sk: [31989.0, 31074.0, 30631.0, 30201.0, 29597.0, 28975.0, 28325.0, 27970.0, 27675.0, 27044.0, 26426.0, 26027.0, 25307.0, 24772.0, 24342.0, 23643.0, 23346.0, 23308.0, 22913.0, 22749.0, 22567.0, 22472.0, 22416.0, 22021.0, 21238.0, 20284.0, 21050.0, 25000.0, 27011.0, 26536.0, 24672.0, 22946.0, 21656.0, 20751.0, 20051.0, 19384.0, 19725.0, 19628.0, 19056.0, 18010.0, 16745.0, 15255.0, 14075.0, 13391.0, 12687.0, 12043.0, 11390.0, 10576.0, 10495.0, 10295.0, 10271.0, 11028.0, 13396.0, 14973.0, 15720.0, 15473.0, 15273.0, 15363.0, 15257.0, 15295.0, 15479.0, 15261.0, 15013.0, 14941.0, 14504.0, 13884.0, 13689.0, 13385.0, 13379.0, 13202.0, 13046.0, 12975.0, 12787.0, 12647.0, 12568.0, 12405.0, 12298.0, 12148.0, 12211.0, 12267.0, 12389.0, 12405.0, 12443.0, 12449.0, 12384.0, 12440.0, 12530.0, 12422.0, 12278.0, 12337.0, 12411.0, 12676.0, 12713.0, 13044.0, 13819.0, 14413.0, 14748.0, 14939.0, 15109.0, 15315.0, 15719.0],
+    lang_labels: ["2018M01", "2018M02", "2018M03", "2018M04", "2018M05", "2018M06", "2018M07", "2018M08", "2018M09", "2018M10", "2018M11", "2018M12", "2019M01", "2019M02", "2019M03", "2019M04", "2019M05", "2019M06", "2019M07", "2019M08", "2019M09", "2019M10", "2019M11", "2019M12", "2020M01", "2020M02", "2020M03", "2020M04", "2020M05", "2020M06", "2020M07", "2020M08", "2020M09", "2020M10", "2020M11", "2020M12", "2021M01", "2021M02", "2021M03", "2021M04", "2021M05", "2021M06", "2021M07", "2021M08", "2021M09", "2021M10", "2021M11", "2021M12", "2022M01", "2022M02", "2022M03", "2022M04", "2022M05", "2022M06", "2022M07", "2022M08", "2022M09", "2022M10", "2022M11", "2022M12", "2023M01", "2023M02", "2023M03", "2023M04", "2023M05", "2023M06", "2023M07", "2023M08", "2023M09", "2023M10", "2023M11", "2023M12", "2024M01", "2024M02", "2024M03", "2024M04", "2024M05", "2024M06", "2024M07", "2024M08", "2024M09", "2024M10", "2024M11", "2024M12", "2025M01", "2025M02", "2025M03", "2025M04", "2025M05", "2025M06", "2025M07", "2025M08", "2025M09", "2025M10", "2025M11", "2025M12", "2026M01", "2026M02", "2026M03", "2026M04", "2026M05"],
+    lang_ialt: [30397.0, 29806.0, 29872.0, 29842.0, 30545.0, 30457.0, 28884.0, 28482.0, 26935.0, 26450.0, 26546.0, 26413.0, 26363.0, 25435.0, 25140.0, 24893.0, 25755.0, 25870.0, 25420.0, 25329.0, 23864.0, 23389.0, 23703.0, 23991.0, 24227.0, 23352.0, 23415.0, 25632.0, 28830.0, 30933.0, 32366.0, 32969.0, 32625.0, 33355.0, 34566.0, 36075.0, 38576.0, 39497.0, 39795.0, 40710.0, 39318.0, 37618.0, 35757.0, 33725.0, 30323.0, 27846.0, 25808.0, 23024.0, 21695.0, 19483.0, 17848.0, 16712.0, 15810.0, 15025.0, 13997.0, 13286.0, 12159.0, 11579.0, 11617.0, 11664.0, 12040.0, 12149.0, 12775.0, 13414.0, 13953.0, 14184.0, 14045.0, 14146.0, 13653.0, 13699.0, 14312.0, 14698.0, 15262.0, 15128.0, 15265.0, 15606.0, 16036.0, 16129.0, 15767.0, 15829.0, 15072.0, 15029.0, 15398.0, 15503.0, 16114.0, 15535.0, 15365.0, 15824.0, 16448.0, 16596.0, 16466.0, 16296.0, 15587.0, 15565.0, 15912.0, 16028.0, 16742.0, 16188.0, 16217.0, 17007.0, 17106.0],
+    lang_dp: [14596.0, 14206.0, 14212.0, 14355.0, 15259.0, 15537.0, 14890.0, 14791.0, 13638.0, 13415.0, 13695.0, 13969.0, 14163.0, 13639.0, 13517.0, 13544.0, 14566.0, 14850.0, 14903.0, 15088.0, 13908.0, 13638.0, 13974.0, 14475.0, 14955.0, 14512.0, 14700.0, 16677.0, 19558.0, 21529.0, 23071.0, 23755.0, 23601.0, 24401.0, 25696.0, 27362.0, 29635.0, 30664.0, 31049.0, 32142.0, 31118.0, 29908.0, 28740.0, 27085.0, 24190.0, 22102.0, 20418.0, 18093.0, 16986.0, 15110.0, 13732.0, 12850.0, 12148.0, 11579.0, 10792.0, 10165.0, 9133.0, 8687.0, 8767.0, 8853.0, 9086.0, 8809.0, 8774.0, 9019.0, 9418.0, 9681.0, 9580.0, 9667.0, 9174.0, 9239.0, 9873.0, 10265.0, 10738.0, 10697.0, 10888.0, 11310.0, 11872.0, 12056.0, 11755.0, 11734.0, 11032.0, 11071.0, 11466.0, 11572.0, 12193.0, 11600.0, 11388.0, 11838.0, 12479.0, 12607.0, 12522.0, 12255.0, 11515.0, 11510.0, 11821.0, 11926.0, 12544.0, 11975.0, 11925.0, 12619.0, 12749.0],
+    lang_kh: [15800.0, 15600.0, 15660.0, 15487.0, 15285.0, 14921.0, 13994.0, 13691.0, 13297.0, 13035.0, 12850.0, 12444.0, 12201.0, 11796.0, 11623.0, 11349.0, 11188.0, 11020.0, 10517.0, 10241.0, 9957.0, 9750.0, 9728.0, 9517.0, 9272.0, 8841.0, 8715.0, 8956.0, 9272.0, 9404.0, 9294.0, 9214.0, 9024.0, 8955.0, 8870.0, 8713.0, 8941.0, 8833.0, 8746.0, 8568.0, 8200.0, 7710.0, 7017.0, 6639.0, 6133.0, 5744.0, 5390.0, 4931.0, 4709.0, 4373.0, 4116.0, 3862.0, 3662.0, 3446.0, 3205.0, 3121.0, 3025.0, 2892.0, 2850.0, 2811.0, 2954.0, 3340.0, 4000.0, 4395.0, 4535.0, 4503.0, 4464.0, 4479.0, 4479.0, 4459.0, 4439.0, 4433.0, 4524.0, 4430.0, 4377.0, 4296.0, 4165.0, 4073.0, 4012.0, 4095.0, 4040.0, 3958.0, 3933.0, 3931.0, 3920.0, 3935.0, 3978.0, 3986.0, 3969.0, 3990.0, 3944.0, 4041.0, 4072.0, 4055.0, 4091.0, 4102.0, 4198.0, 4214.0, 4293.0, 4388.0, 4357.0],
+    stil_labels: ["2018M01", "2018M02", "2018M03", "2018M04", "2018M05", "2018M06", "2018M07", "2018M08", "2018M09", "2018M10", "2018M11", "2018M12", "2019M01", "2019M02", "2019M03", "2019M04", "2019M05", "2019M06", "2019M07", "2019M08", "2019M09", "2019M10", "2019M11", "2019M12", "2020M01", "2020M02", "2020M03", "2020M04", "2020M05", "2020M06", "2020M07", "2020M08", "2020M09", "2020M10", "2020M11", "2020M12", "2021M01", "2021M02", "2021M03", "2021M04", "2021M05", "2021M06", "2021M07", "2021M08", "2021M09", "2021M10", "2021M11", "2021M12", "2022M01", "2022M02", "2022M03", "2022M04", "2022M05", "2022M06", "2022M07", "2022M08", "2022M09", "2022M10", "2022M11", "2022M12", "2023M01", "2023M02", "2023M03", "2023M04", "2023M05", "2023M06", "2023M07", "2023M08", "2023M09", "2023M10", "2023M11", "2023M12", "2024M01", "2024M02", "2024M03", "2024M04", "2024M05", "2024M06", "2024M07", "2024M08", "2024M09", "2024M10", "2024M11", "2024M12", "2025M01", "2025M02", "2025M03", "2025M04", "2025M05", "2025M06", "2025M07", "2025M08", "2025M09", "2025M10", "2025M11", "2025M12", "2026M01", "2026M02", "2026M03", "2026M04", "2026M05", "2026M06"],
+    stil_ny: [22386.0, 19573.0, 21072.0, 21758.0, 26876.0, 21794.0, 17414.0, 22242.0, 19086.0, 20001.0, 20901.0, 15789.0, 23867.0, 20457.0, 24302.0, 22554.0, 26380.0, 20666.0, 18783.0, 19361.0, 20621.0, 21654.0, 20621.0, 17718.0, 24743.0, 21762.0, 18896.0, 15731.0, 21204.0, 22994.0, 16729.0, 21618.0, 25225.0, 24557.0, 24381.0, 22017.0, 21115.0, 23534.0, 32025.0, 32417.0, 36887.0, 36925.0, 27263.0, 32264.0, 35157.0, 33071.0, 35793.0, 30485.0, 33971.0, 32796.0, 39631.0, 32605.0, 38652.0, 33759.0, 23901.0, 30383.0, 30220.0, 26897.0, 27730.0, 23611.0, 30432.0, 27571.0, 32009.0, 23420.0, 32952.0, 29618.0, 18646.0, 26393.0, 22463.0, 23412.0, 23603.0, 20410.0, 27224.0, 26505.0, 25010.0, 27581.0, 31526.0, 24117.0, 19926.0, 23245.0, 23446.0, 24944.0, 22932.0, 19984.0, 24698.0, 23756.0, 25717.0, 24125.0, 28589.0, 23957.0, 18786.0, 22022.0, 24490.0, 24348.0, 24007.0, 21068.0, 25312.0, 25450.0, 29665.0, 24981.0, 29640.0, 27773.0],
+    lon_labels: ["2018M01", "2018M02", "2018M03", "2018M04", "2018M05", "2018M06", "2018M07", "2018M08", "2018M09", "2018M10", "2018M11", "2018M12", "2019M01", "2019M02", "2019M03", "2019M04", "2019M05", "2019M06", "2019M07", "2019M08", "2019M09", "2019M10", "2019M11", "2019M12", "2020M01", "2020M02", "2020M03", "2020M04", "2020M05", "2020M06", "2020M07", "2020M08", "2020M09", "2020M10", "2020M11", "2020M12", "2021M01", "2021M02", "2021M03", "2021M04", "2021M05", "2021M06", "2021M07", "2021M08", "2021M09", "2021M10", "2021M11", "2021M12", "2022M01", "2022M02", "2022M03", "2022M04", "2022M05", "2022M06", "2022M07", "2022M08", "2022M09", "2022M10", "2022M11", "2022M12", "2023M01", "2023M02", "2023M03", "2023M04", "2023M05", "2023M06", "2023M07", "2023M08", "2023M09", "2023M10", "2023M11", "2023M12", "2024M01", "2024M02", "2024M03", "2024M04", "2024M05", "2024M06", "2024M07", "2024M08", "2024M09", "2024M10", "2024M11", "2024M12", "2025M01", "2025M02", "2025M03", "2025M04", "2025M05", "2025M06", "2025M07", "2025M08", "2025M09", "2025M10", "2025M11", "2025M12", "2026M01", "2026M02", "2026M03", "2026M04"],
+    lon_total: [2720690.0, 2727183.0, 2732695.0, 2740400.0, 2749266.0, 2755571.0, 2759854.0, 2758062.0, 2759016.0, 2759800.0, 2763211.0, 2766035.0, 2770412.0, 2771995.0, 2778851.0, 2786605.0, 2788541.0, 2789519.0, 2797714.0, 2791615.0, 2790043.0, 2791641.0, 2792483.0, 2797032.0, 2799958.0, 2802416.0, 2785258.0, 2734185.0, 2723997.0, 2735237.0, 2754529.0, 2764456.0, 2772709.0, 2774768.0, 2777520.0, 2777408.0, 2758035.0, 2758707.0, 2762002.0, 2783032.0, 2818103.0, 2841485.0, 2855596.0, 2864602.0, 2877485.0, 2888283.0, 2901611.0, 2914638.0, 2917907.0, 2927320.0, 2940321.0, 2944350.0, 2949998.0, 2955297.0, 2955979.0, 2963174.0, 2967528.0, 2969351.0, 2972770.0, 2975489.0, 2976550.0, 2980976.0, 2985088.0, 2984566.0, 2990474.0, 2996031.0, 2995014.0, 2999428.0, 3000559.0, 3002441.0, 3006316.0, 3005987.0, 3008501.0, 3014194.0, 3015779.0, 3019859.0, 3022948.0, 3023514.0, 3025063.0, 3024875.0, 3028098.0, 3033237.0, 3035966.0, 3038984.0, 3045033.0, 3046773.0, 3049662.0, 3053563.0, 3055361.0, 3057307.0, 3061009.0, 3064410.0, 3068635.0, 3073207.0, 3075197.0, 3079365.0, 3080450.0, 3080698.0, 3084471.0, 3085275.0],
+    var_labels: ["2018M01", "2018M02", "2018M03", "2018M04", "2018M05", "2018M06", "2018M07", "2018M08", "2018M09", "2018M10", "2018M11", "2018M12", "2019M01", "2019M02", "2019M03", "2019M04", "2019M05", "2019M06", "2019M07", "2019M08", "2019M09", "2019M10", "2019M11", "2019M12", "2020M01", "2020M02", "2020M03", "2020M04", "2020M05", "2020M06", "2020M07", "2020M08", "2020M09", "2020M10", "2020M11", "2020M12", "2021M01", "2021M02", "2021M03", "2021M04", "2021M05", "2021M06", "2021M07", "2021M08", "2021M09", "2021M10", "2021M11", "2021M12", "2022M01", "2022M02", "2022M03", "2022M04", "2022M05", "2022M06", "2022M07", "2022M08", "2022M09", "2022M10", "2022M11", "2022M12", "2023M01", "2023M02", "2023M03", "2023M04", "2023M05", "2023M06", "2023M07", "2023M08", "2023M09", "2023M10", "2023M11", "2023M12", "2024M01", "2024M02", "2024M03", "2024M04", "2024M05", "2024M06", "2024M07", "2024M08", "2024M09", "2024M10", "2024M11", "2024M12", "2025M01", "2025M02", "2025M03", "2025M04", "2025M05", "2025M06", "2025M07", "2025M08", "2025M09", "2025M10", "2025M11", "2025M12", "2026M01", "2026M02", "2026M03", "2026M04", "2026M05"],
+    var_pers: [1491.0, 1444.0, 734.0, 1067.0, 713.0, 505.0, 284.0, 473.0, 1979.0, 730.0, 702.0, 61.0, 809.0, 150.0, 512.0, 436.0, 405.0, 875.0, 137.0, 589.0, 869.0, 491.0, 493.0, 287.0, 1069.0, 785.0, 3612.0, 1759.0, 2519.0, 4600.0, 756.0, 3712.0, 1185.0, 825.0, 583.0, 409.0, 278.0, 484.0, 437.0, 87.0, 268.0, 353.0, 113.0, 66.0, 172.0, 199.0, 84.0, 92.0, 271.0, 873.0, 351.0, NaN, 752.0, 438.0, NaN, 593.0, 449.0, 504.0, 994.0, 1370.0, 1579.0, 394.0, 408.0, 1156.0, 764.0, 824.0, 572.0, 937.0, 490.0, 471.0, 1245.0, NaN, 1166.0, 743.0, 500.0, 1658.0, 715.0, 699.0, NaN, 809.0, 1081.0, 845.0, 482.0, 98.0, 831.0, 394.0, 403.0, 1024.0, 1160.0, 434.0, 119.0, 670.0, 6173.0, 1256.0, 1068.0, 969.0, 1247.0, 676.0, 1885.0, 421.0, 1183.0],
+    konk_labels: ["2009M01", "2009M02", "2009M03", "2009M04", "2009M05", "2009M06", "2009M07", "2009M08", "2009M09", "2009M10", "2009M11", "2009M12", "2010M01", "2010M02", "2010M03", "2010M04", "2010M05", "2010M06", "2010M07", "2010M08", "2010M09", "2010M10", "2010M11", "2010M12", "2011M01", "2011M02", "2011M03", "2011M04", "2011M05", "2011M06", "2011M07", "2011M08", "2011M09", "2011M10", "2011M11", "2011M12", "2012M01", "2012M02", "2012M03", "2012M04", "2012M05", "2012M06", "2012M07", "2012M08", "2012M09", "2012M10", "2012M11", "2012M12", "2013M01", "2013M02", "2013M03", "2013M04", "2013M05", "2013M06", "2013M07", "2013M08", "2013M09", "2013M10", "2013M11", "2013M12", "2014M01", "2014M02", "2014M03", "2014M04", "2014M05", "2014M06", "2014M07", "2014M08", "2014M09", "2014M10", "2014M11", "2014M12", "2015M01", "2015M02", "2015M03", "2015M04", "2015M05", "2015M06", "2015M07", "2015M08", "2015M09", "2015M10", "2015M11", "2015M12", "2016M01", "2016M02", "2016M03", "2016M04", "2016M05", "2016M06", "2016M07", "2016M08", "2016M09", "2016M10", "2016M11", "2016M12", "2017M01", "2017M02", "2017M03", "2017M04", "2017M05", "2017M06", "2017M07", "2017M08", "2017M09", "2017M10", "2017M11", "2017M12", "2018M01", "2018M02", "2018M03", "2018M04", "2018M05", "2018M06", "2018M07", "2018M08", "2018M09", "2018M10", "2018M11", "2018M12", "2019M01", "2019M02", "2019M03", "2019M04", "2019M05", "2019M06", "2019M07", "2019M08", "2019M09", "2019M10", "2019M11", "2019M12", "2020M01", "2020M02", "2020M03", "2020M04", "2020M05", "2020M06", "2020M07", "2020M08", "2020M09", "2020M10", "2020M11", "2020M12", "2021M01", "2021M02", "2021M03", "2021M04", "2021M05", "2021M06", "2021M07", "2021M08", "2021M09", "2021M10", "2021M11", "2021M12", "2022M01", "2022M02", "2022M03", "2022M04", "2022M05", "2022M06", "2022M07", "2022M08", "2022M09", "2022M10", "2022M11", "2022M12", "2023M01", "2023M02", "2023M03", "2023M04", "2023M05", "2023M06", "2023M07", "2023M08", "2023M09", "2023M10", "2023M11", "2023M12", "2024M01", "2024M02", "2024M03", "2024M04", "2024M05", "2024M06", "2024M07", "2024M08", "2024M09", "2024M10", "2024M11", "2024M12", "2025M01", "2025M02", "2025M03", "2025M04", "2025M05", "2025M06", "2025M07", "2025M08", "2025M09", "2025M10", "2025M11", "2025M12", "2026M01", "2026M02", "2026M03", "2026M04", "2026M05", "2026M06"],
+    konk_sk: [222.5, 220.3, 259.6, 254.9, 238.7, 210.5, 223.5, 211.5, 237.5, 247.5, 239.6, 239.0, 251.6, 251.2, 262.2, 245.8, 207.7, 267.0, 248.5, 279.3, 212.2, 187.9, 179.3, 185.3, 186.4, 180.4, 156.5, 185.8, 161.6, 171.4, 170.0, 163.2, 186.1, 171.6, 172.6, 186.5, 179.0, 184.4, 157.5, 159.1, 183.5, 141.2, 197.3, 189.7, 173.0, 172.7, 174.1, 165.5, 146.9, 174.6, 172.3, 149.2, 157.4, 168.3, 146.4, 148.6, 145.5, 155.0, 137.7, 125.4, 137.2, 109.5, 114.2, 101.8, 104.2, 104.2, 118.3, 124.4, 117.2, 129.8, 142.5, 123.9, 134.4, 133.5, 139.6, 155.1, 142.2, 150.0, 125.8, 137.3, 127.5, 133.7, 137.9, 162.1, 144.4, 155.3, 172.3, 236.7, 177.5, 155.0, 157.3, 147.4, 147.7, 120.1, 151.7, 141.5, 165.3, 124.4, 148.4, 141.3, 158.4, 158.5, 166.5, 171.9, 185.2, 184.9, 182.8, 201.6, 180.2, 191.0, 149.2, 191.5, 166.2, 195.8, 204.0, 207.3, 204.3, 145.7, 153.3, 153.6, 169.1, 202.9, 191.7, 189.2, 189.9, 171.7, 185.4, 164.2, 168.3, 206.8, 203.5, 199.0, 180.2, 160.9, 123.8, 178.5, 193.0, 156.2, 175.2, 167.5, 160.1, 138.3, 147.0, 155.7, 199.2, 183.1, 146.1, 136.9, 146.4, 135.0, 128.4, 90.4, 153.3, 167.6, 165.0, 165.5, 155.3, 157.1, 192.4, 197.6, 202.0, 235.1, 187.9, 222.3, 204.0, 220.2, 247.6, 203.8, 248.1, 230.8, 239.2, 213.6, 195.4, 234.6, 240.7, 144.7, 212.8, 226.0, 186.9, 202.6, 178.5, 185.3, 173.6, 244.0, 172.6, 177.1, 179.9, 166.3, 186.3, 159.3, 136.0, 176.8, 179.4, 166.8, 167.8, 169.6, 204.3, 153.6, 167.2, 178.4, 165.9, 162.9, 158.4, 146.8, 143.7, 135.9, 144.4, 133.0, 131.9, 132.2],
+    konk_job: [1253.0, 2112.0, 1955.0, 3072.0, 1732.0, 2082.0, 1975.0, 1049.0, 1259.0, 1815.0, 1048.0, 1845.0, 1738.0, 1969.0, 2044.0, 1459.0, 1190.0, 1999.0, 1533.0, 1383.0, 1400.0, 1341.0, 1169.0, 1879.0, 1268.0, 2095.0, 1269.0, 1160.0, 1130.0, 1787.0, 1348.0, 1003.0, 1350.0, 1591.0, 1701.0, 1277.0, 851.0, 1268.0, 1318.0, 1027.0, 2641.0, 1052.0, 1197.0, 1205.0, 999.0, 907.0, 1078.0, 800.0, 1282.0, 1426.0, 1280.0, 940.0, 1366.0, 1350.0, 894.0, 1744.0, 830.0, 1588.0, 944.0, 618.0, 690.0, 601.0, 1020.0, 808.0, 623.0, 809.0, 870.0, 517.0, 921.0, 1005.0, 989.0, 753.0, 640.0, 1152.0, 1043.0, 803.0, 944.0, 739.0, 785.0, 706.0, 649.0, 864.0, 698.0, 795.0, 881.0, 934.0, 1132.0, 1111.0, 1198.0, 910.0, 1351.0, 811.0, 587.0, 561.0, 1139.0, 779.0, 1263.0, 927.0, 1068.0, 844.0, 1167.0, 1042.0, 920.0, 898.0, 843.0, 866.0, 1022.0, 836.0, 1240.0, 1819.0, 845.0, 886.0, 1059.0, 967.0, 1205.0, 978.0, 772.0, 900.0, 1027.0, 672.0, 1886.0, 1118.0, 1060.0, 861.0, 1039.0, 783.0, 1150.0, 655.0, 752.0, 1248.0, 1483.0, 791.0, 756.0, 879.0, 1056.0, 2155.0, 894.0, 705.0, 1295.0, 578.0, 1155.0, 867.0, 736.0, 1075.0, 810.0, 773.0, 740.0, 606.0, 733.0, 431.0, 788.0, 331.0, 1248.0, 808.0, 1232.0, 694.0, 555.0, 669.0, 1076.0, 1393.0, 948.0, 1743.0, 1044.0, 893.0, 1242.0, 1505.0, 1456.0, 1149.0, 1301.0, 1476.0, 2200.0, 1114.0, 909.0, 1409.0, 881.0, 656.0, 1025.0, 1662.0, 1009.0, 1078.0, 921.0, 1089.0, 1544.0, 1136.0, 746.0, 950.0, 1010.0, 974.0, 913.0, 1049.0, 775.0, 1003.0, 1100.0, 1175.0, 1264.0, 735.0, 1003.0, 1145.0, 1107.0, 774.0, 1295.0, 918.0, 743.0, 942.0, 740.0, 644.0, 830.0, 782.0, 971.0, 736.0],
+    ft_labels: ["2008M01", "2008M02", "2008M03", "2008M04", "2008M05", "2008M06", "2008M07", "2008M08", "2008M09", "2008M10", "2008M11", "2008M12", "2009M01", "2009M02", "2009M03", "2009M04", "2009M05", "2009M06", "2009M07", "2009M08", "2009M09", "2009M10", "2009M11", "2009M12", "2010M01", "2010M02", "2010M03", "2010M04", "2010M05", "2010M06", "2010M07", "2010M08", "2010M09", "2010M10", "2010M11", "2010M12", "2011M01", "2011M02", "2011M03", "2011M04", "2011M05", "2011M06", "2011M07", "2011M08", "2011M09", "2011M10", "2011M11", "2011M12", "2012M01", "2012M02", "2012M03", "2012M04", "2012M05", "2012M06", "2012M07", "2012M08", "2012M09", "2012M10", "2012M11", "2012M12", "2013M01", "2013M02", "2013M03", "2013M04", "2013M05", "2013M06", "2013M07", "2013M08", "2013M09", "2013M10", "2013M11", "2013M12", "2014M01", "2014M02", "2014M03", "2014M04", "2014M05", "2014M06", "2014M07", "2014M08", "2014M09", "2014M10", "2014M11", "2014M12", "2015M01", "2015M02", "2015M03", "2015M04", "2015M05", "2015M06", "2015M07", "2015M08", "2015M09", "2015M10", "2015M11", "2015M12", "2016M01", "2016M02", "2016M03", "2016M04", "2016M05", "2016M06", "2016M07", "2016M08", "2016M09", "2016M10", "2016M11", "2016M12", "2017M01", "2017M02", "2017M03", "2017M04", "2017M05", "2017M06", "2017M07", "2017M08", "2017M09", "2017M10", "2017M11", "2017M12", "2018M01", "2018M02", "2018M03", "2018M04", "2018M05", "2018M06", "2018M07", "2018M08", "2018M09", "2018M10", "2018M11", "2018M12", "2019M01", "2019M02", "2019M03", "2019M04", "2019M05", "2019M06", "2019M07", "2019M08", "2019M09", "2019M10", "2019M11", "2019M12", "2020M01", "2020M02", "2020M03", "2020M04", "2020M05", "2020M06", "2020M07", "2020M08", "2020M09", "2020M10", "2020M11", "2020M12", "2021M01", "2021M02", "2021M03", "2021M04", "2021M05", "2021M06", "2021M07", "2021M08", "2021M09", "2021M10", "2021M11", "2021M12", "2022M01", "2022M02", "2022M03", "2022M04", "2022M05", "2022M06", "2022M07", "2022M08", "2022M09", "2022M10", "2022M11", "2022M12", "2023M01", "2023M02", "2023M03", "2023M04", "2023M05", "2023M06", "2023M07", "2023M08", "2023M09", "2023M10", "2023M11", "2023M12", "2024M01", "2024M02", "2024M03", "2024M04", "2024M05", "2024M06", "2024M07", "2024M08", "2024M09", "2024M10", "2024M11", "2024M12", "2025M01", "2025M02", "2025M03", "2025M04", "2025M05", "2025M06", "2025M07", "2025M08", "2025M09", "2025M10", "2025M11", "2025M12", "2026M01", "2026M02", "2026M03", "2026M04", "2026M05", "2026M06"],
+    ft_dk: [-1.1, -2.5, -1.3, -3.1, -3.5, -6.6, -9.7, -12.2, -11.1, -16.6, -11.5, -13.5, -9.1, -11.3, -11.7, -4.4, -4.7, -5.5, -3.2, -2.6, -1.1, -0.9, -2.4, -3.6, 1.1, 1.8, -1.0, 4.2, 3.0, -1.5, 4.1, 4.4, 2.3, 0.6, 3.6, -0.7, 3.3, -0.5, -0.8, 2.0, 2.6, 3.0, -0.6, -2.2, -3.6, -6.6, -9.2, -9.8, -7.0, -4.8, -0.4, 0.6, -0.4, -2.6, 0.1, 0.0, -2.2, -5.5, -1.3, -4.7, -2.7, -2.0, -2.1, -2.8, -2.6, 3.4, 3.7, 5.9, 4.7, 4.6, 4.0, 2.9, 6.3, 4.2, 5.0, 5.5, 7.8, 9.3, 10.6, 11.4, 7.1, 8.2, 6.3, 6.0, 9.0, 9.1, 13.9, 13.7, 13.0, 9.8, 9.5, 9.2, 5.0, 3.0, 5.6, 6.1, 4.6, 4.0, 3.6, 5.5, 3.2, 4.4, 3.1, 4.8, 1.8, 1.2, 0.9, -0.3, 4.5, 4.8, 6.2, 7.4, 5.8, 7.1, 10.5, 7.6, 7.3, 7.1, 7.6, 6.5, 8.2, 8.5, 8.5, 7.1, 9.3, 10.6, 9.7, 7.8, 6.9, 5.1, 4.3, 2.9, 3.9, 3.3, 3.8, 3.7, 5.9, 5.8, 2.9, 6.3, 4.3, 1.7, 1.4, 2.5, 4.5, 3.3, 0.4, -11.9, -8.8, -3.1, -2.9, -5.5, -7.4, -6.2, -7.6, -3.8, -4.1, -5.2, -5.0, -1.1, 2.8, 2.3, 2.6, 4.4, 8.2, 3.3, -2.0, -2.1, -1.5, -3.2, -14.4, -20.9, -22.4, -24.8, -25.6, -25.1, -32.1, -37.0, -30.4, -28.9, -26.1, -25.1, -23.1, -18.2, -15.1, -10.9, -10.1, -10.9, -13.0, -11.8, -10.3, -13.0, -8.4, -7.4, -7.6, -8.6, -6.5, -4.4, -5.4, -7.4, -6.8, -8.9, -9.3, -13.1, -11.7, -14.5, -15.5, -17.0, -18.4, -15.1, -15.7, -17.2, -18.7, -19.5, -20.1, -17.3, -13.4, -13.1, -13.8, -18.6, -19.8, -14.0],
+    et_labels: ["2008M01", "2008M02", "2008M03", "2008M04", "2008M05", "2008M06", "2008M07", "2008M08", "2008M09", "2008M10", "2008M11", "2008M12", "2009M01", "2009M02", "2009M03", "2009M04", "2009M05", "2009M06", "2009M07", "2009M08", "2009M09", "2009M10", "2009M11", "2009M12", "2010M01", "2010M02", "2010M03", "2010M04", "2010M05", "2010M06", "2010M07", "2010M08", "2010M09", "2010M10", "2010M11", "2010M12", "2011M01", "2011M02", "2011M03", "2011M04", "2011M05", "2011M06", "2011M07", "2011M08", "2011M09", "2011M10", "2011M11", "2011M12", "2012M01", "2012M02", "2012M03", "2012M04", "2012M05", "2012M06", "2012M07", "2012M08", "2012M09", "2012M10", "2012M11", "2012M12", "2013M01", "2013M02", "2013M03", "2013M04", "2013M05", "2013M06", "2013M07", "2013M08", "2013M09", "2013M10", "2013M11", "2013M12", "2014M01", "2014M02", "2014M03", "2014M04", "2014M05", "2014M06", "2014M07", "2014M08", "2014M09", "2014M10", "2014M11", "2014M12", "2015M01", "2015M02", "2015M03", "2015M04", "2015M05", "2015M06", "2015M07", "2015M08", "2015M09", "2015M10", "2015M11", "2015M12", "2016M01", "2016M02", "2016M03", "2016M04", "2016M05", "2016M06", "2016M07", "2016M08", "2016M09", "2016M10", "2016M11", "2016M12", "2017M01", "2017M02", "2017M03", "2017M04", "2017M05", "2017M06", "2017M07", "2017M08", "2017M09", "2017M10", "2017M11", "2017M12", "2018M01", "2018M02", "2018M03", "2018M04", "2018M05", "2018M06", "2018M07", "2018M08", "2018M09", "2018M10", "2018M11", "2018M12", "2019M01", "2019M02", "2019M03", "2019M04", "2019M05", "2019M06", "2019M07", "2019M08", "2019M09", "2019M10", "2019M11", "2019M12", "2020M01", "2020M02", "2020M03", "2020M04", "2020M05", "2020M06", "2020M07", "2020M08", "2020M09", "2020M10", "2020M11", "2020M12", "2021M01", "2021M02", "2021M03", "2021M04", "2021M05", "2021M06", "2021M07", "2021M08", "2021M09", "2021M10", "2021M11", "2021M12", "2022M01", "2022M02", "2022M03", "2022M04", "2022M05", "2022M06", "2022M07", "2022M08", "2022M09", "2022M10", "2022M11", "2022M12", "2023M01", "2023M02", "2023M03", "2023M04", "2023M05", "2023M06", "2023M07", "2023M08", "2023M09", "2023M10", "2023M11", "2023M12", "2024M01", "2024M02", "2024M03", "2024M04", "2024M05", "2024M06", "2024M07", "2024M08", "2024M09", "2024M10", "2024M11", "2024M12", "2025M01", "2025M02", "2025M03", "2025M04", "2025M05", "2025M06", "2025M07", "2025M08", "2025M09", "2025M10", "2025M11", "2025M12", "2026M01", "2026M02", "2026M03", "2026M04", "2026M05", "2026M06"],
+    et_dk: [102.4, 103.5, 101.8, 98.1, 98.7, 98.3, 93.2, 90.7, 85.6, 80.4, 74.5, 70.5, 64.9, 60.8, 63.1, 63.8, 72.3, 72.1, 74.6, 80.3, 78.7, 81.9, 85.8, 86.4, 89.6, 88.6, 94.0, 97.9, 98.1, 95.7, 95.7, 96.4, 95.3, 94.3, 93.2, 93.4, 98.0, 99.5, 99.8, 100.9, 107.0, 105.8, 106.9, 101.6, 97.0, 90.2, 90.0, 89.8, 89.0, 94.0, 91.1, 95.5, 92.7, 88.1, 90.2, 91.8, 91.0, 87.9, 89.5, 89.8, 86.8, 89.0, 91.4, 90.8, 91.7, 95.9, 96.4, 99.1, 100.0, 102.5, 102.3, 101.4, 103.0, 99.8, 102.7, 103.1, 100.8, 102.1, 100.5, 104.8, 102.4, 103.4, 101.3, 99.3, 99.9, 101.1, 101.3, 105.1, 104.1, 105.0, 107.0, 105.1, 106.7, 110.0, 106.9, 105.6, 106.8, 105.6, 104.7, 103.9, 104.8, 105.7, 104.3, 103.8, 102.5, 101.1, 100.4, 101.5, 107.0, 105.0, 104.3, 106.8, 105.8, 107.6, 107.6, 107.0, 107.0, 109.4, 111.4, 110.9, 109.7, 111.1, 107.7, 107.4, 110.0, 108.8, 108.0, 109.1, 106.3, 107.4, 106.2, 107.7, 106.3, 103.9, 106.1, 105.3, 105.4, 103.0, 102.4, 103.0, 102.2, 101.6, 102.8, 102.3, 103.9, 104.0, 98.1, 54.2, 55.7, 68.3, 79.1, 82.6, 86.4, 89.1, 89.2, 97.5, 92.8, 92.2, 98.7, 104.5, 108.1, 109.1, 110.7, 110.4, 113.3, 116.2, 116.3, 112.8, 109.4, 113.7, 112.2, 108.0, 105.4, 102.1, 100.1, 99.8, 98.0, 92.8, 93.3, 90.5, 91.2, 91.5, 94.1, 95.9, 100.8, 102.1, 102.8, 100.7, 98.1, 99.0, 97.1, 98.8, 95.7, 102.3, 100.3, 102.9, 104.7, 106.2, 105.1, 102.6, 104.8, 105.7, 105.0, 104.7, 102.9, 106.6, 104.0, 103.7, 102.5, 102.6, 104.5, 102.8, 103.6, 102.0, 101.1, 102.3, 102.2, 103.2, 103.9, 105.5, 104.1, 101.0],
+    inf_labels: ["2008M01", "2008M02", "2008M03", "2008M04", "2008M05", "2008M06", "2008M07", "2008M08", "2008M09", "2008M10", "2008M11", "2008M12", "2009M01", "2009M02", "2009M03", "2009M04", "2009M05", "2009M06", "2009M07", "2009M08", "2009M09", "2009M10", "2009M11", "2009M12", "2010M01", "2010M02", "2010M03", "2010M04", "2010M05", "2010M06", "2010M07", "2010M08", "2010M09", "2010M10", "2010M11", "2010M12", "2011M01", "2011M02", "2011M03", "2011M04", "2011M05", "2011M06", "2011M07", "2011M08", "2011M09", "2011M10", "2011M11", "2011M12", "2012M01", "2012M02", "2012M03", "2012M04", "2012M05", "2012M06", "2012M07", "2012M08", "2012M09", "2012M10", "2012M11", "2012M12", "2013M01", "2013M02", "2013M03", "2013M04", "2013M05", "2013M06", "2013M07", "2013M08", "2013M09", "2013M10", "2013M11", "2013M12", "2014M01", "2014M02", "2014M03", "2014M04", "2014M05", "2014M06", "2014M07", "2014M08", "2014M09", "2014M10", "2014M11", "2014M12", "2015M01", "2015M02", "2015M03", "2015M04", "2015M05", "2015M06", "2015M07", "2015M08", "2015M09", "2015M10", "2015M11", "2015M12", "2016M01", "2016M02", "2016M03", "2016M04", "2016M05", "2016M06", "2016M07", "2016M08", "2016M09", "2016M10", "2016M11", "2016M12", "2017M01", "2017M02", "2017M03", "2017M04", "2017M05", "2017M06", "2017M07", "2017M08", "2017M09", "2017M10", "2017M11", "2017M12", "2018M01", "2018M02", "2018M03", "2018M04", "2018M05", "2018M06", "2018M07", "2018M08", "2018M09", "2018M10", "2018M11", "2018M12", "2019M01", "2019M02", "2019M03", "2019M04", "2019M05", "2019M06", "2019M07", "2019M08", "2019M09", "2019M10", "2019M11", "2019M12", "2020M01", "2020M02", "2020M03", "2020M04", "2020M05", "2020M06", "2020M07", "2020M08", "2020M09", "2020M10", "2020M11", "2020M12", "2021M01", "2021M02", "2021M03", "2021M04", "2021M05", "2021M06", "2021M07", "2021M08", "2021M09", "2021M10", "2021M11", "2021M12", "2022M01", "2022M02", "2022M03", "2022M04", "2022M05", "2022M06", "2022M07", "2022M08", "2022M09", "2022M10", "2022M11", "2022M12", "2023M01", "2023M02", "2023M03", "2023M04", "2023M05", "2023M06", "2023M07", "2023M08", "2023M09", "2023M10", "2023M11", "2023M12", "2024M01", "2024M02", "2024M03", "2024M04", "2024M05", "2024M06", "2024M07", "2024M08", "2024M09", "2024M10", "2024M11", "2024M12", "2025M01", "2025M02", "2025M03", "2025M04", "2025M05", "2025M06", "2025M07", "2025M08", "2025M09", "2025M10", "2025M11", "2025M12", "2026M01", "2026M02", "2026M03", "2026M04", "2026M05"],
+    inf_total: [2.9, 3.1, 3.1, 3.2, 3.4, 3.8, 4.0, 4.4, 4.2, 3.7, 2.7, 2.4, 1.8, 1.9, 1.7, 1.3, 1.3, 1.2, 1.0, 1.1, 0.8, 1.0, 1.3, 1.4, 2.0, 2.0, 2.3, 2.5, 2.1, 1.8, 2.3, 2.4, 2.6, 2.4, 2.5, 2.8, 2.7, 2.7, 2.7, 2.9, 3.1, 3.0, 3.0, 2.6, 2.5, 2.8, 2.6, 2.5, 2.8, 2.8, 2.7, 2.3, 2.2, 2.2, 2.3, 2.7, 2.6, 2.3, 2.3, 2.0, 1.2, 1.2, 0.9, 0.8, 0.9, 0.9, 0.7, 0.4, 0.5, 0.6, 0.6, 0.8, 1.0, 0.5, 0.4, 0.7, 0.5, 0.6, 0.7, 0.5, 0.5, 0.5, 0.5, 0.3, -0.1, 0.3, 0.6, 0.6, 0.6, 0.6, 0.7, 0.6, 0.5, 0.4, 0.3, 0.5, 0.6, 0.3, -0.1, 0.0, 0.2, 0.3, 0.3, 0.3, 0.0, 0.3, 0.4, 0.5, 0.9, 1.0, 1.0, 1.1, 0.8, 0.6, 1.5, 1.5, 1.6, 1.5, 1.3, 0.9, 0.7, 0.6, 0.6, 0.8, 1.1, 1.1, 1.1, 1.0, 0.6, 0.8, 0.8, 0.8, 1.3, 1.0, 1.2, 0.9, 0.7, 0.5, 0.3, 0.4, 0.5, 0.5, 0.7, 0.8, 0.7, 0.8, 0.4, 0.0, -0.1, 0.3, 0.5, 0.5, 0.5, 0.4, 0.5, 0.5, 0.5, 0.6, 0.9, 1.4, 1.8, 1.8, 1.6, 1.8, 2.2, 2.9, 3.4, 3.1, 4.4, 4.8, 5.4, 6.7, 7.4, 8.2, 8.7, 8.9, 10.0, 10.2, 8.9, 8.7, 7.7, 7.6, 6.8, 5.3, 2.9, 2.4, 3.2, 2.4, 0.9, 0.0, 0.6, 0.7, 1.2, 0.8, 0.9, 0.7, 2.1, 1.8, 1.1, 1.4, 1.3, 1.6, 1.7, 1.9, 1.5, 2.0, 1.5, 1.6, 1.6, 1.8, 2.2, 2.0, 2.2, 2.1, 2.1, 1.9, 0.8, 0.7, 1.2, 1.4, 1.9],
+    inf_kerne: [2.4, 2.7, 2.7, 2.6, 2.8, 2.9, 3.0, 3.4, 3.4, 3.0, 2.8, 2.7, 2.5, 2.3, 2.3, 2.1, 2.2, 2.1, 2.2, 1.9, 1.7, 1.8, 1.5, 1.5, 1.6, 1.7, 1.6, 1.8, 1.4, 1.3, 1.6, 1.9, 2.0, 1.8, 2.0, 2.0, 1.9, 2.1, 2.1, 2.3, 2.5, 2.4, 2.4, 2.0, 1.9, 2.1, 2.0, 2.0, 2.6, 2.5, 2.4, 2.3, 2.3, 2.3, 2.3, 2.4, 2.4, 2.3, 2.3, 2.0, 1.2, 1.1, 1.1, 0.9, 0.9, 0.9, 0.7, 0.7, 0.7, 0.9, 0.8, 0.9, 1.2, 0.8, 0.7, 0.8, 0.7, 0.6, 0.9, 0.6, 0.7, 0.6, 0.6, 0.8, 0.8, 1.0, 1.2, 1.2, 1.1, 1.2, 1.3, 1.3, 1.2, 1.2, 1.2, 1.2, 1.0, 0.8, 0.5, 0.4, 0.6, 0.8, 0.9, 0.7, 0.3, 0.4, 0.4, 0.2, 0.6, 0.6, 0.7, 0.9, 0.8, 0.8, 1.6, 1.6, 1.5, 1.4, 1.2, 1.1, 0.8, 0.9, 0.7, 0.8, 0.8, 0.7, 0.8, 0.6, 0.4, 0.6, 0.7, 0.7, 1.3, 0.9, 1.1, 0.8, 0.8, 0.7, 0.4, 0.6, 0.7, 0.8, 0.8, 0.8, 0.6, 0.9, 0.7, 0.8, 0.6, 0.8, 0.9, 0.9, 0.9, 0.9, 1.1, 1.0, 1.1, 0.7, 0.8, 0.9, 1.3, 1.3, 0.9, 1.0, 1.4, 1.5, 1.6, 1.6, 2.0, 2.8, 3.1, 3.6, 4.4, 4.8, 5.5, 5.9, 5.9, 6.2, 6.1, 6.6, 6.5, 6.7, 6.4, 6.1, 5.0, 4.9, 5.3, 4.3, 3.7, 3.3, 2.9, 2.6, 2.5, 1.7, 1.6, 1.4, 1.6, 1.3, 1.0, 1.2, 1.5, 1.4, 1.2, 1.4, 1.4, 1.8, 1.6, 1.7, 1.7, 1.9, 2.2, 2.2, 2.2, 2.3, 2.3, 2.3, 1.9, 1.8, 1.7, 1.6, 2.1],
+    fteu_labels: ["2008-01", "2008-02", "2008-03", "2008-04", "2008-05", "2008-06", "2008-07", "2008-08", "2008-09", "2008-10", "2008-11", "2008-12", "2009-01", "2009-02", "2009-03", "2009-04", "2009-05", "2009-06", "2009-07", "2009-08", "2009-09", "2009-10", "2009-11", "2009-12", "2010-01", "2010-02", "2010-03", "2010-04", "2010-05", "2010-06", "2010-07", "2010-08", "2010-09", "2010-10", "2010-11", "2010-12", "2011-01", "2011-02", "2011-03", "2011-04", "2011-05", "2011-06", "2011-07", "2011-08", "2011-09", "2011-10", "2011-11", "2011-12", "2012-01", "2012-02", "2012-03", "2012-04", "2012-05", "2012-06", "2012-07", "2012-08", "2012-09", "2012-10", "2012-11", "2012-12", "2013-01", "2013-02", "2013-03", "2013-04", "2013-05", "2013-06", "2013-07", "2013-08", "2013-09", "2013-10", "2013-11", "2013-12", "2014-01", "2014-02", "2014-03", "2014-04", "2014-05", "2014-06", "2014-07", "2014-08", "2014-09", "2014-10", "2014-11", "2014-12", "2015-01", "2015-02", "2015-03", "2015-04", "2015-05", "2015-06", "2015-07", "2015-08", "2015-09", "2015-10", "2015-11", "2015-12", "2016-01", "2016-02", "2016-03", "2016-04", "2016-05", "2016-06", "2016-07", "2016-08", "2016-09", "2016-10", "2016-11", "2016-12", "2017-01", "2017-02", "2017-03", "2017-04", "2017-05", "2017-06", "2017-07", "2017-08", "2017-09", "2017-10", "2017-11", "2017-12", "2018-01", "2018-02", "2018-03", "2018-04", "2018-05", "2018-06", "2018-07", "2018-08", "2018-09", "2018-10", "2018-11", "2018-12", "2019-01", "2019-02", "2019-03", "2019-04", "2019-05", "2019-06", "2019-07", "2019-08", "2019-09", "2019-10", "2019-11", "2019-12", "2020-01", "2020-02", "2020-03", "2020-04", "2020-05", "2020-06", "2020-07", "2020-08", "2020-09", "2020-10", "2020-11", "2020-12", "2021-01", "2021-02", "2021-03", "2021-04", "2021-05", "2021-06", "2021-07", "2021-08", "2021-09", "2021-10", "2021-11", "2021-12", "2022-01", "2022-02", "2022-03", "2022-04", "2022-05", "2022-06", "2022-07", "2022-08", "2022-09", "2022-10", "2022-11", "2022-12", "2023-01", "2023-02", "2023-03", "2023-04", "2023-05", "2023-06", "2023-07", "2023-08", "2023-09", "2023-10", "2023-11", "2023-12", "2024-01", "2024-02", "2024-03", "2024-04", "2024-05", "2024-06", "2024-07", "2024-08", "2024-09", "2024-10", "2024-11", "2024-12", "2025-01", "2025-02", "2025-03", "2025-04", "2025-05", "2025-06", "2025-07", "2025-08", "2025-09", "2025-10", "2025-11", "2025-12", "2026-01", "2026-02", "2026-03", "2026-04", "2026-05", "2026-06"],
+    fteu_DK: [0.6, 0.9, 2.3, -0.4, 0.5, -3.6, -4.0, -4.7, -3.8, -5.1, 1.2, 1.2, 0.0, 0.5, 0.5, 3.2, 6.2, 3.7, 6.0, 4.9, 6.6, 6.2, 4.9, 5.7, 6.8, 7.8, 6.2, 8.2, 6.8, 3.0, 7.1, 5.3, 5.6, 5.3, 6.7, 5.0, 4.3, 3.7, 3.5, 4.2, 4.5, 4.7, 2.1, -0.6, 2.3, -2.0, -5.3, -4.0, -3.0, -0.7, 2.8, 2.6, 0.4, -0.4, 2.2, 1.1, 1.3, -0.9, 3.2, 0.5, -0.5, 2.1, 1.5, 1.5, 0.5, 4.6, 3.5, 5.2, 5.8, 6.8, 5.3, 5.7, 6.2, 4.4, 5.3, 4.3, 6.1, 7.9, 9.5, 9.9, 6.9, 8.6, 7.0, 8.6, 8.2, 8.3, 11.6, 10.5, 9.7, 7.6, 7.7, 7.0, 4.3, 4.4, 6.0, 6.4, 2.6, 3.8, 2.9, 4.9, 3.0, 3.9, 2.6, 3.7, 2.4, 2.5, 2.2, 0.2, 4.1, 5.4, 6.1, 6.7, 4.7, 5.2, 8.2, 5.7, 6.8, 8.2, 8.7, 7.0, 7.4, 8.3, 7.2, 4.6, 6.6, 7.7, 8.2, 4.8, 6.6, 4.7, 5.2, 3.6, 3.0, 3.1, 4.6, 3.4, 6.6, 5.3, 1.3, 5.6, 3.8, 3.0, 4.0, 4.5, 3.7, 4.8, 0.2, -7.2, -1.9, 2.8, 2.4, 0.1, 1.0, 1.7, -0.3, 3.6, 3.2, 3.6, 4.0, 7.0, 7.0, 7.0, 6.6, 6.7, 10.4, 6.3, 1.3, 1.4, 0.6, 0.6, -11.3, -14.7, -15.4, -17.5, -18.1, -14.7, -20.0, -23.5, -17.7, -16.2, -13.5, -12.7, -11.5, -8.7, -6.4, -4.9, -5.3, -5.4, -7.1, -6.8, -5.2, -6.7, -4.8, -3.6, -4.8, -6.2, -3.3, -2.7, -3.9, -4.9, -3.8, -5.7, -5.1, -8.3, -8.4, -11.2, -11.9, -14.3, -14.2, -13.4, -12.8, -14.0, -14.5, -12.8, -12.8, -11.2, -7.9, -8.0, -8.3, -14.2, -15.5, -12.0],
+    fteu_DE: [-8.0, -9.0, -9.3, -8.6, -11.1, -13.1, -16.2, -17.1, -15.7, -18.1, -17.1, -20.0, -19.6, -19.7, -20.8, -19.3, -18.7, -17.9, -15.7, -13.2, -11.4, -9.8, -11.6, -9.4, -11.3, -10.7, -9.1, -5.5, -8.6, -7.6, -3.8, -2.2, -0.4, -0.7, 1.3, 0.6, 0.4, 1.0, 0.0, -0.9, -1.5, -0.4, -0.7, -4.0, -3.0, -5.1, -5.1, -3.9, -4.2, -4.7, -4.9, -4.6, -5.3, -4.6, -5.6, -6.2, -7.2, -7.1, -6.4, -6.8, -5.5, -5.2, -5.2, -4.8, -4.8, -4.5, -3.8, -3.9, -3.0, -2.6, -1.8, -1.3, -0.3, 0.0, -0.6, -0.4, -0.1, -0.4, 0.0, -1.7, -2.2, -1.2, -2.0, -1.3, -0.5, -0.2, 0.5, 0.6, 0.2, -0.3, -0.7, -0.9, -2.1, -3.3, -3.3, -1.7, -2.2, -2.2, -2.7, -1.7, -2.0, -1.0, -1.5, -1.2, -1.6, -1.7, -0.9, -0.3, 0.0, -1.5, -0.5, 0.4, 1.2, 2.0, 2.1, 1.3, 1.2, 1.7, 1.4, 1.4, 2.4, 2.3, 1.6, 1.4, 1.2, 1.4, 0.1, 0.7, 0.3, -0.1, -0.1, -0.7, 0.0, -0.4, -0.2, -0.4, -1.0, -2.8, -2.6, -3.4, -2.1, -4.1, -2.0, -3.6, -2.6, -2.3, -8.4, -18.0, -15.8, -11.1, -10.5, -8.3, -8.1, -9.2, -9.9, -8.5, -11.5, -9.5, -6.6, -8.5, -4.9, -1.4, -2.6, -4.0, -0.8, -2.4, -4.4, -6.5, -4.9, -6.2, -15.3, -18.7, -18.7, -20.3, -24.9, -23.3, -28.1, -26.8, -24.2, -22.0, -19.8, -16.7, -17.9, -14.3, -14.0, -14.3, -13.8, -14.9, -15.3, -15.2, -16.3, -13.7, -16.6, -13.7, -13.2, -10.3, -10.4, -10.5, -8.4, -10.1, -10.9, -8.8, -10.9, -10.1, -11.4, -11.3, -10.2, -10.6, -9.2, -9.6, -8.9, -10.6, -9.2, -10.8, -11.4, -12.1, -9.8, -10.8, -13.6, -17.8, -16.0, -14.6],
+    fteu_FR: [-14.6, -13.7, -14.5, -15.5, -17.6, -20.5, -19.9, -18.3, -17.2, -19.8, -16.9, -18.3, -18.1, -19.1, -20.0, -15.5, -15.4, -14.0, -13.4, -15.8, -11.6, -10.4, -8.5, -9.1, -8.3, -10.7, -12.6, -12.2, -14.7, -15.6, -14.8, -12.9, -13.7, -12.6, -9.4, -12.4, -14.5, -14.9, -16.0, -16.4, -15.3, -16.1, -15.0, -19.0, -18.7, -16.2, -19.0, -19.8, -18.8, -16.9, -13.3, -13.4, -11.2, -12.2, -15.7, -16.0, -18.9, -19.3, -18.3, -18.1, -19.3, -18.9, -19.9, -19.2, -22.1, -22.0, -19.3, -16.4, -15.1, -14.8, -18.1, -16.7, -16.1, -16.2, -15.2, -16.0, -16.7, -18.0, -16.4, -16.5, -17.7, -17.0, -16.2, -14.2, -13.6, -11.3, -10.8, -9.9, -11.9, -11.8, -12.9, -11.1, -10.2, -9.9, -9.2, -9.5, -8.4, -10.7, -12.1, -11.7, -9.5, -12.1, -11.7, -11.1, -9.6, -9.4, -7.9, -6.9, -7.4, -8.3, -8.4, -7.2, -6.6, -1.9, -4.2, -5.8, -7.2, -7.4, -4.2, -3.1, -4.2, -7.2, -6.9, -7.8, -8.6, -10.5, -9.8, -10.4, -13.8, -11.3, -13.6, -16.9, -12.2, -10.7, -9.9, -10.1, -8.2, -8.2, -6.6, -7.5, -6.1, -6.6, -5.8, -9.6, -8.9, -7.7, -12.6, -21.6, -17.6, -12.4, -11.7, -12.2, -10.9, -13.4, -18.0, -10.8, -13.6, -14.4, -9.8, -9.6, -5.2, -0.1, -3.1, -6.5, -2.8, -6.3, -6.9, -8.5, -9.5, -8.6, -21.2, -19.0, -18.8, -21.2, -21.7, -18.8, -22.3, -20.8, -18.8, -20.6, -20.6, -21.6, -20.7, -18.7, -17.0, -14.7, -14.1, -14.8, -15.8, -16.7, -13.5, -13.5, -11.7, -14.8, -13.5, -15.3, -13.5, -14.4, -15.3, -12.9, -11.6, -12.8, -15.3, -17.7, -14.1, -13.2, -14.8, -16.3, -17.5, -17.4, -16.8, -18.5, -19.3, -15.5, -15.8, -16.3, -15.7, -14.3, -17.1, -21.8, -21.1, -19.3],
+    fteu_SE: [-1.1, -3.4, -1.3, -3.0, -4.4, -8.1, -10.6, -8.6, -7.2, -9.0, -7.5, -7.3, -5.4, -3.4, -4.5, -6.6, -0.7, 0.2, 1.6, 4.5, 5.4, 6.5, 6.8, 5.8, 4.0, 6.8, 6.7, 7.5, 5.9, 7.0, 6.2, 6.5, 7.8, 6.0, 6.2, 5.7, 6.6, 6.5, 4.5, 3.7, 3.2, 2.8, 1.4, -3.2, -4.6, -3.9, -4.5, -4.0, -1.2, -1.9, 1.1, 1.7, 1.1, -0.4, 0.9, 0.1, -1.7, -2.5, -1.5, -4.1, 0.0, -0.7, 1.4, 1.6, 0.1, -0.4, 2.4, 1.8, 0.3, 1.0, 3.6, 3.2, 2.9, 1.8, 1.9, 1.6, 2.2, 2.4, 2.5, 0.6, 1.0, -1.1, -2.5, -0.5, -0.4, -1.4, 0.2, -0.9, 0.1, -0.5, -0.3, 0.0, -2.2, -3.3, -4.5, -2.0, -1.9, -2.2, -0.3, -1.2, -1.5, -1.2, -1.8, -2.1, 0.2, 0.9, 1.5, 0.4, 0.6, 0.7, 1.5, 1.4, 2.6, 0.5, 0.4, 0.0, -0.3, 1.0, 2.0, 0.8, 2.3, 0.3, 0.6, 0.0, 0.6, -2.0, -2.0, 0.3, 1.0, -1.9, -1.3, -2.3, -3.2, -3.4, -1.7, -0.7, -3.5, -3.6, -1.4, -3.3, -4.6, -3.3, -3.9, -2.5, -3.6, -2.3, -4.2, -6.9, -7.4, -3.0, -1.5, -0.6, 1.3, 1.5, -1.0, 1.8, 2.7, 5.3, 4.5, 6.0, 9.1, 7.7, 7.5, 6.7, 6.1, 4.8, 2.4, 2.6, -2.4, -1.8, -11.0, -10.0, -13.5, -15.2, -20.3, -20.5, -26.6, -27.5, -23.3, -23.8, -23.5, -20.6, -20.8, -17.6, -15.2, -14.0, -15.0, -17.8, -18.6, -18.0, -15.9, -12.9, -8.7, -6.9, -4.8, -4.3, -1.4, -0.3, -0.5, 0.2, 1.5, 0.6, 1.8, -1.6, 0.2, -2.6, -7.7, -13.5, -10.1, -8.1, -6.0, -6.8, -5.0, -3.6, -3.3, -3.7, -2.1, -2.6, -4.5, -7.3, -5.7, -5.1],
+    fteu_EU: [-11.8, -11.9, -12.0, -12.5, -13.9, -17.3, -19.2, -17.2, -15.9, -18.4, -18.3, -19.4, -19.3, -20.5, -20.7, -18.4, -16.9, -15.8, -14.5, -12.9, -11.4, -10.4, -10.4, -9.9, -10.7, -12.2, -12.4, -11.1, -14.3, -15.1, -13.2, -11.0, -10.9, -11.3, -10.1, -11.2, -12.0, -11.5, -12.6, -13.5, -13.4, -13.1, -13.0, -15.4, -16.0, -17.0, -16.4, -17.4, -17.5, -16.7, -15.7, -16.6, -17.1, -17.1, -17.2, -17.8, -19.3, -18.9, -19.0, -19.7, -18.1, -17.6, -17.6, -16.8, -17.7, -16.7, -15.8, -14.4, -12.8, -13.3, -12.5, -12.0, -11.2, -11.1, -9.9, -9.8, -9.4, -9.4, -9.4, -10.5, -11.1, -10.4, -10.5, -9.8, -8.5, -6.5, -5.1, -5.2, -6.1, -6.7, -7.6, -6.7, -6.8, -6.3, -5.6, -4.9, -5.2, -6.2, -7.0, -6.4, -6.9, -6.6, -7.0, -6.9, -6.8, -5.9, -5.1, -4.8, -4.3, -5.7, -4.7, -4.2, -4.3, -3.6, -3.3, -3.1, -2.9, -2.1, -1.8, -1.2, -1.3, -2.2, -2.6, -2.4, -3.7, -3.8, -3.7, -3.9, -4.5, -3.9, -4.3, -5.8, -5.1, -5.1, -4.4, -4.9, -4.7, -5.1, -4.7, -5.4, -5.1, -5.4, -4.9, -5.8, -5.6, -4.8, -10.1, -23.2, -18.9, -13.2, -12.9, -12.6, -11.4, -12.9, -15.2, -10.9, -12.4, -11.8, -8.7, -8.3, -4.3, -1.5, -3.0, -4.2, -3.0, -4.6, -7.7, -8.6, -9.3, -9.1, -21.1, -21.2, -20.9, -23.7, -26.5, -24.6, -28.4, -27.3, -23.8, -22.1, -20.6, -18.9, -18.7, -16.6, -16.5, -15.4, -14.4, -15.2, -16.9, -16.7, -15.7, -13.9, -14.2, -13.9, -13.0, -12.6, -12.5, -12.1, -11.4, -11.7, -11.4, -11.0, -11.8, -12.4, -12.5, -12.6, -13.3, -15.2, -13.7, -14.0, -13.7, -14.2, -13.6, -12.8, -12.9, -13.1, -12.5, -12.2, -15.8, -19.8, -18.2, -17.0],
+    euro_ts: {"DK": {"labels": ["2009-Q1", "2009-Q2", "2009-Q3", "2009-Q4", "2010-Q1", "2010-Q2", "2010-Q3", "2010-Q4", "2011-Q1", "2011-Q2", "2011-Q3", "2011-Q4", "2012-Q1", "2012-Q2", "2012-Q3", "2012-Q4", "2013-Q1", "2013-Q2", "2013-Q3", "2013-Q4", "2014-Q1", "2014-Q2", "2014-Q3", "2014-Q4", "2015-Q1", "2015-Q2", "2015-Q3", "2015-Q4", "2016-Q1", "2016-Q2", "2016-Q3", "2016-Q4", "2017-Q1", "2017-Q2", "2017-Q3", "2017-Q4", "2018-Q1", "2018-Q2", "2018-Q3", "2018-Q4", "2019-Q1", "2019-Q2", "2019-Q3", "2019-Q4", "2020-Q1", "2020-Q2", "2020-Q3", "2020-Q4", "2021-Q1", "2021-Q2", "2021-Q3", "2021-Q4", "2022-Q1", "2022-Q2", "2022-Q3", "2022-Q4", "2023-Q1", "2023-Q2", "2023-Q3", "2023-Q4", "2024-Q1", "2024-Q2", "2024-Q3", "2024-Q4", "2025-Q1", "2025-Q2", "2025-Q3", "2025-Q4", "2026-Q1"], "values": [5.4, 6.5, 6.7, 7.1, 7.9, 7.7, 7.6, 7.8, 8.1, 7.5, 7.6, 7.9, 7.9, 8.2, 7.8, 7.3, 7.7, 7.5, 7.4, 7.0, 7.2, 6.8, 7.0, 6.7, 6.4, 6.4, 6.2, 6.1, 6.1, 6.0, 6.0, 5.9, 6.2, 5.9, 5.9, 5.4, 5.2, 5.2, 4.8, 5.2, 5.2, 5.0, 4.8, 5.1, 4.9, 5.5, 6.3, 5.9, 6.1, 5.1, 4.8, 4.5, 4.3, 4.3, 4.6, 4.6, 4.7, 4.9, 4.9, 5.9, 5.8, 6.1, 6.4, 6.5, 6.3, 6.3, 6.5, 6.4, 7.0]}, "DE": {"labels": ["2009-Q1", "2009-Q2", "2009-Q3", "2009-Q4", "2010-Q1", "2010-Q2", "2010-Q3", "2010-Q4", "2011-Q1", "2011-Q2", "2011-Q3", "2011-Q4", "2012-Q1", "2012-Q2", "2012-Q3", "2012-Q4", "2013-Q1", "2013-Q2", "2013-Q3", "2013-Q4", "2014-Q1", "2014-Q2", "2014-Q3", "2014-Q4", "2015-Q1", "2015-Q2", "2015-Q3", "2015-Q4", "2016-Q1", "2016-Q2", "2016-Q3", "2016-Q4", "2017-Q1", "2017-Q2", "2017-Q3", "2017-Q4", "2018-Q1", "2018-Q2", "2018-Q3", "2018-Q4", "2019-Q1", "2019-Q2", "2019-Q3", "2019-Q4", "2020-Q1", "2020-Q2", "2020-Q3", "2020-Q4", "2021-Q1", "2021-Q2", "2021-Q3", "2021-Q4", "2022-Q1", "2022-Q2", "2022-Q3", "2022-Q4", "2023-Q1", "2023-Q2", "2023-Q3", "2023-Q4", "2024-Q1", "2024-Q2", "2024-Q3", "2024-Q4", "2025-Q1", "2025-Q2", "2025-Q3", "2025-Q4", "2026-Q1"], "values": [7.3, 7.4, 7.5, 7.1, 7.1, 6.6, 6.3, 6.3, 5.9, 5.5, 5.4, 5.2, 5.2, 5.1, 5.1, 5.0, 5.1, 5.0, 4.8, 4.8, 4.8, 4.7, 4.6, 4.6, 4.5, 4.4, 4.2, 4.3, 4.1, 4.0, 3.8, 3.7, 3.7, 3.6, 3.5, 3.4, 3.2, 3.3, 3.1, 3.1, 3.0, 2.9, 2.9, 3.0, 3.3, 3.6, 3.9, 3.7, 3.9, 3.7, 3.4, 3.4, 3.1, 3.1, 3.2, 3.1, 3.0, 3.0, 3.1, 3.2, 3.3, 3.4, 3.5, 3.5, 3.7, 3.9, 4.0, 3.9, 3.8]}, "SE": {"labels": ["2005-Q1", "2005-Q2", "2005-Q3", "2005-Q4", "2006-Q1", "2006-Q2", "2006-Q3", "2006-Q4", "2007-Q1", "2007-Q2", "2007-Q3", "2007-Q4", "2008-Q1", "2008-Q2", "2008-Q3", "2008-Q4", "2009-Q1", "2009-Q2", "2009-Q3", "2009-Q4", "2010-Q1", "2010-Q2", "2010-Q3", "2010-Q4", "2011-Q1", "2011-Q2", "2011-Q3", "2011-Q4", "2012-Q1", "2012-Q2", "2012-Q3", "2012-Q4", "2013-Q1", "2013-Q2", "2013-Q3", "2013-Q4", "2014-Q1", "2014-Q2", "2014-Q3", "2014-Q4", "2015-Q1", "2015-Q2", "2015-Q3", "2015-Q4", "2016-Q1", "2016-Q2", "2016-Q3", "2016-Q4", "2017-Q1", "2017-Q2", "2017-Q3", "2017-Q4", "2018-Q1", "2018-Q2", "2018-Q3", "2018-Q4", "2019-Q1", "2019-Q2", "2019-Q3", "2019-Q4", "2020-Q1", "2020-Q2", "2020-Q3", "2020-Q4", "2021-Q1", "2021-Q2", "2021-Q3", "2021-Q4", "2022-Q1", "2022-Q2", "2022-Q3", "2022-Q4", "2023-Q1", "2023-Q2", "2023-Q3", "2023-Q4", "2024-Q1", "2024-Q2", "2024-Q3", "2024-Q4", "2025-Q1", "2025-Q2", "2025-Q3", "2025-Q4", "2026-Q1"], "values": [7.9, 8.0, 8.0, 7.8, 7.6, 7.4, 7.0, 6.7, 6.5, 6.2, 6.2, 6.1, 6.0, 6.1, 6.3, 6.8, 7.6, 8.4, 8.9, 9.1, 9.1, 8.8, 8.7, 8.3, 8.0, 7.9, 7.8, 8.0, 7.8, 7.9, 8.2, 8.4, 8.2, 8.1, 8.1, 8.2, 8.2, 8.0, 7.9, 8.0, 7.9, 7.7, 7.2, 7.2, 7.3, 7.0, 7.0, 7.0, 6.8, 6.8, 6.8, 6.7, 6.3, 6.4, 6.6, 6.5, 6.9, 6.6, 7.1, 7.0, 7.3, 8.6, 9.4, 8.8, 9.2, 9.2, 8.9, 8.2, 7.7, 7.8, 7.1, 7.4, 7.4, 7.6, 7.8, 8.0, 8.3, 8.3, 8.5, 8.4, 8.8, 8.6, 8.8, 9.1, 8.6]}, "EU27_2020": {"labels": ["2009-Q1", "2009-Q2", "2009-Q3", "2009-Q4", "2010-Q1", "2010-Q2", "2010-Q3", "2010-Q4", "2011-Q1", "2011-Q2", "2011-Q3", "2011-Q4", "2012-Q1", "2012-Q2", "2012-Q3", "2012-Q4", "2013-Q1", "2013-Q2", "2013-Q3", "2013-Q4", "2014-Q1", "2014-Q2", "2014-Q3", "2014-Q4", "2015-Q1", "2015-Q2", "2015-Q3", "2015-Q4", "2016-Q1", "2016-Q2", "2016-Q3", "2016-Q4", "2017-Q1", "2017-Q2", "2017-Q3", "2017-Q4", "2018-Q1", "2018-Q2", "2018-Q3", "2018-Q4", "2019-Q1", "2019-Q2", "2019-Q3", "2019-Q4", "2020-Q1", "2020-Q2", "2020-Q3", "2020-Q4", "2021-Q1", "2021-Q2", "2021-Q3", "2021-Q4", "2022-Q1", "2022-Q2", "2022-Q3", "2022-Q4", "2023-Q1", "2023-Q2", "2023-Q3", "2023-Q4", "2024-Q1", "2024-Q2", "2024-Q3", "2024-Q4", "2025-Q1", "2025-Q2", "2025-Q3", "2025-Q4", "2026-Q1"], "values": [8.8, 9.3, 9.6, 9.8, 10.1, 10.1, 10.0, 10.0, 9.9, 9.9, 10.1, 10.4, 10.7, 11.0, 11.2, 11.4, 11.7, 11.7, 11.5, 11.4, 11.4, 11.0, 10.9, 10.8, 10.6, 10.3, 10.0, 9.9, 9.6, 9.4, 9.1, 8.9, 8.7, 8.3, 8.2, 7.9, 7.7, 7.5, 7.2, 7.2, 7.0, 6.8, 6.8, 6.7, 6.6, 7.0, 7.9, 7.5, 7.5, 7.3, 6.9, 6.5, 6.2, 6.2, 6.2, 6.1, 6.1, 6.0, 6.1, 6.1, 6.1, 6.0, 6.0, 5.9, 6.0, 6.0, 6.1, 6.0, 6.0]}},
+    euro_bar_labels: ["BG", "PL", "CZ", "MT", "CY", "DE", "NL", "SI", "HU", "NO", "IE", "IT", "CH", "HR", "AT", "SK", "PT", "EU27_2020", "EA20", "EA21", "BE", "RO", "LV", "EE", "DK", "LU", "LT", "FR", "TR", "SE", "RS", "EL", "ES", "FI", "BA", "MK"],
+    euro_bar_values: [3.0, 3.0, 3.1, 3.5, 3.7, 3.8, 4.0, 4.0, 4.6, 4.7, 4.9, 4.9, 5.0, 5.1, 5.8, 5.8, 5.9, 6.0, 6.3, 6.3, 6.4, 6.4, 6.8, 6.9, 7.0, 7.2, 7.3, 8.1, 8.2, 8.6, 8.7, 9.5, 10.3, 10.4, 11.3, 11.4]
+  };
+  const charts = {};
+  const GREEN='#6B9E78', DARK_GREEN='#3d6b47', ORANGE='#E07A40', BLUE='#4A90C4', PURPLE='#9B59B6';
+  const countryNames = {'AT':'Østrig','BA':'Bosnien-Hercegovina','BE':'Belgien','BG':'Bulgarien','CH':'Schweiz','CY':'Cypern','CZ':'Tjekkiet','DE':'Tyskland','DK':'Danmark','EA20':'Eurozonen (20)','EA21':'Eurozonen (21)','EE':'Estland','EL':'Grækenland','ES':'Spanien','EU27_2020':'EU-27','FI':'Finland','FR':'Frankrig','HR':'Kroatien','HU':'Ungarn','IE':'Irland','IS':'Island','IT':'Italien','LT':'Litauen','LU':'Luxembourg','LV':'Letland','ME':'Montenegro','MK':'Nordmakedonien','MT':'Malta','NL':'Holland','NO':'Norge','PL':'Polen','PT':'Portugal','RO':'Rumænien','RS':'Serbien','SE':'Sverige','SI':'Slovenien','SK':'Slovakiet','TR':'Tyrkiet'};
+  const MDR = ['jan','feb','mar','apr','maj','jun','jul','aug','sep','okt','nov','dec'];
+
+  function fmtLabel(lbl) {
+    if (!lbl) return lbl;
+    let m = String(lbl).match(/^(\d{4})M(\d{2})$/);
+    if (m) return MDR[parseInt(m[2],10)-1] + ' ' + m[1].slice(2);
+    m = String(lbl).match(/^(\d{4})-(\d{2})$/);
+    if (m) return MDR[parseInt(m[2],10)-1] + ' ' + m[1].slice(2);
+    return lbl;
+  }
+  function fmtNum(v) {
+    if (v === null || v === undefined) return '';
+    return v.toLocaleString('da-DK');
+  }
+  function slice(arr, n) { return n > 0 ? arr.slice(-n) : arr.slice(); }
+
+  function xAxis() {
+    return {
+      ticks: {
+        font: { size: 12 }, maxRotation: 45,
+        autoSkip: true,
+        maxTicksLimit: 10,
+        callback: function(val, idx) {
+          return fmtLabel(this.getLabelForValue(val));
+        }
+      },
+      grid: { color: '#E8EBE8' }
+    };
+  }
+  function yAxis(min) {
+    const ax = {
+      ticks: { font: { size: 12 }, callback: v => fmtNum(v) },
+      grid: { color: '#E8EBE8' }
+    };
+    if (min !== undefined) ax.min = min;
+    return ax;
+  }
+  function makeOpts(ymin) {
+    return {
+      responsive: true, maintainAspectRatio: false,
+      interaction: { mode: 'index', intersect: false },
+      plugins: {
+        legend: { display: true, labels: { font: { size: 12 }, boxWidth: 14 } },
+        tooltip: {
+          callbacks: {
+            title: ctx => fmtLabel(ctx[0].label),
+            label: ctx => ctx.dataset.label + ': ' + fmtNum(ctx.parsed.y)
+          }
+        }
+      },
+      scales: { x: xAxis(), y: yAxis(ymin) }
+    };
+  }
+  function ds(label, data, color, fill) {
+    return {
+      label, data,
+      borderColor: color, backgroundColor: fill ? color + '22' : color,
+      pointRadius: 2, pointBackgroundColor: color,
+      borderWidth: 2, tension: 0.15, fill: !!fill
+    };
+  }
+  function line(id, labels, datasets, ymin) {
+    if (charts[id]) charts[id].destroy();
+    charts[id] = new Chart(document.getElementById(id), {
+      type: 'line', data: { labels, datasets }, options: makeOpts(ymin)
+    });
+  }
+  function barChart(id, labels, datasets) {
+    if (charts[id]) charts[id].destroy();
+    charts[id] = new Chart(document.getElementById(id), {
+      type: 'bar', data: { labels, datasets }, options: makeOpts(0)
+    });
+  }
+  function hbarChart(id, labels, datasets) {
+    if (charts[id]) charts[id].destroy();
+    charts[id] = new Chart(document.getElementById(id), {
+      type: 'bar',
+      data: { labels, datasets },
+      options: {
+        responsive: true, maintainAspectRatio: false,
+        indexAxis: 'y',
+        plugins: {
+          legend: { display: false },
+          tooltip: { callbacks: { title: ctx => ctx[0].label, label: ctx => (''+ctx.parsed.x).replace('.', ',') + '%' } }
+        },
+        scales: {
+          x: { ticks: { font: {size:12}, callback: v => (''+v).replace('.', ',') + '%' }, grid: { color: '#E8EBE8' } },
+          y: { ticks: { autoSkip: false, font: {size:10} }, grid: { color: '#E8EBE8' } }
+        }
+      }
+    });
+  }
+
+  function drawAll(n) {
+    const nq = n > 0 ? Math.ceil(n / 3) : 0;
+
+    line('c_brutto', slice(DATA.led_labels, n), [
+      ds('Faktisk', slice(DATA.brutto, n), ORANGE, false),
+      ds('Sæsonkorrigeret', slice(DATA.brutto_sk, n), GREEN, true)
+    ], undefined);
+
+    line('c_pct', slice(DATA.led_labels, n), [
+      ds('Pct. af arbejdsstyrken', slice(DATA.pct_sk, n), GREEN, true)
+    ], 0);
+
+    line('c_ydelse', slice(DATA.led_labels, n), [
+      ds('A-dagpenge', slice(DATA.dp_sk, n), GREEN, true),
+      ds('Kontanthjælp', slice(DATA.kh_sk, n), ORANGE, false)
+    ], 0);
+
+    line('c_lang', slice(DATA.lang_labels, n), [
+      ds('I alt', slice(DATA.lang_ialt, n), DARK_GREEN, false),
+      ds('A-dagpenge', slice(DATA.lang_dp, n), GREEN, true),
+      ds('Kontanthjælp', slice(DATA.lang_kh, n), ORANGE, false)
+    ], 0);
+
+    barChart('c_stil', slice(DATA.stil_labels, n), [
+      { label: 'Nyopslåede stillinger', data: slice(DATA.stil_ny, n),
+         backgroundColor: GREEN, borderColor: DARK_GREEN, borderWidth: 1 }
+    ]);
+
+    line('c_lon', slice(DATA.lon_labels, n), [
+      ds('Lønmodtagere i alt', slice(DATA.lon_total, n), GREEN, true)
+    ], undefined);
+
+    barChart('c_var', slice(DATA.var_labels, n), [
+      { label: 'Varslede personer', data: slice(DATA.var_pers, n),
+         backgroundColor: ORANGE, borderColor: '#b85f2c', borderWidth: 1 }
+    ]);
+
+    (function() {
+      const id = 'c_konk';
+      if (charts[id]) charts[id].destroy();
+      const labels = slice(DATA.konk_labels, n);
+      charts[id] = new Chart(document.getElementById(id), {
+        type: 'line',
+        data: {
+          labels,
+          datasets: [
+            Object.assign(ds('Konkurser (sæsonkorr.)', slice(DATA.konk_sk, n), GREEN, true), { yAxisID: 'y' }),
+            Object.assign(ds('Tabte job', slice(DATA.konk_job, n), ORANGE, false), { yAxisID: 'y2' })
+          ]
+        },
+        options: {
+          responsive: true, maintainAspectRatio: false,
+          interaction: { mode: 'index', intersect: false },
+          plugins: {
+            legend: { display: true, labels: { font: { size: 12 }, boxWidth: 14 } },
+            tooltip: { callbacks: {
+              title: ctx => fmtLabel(ctx[0].label),
+              label: ctx => ctx.dataset.label + ': ' + fmtNum(ctx.parsed.y)
+            } }
+          },
+          scales: {
+            x: xAxis(),
+            y: Object.assign(yAxis(undefined), { title: { display: true, text: 'Konkurser' } }),
+            y2: {
+              position: 'right',
+              ticks: { font: { size: 12 }, callback: v => fmtNum(v) },
+              grid: { drawOnChartArea: false },
+              title: { display: true, text: 'Tabte job' }
+            }
+          }
+        }
+      });
+    })();
+
+    line('c_ft', slice(DATA.ft_labels, n), [
+      ds('Forbrugertillidsindikatoren', slice(DATA.ft_dk, n), GREEN, true)
+    ], undefined);
+
+    line('c_et', slice(DATA.et_labels, n), [
+      ds('Erhvervstillidsindikator', slice(DATA.et_dk, n), GREEN, true)
+    ], undefined);
+
+    line('c_inf', slice(DATA.inf_labels, n), [
+      ds('Samlet inflation', slice(DATA.inf_total, n), GREEN, true),
+      ds('Kerneinflation', slice(DATA.inf_kerne, n), ORANGE, false)
+    ], undefined);
+
+    line('c_euro_ts', slice(DATA.euro_ts.DK.labels, nq), [
+      ds('Danmark', slice(DATA.euro_ts.DK.values, nq), GREEN, true),
+      ds('Tyskland', slice(DATA.euro_ts.DE.values, nq), ORANGE, false),
+      ds('Sverige', slice(DATA.euro_ts.SE.values, nq), BLUE, false),
+      ds('EU-27', slice(DATA.euro_ts.EU27_2020.values, nq), PURPLE, false)
+    ], 0);
+
+    hbarChart('c_euro_bar',
+      DATA.euro_bar_labels.map(c => c === 'DK' ? '🇩🇰 Danmark' : (countryNames[c] || c)),
+      [{
+        label: 'Ledighed',
+        data: DATA.euro_bar_values,
+        backgroundColor: DATA.euro_bar_labels.map(c => c === 'DK' ? DARK_GREEN : GREEN),
+        borderColor: DATA.euro_bar_labels.map(c => c === 'DK' ? '#26482f' : DARK_GREEN),
+        borderWidth: 1
+      }]
+    );
+
+    line('c_fteu', slice(DATA.fteu_labels, n), [
+      ds('Danmark', slice(DATA.fteu_DK, n), GREEN, true),
+      ds('Tyskland', slice(DATA.fteu_DE, n), ORANGE, false),
+      ds('Frankrig', slice(DATA.fteu_FR, n), BLUE, false),
+      ds('Sverige', slice(DATA.fteu_SE, n), PURPLE, false),
+      ds('EU-27', slice(DATA.fteu_EU, n), '#8a9aa2', false)
+    ], undefined);
+  }
+
+  window.setPeriod = function(n, btn) {
+    document.querySelectorAll('#dak-dashboard .period-btns button').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    drawAll(n);
+  };
+
+  drawAll(36);
+})();
+</script>
+</body>
+</html>
