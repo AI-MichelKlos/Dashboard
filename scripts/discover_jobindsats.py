@@ -20,6 +20,24 @@ KEYWORDS = {
     "long_term_unemployment": [r"langtidsledig"],
     "notices": [r"varsl", r"afskedig"],
 }
+PROBE_QUERIES = {
+    "unemployment": (
+        "data/y25i03?mgroup.*=*&period.M=latest:14"
+        "&hierarchy._hele_landet=/&hierarchy._ygrpi09=/&format=json"
+    ),
+    "vacancies": (
+        "data/y25i07?mgroup.*=*&period.M=latest:14"
+        "&hierarchy._nykom=/&format=json"
+    ),
+    "long_term_unemployment": (
+        "data/y25i09?mgroup.*=*&period.M=latest:14"
+        "&hierarchy._nykom=/&hierarchy._ygrpi09=/&format=json"
+    ),
+    "notices": (
+        "data/y25i05?mgroup.*=*&period.M=latest:14"
+        "&hierarchy._nykom=/&format=json"
+    ),
+}
 
 
 def api_get(path: str):
@@ -68,6 +86,21 @@ def table_title(item: dict) -> str:
     return first_text(item, ("table_name", "tableName", "name", "title", "text"))
 
 
+def schema(value, depth=0):
+    """Describe response structure without printing data values."""
+    if depth >= 5:
+        return type(value).__name__
+    if isinstance(value, dict):
+        return {key: schema(child, depth + 1) for key, child in value.items()}
+    if isinstance(value, list):
+        return {
+            "type": "list",
+            "length": len(value),
+            "item": schema(value[0], depth + 1) if value else None,
+        }
+    return type(value).__name__
+
+
 def main():
     catalog = api_get("tables?format=json")
     candidates = {}
@@ -104,6 +137,10 @@ def main():
     }
     OUTPUT.parent.mkdir(parents=True, exist_ok=True)
     OUTPUT.write_text(json.dumps(payload, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    for name, path in PROBE_QUERIES.items():
+        response = api_get(path)
+        print(f"SCHEMA {name}:")
+        print(json.dumps(schema(response), ensure_ascii=False, indent=2))
     print(f"Fandt {len(candidates)} relevante Jobindsats-kandidater")
 
 
