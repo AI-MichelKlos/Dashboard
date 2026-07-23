@@ -17,7 +17,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 15
     env:
-      JOBINDSATS_API_TOKEN: ${{ secrets['API-adgang'] }}
+      JOBINDSATS_API_TOKEN: ${{ secrets.API_ADGANG }}
     steps:
       - uses: actions/checkout@v4
         with:
@@ -30,7 +30,7 @@ jobs:
       - name: Verify secret configuration
         run: |
           if [ -z "$JOBINDSATS_API_TOKEN" ]; then
-            echo "Secretet API-adgang mangler eller er tomt."
+            echo "Secretet API_ADGANG mangler eller er tomt."
             exit 1
           fi
 
