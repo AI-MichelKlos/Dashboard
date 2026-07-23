@@ -139,6 +139,7 @@ def main():
     OUTPUT.write_text(json.dumps(payload, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     for name, path in PROBE_QUERIES.items():
         response = api_get(path)
+        print(f"COLUMNS {name}: {response.get('columns', [])}")
         print(f"SCHEMA {name}:")
         print(json.dumps(schema(response), ensure_ascii=False, indent=2))
     print(f"Fandt {len(candidates)} relevante Jobindsats-kandidater")
