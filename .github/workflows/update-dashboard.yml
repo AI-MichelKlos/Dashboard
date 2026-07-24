@@ -10,7 +10,8 @@ on:
       - "data/dashboard-data.json"
       - ".github/workflows/update-dashboard.yml"
   schedule:
-    - cron: "15 9 * * *"\n      timezone: "Europe/Copenhagen"
+    - cron: "15 9 * * *"
+      timezone: "Europe/Copenhagen"
 
 permissions:
   contents: write
