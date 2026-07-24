@@ -1,0 +1,54 @@
+name: Opdater arbejdsmarkedsdashboard
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - agent/automate-dashboard
+    paths:
+      - "scripts/build_dashboard.py"
+      - "data/dashboard-data.json"
+      - ".github/workflows/update-dashboard.yml"
+  schedule:
+    - cron: "20 5 * * 1-5"
+
+permissions:
+  contents: write
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      JOBINDSATS_API_TOKEN: ${{ secrets.API_ADGANG }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Verify secret configuration
+        run: |
+          if [ -z "$JOBINDSATS_API_TOKEN" ]; then
+            echo "Secretet API_ADGANG mangler eller er tomt."
+            exit 1
+          fi
+
+      - name: Install dependencies
+        run: python -m pip install pandas openpyxl
+
+      - name: Fetch official data and build dashboard
+        run: python scripts/build_dashboard.py
+
+      - name: Save updated dashboard
+        run: |
+          git add index.html data/dashboard-data.json
+          if git diff --cached --quiet; then
+            echo "Ingen nye tal."
+            exit 0
+          fi
+          git config user.name "Dashboard automation"
+          git config user.email "dashboard-automation@users.noreply.github.com"
+          git commit -m "Opdater dashboarddata"
+          git push
