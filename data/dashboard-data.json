@@ -1,8 +1,8 @@
 {
   "meta": {
-    "updated": "29. juli 2026",
+    "updated": "30. juli 2026",
     "sourceFile": "Samlet overblik.xlsx",
-    "retrievedAt": "2026-07-29",
+    "retrievedAt": "2026-07-30",
     "sourceRegister": {
       "unemployment": {
         "source": "Jobindsats API v3",
