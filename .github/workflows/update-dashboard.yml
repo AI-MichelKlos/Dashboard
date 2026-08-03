@@ -1,9 +1,11 @@
 name: Opdater arbejdsmarkedsdashboard
+run-name: "Arbejdsmarkedsdashboard – ${{ github.event_name }}"
 
 on:
   workflow_dispatch:
   push:
     branches:
+      - main
       - agent/automate-dashboard
     paths:
       - "scripts/build_dashboard.py"
