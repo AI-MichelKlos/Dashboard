@@ -12,8 +12,8 @@ on:
       - "data/dashboard-data.json"
       - ".github/workflows/update-dashboard.yml"
   schedule:
-    - cron: "15 9 * * 1-5"
-      timezone: "Europe/Copenhagen"
+    - cron: "15 7 * * 1-5"
+    - cron: "15 8 * * 1-5"
 
 permissions:
   contents: write
@@ -25,13 +25,36 @@ jobs:
     env:
       JOBINDSATS_API_TOKEN: ${{ secrets.API_ADGANG }}
     steps:
+      - name: Afgør om den planlagte kørsel skal fortsætte
+        id: localtime
+        shell: bash
+        run: |
+          if [ "${{ github.event_name }}" != "schedule" ]; then
+            echo "should_run=true" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+
+          local_time="$(TZ=Europe/Copenhagen date +'%Y-%m-%d %H:%M %Z')"
+          local_hour="$(TZ=Europe/Copenhagen date +'%H')"
+          echo "Lokal tid i København: $local_time"
+
+          if [ "$local_hour" = "09" ]; then
+            echo "should_run=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "should_run=false" >> "$GITHUB_OUTPUT"
+            echo "Springer over: den anden UTC-plan rammer ikke kl. 09 dansk tid."
+          fi
+
       - uses: actions/checkout@v4
+        if: steps.localtime.outputs.should_run == 'true'
 
       - uses: actions/setup-python@v5
+        if: steps.localtime.outputs.should_run == 'true'
         with:
           python-version: "3.12"
 
       - name: Verify secret configuration
+        if: steps.localtime.outputs.should_run == 'true'
         run: |
           if [ -z "$JOBINDSATS_API_TOKEN" ]; then
             echo "Secretet API_ADGANG mangler eller er tomt."
@@ -39,12 +62,15 @@ jobs:
           fi
 
       - name: Install dependencies
+        if: steps.localtime.outputs.should_run == 'true'
         run: python -m pip install pandas openpyxl
 
       - name: Fetch official data and build dashboard
+        if: steps.localtime.outputs.should_run == 'true'
         run: python scripts/build_dashboard.py
 
       - name: Save updated dashboard
+        if: steps.localtime.outputs.should_run == 'true'
         run: |
           git add index.html data/dashboard-data.json
           if git diff --cached --quiet; then
