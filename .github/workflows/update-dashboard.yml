@@ -1,5 +1,5 @@
 name: Opdater arbejdsmarkedsdashboard
-run-name: "Arbejdsmarkedsdashboard – ${{ github.event_name }}"
+run-name: "Arbejdsmarkedsdashboard - ${{ github.event_name }}"
 
 on:
   workflow_dispatch:
@@ -34,15 +34,17 @@ jobs:
             exit 0
           fi
 
-          local_time="$(TZ=Europe/Copenhagen date +'%Y-%m-%d %H:%M %Z')"
-          local_hour="$(TZ=Europe/Copenhagen date +'%H')"
-          echo "Lokal tid i København: $local_time"
+          utc_offset="$(TZ=Europe/Copenhagen date +'%z')"
+          scheduled_cron="${{ github.event.schedule }}"
+          echo "Planlagt cron: $scheduled_cron"
+          echo "Aktuel UTC-forskydning for København: $utc_offset"
 
-          if [ "$local_hour" = "09" ]; then
+          if { [ "$scheduled_cron" = "15 7 * * 1-5" ] && [ "$utc_offset" = "+0200" ]; } || \
+             { [ "$scheduled_cron" = "15 8 * * 1-5" ] && [ "$utc_offset" = "+0100" ]; }; then
             echo "should_run=true" >> "$GITHUB_OUTPUT"
           else
             echo "should_run=false" >> "$GITHUB_OUTPUT"
-            echo "Springer over: den anden UTC-plan rammer ikke kl. 09 dansk tid."
+            echo "Springer over: denne cron svarer ikke til kl. 09 dansk tid."
           fi
 
       - uses: actions/checkout@v4
