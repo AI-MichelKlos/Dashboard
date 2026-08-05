@@ -1,5 +1,4 @@
 name: Opdater arbejdsmarkedsdashboard
-# Manuel kontrolkørsel udløst 4. august 2026
 run-name: "Arbejdsmarkedsdashboard – ${{ github.event_name }}"
 
 on:
@@ -22,7 +21,7 @@ permissions:
 jobs:
   update:
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    timeout-minutes: 25
     env:
       JOBINDSATS_API_TOKEN: ${{ secrets.API_ADGANG }}
     steps:
@@ -68,7 +67,21 @@ jobs:
 
       - name: Fetch official data and build dashboard
         if: steps.localtime.outputs.should_run == 'true'
-        run: python scripts/build_dashboard.py
+        shell: bash
+        run: |
+          for attempt in 1 2 3; do
+            echo "Forsøg $attempt af 3"
+            if python scripts/build_dashboard.py; then
+              exit 0
+            fi
+            if [ "$attempt" -lt 3 ]; then
+              pause=$((attempt * 45))
+              echo "Opdateringen fejlede. Prøver igen om $pause sekunder."
+              sleep "$pause"
+            fi
+          done
+          echo "Alle tre forsøg fejlede."
+          exit 1
 
       - name: Save updated dashboard
         if: steps.localtime.outputs.should_run == 'true'
