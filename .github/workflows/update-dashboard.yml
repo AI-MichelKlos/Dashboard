@@ -13,8 +13,8 @@ on:
       - "data/dashboard-data.json"
       - ".github/workflows/update-dashboard.yml"
   schedule:
-    - cron: "15 7 * * 1-5"
-    - cron: "15 8 * * 1-5"
+    - cron: "15 7 * * *"
+    - cron: "15 8 * * *"
 
 permissions:
   contents: write
@@ -40,8 +40,8 @@ jobs:
           echo "Planlagt cron: $scheduled_cron"
           echo "Aktuel UTC-forskydning for København: $utc_offset"
 
-          if { [ "$scheduled_cron" = "15 7 * * 1-5" ] && [ "$utc_offset" = "+0200" ]; } || \
-             { [ "$scheduled_cron" = "15 8 * * 1-5" ] && [ "$utc_offset" = "+0100" ]; }; then
+          if { [ "$scheduled_cron" = "15 7 * * *" ] && [ "$utc_offset" = "+0200" ]; } || \
+             { [ "$scheduled_cron" = "15 8 * * *" ] && [ "$utc_offset" = "+0100" ]; }; then
             echo "should_run=true" >> "$GITHUB_OUTPUT"
           else
             echo "should_run=false" >> "$GITHUB_OUTPUT"
