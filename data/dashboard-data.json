@@ -1,8 +1,8 @@
 {
   "meta": {
-    "updated": "31. juli 2026",
+    "updated": "5. august 2026",
     "sourceFile": "Samlet overblik.xlsx",
-    "retrievedAt": "2026-07-31",
+    "retrievedAt": "2026-08-05",
     "sourceRegister": {
       "unemployment": {
         "source": "Jobindsats API v3",
@@ -97,6 +97,7 @@
       "jobindsats": {
         "source": "Jobindsats",
         "version": "v3",
+        "periodsFetchedPerRun": 24,
         "tables": {
           "unemployment": "y25i03",
           "vacancies": "y25i07",
@@ -110,6 +111,20 @@
           "Kontanthjælp": "/3/"
         }
       }
+    },
+    "updateStatus": {
+      "state": "ok",
+      "successful": [
+        "Bruttoledighed i alt",
+        "A-dagpenge",
+        "Kontanthjælp",
+        "Nyopslåede stillinger",
+        "Langtidsledige i alt",
+        "Langtidsledige på A-dagpenge",
+        "Langtidsledige på kontanthjælp",
+        "Varslede afskedigelser"
+      ],
+      "failed": []
     }
   },
   "unemployment": {
