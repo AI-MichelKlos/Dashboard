@@ -113,7 +113,25 @@
       }
     },
     "updateStatus": {
-      "state": "ok",
+      "state": "partial",
+      "successful": [
+        "Bruttoledighed i alt",
+        "A-dagpenge",
+        "Kontanthjælp",
+        "Nyopslåede stillinger",
+        "Langtidsledige i alt",
+        "Langtidsledige på A-dagpenge",
+        "Langtidsledige på kontanthjælp",
+        "Varslede afskedigelser"
+      ],
+      "failed": [
+        "Danmarks Statistik - lønmodtagere (LBESK104): Statistikbanken svarede ikke med forventet JSON-stat-struktur",
+        "Danmarks Statistik - konkurser (KONK3): Statistikbanken svarede ikke med forventet JSON-stat-struktur",
+        "Danmarks Statistik - forbrugertillid (FORV1): Statistikbanken svarede ikke med forventet JSON-stat-struktur"
+      ],
+      "checkedAt": "2026-08-06T12:50:55+02:00"
+    },
+    "jobindsatsUpdateStatus": {
       "successful": [
         "Bruttoledighed i alt",
         "A-dagpenge",
