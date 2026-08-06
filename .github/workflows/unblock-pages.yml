@@ -20,6 +20,7 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
+          # Engangskørsel for den fastlåste Pages-deployment fra 6. august 2026.
           response_file="$(mktemp)"
           status_code="$(curl -sS -L \
             -o "$response_file" \
