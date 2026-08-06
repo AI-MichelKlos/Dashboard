@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Robust entrypoint for updating the labour-market dashboard."""
+"""Robust daily update of the labour-market dashboard."""
 from __future__ import annotations
 
 import json
@@ -22,13 +22,22 @@ STATBANK_API_URL = "https://api.statbank.dk/v1/data"
 
 
 def compact_period_request(path: str) -> str:
-    """Fetch only recent periods; merge_series keeps the local history."""
     return re.sub(
         r"period\.M=latest:\d+",
         f"period.M=latest:{MONTH_LIMIT}",
         path,
         count=1,
     )
+
+
+def retry_pause(attempt: int, label: str, error: Exception) -> None:
+    pause = attempt * 15
+    print(
+        f"{label} fejlede, forsøg {attempt} af {MAX_ATTEMPTS}. "
+        f"Prøver igen om {pause} sekunder: {error}",
+        flush=True,
+    )
+    time.sleep(pause)
 
 
 def robust_jobindsats_get(path: str):
@@ -42,10 +51,9 @@ def robust_jobindsats_get(path: str):
         headers={
             "Accept": "application/json",
             "Authorization": f"Bearer {token}",
-            "User-Agent": "Danske-A-kasser-dashboard/3.0",
+            "User-Agent": "Danske-A-kasser-dashboard/3.1",
         },
     )
-
     last_error: Exception | None = None
     for attempt in range(1, MAX_ATTEMPTS + 1):
         try:
@@ -61,21 +69,15 @@ def robust_jobindsats_get(path: str):
             last_error = exc
 
         if attempt < MAX_ATTEMPTS:
-            pause = attempt * 15
-            print(
-                f"Jobindsats-kald fejlede, forsøg {attempt} af {MAX_ATTEMPTS}. "
-                f"Prøver igen om {pause} sekunder: {request_path}",
-                flush=True,
-            )
-            time.sleep(pause)
+            retry_pause(attempt, "Jobindsats-kaldet", last_error)
 
     raise RuntimeError(
-        f"Jobindsats-kald fejlede efter {MAX_ATTEMPTS} forsøg: {request_path}: {last_error}"
+        f"Jobindsats-kaldet fejlede efter {MAX_ATTEMPTS} forsøg: "
+        f"{request_path}: {last_error}"
     ) from last_error
 
 
 def statbank_get(table: str, variables: dict[str, list[str]]):
-    """Fetch a complete official Statbank extract as JSON-stat."""
     body = {
         "table": table,
         "format": "JSONSTAT",
@@ -91,11 +93,10 @@ def statbank_get(table: str, variables: dict[str, list[str]]):
         headers={
             "Accept": "application/json",
             "Content-Type": "application/json; charset=utf-8",
-            "User-Agent": "Danske-A-kasser-dashboard/3.0",
+            "User-Agent": "Danske-A-kasser-dashboard/3.1",
         },
         method="POST",
     )
-
     last_error: Exception | None = None
     for attempt in range(1, MAX_ATTEMPTS + 1):
         try:
@@ -113,16 +114,11 @@ def statbank_get(table: str, variables: dict[str, list[str]]):
             last_error = exc
 
         if attempt < MAX_ATTEMPTS:
-            pause = attempt * 15
-            print(
-                f"Statistikbank-kald til {table} fejlede, forsøg {attempt} af "
-                f"{MAX_ATTEMPTS}. Prøver igen om {pause} sekunder: {last_error}",
-                flush=True,
-            )
-            time.sleep(pause)
+            retry_pause(attempt, f"Statistikbank-kaldet til {table}", last_error)
 
     raise RuntimeError(
-        f"Statistikbank-kald til {table} fejlede efter {MAX_ATTEMPTS} forsøg: {last_error}"
+        f"Statistikbank-kaldet til {table} fejlede efter {MAX_ATTEMPTS} forsøg: "
+        f"{last_error}"
     ) from last_error
 
 
@@ -138,7 +134,7 @@ def category_positions(category: dict) -> dict[str, int]:
     raise RuntimeError("JSON-stat-kategorien mangler et anvendeligt indeks")
 
 
-def jsonstat_value(values, index: int):
+def jsonstat_number(values, index: int):
     if isinstance(values, list):
         value = values[index] if index < len(values) else None
     elif isinstance(values, dict):
@@ -162,14 +158,27 @@ def jsonstat_value(values, index: int):
 
 
 def jsonstat_series(payload, dimension: str, selections: list[str]):
-    """Convert selected JSON-stat series into aligned period lists."""
+    """Return selected series from both JSON-stat 1 and JSON-stat 2 layouts."""
+    if not isinstance(payload, dict):
+        raise RuntimeError(f"Uventet JSON-stat-svartype: {type(payload).__name__}")
+
     dataset = payload.get("dataset", payload)
     dimensions = dataset.get("dimension")
-    ids = dataset.get("id")
-    sizes = dataset.get("size")
+    if not isinstance(dimensions, dict):
+        raise RuntimeError(
+            f"JSON-stat-svaret mangler dimension. Nøgler: {sorted(dataset)[:20]}"
+        )
+
+    # Statistikbankens JSONSTAT-format placerer id og size under dimension,
+    # mens JSON-stat 2 normalt placerer dem på datasættets øverste niveau.
+    ids = dataset.get("id") or dimensions.get("id")
+    sizes = dataset.get("size") or dimensions.get("size")
     values = dataset.get("value")
-    if not isinstance(dimensions, dict) or not isinstance(ids, list) or not isinstance(sizes, list):
-        raise RuntimeError("Statistikbanken svarede ikke med forventet JSON-stat-struktur")
+    if not isinstance(ids, list) or not isinstance(sizes, list):
+        raise RuntimeError(
+            f"JSON-stat-svaret mangler id/size. Dataset-nøgler: {sorted(dataset)[:20]}; "
+            f"dimension-nøgler: {sorted(dimensions)[:20]}"
+        )
 
     time_dimension = next((item for item in ids if str(item).lower() == "tid"), None)
     selected_dimension = next(
@@ -195,8 +204,8 @@ def jsonstat_series(payload, dimension: str, selections: list[str]):
     for selection in selections:
         if selection not in selection_positions:
             raise RuntimeError(
-                f"Statistikbanken returnerede ikke den valgte kode {selection} i "
-                f"dimension {dimension}"
+                f"Statistikbanken returnerede ikke kode {selection} i {dimension}. "
+                f"Tilgængelige koder: {list(selection_positions)[:30]}"
             )
         series = []
         for period in labels:
@@ -208,121 +217,109 @@ def jsonstat_series(payload, dimension: str, selections: list[str]):
                     coordinates.append(time_positions[period])
                 else:
                     coordinates.append(0)
-            series.append(jsonstat_value(values, flat_index(coordinates)))
+            series.append(jsonstat_number(values, flat_index(coordinates)))
         result[selection] = series
     return labels, result, dataset
 
 
-def refresh_statbank_resilient(data):
+def refresh_statbank(data):
     successes: list[str] = []
     failures: list[str] = []
     official = data.setdefault("meta", {}).setdefault("officialApi", {})
     now = datetime.now(ZoneInfo("Europe/Copenhagen"))
 
-    def fetch(label: str, table: str, dimension: str, selections: list[str]):
+    specs = [
+        {
+            "label": "Danmarks Statistik - lønmodtagere (LBESK104)",
+            "table": "LBESK104",
+            "dimension": "SEKTOR",
+            "selections": ["1000", "1032", "1046"],
+            "target": "wages",
+            "mapping": {"total": "1000", "public": "1032", "private": "1046"},
+            "meta": {
+                "unit": "personer",
+                "seasonalAdjustment": "sæsonkorrigeret",
+            },
+        },
+        {
+            "label": "Danmarks Statistik - konkurser (KONK3)",
+            "table": "KONK3",
+            "dimension": "BNØGLE",
+            "selections": ["A", "A1", "A2"],
+            "target": "bankruptcies",
+            "mapping": {"bankruptcies": "A", "seasonal": "A1", "lostJobs": "A2"},
+            "meta": {
+                "unit": "antal og tabte job",
+                "seasonalAdjustment": "kun serie A1",
+            },
+        },
+        {
+            "label": "Danmarks Statistik - forbrugertillid (FORV1)",
+            "table": "FORV1",
+            "dimension": "INDIKATOR",
+            "selections": ["F1"],
+            "target": "confidence",
+            "mapping": {"value": "F1"},
+            "meta": {
+                "unit": "nettotal",
+                "seasonalAdjustment": "ikke oplyst",
+            },
+        },
+    ]
+
+    for spec in specs:
         try:
             payload = statbank_get(
-                table,
+                spec["table"],
                 {
-                    dimension: selections,
+                    spec["dimension"]: spec["selections"],
                     "Tid": ["*"],
                 },
             )
-            labels, series, dataset = jsonstat_series(payload, dimension, selections)
+            labels, series, dataset = jsonstat_series(
+                payload,
+                spec["dimension"],
+                spec["selections"],
+            )
             if not labels:
                 raise RuntimeError("Statistikbanken returnerede ingen perioder")
+            data[spec["target"]] = {
+                "labels": labels,
+                **{
+                    target_key: series[source_key]
+                    for target_key, source_key in spec["mapping"].items()
+                },
+            }
+            official_key = {
+                "wages": "wages",
+                "bankruptcies": "bankruptcies",
+                "confidence": "consumerConfidence",
+            }[spec["target"]]
+            official[official_key] = {
+                "source": "Danmarks Statistik",
+                "dataset": spec["table"],
+                "filters": {spec["dimension"]: spec["selections"]},
+                **spec["meta"],
+                "sourceUpdated": dataset.get("updated"),
+                "latestPeriod": labels[-1],
+                "fetchedAt": now.isoformat(timespec="seconds"),
+            }
+            successes.append(spec["label"])
+            print(
+                f"Færdig: {spec['label']}. Seneste periode: {labels[-1]}. "
+                f"Kilden er opdateret: {dataset.get('updated', 'ikke oplyst')}.",
+                flush=True,
+            )
         except Exception as exc:
-            failures.append(f"{label}: {exc}")
-            print(f"ADVARSEL: {label} blev ikke opdateret: {exc}", flush=True)
-            return None
-
-        successes.append(label)
-        print(
-            f"Færdig: {label}. Seneste periode: {labels[-1]}. "
-            f"Kilden er opdateret: {dataset.get('updated', 'ikke oplyst')}.",
-            flush=True,
-        )
-        return labels, series, dataset
-
-    result = fetch(
-        "Danmarks Statistik - lønmodtagere (LBESK104)",
-        "LBESK104",
-        "SEKTOR",
-        ["1000", "1032", "1046"],
-    )
-    if result is not None:
-        labels, series, dataset = result
-        data["wages"] = {
-            "labels": labels,
-            "total": series["1000"],
-            "public": series["1032"],
-            "private": series["1046"],
-        }
-        official["wages"] = {
-            "source": "Danmarks Statistik",
-            "dataset": "LBESK104",
-            "filters": {"SEKTOR": ["1000", "1032", "1046"]},
-            "unit": "personer",
-            "seasonalAdjustment": "sæsonkorrigeret",
-            "sourceUpdated": dataset.get("updated"),
-            "latestPeriod": labels[-1],
-            "fetchedAt": now.isoformat(timespec="seconds"),
-        }
-
-    result = fetch(
-        "Danmarks Statistik - konkurser (KONK3)",
-        "KONK3",
-        "BNØGLE",
-        ["A", "A1", "A2"],
-    )
-    if result is not None:
-        labels, series, dataset = result
-        data["bankruptcies"] = {
-            "labels": labels,
-            "bankruptcies": series["A"],
-            "seasonal": series["A1"],
-            "lostJobs": series["A2"],
-        }
-        official["bankruptcies"] = {
-            "source": "Danmarks Statistik",
-            "dataset": "KONK3",
-            "filters": {"BNØGLE": ["A", "A1", "A2"]},
-            "unit": "antal og tabte job",
-            "seasonalAdjustment": "kun serie A1",
-            "sourceUpdated": dataset.get("updated"),
-            "latestPeriod": labels[-1],
-            "fetchedAt": now.isoformat(timespec="seconds"),
-        }
-
-    result = fetch(
-        "Danmarks Statistik - forbrugertillid (FORV1)",
-        "FORV1",
-        "INDIKATOR",
-        ["F1"],
-    )
-    if result is not None:
-        labels, series, dataset = result
-        data["confidence"] = {
-            "labels": labels,
-            "value": series["F1"],
-        }
-        official["consumerConfidence"] = {
-            "source": "Danmarks Statistik",
-            "dataset": "FORV1",
-            "filters": {"INDIKATOR": ["F1"]},
-            "unit": "nettotal",
-            "seasonalAdjustment": "ikke oplyst",
-            "sourceUpdated": dataset.get("updated"),
-            "latestPeriod": labels[-1],
-            "fetchedAt": now.isoformat(timespec="seconds"),
-        }
+            failures.append(f"{spec['label']}: {exc}")
+            print(f"ADVARSEL: {spec['label']} blev ikke opdateret: {exc}", flush=True)
 
     return successes, failures
 
 
-def refresh_jobindsats_resilient(data):
-    failures: list[str] = []
+def refresh_jobindsats(data):
     successes: list[str] = []
+    failures: list[str] = []
 
     def fetch(label: str, path: str):
         try:
@@ -335,30 +332,21 @@ def refresh_jobindsats_resilient(data):
         return records
 
     common = "mgroup.*=*&period.M=latest:120"
-    unemployment = {
-        "total": ("Bruttoledighed i alt", "/"),
-        "benefit": ("A-dagpenge", "/2/"),
-        "assistance": ("Kontanthjælp", "/3/"),
-    }
-    for key, (label, group) in unemployment.items():
+    for key, label, group in (
+        ("total", "Bruttoledighed i alt", "/"),
+        ("benefit", "A-dagpenge", "/2/"),
+        ("assistance", "Kontanthjælp", "/3/"),
+    ):
         records = fetch(
             label,
             f"data/y25i03?{common}&hierarchy._hele_landet=/"
             f"&hierarchy._ygrpi09={group}&format=json",
         )
         if records is not None:
-            builder.merge_series(
-                data["unemployment"],
-                records,
-                {
-                    key: "Sæsonkorrigeret antal ledige fuldtidspersoner",
-                    **(
-                        {"rate": "Sæsonkorrigeret fuldtidspersoner i pct. af arbejdsstyrken"}
-                        if key == "total"
-                        else {}
-                    ),
-                },
-            )
+            mapping = {key: "Sæsonkorrigeret antal ledige fuldtidspersoner"}
+            if key == "total":
+                mapping["rate"] = "Sæsonkorrigeret fuldtidspersoner i pct. af arbejdsstyrken"
+            builder.merge_series(data["unemployment"], records, mapping)
 
     records = fetch(
         "Nyopslåede stillinger",
@@ -367,12 +355,11 @@ def refresh_jobindsats_resilient(data):
     if records is not None:
         builder.merge_series(data["vacancies"], records, {"values": "Antal nyopslåede stillinger"})
 
-    longterm = {
-        "total": ("Langtidsledige i alt", "/"),
-        "benefit": ("Langtidsledige på A-dagpenge", "/2/"),
-        "assistance": ("Langtidsledige på kontanthjælp", "/3/"),
-    }
-    for key, (label, group) in longterm.items():
+    for key, label, group in (
+        ("total", "Langtidsledige i alt", "/"),
+        ("benefit", "Langtidsledige på A-dagpenge", "/2/"),
+        ("assistance", "Langtidsledige på kontanthjælp", "/3/"),
+    ):
         records = fetch(
             label,
             f"data/y25i09?{common}&hierarchy._nykom=/"
@@ -399,11 +386,7 @@ def refresh_jobindsats_resilient(data):
             },
         )
 
-    data.setdefault("meta", {})["jobindsatsUpdateStatus"] = {
-        "successful": successes,
-        "failed": failures,
-    }
-    data["meta"].setdefault("officialApi", {})["jobindsats"] = {
+    data.setdefault("meta", {}).setdefault("officialApi", {})["jobindsats"] = {
         "source": "Jobindsats",
         "version": "v3",
         "periodsFetchedPerRun": MONTH_LIMIT,
@@ -430,14 +413,11 @@ def refresh_jobindsats_resilient(data):
     for label, key in source_keys.items():
         if label in successes and key in data["meta"].get("sourceRegister", {}):
             data["meta"]["sourceRegister"][key]["source"] = "Jobindsats API v3"
-
     return successes, failures
 
 
-def set_combined_status(data, statbank_successes, statbank_failures, job_successes, job_failures):
+def set_status(data, successes: list[str], failures: list[str]) -> None:
     now = datetime.now(ZoneInfo("Europe/Copenhagen"))
-    successes = statbank_successes + job_successes
-    failures = statbank_failures + job_failures
     state = "ok" if not failures else ("partial" if successes else "stale")
     data.setdefault("meta", {})["updateStatus"] = {
         "state": state,
@@ -445,7 +425,6 @@ def set_combined_status(data, statbank_successes, statbank_failures, job_success
         "failed": failures,
         "checkedAt": now.isoformat(timespec="seconds"),
     }
-
     if successes:
         months = [
             "januar", "februar", "marts", "april", "maj", "juni",
@@ -463,26 +442,16 @@ def add_visible_status(html: str, data: dict) -> str:
 
     if state == "partial":
         failed_labels = [item.split(":", 1)[0] for item in status.get("failed", [])]
-        message = (
-            "Delvist opdateret. Viser seneste gyldige data for: "
-            + ", ".join(failed_labels)
-            + "."
-        )
-        background = "#fff4d6"
-        border = "#ef8b2c"
+        message = "Delvist opdateret. Viser seneste gyldige data for: " + ", ".join(failed_labels) + "."
+        background, border = "#fff4d6", "#ef8b2c"
     else:
-        message = (
-            "Seneste dataopdatering fejlede. "
-            "Dashboardet viser seneste gyldige data."
-        )
-        background = "#fde9e8"
-        border = "#e34a45"
+        message = "Seneste dataopdatering fejlede. Dashboardet viser seneste gyldige data."
+        background, border = "#fde9e8", "#e34a45"
 
     banner = (
         f'<div role="status" style="margin:0 0 24px;padding:12px 14px;'
         f'background:{background};border-left:4px solid {border};'
-        'font-size:13px;line-height:1.45">'
-        f"{message}</div>"
+        f'font-size:13px;line-height:1.45">{message}</div>'
     )
     marker = "  </div>\n\n  <h2>Ledighed og beskæftigelse</h2>"
     if marker not in html:
@@ -494,32 +463,17 @@ def add_visible_status(html: str, data: dict) -> str:
     )
 
 
-def load_existing_data():
-    if not builder.DATA_OUTPUT.exists():
-        raise RuntimeError(
-            "data/dashboard-data.json mangler. Den automatiske opdatering kræver en eksisterende "
-            "valideret datafil som fallback."
-        )
-    return json.loads(builder.DATA_OUTPUT.read_text(encoding="utf-8"))
-
-
 def main() -> int:
     builder.jobindsats_get = robust_jobindsats_get
+    if not builder.DATA_OUTPUT.exists():
+        raise RuntimeError("data/dashboard-data.json mangler")
 
-    builder.OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
-    data = load_existing_data()
-
+    data = json.loads(builder.DATA_OUTPUT.read_text(encoding="utf-8"))
     print("Starter opdatering fra Danmarks Statistik.", flush=True)
-    statbank_successes, statbank_failures = refresh_statbank_resilient(data)
+    stat_successes, stat_failures = refresh_statbank(data)
     print("Starter opdatering fra Jobindsats.", flush=True)
-    job_successes, job_failures = refresh_jobindsats_resilient(data)
-    set_combined_status(
-        data,
-        statbank_successes,
-        statbank_failures,
-        job_successes,
-        job_failures,
-    )
+    job_successes, job_failures = refresh_jobindsats(data)
+    set_status(data, stat_successes + job_successes, stat_failures + job_failures)
 
     html = add_visible_status(builder.build_html(data), data)
     builder.validate(data, html)
