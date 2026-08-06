@@ -13,11 +13,16 @@ on:
       - "data/dashboard-data.json"
       - ".github/workflows/update-dashboard.yml"
   schedule:
-    - cron: "15 7 * * *"
-    - cron: "15 8 * * *"
+    # Flere backupforsøg, fordi GitHub kan forsinke eller droppe enkelte cron-kørsler.
+    # Dagslåsen nedenfor sikrer, at der kun gennemføres én vellykket opdatering pr. dag.
+    - cron: "17 7-11 * * *"
 
 permissions:
   contents: write
+
+concurrency:
+  group: update-labour-market-dashboard
+  cancel-in-progress: false
 
 jobs:
   update:
@@ -26,38 +31,43 @@ jobs:
     env:
       JOBINDSATS_API_TOKEN: ${{ secrets.API_ADGANG }}
     steps:
-      - name: Afgør om den planlagte kørsel skal fortsætte
-        id: localtime
+      - uses: actions/checkout@v4
+
+      - name: Afgør om opdateringen skal gennemføres
+        id: gate
         shell: bash
         run: |
           if [ "${{ github.event_name }}" != "schedule" ]; then
             echo "should_run=true" >> "$GITHUB_OUTPUT"
+            echo "Kører, fordi hændelsen er ${{ github.event_name }}."
             exit 0
           fi
 
-          utc_offset="$(TZ=Europe/Copenhagen date +'%z')"
-          scheduled_cron="${{ github.event.schedule }}"
-          echo "Planlagt cron: $scheduled_cron"
-          echo "Aktuel UTC-forskydning for København: $utc_offset"
+          today="$(TZ=Europe/Copenhagen date +'%F')"
+          local_hour="$(TZ=Europe/Copenhagen date +'%H')"
+          local_hour=$((10#$local_hour))
+          echo "Dansk dato: $today"
+          echo "Dansk time: $local_hour"
 
-          if { [ "$scheduled_cron" = "15 7 * * *" ] && [ "$utc_offset" = "+0200" ]; } || \
-             { [ "$scheduled_cron" = "15 8 * * *" ] && [ "$utc_offset" = "+0100" ]; }; then
-            echo "should_run=true" >> "$GITHUB_OUTPUT"
-          else
+          if [ "$local_hour" -lt 9 ]; then
             echo "should_run=false" >> "$GITHUB_OUTPUT"
-            echo "Springer over: denne cron svarer ikke til kl. 09 dansk tid."
+            echo "Springer over: backupforsøget ligger før kl. 09 dansk tid."
+          elif grep -Fxq "status: ok" status/last-run.txt 2>/dev/null && \
+               grep -Fxq "dato_dk: $today" status/last-run.txt 2>/dev/null; then
+            echo "should_run=false" >> "$GITHUB_OUTPUT"
+            echo "Springer over: dashboardet er allerede opdateret i dag."
+          else
+            echo "should_run=true" >> "$GITHUB_OUTPUT"
+            echo "Kører dagens opdatering eller et backupforsøg efter en tidligere fejl."
           fi
 
-      - uses: actions/checkout@v4
-        if: steps.localtime.outputs.should_run == 'true'
-
       - uses: actions/setup-python@v5
-        if: steps.localtime.outputs.should_run == 'true'
+        if: steps.gate.outputs.should_run == 'true'
         with:
           python-version: "3.12"
 
       - name: Kontroller secret
-        if: steps.localtime.outputs.should_run == 'true'
+        if: steps.gate.outputs.should_run == 'true'
         run: |
           if [ -z "$JOBINDSATS_API_TOKEN" ]; then
             echo "Secretet API_ADGANG mangler eller er tomt."
@@ -65,16 +75,17 @@ jobs:
           fi
 
       - name: Installer afhængigheder
-        if: steps.localtime.outputs.should_run == 'true'
+        if: steps.gate.outputs.should_run == 'true'
         run: python -m pip install pandas openpyxl
 
       - name: Hent officielle data og byg dashboard
-        if: steps.localtime.outputs.should_run == 'true'
+        if: steps.gate.outputs.should_run == 'true'
         id: update
         shell: bash
         run: |
           mkdir -p status
           started="$(date -u +'%Y-%m-%dT%H:%M:%SZ')"
+          today="$(TZ=Europe/Copenhagen date +'%F')"
           set +e
           python -m py_compile scripts/build_dashboard.py scripts/run_dashboard_update.py > status/run.log 2>&1
           code=$?
@@ -85,15 +96,15 @@ jobs:
           set -e
           cat status/run.log || true
           if [ "$code" -eq 0 ]; then
-            printf 'status: ok\ntid_utc: %s\n' "$started" > status/last-run.txt
+            printf 'status: ok\ntid_utc: %s\ndato_dk: %s\n' "$started" "$today" > status/last-run.txt
           else
             message="$(tail -n 12 status/run.log | tr '\n' ' ' | sed 's/[[:space:]]\+/ /g')"
-            printf 'status: fejl\ntid_utc: %s\ntrin: opdatering\nfejl: %s\n' "$started" "$message" > status/last-run.txt
+            printf 'status: fejl\ntid_utc: %s\ndato_dk: %s\ntrin: opdatering\nfejl: %s\n' "$started" "$today" "$message" > status/last-run.txt
           fi
           echo "exit_code=$code" >> "$GITHUB_OUTPUT"
 
       - name: Kontroller dashboardfiler
-        if: steps.localtime.outputs.should_run == 'true' && steps.update.outputs.exit_code == '0'
+        if: steps.gate.outputs.should_run == 'true' && steps.update.outputs.exit_code == '0'
         run: |
           test -s index.html
           test -s data/dashboard-data.json
@@ -101,7 +112,7 @@ jobs:
           grep -q "const DATA=" index.html
 
       - name: Gem dashboarddata og status
-        if: steps.localtime.outputs.should_run == 'true' && always()
+        if: steps.gate.outputs.should_run == 'true' && always()
         run: |
           git add index.html data/dashboard-data.json status/last-run.txt
           if git diff --cached --quiet; then
@@ -114,5 +125,5 @@ jobs:
           fi
 
       - name: Markér mislykket kørsel
-        if: steps.localtime.outputs.should_run == 'true' && steps.update.outputs.exit_code != '0'
+        if: steps.gate.outputs.should_run == 'true' && steps.update.outputs.exit_code != '0'
         run: exit 1
