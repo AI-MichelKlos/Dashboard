@@ -10,6 +10,7 @@ on:
     paths:
       - "scripts/build_dashboard.py"
       - "scripts/run_dashboard_update.py"
+      - "scripts/run_dashboard_update_with_inflation.py"
       - "data/dashboard-data.json"
       - ".github/workflows/update-dashboard.yml"
   schedule:
@@ -87,10 +88,10 @@ jobs:
           started="$(date -u +'%Y-%m-%dT%H:%M:%SZ')"
           today="$(TZ=Europe/Copenhagen date +'%F')"
           set +e
-          python -m py_compile scripts/build_dashboard.py scripts/run_dashboard_update.py > status/run.log 2>&1
+          python -m py_compile scripts/build_dashboard.py scripts/run_dashboard_update.py scripts/run_dashboard_update_with_inflation.py > status/run.log 2>&1
           code=$?
           if [ "$code" -eq 0 ]; then
-            python scripts/run_dashboard_update.py >> status/run.log 2>&1
+            python scripts/run_dashboard_update_with_inflation.py >> status/run.log 2>&1
             code=$?
           fi
           set -e
@@ -110,6 +111,7 @@ jobs:
           test -s data/dashboard-data.json
           grep -q "Analytisk overblik" index.html
           grep -q "const DATA=" index.html
+          grep -q '"PRIS01"' data/dashboard-data.json
 
       - name: Gem dashboarddata og status
         if: steps.gate.outputs.should_run == 'true' && always()
