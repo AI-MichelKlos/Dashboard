@@ -117,3 +117,5 @@ updater.refresh_statbank = refresh_statbank
 
 if __name__ == "__main__":
     raise SystemExit(updater.main())
+
+# Manual control trigger 2026-08-11
