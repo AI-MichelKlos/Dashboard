@@ -68,7 +68,7 @@
         "seasonalAdjustment": "sæsonkorrigeret",
         "sourceUpdated": "2026-07-21T06:00:00Z",
         "latestPeriod": "2026M05",
-        "fetchedAt": "2026-08-11T10:15:05+02:00"
+        "fetchedAt": "2026-08-11T10:59:47+02:00"
       },
       "bankruptcies": {
         "source": "Danmarks Statistik",
@@ -84,7 +84,7 @@
         "seasonalAdjustment": "kun serie A1",
         "sourceUpdated": "2026-08-06T06:00:00Z",
         "latestPeriod": "2026M07",
-        "fetchedAt": "2026-08-11T10:15:05+02:00"
+        "fetchedAt": "2026-08-11T10:59:47+02:00"
       },
       "consumerConfidence": {
         "source": "Danmarks Statistik",
@@ -98,7 +98,7 @@
         "seasonalAdjustment": "ikke oplyst",
         "sourceUpdated": "2026-07-23T06:00:00Z",
         "latestPeriod": "2026M07",
-        "fetchedAt": "2026-08-11T10:15:05+02:00"
+        "fetchedAt": "2026-08-11T10:59:47+02:00"
       },
       "jobindsats": {
         "source": "Jobindsats",
@@ -133,7 +133,7 @@
         "seasonalAdjustment": "ikke relevant",
         "sourceUpdated": "2026-08-10T06:00:00Z",
         "latestPeriod": "2026M07",
-        "fetchedAt": "2026-08-11T10:15:22+02:00"
+        "fetchedAt": "2026-08-11T10:59:59+02:00"
       }
     },
     "updateStatus": {
@@ -153,7 +153,7 @@
         "Varslede afskedigelser"
       ],
       "failed": [],
-      "checkedAt": "2026-08-11T10:15:27+02:00"
+      "checkedAt": "2026-08-11T11:00:05+02:00"
     },
     "jobindsatsUpdateStatus": {
       "successful": [
