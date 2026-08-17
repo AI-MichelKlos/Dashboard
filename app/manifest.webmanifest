@@ -25,5 +25,22 @@
       "type": "image/svg+xml",
       "purpose": "any maskable"
     }
+  ],
+  "shortcuts": [
+    {
+      "name": "A-kasseindsigt",
+      "short_name": "A-kasseindsigt",
+      "url": "./#akasse"
+    },
+    {
+      "name": "JUR – Arbejdsmarkedsoverblik",
+      "short_name": "JUR",
+      "url": "./#jur"
+    },
+    {
+      "name": "Analytisk overblik – Arbejdsmarkedet",
+      "short_name": "Arbejdsmarked",
+      "url": "./#arbejdsmarked"
+    }
   ]
 }
