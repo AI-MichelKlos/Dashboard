@@ -1,8 +1,8 @@
 {
   "meta": {
-    "updated": "16. august 2026",
+    "updated": "17. august 2026",
     "sourceFile": "Samlet overblik.xlsx",
-    "retrievedAt": "2026-08-16",
+    "retrievedAt": "2026-08-17",
     "sourceRegister": {
       "unemployment": {
         "source": "Jobindsats API v3",
@@ -68,7 +68,7 @@
         "seasonalAdjustment": "sæsonkorrigeret",
         "sourceUpdated": "2026-07-21T06:00:00Z",
         "latestPeriod": "2026M05",
-        "fetchedAt": "2026-08-16T09:49:52+02:00"
+        "fetchedAt": "2026-08-17T09:59:49+02:00"
       },
       "bankruptcies": {
         "source": "Danmarks Statistik",
@@ -84,7 +84,7 @@
         "seasonalAdjustment": "kun serie A1",
         "sourceUpdated": "2026-08-06T06:00:00Z",
         "latestPeriod": "2026M07",
-        "fetchedAt": "2026-08-16T09:49:52+02:00"
+        "fetchedAt": "2026-08-17T09:59:49+02:00"
       },
       "consumerConfidence": {
         "source": "Danmarks Statistik",
@@ -98,7 +98,7 @@
         "seasonalAdjustment": "ikke oplyst",
         "sourceUpdated": "2026-07-23T06:00:00Z",
         "latestPeriod": "2026M07",
-        "fetchedAt": "2026-08-16T09:49:52+02:00"
+        "fetchedAt": "2026-08-17T09:59:49+02:00"
       },
       "jobindsats": {
         "source": "Jobindsats",
@@ -133,7 +133,7 @@
         "seasonalAdjustment": "ikke relevant",
         "sourceUpdated": "2026-08-10T06:00:00Z",
         "latestPeriod": "2026M07",
-        "fetchedAt": "2026-08-16T09:50:04+02:00"
+        "fetchedAt": "2026-08-17T10:00:04+02:00"
       }
     },
     "updateStatus": {
@@ -153,7 +153,7 @@
         "Varslede afskedigelser"
       ],
       "failed": [],
-      "checkedAt": "2026-08-16T09:50:08+02:00"
+      "checkedAt": "2026-08-17T10:00:09+02:00"
     },
     "jobindsatsUpdateStatus": {
       "successful": [
