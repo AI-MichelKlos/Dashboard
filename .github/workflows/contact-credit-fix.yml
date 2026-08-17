@@ -1,0 +1,68 @@
+name: Ret grafikcredit og kontakt
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - .github/workflows/contact-credit-fix.yml
+
+permissions:
+  contents: write
+
+jobs:
+  patch:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Ret credit og kontakt
+        shell: bash
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+
+          old = 'Grafik og databehandling: Danske A-kasser'
+          new = 'Grafik og databehandling: Michel Klos'
+          contact = '<div style="margin-top:22px;color:var(--muted);font-size:.78rem;text-align:center">Kontakt: <a href="mailto:mk@danskeakasser.dk" style="color:var(--green-dark)">mk@danskeakasser.dk</a></div>'
+
+          p = Path('index.html')
+          text = p.read_text(encoding='utf-8')
+          if old not in text:
+              raise RuntimeError('Gammel grafikcredit mangler i index.html')
+          text = text.replace(old, new)
+          if 'mailto:mk@danskeakasser.dk' not in text:
+              if '</main>' not in text:
+                  raise RuntimeError('Kan ikke finde </main> i index.html')
+              text = text.replace('</main>', contact + '\n</main>', 1)
+          p.write_text(text, encoding='utf-8')
+
+          b = Path('scripts/build_dashboard.py')
+          src = b.read_text(encoding='utf-8')
+          if old not in src:
+              raise RuntimeError('Gammel grafikcredit mangler i builder')
+          src = src.replace(old, new)
+          if 'mailto:mk@danskeakasser.dk' not in src:
+              if '</main>' not in src:
+                  raise RuntimeError('Kan ikke finde </main> i builder')
+              src = src.replace('</main>', contact + '\n</main>', 1)
+          src = src.replace('html.count("Grafik og databehandling: Danske A-kasser") == 14', 'html.count("Grafik og databehandling: Michel Klos") == 14')
+          b.write_text(src, encoding='utf-8')
+          PY
+      - name: Kontroller
+        shell: bash
+        run: |
+          grep -Fq 'Grafik og databehandling: Michel Klos' index.html
+          grep -Fq 'mailto:mk@danskeakasser.dk' index.html
+          ! grep -Fq 'Grafik og databehandling: Danske A-kasser' index.html
+          grep -Fq 'Grafik og databehandling: Michel Klos' scripts/build_dashboard.py
+          grep -Fq 'mailto:mk@danskeakasser.dk' scripts/build_dashboard.py
+          python -m py_compile scripts/build_dashboard.py
+      - name: Gem
+        shell: bash
+        run: |
+          git config user.name "ChatGPT dashboard update"
+          git config user.email "dashboard-automation@users.noreply.github.com"
+          git add index.html scripts/build_dashboard.py
+          git commit -m "Ret grafikcredit og tilføj kontakt"
+          git push origin HEAD:main
