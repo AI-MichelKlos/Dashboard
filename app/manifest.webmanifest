@@ -1,0 +1,23 @@
+{
+  "id": "./",
+  "name": "Danske A-kasser – Analyse",
+  "short_name": "DAK Analyse",
+  "description": "Samlet adgang til Danske A-kassers dashboards og analyser.",
+  "lang": "da",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "display_override": ["window-controls-overlay", "standalone", "minimal-ui"],
+  "background_color": "#f5f7f5",
+  "theme_color": "#0F2B36",
+  "orientation": "any",
+  "categories": ["business", "productivity"],
+  "icons": [
+    {
+      "src": "./icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
