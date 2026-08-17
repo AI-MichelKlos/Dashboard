@@ -730,32 +730,33 @@ def build_html(data):
   <h2>Ledighed og beskæftigelse</h2>
   <div class="kpi-grid">{''.join(kpi_cards)}</div>
   <div class="chart-grid">
-    <article class="chart-card"><h3>Bruttoledighed</h3><div class="chart-wrap"><canvas id="unemploymentTotal"></canvas></div><p class="source">Kilde: Danmarks Statistik og Jobindsats<br>Grafik og databehandling: Danske A-kasser</p></article>
-    <article class="chart-card"><h3>Ledighedsprocent</h3><div class="chart-wrap"><canvas id="unemploymentRate"></canvas></div><p class="source">Kilde: Danmarks Statistik og Jobindsats<br>Grafik og databehandling: Danske A-kasser</p></article>
-    <article class="chart-card"><h3>Ledige fordelt på ydelse</h3><div class="chart-wrap"><canvas id="unemploymentType"></canvas></div><p class="source">Kilde: Jobindsats<br>Grafik og databehandling: Danske A-kasser</p></article>
-    <article class="chart-card"><h3>Langtidsledige</h3><div class="chart-wrap"><canvas id="longterm"></canvas></div><p class="source">Kilde: Jobindsats<br>Grafik og databehandling: Danske A-kasser</p></article>
-    <article class="chart-card"><h3>Nyopslåede stillinger</h3><div class="chart-wrap"><canvas id="vacancies"></canvas></div><p class="source">Kilde: Jobindsats<br>Grafik og databehandling: Danske A-kasser</p></article>
-    <article class="chart-card"><h3>Lønmodtagere</h3><div class="chart-wrap"><canvas id="wages"></canvas></div><p class="source">Kilde: Danmarks Statistik<br>Grafik og databehandling: Danske A-kasser</p></article>
-    <article class="chart-card"><h3>Varslede afskedigelser</h3><div class="chart-wrap"><canvas id="notices"></canvas></div><p class="source">Kilde: Jobindsats<br>Grafik og databehandling: Danske A-kasser</p></article>
-    <article class="chart-card"><h3>Konkurser og tabte job</h3><div class="chart-wrap"><canvas id="bankruptcies"></canvas></div><p class="source">Kilde: Danmarks Statistik<br>Grafik og databehandling: Danske A-kasser</p></article>
+    <article class="chart-card"><h3>Bruttoledighed</h3><div class="chart-wrap"><canvas id="unemploymentTotal"></canvas></div><p class="source">Kilde: Danmarks Statistik og Jobindsats<br>Grafik og databehandling: Michel Klos</p></article>
+    <article class="chart-card"><h3>Ledighedsprocent</h3><div class="chart-wrap"><canvas id="unemploymentRate"></canvas></div><p class="source">Kilde: Danmarks Statistik og Jobindsats<br>Grafik og databehandling: Michel Klos</p></article>
+    <article class="chart-card"><h3>Ledige fordelt på ydelse</h3><div class="chart-wrap"><canvas id="unemploymentType"></canvas></div><p class="source">Kilde: Jobindsats<br>Grafik og databehandling: Michel Klos</p></article>
+    <article class="chart-card"><h3>Langtidsledige</h3><div class="chart-wrap"><canvas id="longterm"></canvas></div><p class="source">Kilde: Jobindsats<br>Grafik og databehandling: Michel Klos</p></article>
+    <article class="chart-card"><h3>Nyopslåede stillinger</h3><div class="chart-wrap"><canvas id="vacancies"></canvas></div><p class="source">Kilde: Jobindsats<br>Grafik og databehandling: Michel Klos</p></article>
+    <article class="chart-card"><h3>Lønmodtagere</h3><div class="chart-wrap"><canvas id="wages"></canvas></div><p class="source">Kilde: Danmarks Statistik<br>Grafik og databehandling: Michel Klos</p></article>
+    <article class="chart-card"><h3>Varslede afskedigelser</h3><div class="chart-wrap"><canvas id="notices"></canvas></div><p class="source">Kilde: Jobindsats<br>Grafik og databehandling: Michel Klos</p></article>
+    <article class="chart-card"><h3>Konkurser og tabte job</h3><div class="chart-wrap"><canvas id="bankruptcies"></canvas></div><p class="source">Kilde: Danmarks Statistik<br>Grafik og databehandling: Michel Klos</p></article>
   </div>
 
   <h2>Samfundsøkonomi</h2>
   <div class="kpi-grid economy">{''.join(economy_cards)}</div>
   <div class="chart-grid">
-    <article class="chart-card"><h3>Forbrugertillid</h3><div class="chart-wrap"><canvas id="confidence"></canvas></div><p class="source">Kilde: Danmarks Statistik<br>Grafik og databehandling: Danske A-kasser</p></article>
-    <article class="chart-card"><h3>Erhvervstillid</h3><div class="chart-wrap"><canvas id="business"></canvas></div><p class="source">Kilde: Danmarks Statistik<br>Grafik og databehandling: Danske A-kasser</p></article>
-    <article class="chart-card wide"><h3>Inflation</h3><div class="chart-wrap"><canvas id="inflation"></canvas></div><p class="source">Kilde: Danmarks Statistik<br>Grafik og databehandling: Danske A-kasser</p></article>
+    <article class="chart-card"><h3>Forbrugertillid</h3><div class="chart-wrap"><canvas id="confidence"></canvas></div><p class="source">Kilde: Danmarks Statistik<br>Grafik og databehandling: Michel Klos</p></article>
+    <article class="chart-card"><h3>Erhvervstillid</h3><div class="chart-wrap"><canvas id="business"></canvas></div><p class="source">Kilde: Danmarks Statistik<br>Grafik og databehandling: Michel Klos</p></article>
+    <article class="chart-card wide"><h3>Inflation</h3><div class="chart-wrap"><canvas id="inflation"></canvas></div><p class="source">Kilde: Danmarks Statistik<br>Grafik og databehandling: Michel Klos</p></article>
   </div>
 
   <h2>Internationalt</h2>
   <div class="kpi-grid international">{international_table(data, "eurostat")}{international_table(data, "confidence")}</div>
   <div class="chart-grid">
-    <article class="chart-card wide"><h3>Ledighed i udvalgte lande</h3><div class="chart-wrap"><canvas id="eurostatTrend"></canvas></div><p class="source">Kilde: Eurostat<br>Grafik og databehandling: Danske A-kasser</p></article>
-    <article class="chart-card wide tall"><h3>Ledighed i Europa, seneste kvartal</h3><div class="chart-wrap"><canvas id="eurostatLatest"></canvas></div><p class="source">Kilde: Eurostat<br>Grafik og databehandling: Danske A-kasser</p></article>
-    <article class="chart-card wide"><h3>Forbrugertillid i udvalgte lande</h3><div class="chart-wrap"><canvas id="euConfidence"></canvas></div><p class="source">Kilde: Europa-Kommissionen, DG ECFIN<br>Grafik og databehandling: Danske A-kasser</p></article>
+    <article class="chart-card wide"><h3>Ledighed i udvalgte lande</h3><div class="chart-wrap"><canvas id="eurostatTrend"></canvas></div><p class="source">Kilde: Eurostat<br>Grafik og databehandling: Michel Klos</p></article>
+    <article class="chart-card wide tall"><h3>Ledighed i Europa, seneste kvartal</h3><div class="chart-wrap"><canvas id="eurostatLatest"></canvas></div><p class="source">Kilde: Eurostat<br>Grafik og databehandling: Michel Klos</p></article>
+    <article class="chart-card wide"><h3>Forbrugertillid i udvalgte lande</h3><div class="chart-wrap"><canvas id="euConfidence"></canvas></div><p class="source">Kilde: Europa-Kommissionen, DG ECFIN<br>Grafik og databehandling: Michel Klos</p></article>
   </div>
   <div class="footnote">Bemærk: Serierne offentliggøres på forskellige tidspunkter. Den seneste periode kan derfor variere mellem nøgletal. Ændringer på KPI-kortene er angivet i enheder, ikke i procent.</div>
+<div style="margin-top:22px;color:var(--muted);font-size:.78rem;text-align:center">Kontakt: <a href="mailto:mk@danskeakasser.dk" style="color:var(--green-dark)">mk@danskeakasser.dk</a></div>
 </main>
 <script>
 (function(){{
@@ -918,7 +919,7 @@ def validate(data, html):
     assert "this.chart.data.labels" in html
     assert "left.label+' (venstre akse)'" in html
     assert "right.label+' (højre akse)'" in html
-    assert html.count("Grafik og databehandling: Danske A-kasser") == 14
+    assert html.count("Grafik og databehandling: Michel Klos") == 14
     assert "–" not in html and "—" not in html
 
 
