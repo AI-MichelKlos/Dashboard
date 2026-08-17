@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="DAK Analyse">
+  <rect width="512" height="512" rx="112" fill="#0F2B36"/>
+  <rect x="74" y="74" width="364" height="364" rx="88" fill="#6B9E78"/>
+  <path d="M151 340V172h58c55 0 91 30 91 84s-36 84-91 84h-58zm45-39h15c28 0 44-16 44-45s-16-45-44-45h-15v90z" fill="#fff"/>
+  <path d="M309 340l52-168h49l52 168h-46l-9-34h-44l-9 34h-45zm64-71h25l-12-48h-1l-12 48z" fill="#fff" transform="translate(-17 0)"/>
+</svg>
