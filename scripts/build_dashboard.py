@@ -652,27 +652,34 @@ def build_html(data):
   <title>Analytisk overblik - Arbejdsmarkedet</title>
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
   <style>
+    body {{margin:0; background:#f5f7f5; font-family:'Segoe UI',Arial,sans-serif; color:#0F2B36}}
+    .dak-hero {{background:linear-gradient(135deg,#0F2B36,#244d4b); color:#fff; padding:32px 20px}}
+    .dak-hero-inner {{max-width:1280px; margin:0 auto}}
+    .dak-eyebrow {{font-size:.75rem; letter-spacing:.12em; text-transform:uppercase; font-weight:700; color:#c9dfcf}}
+    .dak-hero h1 {{font-size:clamp(2.1rem,4vw,3.4rem); line-height:1.08; margin:5px 0 0; color:#fff}}
+    .dak-byline {{font-size:.78rem; color:#c9d8d5; font-weight:600; margin-top:5px}}
+    .dak-hero-sub {{max-width:900px; color:#e7eeee; line-height:1.5; margin:10px 0 0}}
     #dak-dashboard {{
-      --navy:#13263f; --blue:#0076a8; --cyan:#42b6d5; --red:#e34a45;
-      --green:#24895b; --orange:#ef8b2c; --purple:#7355a3; --ink:#202b38;
-      --muted:#667483; --line:#dce3e8; --paper:#fff; --soft:#f3f7f9;
-      max-width:1280px; margin:0 auto; padding:24px; color:var(--ink);
-      font-family:Arial,Helvetica,sans-serif; box-sizing:border-box;
+      --navy:#0F2B36; --blue:#4A90C4; --cyan:#6B9E78; --red:#b14f4a;
+      --green:#6B9E78; --green-dark:#3d6b47; --orange:#E07A40; --purple:#9B59B6; --ink:#0F2B36;
+      --muted:#68777d; --line:#E8EBE8; --paper:#fff; --soft:#f5f7f5;
+      max-width:1280px; margin:0 auto; padding:28px 20px 55px; color:var(--ink);
+      font-family:'Segoe UI',Arial,sans-serif; box-sizing:border-box;
     }}
     #dak-dashboard * {{box-sizing:border-box}}
     #dak-dashboard h1 {{font-size:32px; line-height:1.15; color:var(--navy); margin:0 0 8px}}
-    #dak-dashboard h2 {{font-size:23px; color:var(--navy); margin:44px 0 16px; border-bottom:3px solid var(--blue); padding-bottom:8px}}
+    #dak-dashboard h2 {{font-size:23px; color:var(--navy); margin:44px 0 16px; border-bottom:3px solid var(--green); padding-bottom:8px}}
     #dak-dashboard h3 {{font-size:18px; color:var(--navy); margin:0 0 6px}}
     #dak-dashboard .intro {{color:var(--muted); margin:0 0 18px; line-height:1.55}}
     #dak-dashboard .toolbar {{display:flex; flex-wrap:wrap; align-items:center; gap:9px; padding:14px 16px; background:var(--soft); border-radius:8px; margin:18px 0 24px}}
     #dak-dashboard .toolbar-label {{font-weight:700; margin-right:4px}}
-    #dak-dashboard button {{border:1px solid var(--blue); background:#fff; color:var(--blue); border-radius:5px; padding:8px 13px; font-weight:700; cursor:pointer}}
-    #dak-dashboard button.active, #dak-dashboard button:hover {{background:var(--blue); color:#fff}}
+    #dak-dashboard button {{border:1px solid var(--green-dark); background:#fff; color:var(--green-dark); border-radius:5px; padding:8px 13px; font-weight:700; cursor:pointer}}
+    #dak-dashboard button.active, #dak-dashboard button:hover {{background:var(--green-dark); color:#fff}}
     #dak-dashboard .updated {{margin-left:auto; color:var(--muted); font-size:13px}}
     #dak-dashboard .kpi-grid {{display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:14px}}
     #dak-dashboard .kpi-grid.economy {{grid-template-columns:repeat(3,minmax(0,1fr))}}
     #dak-dashboard .kpi-grid.international {{grid-template-columns:repeat(2,minmax(0,1fr))}}
-    #dak-dashboard .kpi-card, #dak-dashboard .table-card {{background:var(--paper); border:1px solid var(--line); border-top:5px solid var(--blue); border-radius:7px; padding:16px; box-shadow:0 2px 7px rgba(19,38,63,.08)}}
+    #dak-dashboard .kpi-card, #dak-dashboard .table-card {{background:var(--paper); border:1px solid var(--line); border-top:5px solid var(--green); border-radius:12px; padding:16px; box-shadow:0 8px 28px rgba(15,43,54,.06)}}
     #dak-dashboard .kpi-title {{font-weight:700; color:var(--navy); min-height:38px}}
     #dak-dashboard .kpi-value {{font-size:28px; color:var(--navy); font-weight:800; line-height:1.15; margin:8px 0 2px}}
     #dak-dashboard .kpi-value span {{font-size:13px; font-weight:400; color:var(--muted)}}
@@ -685,7 +692,7 @@ def build_html(data):
     #dak-dashboard .compare-label {{color:var(--muted)}}
     #dak-dashboard .kpi-note {{font-size:11px; color:var(--muted); margin-top:7px}}
     #dak-dashboard .chart-grid {{display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:18px; margin-top:20px}}
-    #dak-dashboard .chart-card {{background:#fff; border:1px solid var(--line); border-radius:7px; padding:18px; box-shadow:0 2px 7px rgba(19,38,63,.06)}}
+    #dak-dashboard .chart-card {{background:#fff; border:1px solid var(--line); border-radius:12px; padding:18px; box-shadow:0 8px 28px rgba(15,43,54,.06)}}
     #dak-dashboard .chart-card.wide {{grid-column:1/-1}}
     #dak-dashboard .chart-wrap {{position:relative; height:390px}}
     #dak-dashboard .chart-card.wide .chart-wrap {{height:430px}}
@@ -710,9 +717,8 @@ def build_html(data):
   </style>
 </head>
 <body>
+<header class="dak-hero"><div class="dak-hero-inner"><div class="dak-eyebrow">Danske A-kasser</div><h1>Analytisk overblik - Arbejdsmarkedet</h1><div class="dak-byline">Udarbejdet af Michel Klos@GitHub</div><p class="dak-hero-sub">Udvalgte nøgletal for arbejdsmarkedet, samfundsøkonomien og den internationale udvikling. Tallene opdateres i takt med de enkelte kilders offentliggørelser.</p></div></header>
 <main id="dak-dashboard">
-  <h1>Analytisk overblik - Arbejdsmarkedet</h1>
-  <p class="intro">Udvalgte nøgletal for arbejdsmarkedet, samfundsøkonomien og den internationale udvikling. Tallene opdateres i takt med de enkelte kilders offentliggørelser.</p>
   <div class="toolbar">
     <span class="toolbar-label">Vis periode:</span>
     <button type="button" data-months="12" onclick="setPeriod(12,this)">12 måneder</button>
@@ -755,7 +761,7 @@ def build_html(data):
 (function(){{
 const DATA={json_data};
 const COUNTRY_NAMES={country_names};
-const COLORS=['#0076a8','#e34a45','#24895b','#ef8b2c','#7355a3','#42b6d5','#13263f'];
+const COLORS=['#6B9E78','#E07A40','#4A90C4','#9B59B6','#3d6b47','#0F2B36'];
 const charts={{}};
 let activeMonths=60;
 
