@@ -1,8 +1,8 @@
 {
   "id": "./",
-  "name": "Danske A-kasser – Analyse",
+  "name": "Analyse og dashboards",
   "short_name": "DAK Analyse",
-  "description": "Samlet adgang til Danske A-kassers dashboards og analyser.",
+  "description": "Samlet adgang til dashboards og analyser.",
   "lang": "da",
   "start_url": "./",
   "scope": "./",

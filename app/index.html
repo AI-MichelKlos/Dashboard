@@ -4,8 +4,8 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="theme-color" content="#0F2B36">
-  <meta name="description" content="Samlet adgang til Danske A-kassers dashboards og analyser.">
-  <title>Danske A-kasser – Analyse</title>
+  <meta name="description" content="Samlet adgang til dashboards og analyser.">
+  <title>Analyse og dashboards</title>
   <link rel="manifest" href="./manifest.webmanifest">
   <link rel="icon" href="./icon.svg" type="image/svg+xml">
   <style>
@@ -67,7 +67,7 @@
     <div class="appbar-inner">
       <button class="brand" id="homeBrand" type="button" aria-label="Gå til forsiden">
         <span class="mark">DAK</span>
-        <span class="brand-text"><span class="brand-title">Danske A-kasser – Analyse</span><span class="brand-sub">Dashboards samlet ét sted</span></span>
+        <span class="brand-text"><span class="brand-title">Analyse og dashboards</span><span class="brand-sub">Dashboards samlet ét sted</span></span>
       </button>
       <div class="app-actions">
         <button class="top-btn labelled" id="installBtn" type="button">＋ <span>Installer app</span></button>
@@ -79,7 +79,7 @@
     <section class="hero">
       <div class="eyebrow">Analyse og nøgletal</div>
       <h1>Ét sted til alle dashboards</h1>
-      <p class="lead">Samlet indgang til Danske A-kassers dashboards om a-kasser, arbejdsmarked, virksomheder og udenlandsk arbejdskraft. De eksisterende dashboards og deres automatiske dataopdateringer fortsætter uændret.</p>
+      <p class="lead">Samlet indgang til dashboards om a-kasser, arbejdsmarked, virksomheder og udenlandsk arbejdskraft. De eksisterende dashboards og deres automatiske dataopdateringer fortsætter uændret.</p>
       <div id="offlineNote" class="offline-note">Du er offline. Appens forside virker fortsat, men dashboards kræver internetforbindelse for at hente de seneste data.</div>
     </section>
 
@@ -151,7 +151,7 @@
       const item=dashboards[key];
       if(!item){
         viewer.style.display='none';home.style.display='block';
-        frame.removeAttribute('src');document.title='Danske A-kasser – Analyse';
+        frame.removeAttribute('src');document.title='Analyse og dashboards';
         window.scrollTo({top:0,behavior:'instant'});return;
       }
       home.style.display='none';viewer.style.display='block';loading.style.display='grid';
