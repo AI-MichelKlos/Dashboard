@@ -594,6 +594,10 @@ def international_table(data, kind):
 
 
 def build_html(data):
+    expired_period, expired_one_year = latest_valid(
+        data["expiredBenefits"]["labels"],
+        data["expiredBenefits"]["oneYearGraduate"],
+    )
     kpi_cards = [
         card(
             "Bruttoledige",
@@ -625,6 +629,15 @@ def build_html(data):
             "Tabte job ved konkurser",
             {"labels": data["bankruptcies"]["labels"], "values": data["bankruptcies"]["lostJobs"]},
             "job", 0, False,
+        ),
+        card(
+            "Opbrugt dagpengeret",
+            {
+                "labels": data["expiredBenefits"]["labels"],
+                "values": data["expiredBenefits"]["total"],
+            },
+            "personer", 0, False,
+            f"Heraf {fmt_number(expired_one_year)} med 1 års dimittendret i {fmt_period(expired_period)}",
         ),
     ]
     economy_cards = [
@@ -762,6 +775,7 @@ def build_html(data):
     <article class="chart-card"><h3>Lønmodtagere</h3><div class="chart-wrap"><canvas id="wages"></canvas></div><p class="source">Kilde: Danmarks Statistik</p></article>
     <article class="chart-card"><h3>Varslede afskedigelser</h3><div class="chart-wrap"><canvas id="notices"></canvas></div><p class="source">Kilde: Jobindsats</p></article>
     <article class="chart-card"><h3>Konkurser og tabte job</h3><div class="chart-wrap"><canvas id="bankruptcies"></canvas></div><p class="source">Kilde: Danmarks Statistik</p></article>
+    <article class="chart-card wide"><h3>Opbrugt dagpengeret fordelt på dimittendstatus</h3><div class="chart-wrap"><canvas id="expiredBenefits"></canvas></div><p class="source">Kilde: Jobindsats. Antal personer med opbrugt dagpengeret fordelt på 1 års dimittendret, øvrige dimittender og øvrige ledige.</p></article>
   </div>
 
   <h2>Rekruttering og arbejdsfordeling</h2>
@@ -949,6 +963,8 @@ function drawAll(n){{
   dualAxisChart('notices',s.labels,{{label:'Varslede personer',data:s.series[0]}},{{label:'Virksomheder',data:s.series[1]}});
   s=sliced(DATA.bankruptcies.labels,[DATA.bankruptcies.seasonal,DATA.bankruptcies.lostJobs],n);
   dualAxisChart('bankruptcies',s.labels,{{label:'Konkurser, sæsonkorrigeret',data:s.series[0]}},{{label:'Tabte job',data:s.series[1]}});
+  s=sliced(DATA.expiredBenefits.labels,[DATA.expiredBenefits.total,DATA.expiredBenefits.oneYearGraduate,DATA.expiredBenefits.otherGraduates,DATA.expiredBenefits.otherUnemployed],n);
+  lineChart('expiredBenefits',s.labels,[{{label:'I alt',data:s.series[0]}},{{label:'1 års dimittendret',data:s.series[1]}},{{label:'Øvrige dimittender',data:s.series[2]}},{{label:'Øvrige ledige',data:s.series[3]}}]);
   s=sliced(DATA.workSharing.labels,[DATA.workSharing.under13Weeks,DATA.workSharing.over13Weeks],n);
   stackedBarChart('workSharing',s.labels,[{{label:'Under 13 uger',data:s.series[0]}},{{label:'Over 13 uger',data:s.series[1]}}]);
   const surveyPeriods=Math.max(4,Math.ceil(n/3));
@@ -991,6 +1007,7 @@ def validate(data, html):
         "vacancies",
         "notices",
         "longterm",
+        "expiredBenefits",
         "workSharing",
         "failedRecruitment",
     ):
@@ -1000,6 +1017,9 @@ def validate(data, html):
     assert latest_valid(data["vacancies"]["labels"], data["vacancies"]["values"])[1] is not None
     assert latest_valid(data["notices"]["labels"], data["notices"]["people"])[1] is not None
     assert latest_valid(data["longterm"]["labels"], data["longterm"]["total"])[1] is not None
+    assert latest_valid(data["expiredBenefits"]["labels"], data["expiredBenefits"]["total"])[1] is not None
+    for key in ("total", "oneYearGraduate", "otherGraduates", "otherUnemployed"):
+        assert len(data["expiredBenefits"][key]) == len(data["expiredBenefits"]["labels"])
     assert latest_valid(data["workSharing"]["labels"], data["workSharing"]["total"])[1] is not None
     for key in ("under13Weeks", "over13Weeks", "total"):
         assert len(data["workSharing"][key]) == len(data["workSharing"]["labels"])
@@ -1020,10 +1040,11 @@ def validate(data, html):
     assert data["meta"]["officialApi"]["consumerConfidence"]["dataset"] == "FORV1"
     assert data["meta"]["officialApi"]["jobindsats"]["tables"]["unemployment"] == "y25i03"
     assert data["meta"]["officialApi"]["jobindsats"]["tables"]["workSharing"] == "y25i06"
+    assert data["meta"]["officialApi"]["jobindsats"]["tables"]["expiredBenefits"] == "y01ud01di"
     assert data["meta"]["officialApi"]["jobindsats"]["tables"]["failedRecruitment"]
     assert "NaN" not in html and "Infinity" not in html
-    assert html.count("<canvas") == 17
-    assert html.count('class="kpi-card"') == 12
+    assert html.count("<canvas") == 18
+    assert html.count('class="kpi-card"') == 13
     assert html.count('class="table-card"') == 2
     assert "type:'category'" in html
     assert "indexAxis:'y'" in html
@@ -1031,6 +1052,7 @@ def validate(data, html):
     assert "left.label+' (venstre akse)'" in html
     assert "right.label+' (højre akse)'" in html
     assert "Arbejdsfordelinger under og over 13 uger" in html
+    assert "Opbrugt dagpengeret fordelt på dimittendstatus" in html
     assert "15 stillinger med flest forgæves rekrutteringsforsøg" in html
     assert html.count("Grafik og databehandling: Michel Klos") == 1
     assert "–" not in html and "—" not in html

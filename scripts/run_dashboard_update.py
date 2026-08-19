@@ -454,6 +454,53 @@ def merge_work_sharing(target: dict, records: list[dict]) -> None:
     target.pop("kpi", None)
 
 
+def merge_expired_benefits(target: dict, records: list[dict]) -> None:
+    category_column = find_record_column(records, ("dimittend",))
+    value_column = find_record_column(
+        records,
+        ("antal", "person", "opbrugt", "dagpengeret"),
+    )
+    category_keys = {
+        "ledige i alt": "total",
+        "1 ars dimittendret": "oneYearGraduate",
+        "oevrige dimittender": "otherGraduates",
+        "oevrige ledige": "otherUnemployed",
+    }
+    series_keys = tuple(category_keys.values())
+    combined = {
+        str(period): {
+            key: target.get(key, [None] * len(target["labels"]))[index]
+            for key in series_keys
+        }
+        for index, period in enumerate(target["labels"])
+    }
+    received = set()
+    for record in records:
+        category = normalized_text(record.get(category_column, "")).strip()
+        key = category_keys.get(category)
+        if key is None:
+            raise RuntimeError(
+                f"Ukendt dimittendkategori for opbrugt dagpengeret: "
+                f"{record.get(category_column)!r}"
+            )
+        received.add(key)
+        period = str(record["Periode"])
+        combined.setdefault(period, {})[key] = builder.api_number(record.get(value_column))
+
+    missing = set(series_keys) - received
+    if missing:
+        raise RuntimeError(
+            "Jobindsats returnerede ikke alle forventede dimittendkategorier: "
+            + ", ".join(sorted(missing))
+        )
+
+    labels = sorted(combined)
+    target["labels"] = labels
+    for key in series_keys:
+        target[key] = [combined[period].get(key) for period in labels]
+    target.pop("kpi", None)
+
+
 def update_failed_recruitment(
     target: dict,
     national_records: list[dict],
@@ -605,6 +652,15 @@ def refresh_jobindsats(data):
     if records is not None:
         merge_work_sharing(data["workSharing"], records)
 
+    records = fetch(
+        "Opbrugt dagpengeret",
+        f"data/y01ud01di?{common}&hierarchy._hele_landet=/"
+        "&hierarchy._akassedp=/&hierarchy._dimittend=*"
+        "&hierarchy._forlang=/&format=json",
+    )
+    if records is not None:
+        merge_expired_benefits(data["expiredBenefits"], records)
+
     recruitment_table_id = None
     try:
         recruitment_table_id, recruitment_metadata = discover_recruitment_table()
@@ -639,6 +695,7 @@ def refresh_jobindsats(data):
             "longTermUnemployment": "y25i09",
             "notices": "y25i05",
             "workSharing": "y25i06",
+            "expiredBenefits": "y01ud01di",
             "failedRecruitment": recruitment_table_id or "automatisk opslag",
         },
         "area": "Hele landet",
@@ -655,6 +712,7 @@ def refresh_jobindsats(data):
         "Langtidsledige i alt": "longTermUnemployment",
         "Varslede afskedigelser": "notices",
         "Arbejdsfordelinger": "workSharing",
+        "Opbrugt dagpengeret": "expiredBenefits",
         "Forgæves rekrutteringsforsøg": "failedRecruitment",
     }
     for label, key in source_keys.items():
@@ -665,6 +723,12 @@ def refresh_jobindsats(data):
     source_status = data.setdefault("meta", {}).setdefault("sourceStatus", {})
     for label, key, dataset, target in (
         ("Arbejdsfordelinger", "workSharing", "y25i06", data["workSharing"]),
+        (
+            "Opbrugt dagpengeret",
+            "expiredBenefits",
+            "y01ud01di",
+            data["expiredBenefits"],
+        ),
         (
             "Forgæves rekrutteringsforsøg",
             "failedRecruitment",
