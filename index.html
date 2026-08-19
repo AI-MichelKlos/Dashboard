@@ -246,11 +246,13 @@ function replaceChart(id,config){
   if(charts[id]) charts[id].destroy();
   charts[id]=new Chart(document.getElementById(id),config);
 }
-function lineChart(id,labels,datasets,decimals=0){
+function lineChart(id,labels,datasets,decimals=0,yMin){
+  const opts=commonOptions(decimals);
+  if(yMin!==undefined) opts.scales.y.min=yMin;
   replaceChart(id,{type:'line',data:{labels,datasets:datasets.map((d,i)=>({
     ...d,borderColor:d.borderColor||COLORS[i],backgroundColor:d.backgroundColor||COLORS[i],
     pointRadius:0,pointHoverRadius:4,borderWidth:2,tension:.18,spanGaps:true
-  }))},options:commonOptions(decimals)});
+  }))},options:opts});
 }
 function barChart(id,labels,datasets,decimals=0){
   const opts=commonOptions(decimals); opts.scales.y.beginAtZero=true;
@@ -294,7 +296,7 @@ function drawAll(n){
   let s=sliced(DATA.unemployment.labels,[DATA.unemployment.total],n);
   lineChart('unemploymentTotal',s.labels,[{label:'Bruttoledige',data:s.series[0]}]);
   s=sliced(DATA.unemployment.labels,[DATA.unemployment.rate],n);
-  lineChart('unemploymentRate',s.labels,[{label:'Ledighed',data:s.series[0]}],1);
+  lineChart('unemploymentRate',s.labels,[{label:'Ledighed',data:s.series[0]}],1,0);
   s=sliced(DATA.unemployment.labels,[DATA.unemployment.benefit,DATA.unemployment.assistance],n);
   lineChart('unemploymentType',s.labels,[{label:'A-dagpenge',data:s.series[0]},{label:'Kontanthjælp',data:s.series[1]}]);
   s=sliced(DATA.longterm.labels,[DATA.longterm.total,DATA.longterm.benefit,DATA.longterm.assistance],n);
