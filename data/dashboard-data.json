@@ -59,7 +59,7 @@
         "seasonalAdjustment": "ikke sæsonkorrigeret"
       },
       "failedRecruitment": {
-        "source": "Jobindsats API v3 og STARs rekrutteringssurvey",
+        "source": "Jobindsats API v3",
         "dataset": "Virksomhedernes forgæves rekrutteringer",
         "unit": "antal og pct.",
         "seasonalAdjustment": "ikke relevant"
@@ -80,7 +80,7 @@
         "seasonalAdjustment": "sæsonkorrigeret",
         "sourceUpdated": "2026-07-21T06:00:00Z",
         "latestPeriod": "2026M05",
-        "fetchedAt": "2026-08-19T09:53:51+02:00"
+        "fetchedAt": "2026-08-19T21:14:18+02:00"
       },
       "bankruptcies": {
         "source": "Danmarks Statistik",
@@ -96,7 +96,7 @@
         "seasonalAdjustment": "kun serie A1",
         "sourceUpdated": "2026-08-06T06:00:00Z",
         "latestPeriod": "2026M07",
-        "fetchedAt": "2026-08-19T09:53:51+02:00"
+        "fetchedAt": "2026-08-19T21:14:18+02:00"
       },
       "consumerConfidence": {
         "source": "Danmarks Statistik",
@@ -110,7 +110,7 @@
         "seasonalAdjustment": "ikke oplyst",
         "sourceUpdated": "2026-07-23T06:00:00Z",
         "latestPeriod": "2026M07",
-        "fetchedAt": "2026-08-19T09:53:51+02:00"
+        "fetchedAt": "2026-08-19T21:14:18+02:00"
       },
       "jobindsats": {
         "source": "Jobindsats",
@@ -122,7 +122,7 @@
           "longTermUnemployment": "y25i09",
           "notices": "y25i05",
           "workSharing": "y25i06",
-          "failedRecruitment": "automatisk opslag"
+          "failedRecruitment": "y25i14"
         },
         "area": "Hele landet",
         "benefitGroups": {
@@ -147,11 +147,11 @@
         "seasonalAdjustment": "ikke relevant",
         "sourceUpdated": "2026-08-10T06:00:00Z",
         "latestPeriod": "2026M07",
-        "fetchedAt": "2026-08-19T09:54:01+02:00"
+        "fetchedAt": "2026-08-19T21:14:33+02:00"
       }
     },
     "updateStatus": {
-      "state": "ok",
+      "state": "partial",
       "successful": [
         "Danmarks Statistik - lønmodtagere (LBESK104)",
         "Danmarks Statistik - konkurser (KONK3)",
@@ -161,13 +161,16 @@
         "A-dagpenge",
         "Kontanthjælp",
         "Nyopslåede stillinger",
-        "Langtidsledige i alt",
-        "Langtidsledige på A-dagpenge",
-        "Langtidsledige på kontanthjælp",
-        "Varslede afskedigelser"
+        "Varslede afskedigelser",
+        "Arbejdsfordelinger",
+        "Forgæves rekrutteringsforsøg"
       ],
-      "failed": [],
-      "checkedAt": "2026-08-19T09:54:08+02:00"
+      "failed": [
+        "Langtidsledige i alt: Jobindsats returnerede HTTP 422: {\"code\":422,\"cause\":\"Unknown period type: M\",\"request_id\":\"90facf57-4fdb-4a2e-a226-ce7777e5aa8b\"}",
+        "Langtidsledige på A-dagpenge: Jobindsats returnerede HTTP 422: {\"code\":422,\"cause\":\"Unknown period type: M\",\"request_id\":\"bae7f07e-2b47-410b-a5b1-d357e7732cfe\"}",
+        "Langtidsledige på kontanthjælp: Jobindsats returnerede HTTP 422: {\"code\":422,\"cause\":\"Unknown period type: M\",\"request_id\":\"68456093-927c-49bc-ba18-99d75c867d03\"}"
+      ],
+      "checkedAt": "2026-08-19T21:14:46+02:00"
     },
     "jobindsatsUpdateStatus": {
       "successful": [
@@ -175,25 +178,30 @@
         "A-dagpenge",
         "Kontanthjælp",
         "Nyopslåede stillinger",
-        "Langtidsledige i alt",
-        "Langtidsledige på A-dagpenge",
-        "Langtidsledige på kontanthjælp",
-        "Varslede afskedigelser"
+        "Varslede afskedigelser",
+        "Arbejdsfordelinger",
+        "Forgæves rekrutteringsforsøg"
       ],
-      "failed": []
+      "failed": [
+        "Langtidsledige i alt: Jobindsats returnerede HTTP 422: {\"code\":422,\"cause\":\"Unknown period type: M\",\"request_id\":\"90facf57-4fdb-4a2e-a226-ce7777e5aa8b\"}",
+        "Langtidsledige på A-dagpenge: Jobindsats returnerede HTTP 422: {\"code\":422,\"cause\":\"Unknown period type: M\",\"request_id\":\"bae7f07e-2b47-410b-a5b1-d357e7732cfe\"}",
+        "Langtidsledige på kontanthjælp: Jobindsats returnerede HTTP 422: {\"code\":422,\"cause\":\"Unknown period type: M\",\"request_id\":\"68456093-927c-49bc-ba18-99d75c867d03\"}"
+      ]
     },
     "sourceStatus": {
       "workSharing": {
-        "state": "seeded",
+        "state": "ok",
         "latestPeriod": "2026M07",
+        "checkedAt": "2026-08-19T21:14:46+02:00",
         "source": "Jobindsats API v3",
         "dataset": "y25i06"
       },
       "failedRecruitment": {
-        "state": "seeded",
+        "state": "ok",
         "latestPeriod": "2026M06",
-        "source": "Jobindsats API v3 og STARs rekrutteringssurvey",
-        "dataset": "automatisk opslag"
+        "checkedAt": "2026-08-19T21:14:46+02:00",
+        "source": "Jobindsats API v3",
+        "dataset": "y25i14"
       }
     }
   },
@@ -8448,7 +8456,7 @@
       284,
       211,
       129,
-      null,
+      144,
       275,
       394,
       452,
@@ -8471,21 +8479,21 @@
       272,
       283,
       198,
-      null,
-      null,
-      null,
-      null,
-      null,
+      94,
+      16,
+      136,
+      239,
+      238,
       228,
       442,
       377,
       498,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
+      477,
+      300,
+      204,
+      85,
+      20,
+      30,
       67,
       439,
       562,
@@ -8527,7 +8535,7 @@
       21,
       72,
       74,
-      null,
+      80,
       375,
       415,
       334,
@@ -8618,64 +8626,64 @@
     "topPeriod": "2026M06",
     "topOccupations": [
       {
-        "name": "Social- og sundhedshjælper",
-        "value": 2788
+        "name": "Stillingsbetegnelse i alt",
+        "value": 95783
       },
       {
-        "name": "Pædagog",
-        "value": 2690
+        "name": "Salg, indkøb og markedsføring",
+        "value": 12516
       },
       {
-        "name": "Lager- og logistikmedarbejder",
-        "value": 1495
+        "name": "Bygge og anlæg",
+        "value": 10879
       },
       {
-        "name": "Butiksassistent",
-        "value": 1337
+        "name": "Sundhed, omsorg og personlig pleje",
+        "value": 10750
       },
       {
-        "name": "Sygeplejerske",
-        "value": 1128
+        "name": "Transport, post, lager- og maskinførerarbejde",
+        "value": 8679
       },
       {
-        "name": "Social- og sundhedsassistent",
-        "value": 1035
+        "name": "Pædagogisk, socialt og kirkeligt arbejde",
+        "value": 6719
       },
       {
-        "name": "Folkeskolelærer",
-        "value": 1007
+        "name": "Akademisk arbejde",
+        "value": 6582
       },
       {
-        "name": "Kok",
-        "value": 856
+        "name": "Jern, metal og auto",
+        "value": 5945
       },
       {
-        "name": "Elektriker",
-        "value": 819
+        "name": "Rengøring, ejendomsservice og renovation",
+        "value": 5298
       },
       {
-        "name": "Rengøringsassistent",
-        "value": 760
+        "name": "Kontor, administration, regnskab og finans",
+        "value": 4548
       },
       {
-        "name": "Tømrer",
-        "value": 755
+        "name": "Hotel, restauration, køkken, kantine",
+        "value": 4368
       },
       {
-        "name": "Murer",
-        "value": 728
+        "name": "(5223.6) Butiksassistent",
+        "value": 4345
       },
       {
-        "name": "Chauffør, fragt, distribution, blandet kørsel",
-        "value": 654
+        "name": "(5322.1) Social- og sundhedshjælper",
+        "value": 3949
       },
       {
-        "name": "Automekaniker",
-        "value": 632
+        "name": "(9333.8) Lager- og logistikmedarbejder",
+        "value": 3489
       },
       {
-        "name": "Produktionsmedarbejder",
-        "value": 613
+        "name": "(2342.1) Pædagog",
+        "value": 3436
       }
     ],
     "attempts": [
@@ -8685,30 +8693,30 @@
       45617,
       45732,
       35461,
-      23006,
-      34675,
-      56081,
-      57941,
-      81622,
-      116700,
-      101548,
-      103167,
-      101771,
-      80690,
-      76262,
-      51723,
-      51557,
-      58492,
-      48433,
-      43514,
-      50093,
-      52417,
-      46135,
-      41622,
-      46295,
-      50881,
-      47098,
-      46104
+      55964,
+      79763,
+      103535,
+      99385,
+      145605,
+      200031,
+      177153,
+      172245,
+      170316,
+      152019,
+      145553,
+      110845,
+      110529,
+      119519,
+      104553,
+      94322,
+      109146,
+      118202,
+      105648,
+      94765,
+      100948,
+      111847,
+      105361,
+      95783
     ],
     "rate": [
       23,
@@ -8717,30 +8725,30 @@
       23,
       22,
       20,
-      18,
-      22,
-      24,
-      24,
-      32,
-      34,
-      30,
-      31,
-      31,
-      28.0,
-      28.0,
-      24,
-      24,
-      25,
-      23,
-      22,
-      24,
-      25,
-      23,
-      22,
-      23,
-      25,
-      24,
-      22
+      0.18,
+      0.22,
+      0.24,
+      0.24,
+      0.32,
+      0.34,
+      0.3,
+      0.31,
+      0.31,
+      0.28,
+      0.28,
+      0.24,
+      0.24,
+      0.25,
+      0.23,
+      0.22,
+      0.24,
+      0.25,
+      0.23,
+      0.22,
+      0.23,
+      0.25,
+      0.24,
+      0.22
     ]
   }
 }
