@@ -338,7 +338,10 @@ def card(title, series, unit="", decimals=0, good_if_up=True, note=""):
 
 def build_data():
     if DATA_OUTPUT.exists():
-        return refresh_jobindsats(json.loads(DATA_OUTPUT.read_text(encoding="utf-8")))
+        data = json.loads(DATA_OUTPUT.read_text(encoding="utf-8"))
+        if os.environ.get("JOBINDSATS_API_TOKEN"):
+            return refresh_jobindsats(data)
+        return data
 
     ledige = long_sheet("Ledige ")
     labels = ledige["Periode"].tolist()
@@ -641,6 +644,26 @@ def build_html(data):
             "pct.", 1, False,
         ),
     ]
+    recruitment_period, recruitment_rate = latest_valid(
+        data["failedRecruitment"]["labels"],
+        data["failedRecruitment"]["rate"],
+    )
+    dynamics_cards = [
+        card(
+            "Arbejdsfordelinger",
+            {"labels": data["workSharing"]["labels"], "values": data["workSharing"]["total"]},
+            "personer", 0, False, "Under og over 13 uger",
+        ),
+        card(
+            "Forgæves rekrutteringsforsøg",
+            {
+                "labels": data["failedRecruitment"]["labels"],
+                "values": data["failedRecruitment"]["attempts"],
+            },
+            "forsøg", 0, False,
+            f"FRR: {fmt_number(recruitment_rate, 1)} pct. i {fmt_period(recruitment_period)}",
+        ),
+    ]
     json_data = json.dumps(data, ensure_ascii=False, separators=(",", ":"))
     country_names = json.dumps(COUNTRY_NAMES, ensure_ascii=False, separators=(",", ":"))
 
@@ -678,6 +701,7 @@ def build_html(data):
     #dak-dashboard .updated {{margin-left:auto; color:var(--muted); font-size:13px}}
     #dak-dashboard .kpi-grid {{display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:14px}}
     #dak-dashboard .kpi-grid.economy {{grid-template-columns:repeat(3,minmax(0,1fr))}}
+    #dak-dashboard .kpi-grid.dynamics {{grid-template-columns:repeat(2,minmax(0,1fr))}}
     #dak-dashboard .kpi-grid.international {{grid-template-columns:repeat(2,minmax(0,1fr))}}
     #dak-dashboard .kpi-card, #dak-dashboard .table-card {{background:var(--paper); border:1px solid var(--line); border-top:4px solid var(--green); border-radius:12px; padding:16px; box-shadow:0 6px 20px rgba(15,43,54,.07)}}
     #dak-dashboard .kpi-title {{font-weight:700; color:var(--navy); min-height:38px}}
@@ -703,14 +727,14 @@ def build_html(data):
     #dak-dashboard td {{text-align:right; font-weight:700; color:var(--navy)}}
     #dak-dashboard .footnote {{margin-top:30px; background:var(--soft); padding:16px; border-left:4px solid var(--blue); font-size:13px; color:var(--muted); line-height:1.5}}
     @media(max-width:900px) {{
-      #dak-dashboard .kpi-grid, #dak-dashboard .kpi-grid.economy {{grid-template-columns:repeat(2,minmax(0,1fr))}}
+      #dak-dashboard .kpi-grid, #dak-dashboard .kpi-grid.economy, #dak-dashboard .kpi-grid.dynamics {{grid-template-columns:repeat(2,minmax(0,1fr))}}
       #dak-dashboard .chart-grid {{grid-template-columns:1fr}}
       #dak-dashboard .chart-card.wide {{grid-column:auto}}
     }}
     @media(max-width:560px) {{
       #dak-dashboard {{padding:14px}}
       #dak-dashboard h1 {{font-size:27px}}
-      #dak-dashboard .kpi-grid, #dak-dashboard .kpi-grid.economy, #dak-dashboard .kpi-grid.international {{grid-template-columns:1fr}}
+      #dak-dashboard .kpi-grid, #dak-dashboard .kpi-grid.economy, #dak-dashboard .kpi-grid.dynamics, #dak-dashboard .kpi-grid.international {{grid-template-columns:1fr}}
       #dak-dashboard .updated {{width:100%; margin:6px 0 0}}
       #dak-dashboard .chart-wrap, #dak-dashboard .chart-card.wide .chart-wrap {{height:340px}}
     }}
@@ -738,6 +762,15 @@ def build_html(data):
     <article class="chart-card"><h3>Lønmodtagere</h3><div class="chart-wrap"><canvas id="wages"></canvas></div><p class="source">Kilde: Danmarks Statistik</p></article>
     <article class="chart-card"><h3>Varslede afskedigelser</h3><div class="chart-wrap"><canvas id="notices"></canvas></div><p class="source">Kilde: Jobindsats</p></article>
     <article class="chart-card"><h3>Konkurser og tabte job</h3><div class="chart-wrap"><canvas id="bankruptcies"></canvas></div><p class="source">Kilde: Danmarks Statistik</p></article>
+  </div>
+
+  <h2>Rekruttering og arbejdsfordeling</h2>
+  <p class="intro">Udviklingen i arbejdsfordelinger samt virksomhedernes forgæves rekrutteringsforsøg på baggrund af STARs rekrutteringssurvey.</p>
+  <div class="kpi-grid dynamics">{''.join(dynamics_cards)}</div>
+  <div class="chart-grid">
+    <article class="chart-card"><h3>Arbejdsfordelinger under og over 13 uger</h3><div class="chart-wrap"><canvas id="workSharing"></canvas></div><p class="source">Kilde: Jobindsats</p></article>
+    <article class="chart-card"><h3>Forgæves rekrutteringsforsøg over tid</h3><div class="chart-wrap"><canvas id="failedRecruitment"></canvas></div><p class="source">Kilde: Jobindsats og STAR. FR omfatter både ikke besatte rekrutteringer og rekrutteringer besat med en anden profil.</p></article>
+    <article class="chart-card wide tall"><h3>15 stillinger med flest forgæves rekrutteringsforsøg</h3><div class="chart-wrap"><canvas id="topRecruitmentOccupations"></canvas></div><p class="source">Kilde: Jobindsats og STAR. Seneste surveyperiode: {fmt_period(data["failedRecruitment"]["topPeriod"])}.</p></article>
   </div>
 
   <h2>Samfundsøkonomi</h2>
@@ -828,6 +861,45 @@ function barChart(id,labels,datasets,decimals=0){{
     ...d,backgroundColor:d.backgroundColor||COLORS[i],borderRadius:2
   }}))}},options:opts}});
 }}
+function stackedBarChart(id,labels,datasets){{
+  const opts=commonOptions(0);
+  opts.scales.x={{...xAxis(),stacked:true}};
+  opts.scales.y={{beginAtZero:true,stacked:true,grid:{{color:'#E8EBE8'}},ticks:{{callback:v=>dkNumber(v,0)}}}};
+  replaceChart(id,{{type:'bar',data:{{labels,datasets:datasets.map((d,i)=>({{
+    ...d,backgroundColor:d.backgroundColor||COLORS[i],borderRadius:2
+  }}))}},options:opts}});
+}}
+function recruitmentChart(id,labels,attempts,rate){{
+  const opts=commonOptions(0);
+  opts.scales.y={{
+    beginAtZero:true,position:'left',title:{{display:true,text:'Forgæves rekrutteringsforsøg'}},
+    ticks:{{callback:v=>dkNumber(v,0)}}
+  }};
+  opts.scales.y1={{
+    beginAtZero:true,position:'right',title:{{display:true,text:'FRR, pct.'}},
+    grid:{{drawOnChartArea:false}},ticks:{{callback:v=>dkNumber(v,1)+' %'}}
+  }};
+  opts.plugins.tooltip.callbacks.label=ctx=>ctx.dataset.yAxisID==='y1'
+    ? ' '+ctx.dataset.label+': '+dkNumber(ctx.parsed.y,1)+' pct.'
+    : ' '+ctx.dataset.label+': '+dkNumber(ctx.parsed.y,0);
+  replaceChart(id,{{type:'bar',data:{{labels,datasets:[
+    {{label:'Forgæves rekrutteringsforsøg',data:attempts,backgroundColor:'rgba(107,158,120,.78)',borderColor:COLORS[0],borderWidth:1,borderRadius:2,yAxisID:'y'}},
+    {{type:'line',label:'FRR',data:rate,borderColor:COLORS[1],backgroundColor:COLORS[1],pointRadius:0,pointHoverRadius:4,borderWidth:2.5,tension:.18,yAxisID:'y1'}}
+  ]}},options:opts}});
+}}
+function horizontalValueBar(id,labels,values,label){{
+  replaceChart(id,{{
+    type:'bar',data:{{labels,datasets:[{{label,data:values,backgroundColor:COLORS[2],borderRadius:2}}]}},
+    options:{{
+      indexAxis:'y',responsive:true,maintainAspectRatio:false,
+      plugins:{{legend:{{display:false}},tooltip:{{callbacks:{{label:ctx=>' '+dkNumber(ctx.parsed.x,0)+' forsøg'}}}}}},
+      scales:{{
+        x:{{beginAtZero:true,grid:{{color:'#E8EBE8'}},ticks:{{callback:v=>dkNumber(v,0)}}}},
+        y:{{grid:{{display:false}}}}
+      }}
+    }}
+  }});
+}}
 function dualAxisChart(id,labels,left,right){{
   const opts=commonOptions(0);
   opts.scales.y={{
@@ -877,6 +949,17 @@ function drawAll(n){{
   dualAxisChart('notices',s.labels,{{label:'Varslede personer',data:s.series[0]}},{{label:'Virksomheder',data:s.series[1]}});
   s=sliced(DATA.bankruptcies.labels,[DATA.bankruptcies.seasonal,DATA.bankruptcies.lostJobs],n);
   dualAxisChart('bankruptcies',s.labels,{{label:'Konkurser, sæsonkorrigeret',data:s.series[0]}},{{label:'Tabte job',data:s.series[1]}});
+  s=sliced(DATA.workSharing.labels,[DATA.workSharing.under13Weeks,DATA.workSharing.over13Weeks],n);
+  stackedBarChart('workSharing',s.labels,[{{label:'Under 13 uger',data:s.series[0]}},{{label:'Over 13 uger',data:s.series[1]}}]);
+  const surveyPeriods=Math.max(4,Math.ceil(n/3));
+  s=sliced(DATA.failedRecruitment.labels,[DATA.failedRecruitment.attempts,DATA.failedRecruitment.rate],surveyPeriods);
+  recruitmentChart('failedRecruitment',s.labels,s.series[0],s.series[1]);
+  horizontalValueBar(
+    'topRecruitmentOccupations',
+    DATA.failedRecruitment.topOccupations.map(item=>item.name),
+    DATA.failedRecruitment.topOccupations.map(item=>item.value),
+    'Forgæves rekrutteringsforsøg'
+  );
   s=sliced(DATA.confidence.labels,[DATA.confidence.value],n);
   lineChart('confidence',s.labels,[{{label:'Forbrugertillid',data:s.series[0]}}],1);
   s=sliced(DATA.business.labels,[DATA.business.value],n);
@@ -903,26 +986,52 @@ drawAll(60);
 
 
 def validate(data, html):
-    for name in ("unemployment", "vacancies", "notices", "longterm"):
+    for name in (
+        "unemployment",
+        "vacancies",
+        "notices",
+        "longterm",
+        "workSharing",
+        "failedRecruitment",
+    ):
         assert len(data[name]["labels"]) >= 12
         assert data[name]["labels"] == sorted(data[name]["labels"])
     assert latest_valid(data["unemployment"]["labels"], data["unemployment"]["total"])[1] is not None
     assert latest_valid(data["vacancies"]["labels"], data["vacancies"]["values"])[1] is not None
     assert latest_valid(data["notices"]["labels"], data["notices"]["people"])[1] is not None
     assert latest_valid(data["longterm"]["labels"], data["longterm"]["total"])[1] is not None
+    assert latest_valid(data["workSharing"]["labels"], data["workSharing"]["total"])[1] is not None
+    for key in ("under13Weeks", "over13Weeks", "total"):
+        assert len(data["workSharing"][key]) == len(data["workSharing"]["labels"])
+    assert latest_valid(
+        data["failedRecruitment"]["labels"],
+        data["failedRecruitment"]["attempts"],
+    )[1] is not None
+    for key in ("attempts", "rate"):
+        assert len(data["failedRecruitment"][key]) == len(data["failedRecruitment"]["labels"])
+    assert latest_valid(
+        data["failedRecruitment"]["labels"],
+        data["failedRecruitment"]["rate"],
+    )[1] is not None
+    assert len(data["failedRecruitment"]["topOccupations"]) == 15
+    assert all(item["name"] and item["value"] is not None for item in data["failedRecruitment"]["topOccupations"])
     assert data["meta"]["officialApi"]["wages"]["dataset"] == "LBESK104"
     assert data["meta"]["officialApi"]["bankruptcies"]["dataset"] == "KONK3"
     assert data["meta"]["officialApi"]["consumerConfidence"]["dataset"] == "FORV1"
     assert data["meta"]["officialApi"]["jobindsats"]["tables"]["unemployment"] == "y25i03"
+    assert data["meta"]["officialApi"]["jobindsats"]["tables"]["workSharing"] == "y25i06"
+    assert data["meta"]["officialApi"]["jobindsats"]["tables"]["failedRecruitment"]
     assert "NaN" not in html and "Infinity" not in html
-    assert html.count("<canvas") == 14
-    assert html.count('class="kpi-card"') == 10
+    assert html.count("<canvas") == 17
+    assert html.count('class="kpi-card"') == 12
     assert html.count('class="table-card"') == 2
     assert "type:'category'" in html
     assert "indexAxis:'y'" in html
     assert "this.chart.data.labels" in html
     assert "left.label+' (venstre akse)'" in html
     assert "right.label+' (højre akse)'" in html
+    assert "Arbejdsfordelinger under og over 13 uger" in html
+    assert "15 stillinger med flest forgæves rekrutteringsforsøg" in html
     assert html.count("Grafik og databehandling: Michel Klos") == 1
     assert "–" not in html and "—" not in html
 

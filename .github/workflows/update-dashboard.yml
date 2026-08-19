@@ -111,7 +111,11 @@ jobs:
           test -s data/dashboard-data.json
           grep -q "Analytisk overblik" index.html
           grep -q "const DATA=" index.html
+          grep -q "Arbejdsfordelinger under og over 13 uger" index.html
+          grep -q "15 stillinger med flest forgæves rekrutteringsforsøg" index.html
           grep -q '"PRIS01"' data/dashboard-data.json
+          grep -q '"workSharing": "y25i06"' data/dashboard-data.json
+          grep -q '"failedRecruitment"' data/dashboard-data.json
 
       - name: Gem dashboarddata og status
         if: steps.gate.outputs.should_run == 'true' && always()

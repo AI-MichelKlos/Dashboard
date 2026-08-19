@@ -9,6 +9,7 @@ import re
 import time
 import urllib.error
 import urllib.request
+import unicodedata
 from datetime import datetime
 from zoneinfo import ZoneInfo
 
@@ -317,6 +318,206 @@ def refresh_statbank(data):
     return successes, failures
 
 
+def normalized_text(value) -> str:
+    text = unicodedata.normalize("NFKD", str(value))
+    text = "".join(character for character in text if not unicodedata.combining(character)).lower()
+    return text.replace("æ", "ae").replace("ø", "oe").replace("å", "aa")
+
+
+def walk_dicts(value):
+    if isinstance(value, dict):
+        yield value
+        for child in value.values():
+            yield from walk_dicts(child)
+    elif isinstance(value, list):
+        for child in value:
+            yield from walk_dicts(child)
+
+
+def discover_recruitment_table():
+    catalog = builder.jobindsats_get("tables?format=json")
+    needle = "virksomhedernes forgaeves rekrutteringer"
+    for item in walk_dicts(catalog):
+        searchable = " ".join(
+            normalized_text(value)
+            for value in item.values()
+            if isinstance(value, (str, int, float))
+        )
+        if needle not in searchable:
+            continue
+        candidates = [
+            str(value)
+            for value in item.values()
+            if isinstance(value, str) and re.fullmatch(r"y[0-9a-z]+", value.lower())
+        ]
+        if candidates:
+            table_id = candidates[0]
+            return table_id, builder.jobindsats_get(f"table/{table_id}?format=json")
+    raise RuntimeError(
+        "Jobindsats-tabelkataloget indeholder ikke målingen "
+        "Virksomhedernes forgæves rekrutteringer"
+    )
+
+
+def hierarchy_identifiers(metadata) -> set[str]:
+    identifiers: set[str] = set()
+    for item in walk_dicts(metadata):
+        for key, value in item.items():
+            for candidate in (key, value):
+                if isinstance(candidate, str) and re.fullmatch(r"_[A-Za-z0-9_]+", candidate):
+                    identifiers.add(candidate)
+    return identifiers
+
+
+def occupation_hierarchy(metadata, identifiers: set[str]) -> str:
+    for item in walk_dicts(metadata):
+        searchable = normalized_text(json.dumps(item, ensure_ascii=False))
+        if "stillingsbetegn" not in searchable:
+            continue
+        local = {
+            str(candidate)
+            for key, value in item.items()
+            for candidate in (key, value)
+            if isinstance(candidate, str) and re.fullmatch(r"_[A-Za-z0-9_]+", candidate)
+        }
+        preferred = sorted(local, key=lambda value: ("stilling" not in value.lower(), len(value)))
+        if preferred:
+            return preferred[0]
+    preferred = sorted(
+        (value for value in identifiers if "stilling" in value.lower()),
+        key=len,
+    )
+    if preferred:
+        return preferred[0]
+    raise RuntimeError("Kunne ikke finde hierarkiet for stillingsbetegnelser i tabelmetadata")
+
+
+def recruitment_data_paths(table_id: str, metadata) -> dict[str, str]:
+    identifiers = hierarchy_identifiers(metadata)
+    area = next(
+        (candidate for candidate in ("_nykom", "_reko", "_region") if candidate in identifiers),
+        None,
+    )
+    if area is None:
+        raise RuntimeError(
+            "Kunne ikke finde et områdehierarki i tabelmetadata. "
+            f"Fundne hierarkier: {sorted(identifiers)}"
+        )
+    occupation = occupation_hierarchy(metadata, identifiers)
+    base = f"data/{table_id}?mgroup.*=*&period.M=latest:120&hierarchy.{area}=/"
+    return {
+        "national": f"{base}&format=json",
+        "occupations": f"{base}&hierarchy.{occupation}=*&format=json",
+    }
+
+
+def find_record_column(records: list[dict], include: tuple[str, ...], exclude: tuple[str, ...] = ()) -> str:
+    columns = list(records[0]) if records else []
+    for column in columns:
+        normalized = normalized_text(column)
+        if all(term in normalized for term in include) and not any(term in normalized for term in exclude):
+            return column
+    raise RuntimeError(
+        f"Kunne ikke finde kolonnen med {include}. Tilgængelige kolonner: {columns}"
+    )
+
+
+def merge_work_sharing(target: dict, records: list[dict]) -> None:
+    type_column = find_record_column(records, ("arbejdsfordelingstype",))
+    value_column = find_record_column(records, ("antal", "person"))
+    combined = {
+        str(period): {
+            "under13Weeks": target.get("under13Weeks", [None] * len(target["labels"]))[index],
+            "over13Weeks": target.get("over13Weeks", [None] * len(target["labels"]))[index],
+        }
+        for index, period in enumerate(target["labels"])
+    }
+    for record in records:
+        period = str(record["Periode"])
+        category = normalized_text(record.get(type_column, ""))
+        if "op til 13" in category or "under 13" in category:
+            key = "under13Weeks"
+        elif "over 13" in category:
+            key = "over13Weeks"
+        else:
+            raise RuntimeError(f"Ukendt arbejdsfordelingstype: {record.get(type_column)!r}")
+        combined.setdefault(period, {})[key] = builder.api_number(record.get(value_column))
+
+    labels = sorted(combined)
+    target["labels"] = labels
+    for key in ("under13Weeks", "over13Weeks"):
+        target[key] = [combined[period].get(key) for period in labels]
+    target["total"] = [
+        sum(value for value in values if value is not None) if any(value is not None for value in values) else None
+        for values in zip(target["under13Weeks"], target["over13Weeks"])
+    ]
+    target.pop("kpi", None)
+
+
+def update_failed_recruitment(
+    target: dict,
+    national_records: list[dict],
+    occupation_records: list[dict],
+) -> None:
+    attempts_column = find_record_column(
+        national_records,
+        ("forgaeves", "rekrutteringsforsoeg"),
+        ("rate",),
+    )
+    rate_column = find_record_column(
+        national_records,
+        ("forgaeves", "rekrutteringsrate"),
+    )
+    previous_attempts = target.get("attempts", target.get("notFilled", []))
+    previous_rate = target.get("rate", target.get("frr", []))
+    combined = {
+        str(period): {
+            "attempts": previous_attempts[index] if index < len(previous_attempts) else None,
+            "rate": previous_rate[index] if index < len(previous_rate) else None,
+        }
+        for index, period in enumerate(target.get("labels", []))
+    }
+    for record in national_records:
+        period = str(record["Periode"])
+        combined[period] = {
+            "attempts": builder.api_number(record.get(attempts_column)),
+            "rate": builder.api_number(record.get(rate_column)),
+        }
+
+    labels = sorted(combined)
+    target["labels"] = labels
+    target["attempts"] = [combined[period].get("attempts") for period in labels]
+    target["rate"] = [combined[period].get("rate") for period in labels]
+    target.pop("notFilled", None)
+    target.pop("frr", None)
+    target.pop("kpi", None)
+
+    occupation_column = find_record_column(occupation_records, ("stillingsbetegn",))
+    occupation_attempts_column = find_record_column(
+        occupation_records,
+        ("forgaeves", "rekrutteringsforsoeg"),
+        ("rate",),
+    )
+    latest_period = max(str(record["Periode"]) for record in occupation_records)
+    ranked = sorted(
+        (
+            {
+                "name": str(record.get(occupation_column, "")).strip(),
+                "value": builder.api_number(record.get(occupation_attempts_column)),
+            }
+            for record in occupation_records
+            if str(record["Periode"]) == latest_period
+        ),
+        key=lambda item: item["value"] if item["value"] is not None else -1,
+        reverse=True,
+    )
+    ranked = [item for item in ranked if item["name"] and item["value"] is not None][:15]
+    if len(ranked) < 15:
+        raise RuntimeError(f"Jobindsats returnerede kun {len(ranked)} anvendelige stillinger")
+    target["topPeriod"] = latest_period
+    target["topOccupations"] = ranked
+
+
 def refresh_jobindsats(data):
     successes: list[str] = []
     failures: list[str] = []
@@ -386,6 +587,38 @@ def refresh_jobindsats(data):
             },
         )
 
+    records = fetch(
+        "Arbejdsfordelinger",
+        f"data/y25i06?{common}&hierarchy._nykom=/"
+        "&hierarchy._var13uger=*&format=json",
+    )
+    if records is not None:
+        merge_work_sharing(data["workSharing"], records)
+
+    recruitment_table_id = None
+    try:
+        recruitment_table_id, recruitment_metadata = discover_recruitment_table()
+        recruitment_paths = recruitment_data_paths(recruitment_table_id, recruitment_metadata)
+        national_records = builder.jobindsats_records(recruitment_paths["national"])
+        occupation_records = builder.jobindsats_records(recruitment_paths["occupations"])
+        update_failed_recruitment(
+            data["failedRecruitment"],
+            national_records,
+            occupation_records,
+        )
+        successes.append("Forgæves rekrutteringsforsøg")
+        print(
+            "Færdig: Forgæves rekrutteringsforsøg. "
+            f"Jobindsats-tabel: {recruitment_table_id}.",
+            flush=True,
+        )
+    except Exception as exc:
+        failures.append(f"Forgæves rekrutteringsforsøg: {exc}")
+        print(
+            f"ADVARSEL: Forgæves rekrutteringsforsøg blev ikke opdateret: {exc}",
+            flush=True,
+        )
+
     data.setdefault("meta", {}).setdefault("officialApi", {})["jobindsats"] = {
         "source": "Jobindsats",
         "version": "v3",
@@ -395,6 +628,8 @@ def refresh_jobindsats(data):
             "vacancies": "y25i07",
             "longTermUnemployment": "y25i09",
             "notices": "y25i05",
+            "workSharing": "y25i06",
+            "failedRecruitment": recruitment_table_id or "automatisk opslag",
         },
         "area": "Hele landet",
         "benefitGroups": {
@@ -409,10 +644,36 @@ def refresh_jobindsats(data):
         "Nyopslåede stillinger": "vacancies",
         "Langtidsledige i alt": "longTermUnemployment",
         "Varslede afskedigelser": "notices",
+        "Arbejdsfordelinger": "workSharing",
+        "Forgæves rekrutteringsforsøg": "failedRecruitment",
     }
     for label, key in source_keys.items():
         if label in successes and key in data["meta"].get("sourceRegister", {}):
             data["meta"]["sourceRegister"][key]["source"] = "Jobindsats API v3"
+
+    now = datetime.now(ZoneInfo("Europe/Copenhagen")).isoformat(timespec="seconds")
+    source_status = data.setdefault("meta", {}).setdefault("sourceStatus", {})
+    for label, key, dataset, target in (
+        ("Arbejdsfordelinger", "workSharing", "y25i06", data["workSharing"]),
+        (
+            "Forgæves rekrutteringsforsøg",
+            "failedRecruitment",
+            recruitment_table_id or "automatisk opslag",
+            data["failedRecruitment"],
+        ),
+    ):
+        latest_period = target.get("topPeriod") or target.get("labels", [None])[-1]
+        source_status[key] = {
+            "state": "ok" if label in successes else "stale",
+            "latestPeriod": latest_period,
+            "checkedAt": now,
+            "source": "Jobindsats API v3",
+            "dataset": dataset,
+        }
+    data["meta"]["jobindsatsUpdateStatus"] = {
+        "successful": successes,
+        "failed": failures,
+    }
     return successes, failures
 
 
