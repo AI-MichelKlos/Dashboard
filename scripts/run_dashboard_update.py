@@ -479,9 +479,12 @@ def update_failed_recruitment(
     }
     for record in national_records:
         period = str(record["Periode"])
+        rate_value = builder.api_number(record.get(rate_column))
+        if rate_value is not None and abs(rate_value) <= 1:
+            rate_value = round(rate_value * 100, 4)
         combined[period] = {
             "attempts": builder.api_number(record.get(attempts_column)),
-            "rate": builder.api_number(record.get(rate_column)),
+            "rate": rate_value,
         }
 
     labels = sorted(combined)
@@ -499,15 +502,22 @@ def update_failed_recruitment(
         ("rate",),
     )
     latest_period = max(str(record["Periode"]) for record in occupation_records)
-    ranked = sorted(
-        (
+    occupations = []
+    for record in occupation_records:
+        if str(record["Periode"]) != latest_period:
+            continue
+        raw_name = str(record.get(occupation_column, "")).strip()
+        match = re.fullmatch(r"\(\d{4}(?:\.\d+)?\)\s*(.+)", raw_name)
+        if not match:
+            continue
+        occupations.append(
             {
-                "name": str(record.get(occupation_column, "")).strip(),
+                "name": match.group(1).strip(),
                 "value": builder.api_number(record.get(occupation_attempts_column)),
             }
-            for record in occupation_records
-            if str(record["Periode"]) == latest_period
-        ),
+        )
+    ranked = sorted(
+        occupations,
         key=lambda item: item["value"] if item["value"] is not None else -1,
         reverse=True,
     )
