@@ -80,7 +80,7 @@
         "seasonalAdjustment": "sæsonkorrigeret",
         "sourceUpdated": "2026-07-21T06:00:00Z",
         "latestPeriod": "2026M05",
-        "fetchedAt": "2026-08-19T21:14:18+02:00"
+        "fetchedAt": "2026-08-19T21:16:50+02:00"
       },
       "bankruptcies": {
         "source": "Danmarks Statistik",
@@ -96,7 +96,7 @@
         "seasonalAdjustment": "kun serie A1",
         "sourceUpdated": "2026-08-06T06:00:00Z",
         "latestPeriod": "2026M07",
-        "fetchedAt": "2026-08-19T21:14:18+02:00"
+        "fetchedAt": "2026-08-19T21:16:50+02:00"
       },
       "consumerConfidence": {
         "source": "Danmarks Statistik",
@@ -110,7 +110,7 @@
         "seasonalAdjustment": "ikke oplyst",
         "sourceUpdated": "2026-07-23T06:00:00Z",
         "latestPeriod": "2026M07",
-        "fetchedAt": "2026-08-19T21:14:18+02:00"
+        "fetchedAt": "2026-08-19T21:16:50+02:00"
       },
       "jobindsats": {
         "source": "Jobindsats",
@@ -147,11 +147,11 @@
         "seasonalAdjustment": "ikke relevant",
         "sourceUpdated": "2026-08-10T06:00:00Z",
         "latestPeriod": "2026M07",
-        "fetchedAt": "2026-08-19T21:14:33+02:00"
+        "fetchedAt": "2026-08-19T21:17:07+02:00"
       }
     },
     "updateStatus": {
-      "state": "partial",
+      "state": "ok",
       "successful": [
         "Danmarks Statistik - lønmodtagere (LBESK104)",
         "Danmarks Statistik - konkurser (KONK3)",
@@ -161,16 +161,15 @@
         "A-dagpenge",
         "Kontanthjælp",
         "Nyopslåede stillinger",
+        "Langtidsledige i alt",
+        "Langtidsledige på A-dagpenge",
+        "Langtidsledige på kontanthjælp",
         "Varslede afskedigelser",
         "Arbejdsfordelinger",
         "Forgæves rekrutteringsforsøg"
       ],
-      "failed": [
-        "Langtidsledige i alt: Jobindsats returnerede HTTP 422: {\"code\":422,\"cause\":\"Unknown period type: M\",\"request_id\":\"90facf57-4fdb-4a2e-a226-ce7777e5aa8b\"}",
-        "Langtidsledige på A-dagpenge: Jobindsats returnerede HTTP 422: {\"code\":422,\"cause\":\"Unknown period type: M\",\"request_id\":\"bae7f07e-2b47-410b-a5b1-d357e7732cfe\"}",
-        "Langtidsledige på kontanthjælp: Jobindsats returnerede HTTP 422: {\"code\":422,\"cause\":\"Unknown period type: M\",\"request_id\":\"68456093-927c-49bc-ba18-99d75c867d03\"}"
-      ],
-      "checkedAt": "2026-08-19T21:14:46+02:00"
+      "failed": [],
+      "checkedAt": "2026-08-19T21:17:26+02:00"
     },
     "jobindsatsUpdateStatus": {
       "successful": [
@@ -178,28 +177,27 @@
         "A-dagpenge",
         "Kontanthjælp",
         "Nyopslåede stillinger",
+        "Langtidsledige i alt",
+        "Langtidsledige på A-dagpenge",
+        "Langtidsledige på kontanthjælp",
         "Varslede afskedigelser",
         "Arbejdsfordelinger",
         "Forgæves rekrutteringsforsøg"
       ],
-      "failed": [
-        "Langtidsledige i alt: Jobindsats returnerede HTTP 422: {\"code\":422,\"cause\":\"Unknown period type: M\",\"request_id\":\"90facf57-4fdb-4a2e-a226-ce7777e5aa8b\"}",
-        "Langtidsledige på A-dagpenge: Jobindsats returnerede HTTP 422: {\"code\":422,\"cause\":\"Unknown period type: M\",\"request_id\":\"bae7f07e-2b47-410b-a5b1-d357e7732cfe\"}",
-        "Langtidsledige på kontanthjælp: Jobindsats returnerede HTTP 422: {\"code\":422,\"cause\":\"Unknown period type: M\",\"request_id\":\"68456093-927c-49bc-ba18-99d75c867d03\"}"
-      ]
+      "failed": []
     },
     "sourceStatus": {
       "workSharing": {
         "state": "ok",
         "latestPeriod": "2026M07",
-        "checkedAt": "2026-08-19T21:14:46+02:00",
+        "checkedAt": "2026-08-19T21:17:26+02:00",
         "source": "Jobindsats API v3",
         "dataset": "y25i06"
       },
       "failedRecruitment": {
         "state": "ok",
         "latestPeriod": "2026M06",
-        "checkedAt": "2026-08-19T21:14:46+02:00",
+        "checkedAt": "2026-08-19T21:17:26+02:00",
         "source": "Jobindsats API v3",
         "dataset": "y25i14"
       }
@@ -2830,7 +2828,8 @@
       "2026M03",
       "2026M04",
       "2026M05",
-      "2026M06"
+      "2026M06",
+      "2026M07"
     ],
     "total": [
       29822,
@@ -2932,27 +2931,28 @@
       15765,
       15830,
       15070,
-      15027,
+      15028,
       15394,
-      15500,
-      16111,
-      15532,
-      15362,
-      15822,
-      16446,
-      16597,
-      16465,
-      16294,
-      15585,
-      15564,
-      15912,
-      16028,
-      16743,
+      15501,
+      16109,
+      15534,
+      15363,
+      15825,
+      16448,
+      16600,
+      16466,
+      16298,
+      15589,
+      15570,
+      15913,
+      16031,
+      16744,
       16193,
-      16221,
-      17005,
-      17357,
-      17346
+      16223,
+      17007,
+      17365,
+      17551,
+      17208
     ],
     "benefit": [
       15105,
@@ -3053,28 +3053,29 @@
       12055,
       11753,
       11735,
-      11031,
+      11030,
       11070,
       11463,
-      11570,
-      12191,
-      11597,
-      11387,
-      11836,
-      12477,
-      12607,
+      11571,
+      12192,
+      11599,
+      11389,
+      11839,
+      12478,
+      12609,
       12523,
-      12256,
+      12260,
+      11520,
       11515,
-      11509,
-      11823,
-      11927,
+      11825,
+      11930,
       12545,
-      11978,
-      11924,
-      12611,
-      12972,
-      12989
+      11977,
+      11925,
+      12612,
+      12980,
+      13158,
+      12815
     ],
     "assistance": [
       14716,
@@ -3175,28 +3176,29 @@
       4073,
       4012,
       4095,
-      4039,
-      3957,
+      4040,
+      3958,
       3931,
       3930,
-      3920,
+      3918,
       3934,
-      3976,
-      3986,
+      3975,
+      3987,
       3969,
-      3990,
+      3991,
       3942,
       4038,
       4069,
       4055,
       4089,
       4101,
-      4199,
-      4215,
-      4297,
-      4394,
-      4385,
-      4358
+      4200,
+      4216,
+      4298,
+      4395,
+      4386,
+      4393,
+      4393
     ]
   },
   "inflation": {
@@ -8626,64 +8628,64 @@
     "topPeriod": "2026M06",
     "topOccupations": [
       {
-        "name": "Stillingsbetegnelse i alt",
-        "value": 95783
-      },
-      {
-        "name": "Salg, indkøb og markedsføring",
-        "value": 12516
-      },
-      {
-        "name": "Bygge og anlæg",
-        "value": 10879
-      },
-      {
-        "name": "Sundhed, omsorg og personlig pleje",
-        "value": 10750
-      },
-      {
-        "name": "Transport, post, lager- og maskinførerarbejde",
-        "value": 8679
-      },
-      {
-        "name": "Pædagogisk, socialt og kirkeligt arbejde",
-        "value": 6719
-      },
-      {
-        "name": "Akademisk arbejde",
-        "value": 6582
-      },
-      {
-        "name": "Jern, metal og auto",
-        "value": 5945
-      },
-      {
-        "name": "Rengøring, ejendomsservice og renovation",
-        "value": 5298
-      },
-      {
-        "name": "Kontor, administration, regnskab og finans",
-        "value": 4548
-      },
-      {
-        "name": "Hotel, restauration, køkken, kantine",
-        "value": 4368
-      },
-      {
-        "name": "(5223.6) Butiksassistent",
+        "name": "Butiksassistent",
         "value": 4345
       },
       {
-        "name": "(5322.1) Social- og sundhedshjælper",
+        "name": "Social- og sundhedshjælper",
         "value": 3949
       },
       {
-        "name": "(9333.8) Lager- og logistikmedarbejder",
+        "name": "Lager- og logistikmedarbejder",
         "value": 3489
       },
       {
-        "name": "(2342.1) Pædagog",
+        "name": "Pædagog",
         "value": 3436
+      },
+      {
+        "name": "Rengøringsassistent",
+        "value": 2562
+      },
+      {
+        "name": "Kontormedhjælper",
+        "value": 1867
+      },
+      {
+        "name": "Folkeskolelærer",
+        "value": 1771
+      },
+      {
+        "name": "Sygeplejerske",
+        "value": 1613
+      },
+      {
+        "name": "Elektriker",
+        "value": 1513
+      },
+      {
+        "name": "Butiksmedhjælper",
+        "value": 1466
+      },
+      {
+        "name": "Social- og sundhedsassistent",
+        "value": 1385
+      },
+      {
+        "name": "Kok",
+        "value": 1320
+      },
+      {
+        "name": "Specialarbejder, jord og beton",
+        "value": 1299
+      },
+      {
+        "name": "Tømrer",
+        "value": 1258
+      },
+      {
+        "name": "Chauffør, fragt, distribution, blandet kørsel",
+        "value": 1177
       }
     ],
     "attempts": [
@@ -8725,30 +8727,30 @@
       23,
       22,
       20,
-      0.18,
-      0.22,
-      0.24,
-      0.24,
-      0.32,
-      0.34,
-      0.3,
-      0.31,
-      0.31,
-      0.28,
-      0.28,
-      0.24,
-      0.24,
-      0.25,
-      0.23,
-      0.22,
-      0.24,
-      0.25,
-      0.23,
-      0.22,
-      0.23,
-      0.25,
-      0.24,
-      0.22
+      18.0,
+      22.0,
+      24.0,
+      24.0,
+      32.0,
+      34.0,
+      30.0,
+      31.0,
+      31.0,
+      28.0,
+      28.0,
+      24.0,
+      24.0,
+      25.0,
+      23.0,
+      22.0,
+      24.0,
+      25.0,
+      23.0,
+      22.0,
+      23.0,
+      25.0,
+      24.0,
+      22.0
     ]
   }
 }
