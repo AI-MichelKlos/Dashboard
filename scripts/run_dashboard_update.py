@@ -265,6 +265,19 @@ def refresh_statbank(data):
                 "seasonalAdjustment": "ikke oplyst",
             },
         },
+        {
+            "label": "Danmarks Statistik - erhvervstillid (ETILLID)",
+            "table": "ETILLID",
+            "dimension": "INDIKATOR",
+            "selections": ["TE"],
+            "target": "business",
+            "mapping": {"value": "TE"},
+            "sourceRegisterKey": "businessConfidence",
+            "meta": {
+                "unit": "indeks",
+                "seasonalAdjustment": "ikke oplyst",
+            },
+        },
     ]
 
     for spec in specs:
@@ -294,6 +307,7 @@ def refresh_statbank(data):
                 "wages": "wages",
                 "bankruptcies": "bankruptcies",
                 "confidence": "consumerConfidence",
+                "business": "businessConfidence",
             }[spec["target"]]
             official[official_key] = {
                 "source": "Danmarks Statistik",
@@ -304,6 +318,17 @@ def refresh_statbank(data):
                 "latestPeriod": labels[-1],
                 "fetchedAt": now.isoformat(timespec="seconds"),
             }
+            source_register_key = spec.get("sourceRegisterKey")
+            if source_register_key:
+                data.setdefault("meta", {}).setdefault("sourceRegister", {}).setdefault(
+                    source_register_key, {}
+                ).update(
+                    {
+                        "source": "Danmarks Statistik API",
+                        "dataset": spec["table"],
+                        **spec["meta"],
+                    }
+                )
             successes.append(spec["label"])
             print(
                 f"Færdig: {spec['label']}. Seneste periode: {labels[-1]}. "

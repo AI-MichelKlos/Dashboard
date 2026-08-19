@@ -913,6 +913,12 @@ def validate(data, html):
     assert data["meta"]["officialApi"]["wages"]["dataset"] == "LBESK104"
     assert data["meta"]["officialApi"]["bankruptcies"]["dataset"] == "KONK3"
     assert data["meta"]["officialApi"]["consumerConfidence"]["dataset"] == "FORV1"
+    assert data["meta"]["officialApi"]["businessConfidence"]["dataset"] == "ETILLID"
+    assert (
+        data["meta"]["sourceRegister"]["businessConfidence"]["source"]
+        == "Danmarks Statistik API"
+    )
+    assert data["meta"]["sourceRegister"]["businessConfidence"]["dataset"] == "ETILLID"
     assert data["meta"]["officialApi"]["jobindsats"]["tables"]["unemployment"] == "y25i03"
     assert "NaN" not in html and "Infinity" not in html
     assert html.count("<canvas") == 14

@@ -112,6 +112,7 @@ jobs:
           grep -q "Analytisk overblik" index.html
           grep -q "const DATA=" index.html
           grep -q '"PRIS01"' data/dashboard-data.json
+          grep -q '"ETILLID"' data/dashboard-data.json
 
       - name: Gem dashboarddata og status
         if: steps.gate.outputs.should_run == 'true' && always()
