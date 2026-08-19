@@ -689,7 +689,7 @@ def build_html(data):
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
   <style>
     body {{margin:0; background:#f5f7f5; font-family:'Segoe UI',Arial,sans-serif; color:#0F2B36}}
-    .dak-hero {{background:linear-gradient(135deg,#0F2B36,#244d4b); color:#fff; padding:32px 20px}}
+    .dak-hero {{background-color:#0F2B36; background-image:url('assets/arbejdsmarkedets-puls.webp'),linear-gradient(135deg,#0F2B36,#244d4b); background-position:center 46%,center; background-size:cover,cover; background-repeat:no-repeat; color:#fff; padding:32px 20px}}
     .dak-hero-inner {{max-width:1280px; margin:0 auto}}
     .dak-eyebrow {{font-size:.75rem; letter-spacing:.12em; text-transform:uppercase; font-weight:700; color:#c9dfcf}}
     .dak-hero h1 {{font-size:clamp(2.1rem,4vw,3.4rem); line-height:1.08; margin:5px 0 0; color:#fff}}
@@ -745,6 +745,7 @@ def build_html(data):
       #dak-dashboard .chart-card.wide {{grid-column:auto}}
     }}
     @media(max-width:560px) {{
+      .dak-hero {{background-position:58% center,center}}
       #dak-dashboard {{padding:14px}}
       #dak-dashboard h1 {{font-size:27px}}
       #dak-dashboard .kpi-grid, #dak-dashboard .kpi-grid.economy, #dak-dashboard .kpi-grid.dynamics, #dak-dashboard .kpi-grid.international {{grid-template-columns:1fr}}
