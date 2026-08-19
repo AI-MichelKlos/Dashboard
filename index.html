@@ -27,13 +27,13 @@
     #dak-dashboard .intro {color:var(--muted); margin:0 0 18px; line-height:1.55}
     #dak-dashboard .toolbar {display:flex; flex-wrap:wrap; align-items:center; gap:9px; padding:14px 16px; background:var(--soft); border-radius:8px; margin:18px 0 24px}
     #dak-dashboard .toolbar-label {font-weight:700; margin-right:4px}
-    #dak-dashboard button {border:1px solid var(--green-dark); background:#fff; color:var(--green-dark); border-radius:5px; padding:8px 13px; font-weight:700; cursor:pointer}
+    #dak-dashboard button {border:1px solid var(--green-dark); background:#fff; color:var(--green-dark); border-radius:8px; padding:9px 14px; font-weight:700; cursor:pointer}
     #dak-dashboard button.active, #dak-dashboard button:hover {background:var(--green-dark); color:#fff}
     #dak-dashboard .updated {margin-left:auto; color:var(--muted); font-size:13px}
     #dak-dashboard .kpi-grid {display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:14px}
     #dak-dashboard .kpi-grid.economy {grid-template-columns:repeat(3,minmax(0,1fr))}
     #dak-dashboard .kpi-grid.international {grid-template-columns:repeat(2,minmax(0,1fr))}
-    #dak-dashboard .kpi-card, #dak-dashboard .table-card {background:var(--paper); border:1px solid var(--line); border-top:5px solid var(--green); border-radius:12px; padding:16px; box-shadow:0 8px 28px rgba(15,43,54,.06)}
+    #dak-dashboard .kpi-card, #dak-dashboard .table-card {background:var(--paper); border:1px solid var(--line); border-top:4px solid var(--green); border-radius:12px; padding:16px; box-shadow:0 6px 20px rgba(15,43,54,.07)}
     #dak-dashboard .kpi-title {font-weight:700; color:var(--navy); min-height:38px}
     #dak-dashboard .kpi-value {font-size:28px; color:var(--navy); font-weight:800; line-height:1.15; margin:8px 0 2px}
     #dak-dashboard .kpi-value span {font-size:13px; font-weight:400; color:var(--muted)}
@@ -46,12 +46,12 @@
     #dak-dashboard .compare-label {color:var(--muted)}
     #dak-dashboard .kpi-note {font-size:11px; color:var(--muted); margin-top:7px}
     #dak-dashboard .chart-grid {display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:18px; margin-top:20px}
-    #dak-dashboard .chart-card {background:#fff; border:1px solid var(--line); border-radius:12px; padding:18px; box-shadow:0 8px 28px rgba(15,43,54,.06)}
+    #dak-dashboard .chart-card {background:#fff; border:1px solid var(--line); border-radius:12px; padding:20px; box-shadow:0 6px 20px rgba(15,43,54,.07)}
     #dak-dashboard .chart-card.wide {grid-column:1/-1}
     #dak-dashboard .chart-wrap {position:relative; height:390px}
     #dak-dashboard .chart-card.wide .chart-wrap {height:430px}
     #dak-dashboard .chart-card.tall .chart-wrap {height:650px}
-    #dak-dashboard .source {font-size:11px; color:var(--muted); line-height:1.5; margin:10px 0 0}
+    #dak-dashboard .source {font-size:11px; color:var(--muted); line-height:1.5; margin:12px 0 0; padding-top:10px; border-top:1px solid var(--line)}
     #dak-dashboard table {width:100%; border-collapse:collapse; margin-top:5px}
     #dak-dashboard th, #dak-dashboard td {border-bottom:1px solid var(--line); padding:8px 4px; text-align:left; font-size:14px}
     #dak-dashboard td {text-align:right; font-weight:700; color:var(--navy)}
@@ -133,14 +133,14 @@
         
       </article></div>
   <div class="chart-grid">
-    <article class="chart-card"><h3>Bruttoledighed</h3><div class="chart-wrap"><canvas id="unemploymentTotal"></canvas></div><p class="source">Kilde: Danmarks Statistik og Jobindsats<br>Grafik og databehandling: Michel Klos</p></article>
-    <article class="chart-card"><h3>Ledighedsprocent</h3><div class="chart-wrap"><canvas id="unemploymentRate"></canvas></div><p class="source">Kilde: Danmarks Statistik og Jobindsats<br>Grafik og databehandling: Michel Klos</p></article>
-    <article class="chart-card"><h3>Ledige fordelt på ydelse</h3><div class="chart-wrap"><canvas id="unemploymentType"></canvas></div><p class="source">Kilde: Jobindsats<br>Grafik og databehandling: Michel Klos</p></article>
-    <article class="chart-card"><h3>Langtidsledige</h3><div class="chart-wrap"><canvas id="longterm"></canvas></div><p class="source">Kilde: Jobindsats<br>Grafik og databehandling: Michel Klos</p></article>
-    <article class="chart-card"><h3>Nyopslåede stillinger</h3><div class="chart-wrap"><canvas id="vacancies"></canvas></div><p class="source">Kilde: Jobindsats<br>Grafik og databehandling: Michel Klos</p></article>
-    <article class="chart-card"><h3>Lønmodtagere</h3><div class="chart-wrap"><canvas id="wages"></canvas></div><p class="source">Kilde: Danmarks Statistik<br>Grafik og databehandling: Michel Klos</p></article>
-    <article class="chart-card"><h3>Varslede afskedigelser</h3><div class="chart-wrap"><canvas id="notices"></canvas></div><p class="source">Kilde: Jobindsats<br>Grafik og databehandling: Michel Klos</p></article>
-    <article class="chart-card"><h3>Konkurser og tabte job</h3><div class="chart-wrap"><canvas id="bankruptcies"></canvas></div><p class="source">Kilde: Danmarks Statistik<br>Grafik og databehandling: Michel Klos</p></article>
+    <article class="chart-card"><h3>Bruttoledighed</h3><div class="chart-wrap"><canvas id="unemploymentTotal"></canvas></div><p class="source">Kilde: Danmarks Statistik og Jobindsats</p></article>
+    <article class="chart-card"><h3>Ledighedsprocent</h3><div class="chart-wrap"><canvas id="unemploymentRate"></canvas></div><p class="source">Kilde: Danmarks Statistik og Jobindsats</p></article>
+    <article class="chart-card"><h3>Ledige fordelt på ydelse</h3><div class="chart-wrap"><canvas id="unemploymentType"></canvas></div><p class="source">Kilde: Jobindsats</p></article>
+    <article class="chart-card"><h3>Langtidsledige</h3><div class="chart-wrap"><canvas id="longterm"></canvas></div><p class="source">Kilde: Jobindsats</p></article>
+    <article class="chart-card"><h3>Nyopslåede stillinger</h3><div class="chart-wrap"><canvas id="vacancies"></canvas></div><p class="source">Kilde: Jobindsats</p></article>
+    <article class="chart-card"><h3>Lønmodtagere</h3><div class="chart-wrap"><canvas id="wages"></canvas></div><p class="source">Kilde: Danmarks Statistik</p></article>
+    <article class="chart-card"><h3>Varslede afskedigelser</h3><div class="chart-wrap"><canvas id="notices"></canvas></div><p class="source">Kilde: Jobindsats</p></article>
+    <article class="chart-card"><h3>Konkurser og tabte job</h3><div class="chart-wrap"><canvas id="bankruptcies"></canvas></div><p class="source">Kilde: Danmarks Statistik</p></article>
   </div>
 
   <h2>Samfundsøkonomi</h2>
@@ -167,9 +167,9 @@
         
       </article></div>
   <div class="chart-grid">
-    <article class="chart-card"><h3>Forbrugertillid</h3><div class="chart-wrap"><canvas id="confidence"></canvas></div><p class="source">Kilde: Danmarks Statistik<br>Grafik og databehandling: Michel Klos</p></article>
-    <article class="chart-card"><h3>Erhvervstillid</h3><div class="chart-wrap"><canvas id="business"></canvas></div><p class="source">Kilde: Danmarks Statistik<br>Grafik og databehandling: Michel Klos</p></article>
-    <article class="chart-card wide"><h3>Inflation</h3><div class="chart-wrap"><canvas id="inflation"></canvas></div><p class="source">Kilde: Danmarks Statistik<br>Grafik og databehandling: Michel Klos</p></article>
+    <article class="chart-card"><h3>Forbrugertillid</h3><div class="chart-wrap"><canvas id="confidence"></canvas></div><p class="source">Kilde: Danmarks Statistik</p></article>
+    <article class="chart-card"><h3>Erhvervstillid</h3><div class="chart-wrap"><canvas id="business"></canvas></div><p class="source">Kilde: Danmarks Statistik</p></article>
+    <article class="chart-card wide"><h3>Inflation</h3><div class="chart-wrap"><canvas id="inflation"></canvas></div><p class="source">Kilde: Danmarks Statistik</p></article>
   </div>
 
   <h2>Internationalt</h2>
@@ -185,12 +185,12 @@
           <table><tbody><tr><th>Danmark</th><td>-12,0</td></tr><tr><th>EU-27</th><td>-17,0</td></tr><tr><th>Tyskland</th><td>-14,6</td></tr><tr><th>Sverige</th><td>-5,1</td></tr><tr><th>Frankrig</th><td>-19,3</td></tr></tbody></table>
         </article></div>
   <div class="chart-grid">
-    <article class="chart-card wide"><h3>Ledighed i udvalgte lande</h3><div class="chart-wrap"><canvas id="eurostatTrend"></canvas></div><p class="source">Kilde: Eurostat<br>Grafik og databehandling: Michel Klos</p></article>
-    <article class="chart-card wide tall"><h3>Ledighed i Europa, seneste kvartal</h3><div class="chart-wrap"><canvas id="eurostatLatest"></canvas></div><p class="source">Kilde: Eurostat<br>Grafik og databehandling: Michel Klos</p></article>
-    <article class="chart-card wide"><h3>Forbrugertillid i udvalgte lande</h3><div class="chart-wrap"><canvas id="euConfidence"></canvas></div><p class="source">Kilde: Europa-Kommissionen, DG ECFIN<br>Grafik og databehandling: Michel Klos</p></article>
+    <article class="chart-card wide"><h3>Ledighed i udvalgte lande</h3><div class="chart-wrap"><canvas id="eurostatTrend"></canvas></div><p class="source">Kilde: Eurostat</p></article>
+    <article class="chart-card wide tall"><h3>Ledighed i Europa, seneste kvartal</h3><div class="chart-wrap"><canvas id="eurostatLatest"></canvas></div><p class="source">Kilde: Eurostat</p></article>
+    <article class="chart-card wide"><h3>Forbrugertillid i udvalgte lande</h3><div class="chart-wrap"><canvas id="euConfidence"></canvas></div><p class="source">Kilde: Europa-Kommissionen, DG ECFIN</p></article>
   </div>
   <div class="footnote">Bemærk: Serierne offentliggøres på forskellige tidspunkter. Den seneste periode kan derfor variere mellem nøgletal. Ændringer på KPI-kortene er angivet i enheder, ikke i procent.</div>
-<div style="margin-top:22px;color:var(--muted);font-size:.78rem;text-align:center">Kontakt: <a href="mailto:mk@danskeakasser.dk" style="color:var(--green-dark)">mk@danskeakasser.dk</a></div>
+<div style="margin-top:22px;color:var(--muted);font-size:.78rem;text-align:center">Grafik og databehandling: Michel Klos. Kontakt: <a href="mailto:mk@danskeakasser.dk" style="color:var(--green-dark)">mk@danskeakasser.dk</a></div>
 </main>
 <script>
 (function(){
@@ -236,10 +236,10 @@ function commonOptions(decimals=0){
   return {
     responsive:true,maintainAspectRatio:false,interaction:{mode:'index',intersect:false},
     plugins:{
-      legend:{position:'top',labels:{boxWidth:13,usePointStyle:true}},
+      legend:{position:'top',align:'start',labels:{boxWidth:12,boxHeight:12,padding:18,usePointStyle:true}},
       tooltip:{callbacks:{title:items=>periodLabel(items[0].label),label:ctx=>' '+ctx.dataset.label+': '+dkNumber(ctx.parsed.y,decimals)}}
     },
-    scales:{x:xAxis(),y:{beginAtZero:false,ticks:{callback:v=>dkNumber(v,decimals)}}}
+    scales:{x:xAxis(),y:{beginAtZero:false,grid:{color:'#E8EBE8'},ticks:{padding:8,callback:v=>dkNumber(v,decimals)}}}
   };
 }
 function replaceChart(id,config){
@@ -249,13 +249,15 @@ function replaceChart(id,config){
 function lineChart(id,labels,datasets,decimals=0,yMin){
   const opts=commonOptions(decimals);
   if(yMin!==undefined) opts.scales.y.min=yMin;
+  opts.plugins.legend.display=datasets.length>1;
   replaceChart(id,{type:'line',data:{labels,datasets:datasets.map((d,i)=>({
     ...d,borderColor:d.borderColor||COLORS[i],backgroundColor:d.backgroundColor||COLORS[i],
-    pointRadius:0,pointHoverRadius:4,borderWidth:2,tension:.18,spanGaps:true
+    pointRadius:0,pointHoverRadius:4,borderWidth:2.3,tension:.18,spanGaps:true
   }))},options:opts});
 }
 function barChart(id,labels,datasets,decimals=0){
   const opts=commonOptions(decimals); opts.scales.y.beginAtZero=true;
+  opts.plugins.legend.display=datasets.length>1;
   replaceChart(id,{type:'bar',data:{labels,datasets:datasets.map((d,i)=>({
     ...d,backgroundColor:d.backgroundColor||COLORS[i],borderRadius:2
   }))},options:opts});
@@ -285,7 +287,7 @@ function horizontalBar(id,labels,values){
       indexAxis:'y',responsive:true,maintainAspectRatio:false,
       plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>' '+dkNumber(ctx.parsed.x,1)+' pct.'}}},
       scales:{
-        x:{beginAtZero:true,ticks:{callback:v=>dkNumber(v,1)+' %'}},
+        x:{beginAtZero:true,grid:{color:'#E8EBE8'},ticks:{callback:v=>dkNumber(v,1)+' %'}},
         y:{grid:{display:false},ticks:{callback:function(val,idx){const labels=this.chart.data.labels||[];const code=labels[val]??labels[idx]??val;return COUNTRY_NAMES[code]||code;}}}
       }
     }
