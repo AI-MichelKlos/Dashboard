@@ -998,7 +998,7 @@ window.setPeriod=function(n,button){{
 drawAll(60);
 }})();
 </script>
-<script data-goatcounter="https://hovedsidearbejdsmarked.goatcounter.com/count"
+<script data-goatcounter="https://arbejdsmarkedsoverblikket.goatcounter.com/count"
         async src="//gc.zgo.at/count.js"></script>
 </body>
 </html>"""
