@@ -778,10 +778,10 @@ def add_visible_status(html: str, data: dict) -> str:
     if state == "partial":
         failed_labels = [item.split(":", 1)[0] for item in status.get("failed", [])]
         message = "Delvist opdateret. Viser seneste gyldige data for: " + ", ".join(failed_labels) + "."
-        background, border = "#fff4d6", "#ef8b2c"
+        background, border = "#E4EDE6", "#6B9E78"
     else:
         message = "Seneste dataopdatering fejlede. Dashboardet viser seneste gyldige data."
-        background, border = "#fde9e8", "#e34a45"
+        background, border = "#E4EDE6", "#3D6B47"
 
     banner = (
         f'<div role="status" style="margin:0 0 24px;padding:12px 14px;'
