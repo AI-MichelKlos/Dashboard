@@ -109,7 +109,7 @@ jobs:
         run: |
           test -s index.html
           test -s data/dashboard-data.json
-          grep -q "Analytisk overblik" index.html
+          grep -q "Arbejdsmarkedet generelt - nøgletal" index.html
           grep -q "const DATA=" index.html
           grep -q "Arbejdsfordelinger under og over 13 uger" index.html
           grep -q "Opbrugt dagpengeret fordelt på dimittendstatus" index.html
