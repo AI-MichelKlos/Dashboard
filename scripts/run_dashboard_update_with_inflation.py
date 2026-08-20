@@ -116,48 +116,52 @@ def refresh_statbank(data):
 
 
 def tighten_vertical_spacing() -> None:
-    """Keep the publication design, but reduce excessive vertical whitespace."""
+    """Keep the publication design, but use a compact mobile-friendly vertical rhythm."""
     html = INDEX.read_text(encoding="utf-8")
     replacements = (
         (
             ".page-header {max-width:1180px; margin:0 auto; padding:72px 20px 54px; border-bottom:1px solid var(--line)}",
-            ".page-header {max-width:1180px; margin:0 auto; padding:56px 20px 38px; border-bottom:1px solid var(--line)}",
+            ".page-header {max-width:1180px; margin:0 auto; padding:44px 20px 26px; border-bottom:1px solid var(--line)}",
+        ),
+        (
+            ".page-eyebrow {margin:0 0 12px; color:var(--accent-dark); font-size:.76rem; font-weight:800; letter-spacing:.14em; text-transform:uppercase}",
+            ".page-eyebrow {margin:0 0 8px; color:var(--accent-dark); font-size:.76rem; font-weight:800; letter-spacing:.14em; text-transform:uppercase}",
         ),
         (
             ".page-byline {margin:15px 0 0; color:var(--muted); font-size:.86rem; font-weight:700}",
-            ".page-byline {margin:12px 0 0; color:var(--muted); font-size:.86rem; font-weight:700}",
+            ".page-byline {margin:9px 0 0; color:var(--muted); font-size:.86rem; font-weight:700}",
         ),
         (
             ".page-lead {max-width:780px; margin:22px 0 0; color:var(--muted); font-size:1.08rem; line-height:1.7}",
-            ".page-lead {max-width:780px; margin:18px 0 0; color:var(--muted); font-size:1.08rem; line-height:1.7}",
+            ".page-lead {max-width:780px; margin:14px 0 0; color:var(--muted); font-size:1.08rem; line-height:1.62}",
         ),
         (
             ".page-updated {display:inline-flex; margin:25px 0 0; padding:6px 9px; align-items:center; border:1px solid var(--line); border-radius:4px; color:var(--muted); background:var(--accent-soft); font-size:.78rem; font-weight:750}",
-            ".page-updated {display:inline-flex; margin:18px 0 0; padding:6px 9px; align-items:center; border:1px solid var(--line); border-radius:4px; color:var(--muted); background:var(--accent-soft); font-size:.78rem; font-weight:750}",
+            ".page-updated {display:inline-flex; margin:13px 0 0; padding:6px 9px; align-items:center; border:1px solid var(--line); border-radius:4px; color:var(--muted); background:var(--accent-soft); font-size:.78rem; font-weight:750}",
         ),
         (
             "max-width:1180px; margin:0 auto; padding:40px 20px 72px; color:var(--ink);",
-            "max-width:1180px; margin:0 auto; padding:24px 20px 72px; color:var(--ink);",
+            "max-width:1180px; margin:0 auto; padding:14px 20px 72px; color:var(--ink);",
         ),
         (
             "#dak-dashboard h2 {font-family:var(--serif); font-size:clamp(1.75rem,2.5vw,2.2rem); font-weight:600; color:var(--ink); margin:58px 0 20px; padding-bottom:10px; border-bottom:1px solid var(--line); letter-spacing:-.01em}",
-            "#dak-dashboard h2 {font-family:var(--serif); font-size:clamp(1.75rem,2.5vw,2.2rem); font-weight:600; color:var(--ink); margin:46px 0 18px; padding-bottom:10px; border-bottom:1px solid var(--line); letter-spacing:-.01em}",
+            "#dak-dashboard h2 {font-family:var(--serif); font-size:clamp(1.75rem,2.5vw,2.2rem); font-weight:600; color:var(--ink); margin:38px 0 16px; padding-bottom:8px; border-bottom:1px solid var(--line); letter-spacing:-.01em}",
         ),
         (
             "#dak-dashboard h2:first-of-type {margin-top:34px}",
-            "#dak-dashboard h2:first-of-type {margin-top:22px}",
+            "#dak-dashboard h2:first-of-type {margin-top:10px}",
         ),
         (
             "#dak-dashboard .toolbar {display:flex; flex-wrap:wrap; align-items:center; gap:9px; padding:14px 0; border-top:1px solid var(--line); border-bottom:1px solid var(--line); margin:0 0 24px}",
-            "#dak-dashboard .toolbar {display:flex; flex-wrap:wrap; align-items:center; gap:9px; padding:14px 0; border-top:1px solid var(--line); border-bottom:1px solid var(--line); margin:0 0 14px}",
+            "#dak-dashboard .toolbar {display:flex; flex-wrap:wrap; align-items:center; gap:9px; padding:12px 0; border-top:1px solid var(--line); border-bottom:1px solid var(--line); margin:0 0 8px}",
         ),
         (
             ".page-header {padding:49px 16px 40px}",
-            ".page-header {padding:38px 16px 28px}",
+            ".page-header {padding:28px 16px 20px}",
         ),
         (
             "#dak-dashboard {padding:32px 14px 54px}",
-            "#dak-dashboard {padding:20px 14px 54px}",
+            "#dak-dashboard {padding:12px 14px 48px}",
         ),
     )
     for old, new in replacements:
