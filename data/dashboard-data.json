@@ -1,8 +1,8 @@
 {
   "meta": {
-    "updated": "20. august 2026",
+    "updated": "21. august 2026",
     "sourceFile": "Samlet overblik.xlsx",
-    "retrievedAt": "2026-08-20",
+    "retrievedAt": "2026-08-21",
     "sourceRegister": {
       "unemployment": {
         "source": "Jobindsats API v3",
@@ -86,7 +86,7 @@
         "seasonalAdjustment": "sæsonkorrigeret",
         "sourceUpdated": "2026-07-21T06:00:00Z",
         "latestPeriod": "2026M05",
-        "fetchedAt": "2026-08-20T22:29:25+02:00"
+        "fetchedAt": "2026-08-21T09:56:18+02:00"
       },
       "bankruptcies": {
         "source": "Danmarks Statistik",
@@ -102,7 +102,7 @@
         "seasonalAdjustment": "kun serie A1",
         "sourceUpdated": "2026-08-06T06:00:00Z",
         "latestPeriod": "2026M07",
-        "fetchedAt": "2026-08-20T22:29:25+02:00"
+        "fetchedAt": "2026-08-21T09:56:18+02:00"
       },
       "consumerConfidence": {
         "source": "Danmarks Statistik",
@@ -114,9 +114,9 @@
         },
         "unit": "nettotal",
         "seasonalAdjustment": "ikke oplyst",
-        "sourceUpdated": "2026-07-23T06:00:00Z",
-        "latestPeriod": "2026M07",
-        "fetchedAt": "2026-08-20T22:29:25+02:00"
+        "sourceUpdated": "2026-08-21T06:00:00Z",
+        "latestPeriod": "2026M08",
+        "fetchedAt": "2026-08-21T09:56:18+02:00"
       },
       "jobindsats": {
         "source": "Jobindsats",
@@ -154,7 +154,7 @@
         "seasonalAdjustment": "ikke relevant",
         "sourceUpdated": "2026-08-10T06:00:00Z",
         "latestPeriod": "2026M07",
-        "fetchedAt": "2026-08-20T22:29:30+02:00"
+        "fetchedAt": "2026-08-21T09:56:26+02:00"
       }
     },
     "updateStatus": {
@@ -177,7 +177,7 @@
         "Forgæves rekrutteringsforsøg"
       ],
       "failed": [],
-      "checkedAt": "2026-08-20T22:29:46+02:00"
+      "checkedAt": "2026-08-21T09:56:37+02:00"
     },
     "jobindsatsUpdateStatus": {
       "successful": [
@@ -199,21 +199,21 @@
       "workSharing": {
         "state": "ok",
         "latestPeriod": "2026M07",
-        "checkedAt": "2026-08-20T22:29:46+02:00",
+        "checkedAt": "2026-08-21T09:56:37+02:00",
         "source": "Jobindsats API v3",
         "dataset": "y25i06"
       },
       "expiredBenefits": {
         "state": "ok",
         "latestPeriod": "2026M05",
-        "checkedAt": "2026-08-20T22:29:46+02:00",
+        "checkedAt": "2026-08-21T09:56:37+02:00",
         "source": "Jobindsats API v3",
         "dataset": "y01ud01di"
       },
       "failedRecruitment": {
         "state": "ok",
         "latestPeriod": "2026M06",
-        "checkedAt": "2026-08-20T22:29:46+02:00",
+        "checkedAt": "2026-08-21T09:56:37+02:00",
         "source": "Jobindsats API v3",
         "dataset": "y25i14"
       }
@@ -4772,7 +4772,8 @@
       "2026M04",
       "2026M05",
       "2026M06",
-      "2026M07"
+      "2026M07",
+      "2026M08"
     ],
     "value": [
       -15,
@@ -5396,7 +5397,8 @@
       -18.6,
       -19.8,
       -14,
-      -14.7
+      -14.7,
+      -13.1
     ]
   },
   "business": {
