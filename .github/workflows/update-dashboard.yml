@@ -94,6 +94,12 @@ jobs:
             python scripts/run_dashboard_update_with_inflation.py >> status/run.log 2>&1
             code=$?
           fi
+          if [ "$code" -eq 0 ]; then
+            sed -i 's/mk@danskeakasser.dk/michel@klos.dk/g' scripts/build_dashboard.py index.html
+            if [ -f app/index.html ]; then
+              sed -i 's/mk@danskeakasser.dk/michel@klos.dk/g' app/index.html
+            fi
+          fi
           set -e
           cat status/run.log || true
           if [ "$code" -eq 0 ]; then
@@ -114,6 +120,7 @@ jobs:
           grep -q "Arbejdsfordelinger under og over 13 uger" index.html
           grep -q "Opbrugt dagpengeret fordelt på dimittendstatus" index.html
           grep -q "15 stillinger med flest forgæves rekrutteringsforsøg" index.html
+          grep -q "michel@klos.dk" index.html
           grep -q '"PRIS01"' data/dashboard-data.json
           grep -q '"workSharing": "y25i06"' data/dashboard-data.json
           grep -q '"expiredBenefits": "y01ud01di"' data/dashboard-data.json
@@ -122,13 +129,14 @@ jobs:
       - name: Gem dashboarddata og status
         if: steps.gate.outputs.should_run == 'true' && always()
         run: |
-          git add index.html data/dashboard-data.json status/last-run.txt
+          git add index.html data/dashboard-data.json status/last-run.txt scripts/build_dashboard.py
+          if [ -f app/index.html ]; then git add app/index.html; fi
           if git diff --cached --quiet; then
             echo "Ingen ændringer at gemme."
           else
             git config user.name "Dashboard automation"
             git config user.email "dashboard-automation@users.noreply.github.com"
-            git commit -m "Opdater dashboarddata og status"
+            git commit -m "Opdater dashboarddata, status og kontaktmail"
             git push
           fi
 
