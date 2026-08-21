@@ -804,7 +804,7 @@ def build_html(data):
     <article class="chart-card wide"><h3>Forbrugertillid i udvalgte lande</h3><div class="chart-wrap"><canvas id="euConfidence"></canvas></div><p class="source">Kilde: Europa-Kommissionen, DG ECFIN</p></article>
   </div>
   <div class="footnote">Bemærk: Serierne offentliggøres på forskellige tidspunkter. Den seneste periode kan derfor variere mellem nøgletal. Ændringer på KPI-kortene er angivet i enheder, ikke i procent.</div>
-<div style="margin-top:22px;color:var(--muted);font-size:.78rem;text-align:center">Grafik og databehandling: Michel Klos. Kontakt: <a href="mailto:mk@danskeakasser.dk" style="color:var(--green-dark)">mk@danskeakasser.dk</a></div>
+<div style="margin-top:22px;color:var(--muted);font-size:.78rem;text-align:center">Grafik og databehandling: Michel Klos. Kontakt: <a href="mailto:michel@klos.dk" style="color:var(--green-dark)">michel@klos.dk</a></div>
 </main>
 <script>
 (function(){{
