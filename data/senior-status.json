@@ -3,8 +3,9 @@
     "source": "Jobindsats.dk / STAR",
     "dataset": "snr_arbstatus",
     "latestPeriod": "2026M06",
-    "checkedAt": "2026-08-23T21:49:19+02:00",
+    "checkedAt": "2026-08-23T21:50:35+02:00",
     "measure": "Arbejdsmarkedsstatus for seniorer",
+    "status": "Lønmodtagerbeskæftigelse i alt",
     "unit": "pct."
   },
   "period": "2026M06",
@@ -12,107 +13,107 @@
     {
       "age": 55,
       "label": "55 år",
-      "employmentShare": 71.8
+      "employmentShare": 77.1
     },
     {
       "age": 56,
       "label": "56 år",
-      "employmentShare": 70.5
+      "employmentShare": 76.0
     },
     {
       "age": 57,
       "label": "57 år",
-      "employmentShare": 69.9
+      "employmentShare": 75.4
     },
     {
       "age": 58,
       "label": "58 år",
-      "employmentShare": 68.9
+      "employmentShare": 74.6
     },
     {
       "age": 59,
       "label": "59 år",
-      "employmentShare": 68.6
+      "employmentShare": 74.4
     },
     {
       "age": 60,
       "label": "60 år",
-      "employmentShare": 65.9
+      "employmentShare": 72.6
     },
     {
       "age": 61,
       "label": "61 år",
-      "employmentShare": 63.6
+      "employmentShare": 71.0
     },
     {
       "age": 62,
       "label": "62 år",
-      "employmentShare": 60.2
+      "employmentShare": 68.6
     },
     {
       "age": 63,
       "label": "63 år",
-      "employmentShare": 55.7
+      "employmentShare": 65.1
     },
     {
       "age": 64,
       "label": "64 år",
-      "employmentShare": 46.5
+      "employmentShare": 56.8
     },
     {
       "age": 65,
       "label": "65 år",
-      "employmentShare": 37.6
+      "employmentShare": 48.4
     },
     {
       "age": 66,
       "label": "66 år",
-      "employmentShare": 30.3
+      "employmentShare": 41.7
     },
     {
       "age": 67,
       "label": "67 år",
-      "employmentShare": 3.5
+      "employmentShare": 31.7
     },
     {
       "age": 68,
       "label": "68 år",
-      "employmentShare": 80.0
+      "employmentShare": 25.0
     },
     {
       "age": 69,
       "label": "69 år",
-      "employmentShare": 60.0
+      "employmentShare": 20.9
     },
     {
       "age": 70,
       "label": "70 år",
-      "employmentShare": 30.0
+      "employmentShare": 16.6
     },
     {
       "age": 71,
       "label": "71 år",
-      "employmentShare": 20.0
+      "employmentShare": 13.7
     },
     {
       "age": 72,
       "label": "72 år",
-      "employmentShare": 10.0
+      "employmentShare": 11.3
     },
     {
       "age": 73,
       "label": "73 år",
-      "employmentShare": 10.0
+      "employmentShare": 9.6
     },
     {
       "age": 74,
       "label": "74 år",
-      "employmentShare": 10.0
+      "employmentShare": 8.3
     },
     {
       "age": 75,
       "label": "75+ år",
-      "employmentShare": 0.0
+      "employmentShare": 3.2
     }
   ]
 }
