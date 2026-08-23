@@ -90,18 +90,18 @@ def main():
     geo=find_hierarchy(spec,['område','geografi','kommune'],('_hele_landet','_nykom'));age=find_hierarchy(spec,['alder']);status=find_hierarchy(spec,['arbejdsmarkedsstatus','status']);level=deepest_level(age)
     path=f'data/{tid}?mgroup.*=*&period.M=latest:1&hierarchy.{geo["hierarchy_id"]}={country_value(geo)}&hierarchy.{age["hierarchy_id"]}='+(f'level:{level}' if level else '*')+f'&hierarchy.{status["hierarchy_id"]}=*&format=json'
     rows=records(api.jobindsats_get(path));pc=exact_col(rows,'Periode');agec=exact_col(rows,'Alder');sc=exact_col(rows,'Arbejdsmarkedsstatus');pctc=best_col(rows,['andel'],exclude=['grad']);period=max((str(r.get(pc)) for r in rows),key=pkey);items=[]
+    target_status='loenmodtagerbeskaeftigelse i alt'
+    available_statuses=sorted({norm(r.get(sc)) for r in rows})
+    if target_status not in available_statuses:
+        raise RuntimeError(f'Den samlede lønmodtagerstatus mangler. Statusser: {available_statuses[:30]}')
     for r in rows:
         if str(r.get(pc))!=period:continue
         s=norm(r.get(sc));label=str(r.get(agec) or '').strip();v=num(r.get(pctc));m=re.search(r'(?<!\d)(\d{2})(?!\d)',label)
-        if not m or int(m.group(1))<55 or v is None:continue
-        if 'loenmodtagerbeskaeftigelse' not in s:continue
+        if not m or int(m.group(1))<55 or v is None or s!=target_status:continue
         if abs(v)<=1:v*=100
         items.append({'age':int(m.group(1)),'label':label,'employmentShare':round(v,2)})
     unique={x['age']:x for x in items};items=[unique[k] for k in sorted(unique)]
-    if len(items)<8:
-        statuses=sorted({str(r.get(sc)) for r in rows})
-        ages=sorted({str(r.get(agec)) for r in rows})
-        raise RuntimeError(f'Kun {len(items)} et-årige aldersgrupper fundet. Statusser: {statuses[:20]}. Aldre: {ages[:30]}')
-    payload={'meta':{'source':'Jobindsats.dk / STAR','dataset':tid,'latestPeriod':period,'checkedAt':datetime.now(ZoneInfo('Europe/Copenhagen')).isoformat(timespec='seconds'),'measure':'Arbejdsmarkedsstatus for seniorer','unit':'pct.'},'period':period,'items':items}
+    if len(items)<8:raise RuntimeError(f'Kun {len(items)} et-årige aldersgrupper fundet for samlet lønmodtagerbeskæftigelse')
+    payload={'meta':{'source':'Jobindsats.dk / STAR','dataset':tid,'latestPeriod':period,'checkedAt':datetime.now(ZoneInfo('Europe/Copenhagen')).isoformat(timespec='seconds'),'measure':'Arbejdsmarkedsstatus for seniorer','status':'Lønmodtagerbeskæftigelse i alt','unit':'pct.'},'period':period,'items':items}
     OUT.write_text(json.dumps(payload,ensure_ascii=False,indent=2)+'\n',encoding='utf-8');print('Seniorfeed',tid,period,len(items))
 if __name__=='__main__':main()
