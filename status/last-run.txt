@@ -1,3 +1,5 @@
-status: ok
-tid_utc: 2026-08-23T07:47:02Z
+status: fejl
+tid_utc: 2026-08-23T19:46:12Z
 dato_dk: 2026-08-23
+trin: opdatering
+fejl: Starter opdatering fra Jobindsats. Færdig: Forgæves rekrutteringsforsøg. Jobindsats-tabel: y25i14. Wrote /home/runner/work/Dashboard/Dashboard/index.html (90,998 bytes) Opdaterede dashboardtitel til: Arbejdsmarkedet generelt - nøgletal Traceback (most recent call last): File "/home/runner/work/Dashboard/Dashboard/scripts/fetch_senior_status.py", line 99, in <module> if __name__=='__main__':main() ^^^^^^ File "/home/runner/work/Dashboard/Dashboard/scripts/fetch_senior_status.py", line 96, in main if len(items)<8:raise RuntimeError(f'Kun {len(items)} et-årige aldersgrupper fundet') ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ RuntimeError: Kun 0 et-årige aldersgrupper fundet 
