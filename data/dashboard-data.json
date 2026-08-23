@@ -86,7 +86,7 @@
         "seasonalAdjustment": "sæsonkorrigeret",
         "sourceUpdated": "2026-07-21T06:00:00Z",
         "latestPeriod": "2026M05",
-        "fetchedAt": "2026-08-23T21:46:12+02:00"
+        "fetchedAt": "2026-08-23T21:47:38+02:00"
       },
       "bankruptcies": {
         "source": "Danmarks Statistik",
@@ -102,7 +102,7 @@
         "seasonalAdjustment": "kun serie A1",
         "sourceUpdated": "2026-08-06T06:00:00Z",
         "latestPeriod": "2026M07",
-        "fetchedAt": "2026-08-23T21:46:12+02:00"
+        "fetchedAt": "2026-08-23T21:47:38+02:00"
       },
       "consumerConfidence": {
         "source": "Danmarks Statistik",
@@ -116,7 +116,7 @@
         "seasonalAdjustment": "ikke oplyst",
         "sourceUpdated": "2026-08-21T06:00:00Z",
         "latestPeriod": "2026M08",
-        "fetchedAt": "2026-08-23T21:46:12+02:00"
+        "fetchedAt": "2026-08-23T21:47:38+02:00"
       },
       "jobindsats": {
         "source": "Jobindsats",
@@ -154,7 +154,7 @@
         "seasonalAdjustment": "ikke relevant",
         "sourceUpdated": "2026-08-10T06:00:00Z",
         "latestPeriod": "2026M07",
-        "fetchedAt": "2026-08-23T21:46:16+02:00"
+        "fetchedAt": "2026-08-23T21:47:42+02:00"
       }
     },
     "updateStatus": {
@@ -177,7 +177,7 @@
         "Forgæves rekrutteringsforsøg"
       ],
       "failed": [],
-      "checkedAt": "2026-08-23T21:46:33+02:00"
+      "checkedAt": "2026-08-23T21:47:59+02:00"
     },
     "jobindsatsUpdateStatus": {
       "successful": [
@@ -199,21 +199,21 @@
       "workSharing": {
         "state": "ok",
         "latestPeriod": "2026M07",
-        "checkedAt": "2026-08-23T21:46:33+02:00",
+        "checkedAt": "2026-08-23T21:47:59+02:00",
         "source": "Jobindsats API v3",
         "dataset": "y25i06"
       },
       "expiredBenefits": {
         "state": "ok",
         "latestPeriod": "2026M05",
-        "checkedAt": "2026-08-23T21:46:33+02:00",
+        "checkedAt": "2026-08-23T21:47:59+02:00",
         "source": "Jobindsats API v3",
         "dataset": "y01ud01di"
       },
       "failedRecruitment": {
         "state": "ok",
         "latestPeriod": "2026M06",
-        "checkedAt": "2026-08-23T21:46:33+02:00",
+        "checkedAt": "2026-08-23T21:47:59+02:00",
         "source": "Jobindsats API v3",
         "dataset": "y25i14"
       }
