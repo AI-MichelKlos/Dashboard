@@ -84,7 +84,7 @@ def main():
     tid=find_table(api.jobindsats_get('tables?format=json'));spec=api.jobindsats_get(f'table/{tid}?format=json')
     geo=find_hierarchy(spec,['område','geografi','kommune'],('_hele_landet','_nykom'));age=find_hierarchy(spec,['alder']);status=find_hierarchy(spec,['arbejdsmarkedsstatus','status']);level=deepest_level(age)
     path=f'data/{tid}?mgroup.*=*&period.M=latest:1&hierarchy.{geo["hierarchy_id"]}={country_value(geo)}&hierarchy.{age["hierarchy_id"]}='+(f'level:{level}' if level else '*')+f'&hierarchy.{status["hierarchy_id"]}=*&format=json'
-    rows=records(api.jobindsats_get(path));pc=best_col(rows,['periode']);agec=best_col(rows,['alder'],distinct=True);sc=best_col(rows,['arbejdsmarkedsstatus','status'],distinct=True);pctc=best_col(rows,['procent'],exclude=['grad']);period=max((str(r.get(pc)) for r in rows),key=pkey);items=[]
+    rows=records(api.jobindsats_get(path));pc=best_col(rows,['periode']);agec=best_col(rows,['alder'],distinct=True);sc=best_col(rows,['arbejdsmarkedsstatus','status'],distinct=True);pctc=best_col(rows,['andel'],exclude=['grad']);period=max((str(r.get(pc)) for r in rows),key=pkey);items=[]
     for r in rows:
         if str(r.get(pc))!=period:continue
         s=norm(r.get(sc));label=str(r.get(agec) or '').strip();v=num(r.get(pctc));m=re.search(r'(?<!\d)(\d{2})(?!\d)',label)
