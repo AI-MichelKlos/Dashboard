@@ -126,7 +126,8 @@ jobs:
       - name: Gem dashboarddata og status
         if: steps.gate.outputs.should_run == 'true' && always()
         run: |
-          git add index.html data/dashboard-data.json data/senior-status.json status/last-run.txt scripts/build_dashboard.py
+          git add index.html data/dashboard-data.json status/last-run.txt scripts/build_dashboard.py
+          if [ -f data/senior-status.json ]; then git add data/senior-status.json; fi
           if [ -f app/index.html ]; then git add app/index.html; fi
           if git diff --cached --quiet; then
             echo "Ingen ændringer at gemme."
