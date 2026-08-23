@@ -89,11 +89,14 @@ def main():
         if str(r.get(pc))!=period:continue
         s=norm(r.get(sc));label=str(r.get(agec) or '').strip();v=num(r.get(pctc));m=re.search(r'(?<!\d)(\d{2})(?!\d)',label)
         if not m or int(m.group(1))<55 or v is None:continue
-        if 'loenmodtagerbeskaeftigelse i alt' not in s and s!='loenmodtagerbeskaeftigelse':continue
+        if 'loenmodtagerbeskaeftigelse' not in s:continue
         if abs(v)<=1:v*=100
         items.append({'age':int(m.group(1)),'label':label,'employmentShare':round(v,2)})
     unique={x['age']:x for x in items};items=[unique[k] for k in sorted(unique)]
-    if len(items)<8:raise RuntimeError(f'Kun {len(items)} et-årige aldersgrupper fundet')
+    if len(items)<8:
+        statuses=sorted({str(r.get(sc)) for r in rows})
+        ages=sorted({str(r.get(agec)) for r in rows})
+        raise RuntimeError(f'Kun {len(items)} et-årige aldersgrupper fundet. Statusser: {statuses[:20]}. Aldre: {ages[:30]}')
     payload={'meta':{'source':'Jobindsats.dk / STAR','dataset':tid,'latestPeriod':period,'checkedAt':datetime.now(ZoneInfo('Europe/Copenhagen')).isoformat(timespec='seconds'),'measure':'Arbejdsmarkedsstatus for seniorer','unit':'pct.'},'period':period,'items':items}
     OUT.write_text(json.dumps(payload,ensure_ascii=False,indent=2)+'\n',encoding='utf-8');print('Seniorfeed',tid,period,len(items))
 if __name__=='__main__':main()
