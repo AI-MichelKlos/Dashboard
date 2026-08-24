@@ -560,6 +560,9 @@ COUNTRY_NAMES = {
     "LU": "Luxembourg", "LV": "Letland", "MT": "Malta", "NL": "Nederlandene",
     "NO": "Norge", "PL": "Polen", "PT": "Portugal", "RO": "Rumænien",
     "SE": "Sverige", "SI": "Slovenien", "SK": "Slovakiet",
+    "EA20": "Euroområdet (20 lande)", "EA21": "Euroområdet (21 lande)",
+    "TR": "Tyrkiet", "RS": "Serbien", "BA": "Bosnien-Hercegovina",
+    "MK": "Nordmakedonien",
 }
 
 
@@ -941,7 +944,7 @@ function horizontalBar(id,labels,values){{
       plugins:{{legend:{{display:false}},tooltip:{{callbacks:{{label:ctx=>' '+dkNumber(ctx.parsed.x,1)+' pct.'}}}}}},
       scales:{{
         x:{{beginAtZero:true,grid:{{color:'#E8EBE8'}},ticks:{{callback:v=>dkNumber(v,1)+' %'}}}},
-        y:{{grid:{{display:false}},ticks:{{callback:function(val,idx){{const labels=this.chart.data.labels||[];const code=labels[val]??labels[idx]??val;return COUNTRY_NAMES[code]||code;}}}}}}
+        y:{{grid:{{display:false}},ticks:{{autoSkip:false,callback:function(val,idx){{const labels=this.chart.data.labels||[];const code=labels[val]??labels[idx]??val;return COUNTRY_NAMES[code]||code;}}}}}}
       }}
     }}
   }});
