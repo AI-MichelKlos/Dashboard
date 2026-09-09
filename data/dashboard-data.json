@@ -1,8 +1,8 @@
 {
   "meta": {
-    "updated": "8. september 2026",
+    "updated": "9. september 2026",
     "sourceFile": "Samlet overblik.xlsx",
-    "retrievedAt": "2026-09-08",
+    "retrievedAt": "2026-09-09",
     "sourceRegister": {
       "unemployment": {
         "source": "Jobindsats API v3",
@@ -86,7 +86,7 @@
         "seasonalAdjustment": "sæsonkorrigeret",
         "sourceUpdated": "2026-08-27T06:00:00Z",
         "latestPeriod": "2026M06",
-        "fetchedAt": "2026-09-08T14:08:00+02:00"
+        "fetchedAt": "2026-09-09T14:19:48+02:00"
       },
       "bankruptcies": {
         "source": "Danmarks Statistik",
@@ -102,7 +102,7 @@
         "seasonalAdjustment": "kun serie A1",
         "sourceUpdated": "2026-09-04T06:00:00Z",
         "latestPeriod": "2026M08",
-        "fetchedAt": "2026-09-08T14:08:00+02:00"
+        "fetchedAt": "2026-09-09T14:19:48+02:00"
       },
       "consumerConfidence": {
         "source": "Danmarks Statistik",
@@ -116,7 +116,7 @@
         "seasonalAdjustment": "ikke oplyst",
         "sourceUpdated": "2026-08-21T06:00:00Z",
         "latestPeriod": "2026M08",
-        "fetchedAt": "2026-09-08T14:08:00+02:00"
+        "fetchedAt": "2026-09-09T14:19:48+02:00"
       },
       "jobindsats": {
         "source": "Jobindsats",
@@ -154,7 +154,7 @@
         "seasonalAdjustment": "ikke relevant",
         "sourceUpdated": "2026-08-10T06:00:00Z",
         "latestPeriod": "2026M07",
-        "fetchedAt": "2026-09-08T14:08:13+02:00"
+        "fetchedAt": "2026-09-09T14:20:06+02:00"
       }
     },
     "updateStatus": {
@@ -177,7 +177,7 @@
         "Forgæves rekrutteringsforsøg"
       ],
       "failed": [],
-      "checkedAt": "2026-09-08T14:08:31+02:00"
+      "checkedAt": "2026-09-09T14:20:23+02:00"
     },
     "jobindsatsUpdateStatus": {
       "successful": [
@@ -198,22 +198,22 @@
     "sourceStatus": {
       "workSharing": {
         "state": "ok",
-        "latestPeriod": "2026M07",
-        "checkedAt": "2026-09-08T14:08:31+02:00",
+        "latestPeriod": "2026M08",
+        "checkedAt": "2026-09-09T14:20:23+02:00",
         "source": "Jobindsats API v3",
         "dataset": "y25i06"
       },
       "expiredBenefits": {
         "state": "ok",
         "latestPeriod": "2026M05",
-        "checkedAt": "2026-09-08T14:08:31+02:00",
+        "checkedAt": "2026-09-09T14:20:23+02:00",
         "source": "Jobindsats API v3",
         "dataset": "y01ud01di"
       },
       "failedRecruitment": {
         "state": "ok",
         "latestPeriod": "2026M06",
-        "checkedAt": "2026-09-08T14:08:31+02:00",
+        "checkedAt": "2026-09-09T14:20:23+02:00",
         "source": "Jobindsats API v3",
         "dataset": "y25i14"
       }
@@ -1626,7 +1626,8 @@
       "2026M04",
       "2026M05",
       "2026M06",
-      "2026M07"
+      "2026M07",
+      "2026M08"
     ],
     "people": [
       216,
@@ -1743,13 +1744,14 @@
       1256,
       1068,
       969,
-      1247,
+      1207,
       676,
       1904,
-      421,
+      406,
       995,
-      334,
-      null
+      309,
+      null,
+      1662
     ],
     "companies": [
       7,
@@ -1872,7 +1874,8 @@
       25,
       30,
       55,
-      null
+      null,
+      18
     ]
   },
   "bankruptcies": {
@@ -7942,7 +7945,8 @@
       "2026M04",
       "2026M05",
       "2026M06",
-      "2026M07"
+      "2026M07",
+      "2026M08"
     ],
     "under13Weeks": [
       460,
@@ -8167,7 +8171,8 @@
       330,
       133,
       189,
-      123
+      123,
+      113
     ],
     "over13Weeks": [
       48,
@@ -8392,6 +8397,7 @@
       80,
       28,
       25,
+      8,
       8
     ],
     "total": [
@@ -8617,7 +8623,8 @@
       410,
       161,
       214,
-      131
+      131,
+      121
     ]
   },
   "expiredBenefits": {
