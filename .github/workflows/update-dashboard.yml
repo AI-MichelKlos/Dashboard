@@ -122,6 +122,10 @@ jobs:
           grep -q '"expiredBenefits": "y01ud01di"' data/dashboard-data.json
           grep -q '"failedRecruitment"' data/dashboard-data.json
           grep -q '"employmentShare"' data/senior-status.json
+          grep -q '"statusByAge"' data/senior-status.json
+          grep -q '"workWithPension"' data/senior-status.json
+          grep -q '"employmentDegree"' data/senior-status.json
+          grep -q '"gender"' data/senior-status.json
 
       - name: Gem dashboarddata og status
         if: steps.gate.outputs.should_run == 'true' && always()
