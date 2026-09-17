@@ -217,9 +217,9 @@ def main():
     periods = sorted({str(row.get(period_col)) for row in rows}, key=period_key)
     latest_period = periods[-1]
     employment_status = "loenmodtagerbeskaeftigelse i alt"
-    public_status = "tilbagetraekningsydelse og oevrig offentlig ydelse i alt"
+    public_status = "tilbagetraeknings og oevrig off ydelse i alt"
     private_status = "egen pension og selvforsoergelse i alt"
-    work_pension_status = "loenmodtagerbeskaeftigelse og folkepension"
+    work_pension_status = "loenmodt beskaeft og folkepension"
     available_statuses = {norm(row.get(status_col)) for row in rows}
     required_statuses = {employment_status, public_status, private_status, work_pension_status}
     missing = sorted(required_statuses - available_statuses)
