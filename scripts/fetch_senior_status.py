@@ -224,7 +224,7 @@ def main():
     required_statuses = {employment_status, public_status, private_status, work_pension_status}
     missing = sorted(required_statuses - available_statuses)
     if missing:
-        raise RuntimeError(f"Påkrævede seniorstatusser mangler: {missing}")
+        raise RuntimeError(f"Påkrævede seniorstatusser mangler: {missing}. Tilgængelige statusser: {sorted(available_statuses)}")
 
     latest = [row for row in rows if str(row.get(period_col)) == latest_period]
     by_status_age = {}
