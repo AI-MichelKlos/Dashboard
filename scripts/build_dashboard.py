@@ -31,6 +31,22 @@ def number(value):
     return int(value) if value.is_integer() else round(value, 4)
 
 
+def json_safe(value):
+    """Convert non-finite scalar values to JSON-safe nulls recursively."""
+    if isinstance(value, dict):
+        return {key: json_safe(item) for key, item in value.items()}
+    if isinstance(value, (list, tuple)):
+        return [json_safe(item) for item in value]
+    if isinstance(value, float) and not math.isfinite(value):
+        return None
+    try:
+        if pd.isna(value):
+            return None
+    except (TypeError, ValueError):
+        pass
+    return value
+
+
 def api_number(value):
     """Parse numbers returned by the Danish Jobindsats API."""
     if value is None or isinstance(value, bool):
@@ -680,7 +696,8 @@ def build_html(data):
             f"FRR: {fmt_number(recruitment_rate, 1)} pct. i {fmt_period(recruitment_period)}",
         ),
     ]
-    json_data = json.dumps(data, ensure_ascii=False, separators=(",", ":"))
+    safe_data = json_safe(data)
+    json_data = json.dumps(safe_data, ensure_ascii=False, separators=(",", ":"), allow_nan=False)
     country_names = json.dumps(COUNTRY_NAMES, ensure_ascii=False, separators=(",", ":"))
 
     return f"""<!doctype html>
@@ -1247,12 +1264,12 @@ def validate(data, html):
 
 if __name__ == "__main__":
     OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
-    dashboard_data = build_data()
+    dashboard_data = json_safe(build_data())
     dashboard_html = build_html(dashboard_data)
     validate(dashboard_data, dashboard_html)
     OUTPUT.write_text(dashboard_html, encoding="utf-8")
     DATA_OUTPUT.write_text(
-        json.dumps(dashboard_data, ensure_ascii=False, indent=2) + "\n",
+        json.dumps(dashboard_data, ensure_ascii=False, indent=2, allow_nan=False) + "\n",
         encoding="utf-8",
     )
     print(f"Wrote {OUTPUT} ({OUTPUT.stat().st_size:,} bytes)")

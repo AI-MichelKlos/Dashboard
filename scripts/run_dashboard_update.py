@@ -809,12 +809,13 @@ def main() -> int:
     print("Starter opdatering fra Jobindsats.", flush=True)
     job_successes, job_failures = refresh_jobindsats(data)
     set_status(data, stat_successes + job_successes, stat_failures + job_failures)
+    data = builder.json_safe(data)
 
     html = add_visible_status(builder.build_html(data), data)
     builder.validate(data, html)
     builder.OUTPUT.write_text(html, encoding="utf-8")
     builder.DATA_OUTPUT.write_text(
-        json.dumps(data, ensure_ascii=False, indent=2) + "\n",
+        json.dumps(data, ensure_ascii=False, indent=2, allow_nan=False) + "\n",
         encoding="utf-8",
     )
     print(f"Wrote {builder.OUTPUT} ({builder.OUTPUT.stat().st_size:,} bytes)")

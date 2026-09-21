@@ -136,11 +136,14 @@ jobs:
           test "$(find share -maxdepth 1 -type f -name '*.png' | wc -l)" -eq 18
           test "$(find share -mindepth 2 -maxdepth 2 -type f -name 'index.html' | wc -l)" -eq 18
           grep -q 'og:image' share/unemploymentTotal/index.html
+          ! grep -qE 'NaN|Infinity' index.html
+          ! grep -qE 'NaN|Infinity' data/dashboard-data.json
 
       - name: Gem dashboarddata og status
         if: steps.gate.outputs.should_run == 'true' && always()
         run: |
-          git add index.html data/dashboard-data.json status/last-run.txt scripts/build_dashboard.py scripts/generate_social_shares.py share
+          git add index.html data/dashboard-data.json status/last-run.txt scripts/build_dashboard.py scripts/generate_social_shares.py
+          if [ -d share ]; then git add share; fi
           if [ -f data/senior-status.json ]; then git add data/senior-status.json; fi
           if [ -f app/index.html ]; then git add app/index.html; fi
           if git diff --cached --quiet; then
