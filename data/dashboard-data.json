@@ -1,8 +1,8 @@
 {
   "meta": {
-    "updated": "20. september 2026",
+    "updated": "21. september 2026",
     "sourceFile": "Samlet overblik.xlsx",
-    "retrievedAt": "2026-09-20",
+    "retrievedAt": "2026-09-21",
     "sourceRegister": {
       "unemployment": {
         "source": "Jobindsats API v3",
@@ -86,7 +86,7 @@
         "seasonalAdjustment": "sæsonkorrigeret",
         "sourceUpdated": "2026-08-27T06:00:00Z",
         "latestPeriod": "2026M06",
-        "fetchedAt": "2026-09-20T14:21:32+02:00"
+        "fetchedAt": "2026-09-21T16:08:02+02:00"
       },
       "bankruptcies": {
         "source": "Danmarks Statistik",
@@ -102,7 +102,7 @@
         "seasonalAdjustment": "kun serie A1",
         "sourceUpdated": "2026-09-04T06:00:00Z",
         "latestPeriod": "2026M08",
-        "fetchedAt": "2026-09-20T14:21:32+02:00"
+        "fetchedAt": "2026-09-21T16:08:02+02:00"
       },
       "consumerConfidence": {
         "source": "Danmarks Statistik",
@@ -116,7 +116,7 @@
         "seasonalAdjustment": "ikke oplyst",
         "sourceUpdated": "2026-08-21T06:00:00Z",
         "latestPeriod": "2026M08",
-        "fetchedAt": "2026-09-20T14:21:32+02:00"
+        "fetchedAt": "2026-09-21T16:08:02+02:00"
       },
       "jobindsats": {
         "source": "Jobindsats",
@@ -154,7 +154,7 @@
         "seasonalAdjustment": "ikke relevant",
         "sourceUpdated": "2026-09-10T06:00:00Z",
         "latestPeriod": "2026M08",
-        "fetchedAt": "2026-09-20T14:21:46+02:00"
+        "fetchedAt": "2026-09-21T16:08:17+02:00"
       }
     },
     "updateStatus": {
@@ -177,7 +177,7 @@
         "Forgæves rekrutteringsforsøg"
       ],
       "failed": [],
-      "checkedAt": "2026-09-20T14:22:03+02:00"
+      "checkedAt": "2026-09-21T16:08:38+02:00"
     },
     "jobindsatsUpdateStatus": {
       "successful": [
@@ -199,21 +199,21 @@
       "workSharing": {
         "state": "ok",
         "latestPeriod": "2026M08",
-        "checkedAt": "2026-09-20T14:22:03+02:00",
+        "checkedAt": "2026-09-21T16:08:38+02:00",
         "source": "Jobindsats API v3",
         "dataset": "y25i06"
       },
       "expiredBenefits": {
         "state": "ok",
         "latestPeriod": "2026M06",
-        "checkedAt": "2026-09-20T14:22:03+02:00",
+        "checkedAt": "2026-09-21T16:08:38+02:00",
         "source": "Jobindsats API v3",
         "dataset": "y01ud01di"
       },
       "failedRecruitment": {
         "state": "ok",
         "latestPeriod": "2026M06",
-        "checkedAt": "2026-09-20T14:22:03+02:00",
+        "checkedAt": "2026-09-21T16:08:38+02:00",
         "source": "Jobindsats API v3",
         "dataset": "y25i14"
       }
@@ -2863,7 +2863,8 @@
       "2026M04",
       "2026M05",
       "2026M06",
-      "2026M07"
+      "2026M07",
+      "2026M08"
     ],
     "total": [
       29822,
@@ -2964,29 +2965,30 @@
       16128,
       15765,
       15830,
-      15070,
-      15028,
-      15394,
-      15501,
+      15072,
+      15029,
+      15396,
+      15502,
       16109,
-      15534,
-      15363,
-      15825,
-      16448,
-      16600,
-      16466,
-      16298,
-      15589,
-      15570,
-      15913,
-      16031,
-      16744,
-      16193,
-      16223,
-      17007,
-      17365,
-      17551,
-      17208
+      15537,
+      15367,
+      15830,
+      16451,
+      16604,
+      16470,
+      16301,
+      15592,
+      15573,
+      15917,
+      16038,
+      16748,
+      16197,
+      16226,
+      17010,
+      17368,
+      17558,
+      17479,
+      16921
     ],
     "benefit": [
       15105,
@@ -3087,29 +3089,30 @@
       12055,
       11753,
       11735,
-      11030,
-      11070,
-      11463,
-      11571,
+      11031,
+      11073,
+      11466,
+      11573,
       12192,
-      11599,
-      11389,
-      11839,
-      12478,
-      12609,
-      12523,
-      12260,
-      11520,
-      11515,
-      11825,
-      11930,
-      12545,
-      11977,
-      11925,
-      12612,
-      12980,
-      13158,
-      12815
+      11602,
+      11391,
+      11841,
+      12480,
+      12611,
+      12526,
+      12261,
+      11521,
+      11517,
+      11827,
+      11936,
+      12547,
+      11980,
+      11927,
+      12614,
+      12982,
+      13156,
+      13028,
+      12323
     ],
     "assistance": [
       14716,
@@ -3211,28 +3214,29 @@
       4012,
       4095,
       4040,
-      3958,
-      3931,
+      3956,
       3930,
-      3918,
-      3934,
-      3975,
-      3987,
-      3969,
-      3991,
-      3942,
-      4038,
-      4069,
-      4055,
-      4089,
-      4101,
-      4200,
-      4216,
-      4298,
-      4395,
-      4386,
-      4393,
-      4393
+      3929,
+      3917,
+      3935,
+      3976,
+      3989,
+      3971,
+      3993,
+      3944,
+      4040,
+      4071,
+      4056,
+      4090,
+      4103,
+      4201,
+      4217,
+      4299,
+      4396,
+      4387,
+      4402,
+      4451,
+      4598
     ]
   },
   "inflation": {
