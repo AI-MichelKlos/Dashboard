@@ -737,6 +737,7 @@ def build_html(data):
     #dak-dashboard .share-chart {{position:absolute; top:14px; right:14px; z-index:3; padding:6px 9px; border:1px solid var(--line); background:#fff; color:var(--green-dark); border-radius:7px; font-size:12px; font-weight:700; line-height:1.2; box-shadow:0 2px 8px rgba(15,43,54,.08)}}
     #dak-dashboard .share-chart:hover, #dak-dashboard .share-chart:focus-visible {{background:var(--green-dark); color:#fff; border-color:var(--green-dark)}}
     #dak-dashboard .chart-card h3 {{padding-right:82px}}
+    #dak-dashboard .chart-card.share-target {{outline:3px solid var(--green); outline-offset:3px; box-shadow:0 10px 28px rgba(61,107,71,.22)}}
     #dak-dashboard .chart-card.wide {{grid-column:1/-1}}
     #dak-dashboard .chart-wrap {{position:relative; height:390px}}
     #dak-dashboard .chart-card.wide .chart-wrap {{height:430px}}
@@ -1128,7 +1129,7 @@ async function shareChart(card,chartCanvas){{
   const blob=await new Promise(resolve=>exported.canvas.toBlob(resolve,'image/png'));
   if(!blob) return;
   const file=new File([blob],fileNameFor(exported.title),{{type:'image/png'}});
-  const shareUrl=location.origin+location.pathname+'#'+card.id;
+  const shareUrl=location.origin+location.pathname+'share/'+chartCanvas.id+'/';
   if(navigator.share && navigator.canShare && navigator.canShare({{files:[file]}})){{
     try{{
       await navigator.share({{files:[file],title:exported.title,text:'Graf fra Analytisk overblik - Arbejdsmarkedet. '+shareUrl}});
@@ -1152,6 +1153,19 @@ function setupChartSharing(){{
   }});
 }}
 setupChartSharing();
+function focusSharedChart(){{
+  const hash=location.hash;
+  if(!hash.startsWith('#graf-')) return;
+  const card=document.getElementById(hash.slice(1));
+  if(!card) return;
+  requestAnimationFrame(()=>{{
+    card.scrollIntoView({{behavior:'smooth',block:'center'}});
+    card.classList.add('share-target');
+    setTimeout(()=>card.classList.remove('share-target'),2600);
+  }});
+}}
+window.addEventListener('hashchange',focusSharedChart);
+setTimeout(focusSharedChart,150);
 
 window.setPeriod=function(n,button){{
   document.querySelectorAll('#dak-dashboard [data-months]').forEach(el=>el.classList.remove('active'));
@@ -1226,6 +1240,8 @@ def validate(data, html):
     assert "shareSummary(id)" in html
     assert "ANALYTISK OVERBLIK | ARBEJDSMARKEDET" in html
     assert "const width=1200, height=675" in html
+    assert "share/'+chartCanvas.id+'/'" in html
+    assert "share-target" in html
     assert "–" not in html and "—" not in html
 
 
