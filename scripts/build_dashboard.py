@@ -997,26 +997,121 @@ function drawAll(n){{
   s=sliced(DATA.euConfidence.labels,[DATA.euConfidence.series.DK,DATA.euConfidence.series.EU27_2020,DATA.euConfidence.series.DE,DATA.euConfidence.series.SE,DATA.euConfidence.series.FR],n);
   lineChart('euConfidence',s.labels,[{{label:'Danmark',data:s.series[0]}},{{label:'EU-27',data:s.series[1]}},{{label:'Tyskland',data:s.series[2]}},{{label:'Sverige',data:s.series[3]}},{{label:'Frankrig',data:s.series[4]}}],1);
 }}
+function latestChartPoint(chart,datasetIndex=0){{
+  const labels=chart?.data?.labels||[];
+  const values=chart?.data?.datasets?.[datasetIndex]?.data||[];
+  for(let i=Math.min(labels.length,values.length)-1;i>=0;i--){{
+    const value=Number(values[i]);
+    if(Number.isFinite(value)) return {{value,period:labels[i],index:i}};
+  }}
+  return {{value:null,period:'',index:-1}};
+}}
+function shareSummary(id){{
+  const chart=charts[id];
+  if(!chart) return {{valueText:'',detailText:''}};
+  let point=latestChartPoint(chart,0);
+  let decimals=0, suffix='', detail=chart.data.datasets?.[0]?.label||'';
+  if(['unemploymentRate','inflation','eurostatTrend'].includes(id)){{decimals=1;suffix=' pct.';}}
+  if(['confidence','business','euConfidence'].includes(id)) decimals=1;
+  if(id==='unemploymentTotal') suffix=' fuldtidspersoner';
+  if(id==='vacancies') suffix=' stillinger';
+  if(id==='wages') suffix=' personer';
+  if(id==='notices') suffix=' personer';
+  if(id==='expiredBenefits') suffix=' personer';
+  if(id==='failedRecruitment') suffix=' forsøg';
+  if(id==='workSharing'){{
+    const a=latestChartPoint(chart,0), b=latestChartPoint(chart,1);
+    if(a.value!==null && b.value!==null) point={{value:a.value+b.value,period:a.period,index:a.index}};
+    suffix=' personer'; detail='I alt';
+  }}
+  if(id==='topRecruitmentOccupations'){{
+    const labels=chart.data.labels||[];
+    const values=chart.data.datasets?.[0]?.data||[];
+    let bestIndex=-1, bestValue=-Infinity;
+    values.forEach((raw,i)=>{{const value=Number(raw);if(Number.isFinite(value)&&value>bestValue){{bestValue=value;bestIndex=i;}}}});
+    if(bestIndex>=0){{
+      return {{
+        valueText:dkNumber(bestValue,0)+' forsøg',
+        detailText:'Flest: '+String(labels[bestIndex]||'')+' | '+periodLabel(DATA.failedRecruitment.topPeriod)
+      }};
+    }}
+  }}
+  if(id==='eurostatLatest'){{
+    const labels=chart.data.labels||[];
+    const dkIndex=labels.indexOf('DK');
+    const value=dkIndex>=0?Number(chart.data.datasets?.[0]?.data?.[dkIndex]):null;
+    return {{
+      valueText:Number.isFinite(value)?dkNumber(value,1)+' pct.':'',
+      detailText:'Danmark | '+periodLabel(DATA.eurostat.latestPeriod)
+    }};
+  }}
+  if(id==='eurostatTrend') detail='Danmark';
+  if(id==='euConfidence') detail='Danmark';
+  const valueText=point.value===null?'':dkNumber(point.value,decimals)+suffix;
+  const periodText=point.period!==''?periodLabel(point.period):'';
+  return {{valueText,detailText:[detail,periodText].filter(Boolean).join(' | ')}};
+}}
+function wrapCanvasText(ctx,text,x,y,maxWidth,lineHeight,maxLines=2){{
+  const words=String(text).split(/\\s+/);
+  let line='', lines=[];
+  for(const word of words){{
+    const test=line?line+' '+word:word;
+    if(ctx.measureText(test).width>maxWidth && line){{lines.push(line);line=word;}}
+    else line=test;
+  }}
+  if(line) lines.push(line);
+  if(lines.length>maxLines){{
+    lines=lines.slice(0,maxLines);
+    let last=lines[maxLines-1];
+    while(last.length>1 && ctx.measureText(last+'...').width>maxWidth) last=last.slice(0,-1);
+    lines[maxLines-1]=last+'...';
+  }}
+  lines.forEach((lineText,i)=>ctx.fillText(lineText,x,y+i*lineHeight));
+  return y+lines.length*lineHeight;
+}}
 function exportChartCanvas(card,chartCanvas){{
   const title=(card.querySelector('h3')?.textContent||'Graf').trim();
   const source=(card.querySelector('.source')?.textContent||'').trim();
-  const tall=card.classList.contains('tall');
-  const width=1200, height=tall?1100:800;
+  const summary=shareSummary(chartCanvas.id);
+  const width=1200, height=675;
   const output=document.createElement('canvas');
   output.width=width; output.height=height;
   const ctx=output.getContext('2d');
   ctx.fillStyle='#ffffff'; ctx.fillRect(0,0,width,height);
+
+  ctx.fillStyle='#3d6b47'; ctx.font='700 17px Segoe UI, Arial, sans-serif';
+  ctx.fillText('ANALYTISK OVERBLIK | ARBEJDSMARKEDET',58,38);
+  ctx.fillStyle='#6B9E78'; ctx.fillRect(58,53,72,4);
+
   ctx.fillStyle='#0F2B36'; ctx.font='700 34px Segoe UI, Arial, sans-serif';
-  ctx.fillText(title,60,62);
-  const chartTop=98, chartHeight=height-235;
-  ctx.drawImage(chartCanvas,60,chartTop,width-120,chartHeight);
-  ctx.fillStyle='#68777d'; ctx.font='20px Segoe UI, Arial, sans-serif';
-  const sourceText=source.length>105?source.slice(0,102)+'...':source;
-  ctx.fillText(sourceText,60,height-92);
-  ctx.fillStyle='#3d6b47'; ctx.font='700 20px Segoe UI, Arial, sans-serif';
-  ctx.fillText('Danske A-kasser | Analytisk overblik - Arbejdsmarkedet',60,height-50);
-  ctx.textAlign='right'; ctx.font='18px Segoe UI, Arial, sans-serif';
-  ctx.fillText('ai-michelklos.github.io/Dashboard/',width-60,height-50);
+  const titleBottom=wrapCanvasText(ctx,title,58,91,width-116,40,2);
+  let summaryY=Math.max(142,titleBottom+8);
+  if(summary.valueText){{
+    ctx.fillStyle='#3d6b47'; ctx.font='800 38px Segoe UI, Arial, sans-serif';
+    ctx.fillText(summary.valueText,58,summaryY);
+    summaryY+=29;
+  }}
+  if(summary.detailText){{
+    ctx.fillStyle='#68777d'; ctx.font='600 18px Segoe UI, Arial, sans-serif';
+    ctx.fillText(summary.detailText,58,summaryY);
+    summaryY+=20;
+  }}
+
+  const chartTop=Math.max(205,summaryY+8);
+  const chartBottom=536;
+  ctx.drawImage(chartCanvas,58,chartTop,width-116,Math.max(210,chartBottom-chartTop));
+
+  ctx.strokeStyle='#E8EBE8'; ctx.lineWidth=1; ctx.beginPath(); ctx.moveTo(58,558); ctx.lineTo(width-58,558); ctx.stroke();
+  ctx.fillStyle='#68777d'; ctx.font='17px Segoe UI, Arial, sans-serif';
+  const sourceText=source.length>120?source.slice(0,117)+'...':source;
+  ctx.fillText(sourceText,58,589);
+  ctx.fillStyle='#0F2B36'; ctx.font='700 18px Segoe UI, Arial, sans-serif';
+  ctx.fillText('Danske A-kasser',58,629);
+  ctx.fillStyle='#68777d'; ctx.font='17px Segoe UI, Arial, sans-serif';
+  ctx.fillText('Analytisk overblik - Arbejdsmarkedet',205,629);
+  ctx.textAlign='right';
+  ctx.fillStyle='#3d6b47'; ctx.font='600 16px Segoe UI, Arial, sans-serif';
+  ctx.fillText('ai-michelklos.github.io/Dashboard/',width-58,629);
   ctx.textAlign='left';
   return {{canvas:output,title}};
 }}
@@ -1128,7 +1223,9 @@ def validate(data, html):
     assert html.count("Grafik og databehandling: Michel Klos") == 1
     assert "setupChartSharing();" in html
     assert "navigator.canShare" in html
-    assert "Danske A-kasser | Analytisk overblik - Arbejdsmarkedet" in html
+    assert "shareSummary(id)" in html
+    assert "ANALYTISK OVERBLIK | ARBEJDSMARKEDET" in html
+    assert "const width=1200, height=675" in html
     assert "–" not in html and "—" not in html
 
 
