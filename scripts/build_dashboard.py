@@ -733,6 +733,10 @@ def build_html(data):
     #dak-dashboard .kpi-note {{font-size:11px; color:var(--muted); margin-top:7px}}
     #dak-dashboard .chart-grid {{display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:18px; margin-top:20px}}
     #dak-dashboard .chart-card {{background:#fff; border:1px solid var(--line); border-radius:12px; padding:20px; box-shadow:0 6px 20px rgba(15,43,54,.07)}}
+    #dak-dashboard .chart-card {{position:relative}}
+    #dak-dashboard .share-chart {{position:absolute; top:14px; right:14px; z-index:3; padding:6px 9px; border:1px solid var(--line); background:#fff; color:var(--green-dark); border-radius:7px; font-size:12px; font-weight:700; line-height:1.2; box-shadow:0 2px 8px rgba(15,43,54,.08)}}
+    #dak-dashboard .share-chart:hover, #dak-dashboard .share-chart:focus-visible {{background:var(--green-dark); color:#fff; border-color:var(--green-dark)}}
+    #dak-dashboard .chart-card h3 {{padding-right:82px}}
     #dak-dashboard .chart-card.wide {{grid-column:1/-1}}
     #dak-dashboard .chart-wrap {{position:relative; height:390px}}
     #dak-dashboard .chart-card.wide .chart-wrap {{height:430px}}
@@ -993,6 +997,67 @@ function drawAll(n){{
   s=sliced(DATA.euConfidence.labels,[DATA.euConfidence.series.DK,DATA.euConfidence.series.EU27_2020,DATA.euConfidence.series.DE,DATA.euConfidence.series.SE,DATA.euConfidence.series.FR],n);
   lineChart('euConfidence',s.labels,[{{label:'Danmark',data:s.series[0]}},{{label:'EU-27',data:s.series[1]}},{{label:'Tyskland',data:s.series[2]}},{{label:'Sverige',data:s.series[3]}},{{label:'Frankrig',data:s.series[4]}}],1);
 }}
+function exportChartCanvas(card,chartCanvas){{
+  const title=(card.querySelector('h3')?.textContent||'Graf').trim();
+  const source=(card.querySelector('.source')?.textContent||'').trim();
+  const tall=card.classList.contains('tall');
+  const width=1200, height=tall?1100:800;
+  const output=document.createElement('canvas');
+  output.width=width; output.height=height;
+  const ctx=output.getContext('2d');
+  ctx.fillStyle='#ffffff'; ctx.fillRect(0,0,width,height);
+  ctx.fillStyle='#0F2B36'; ctx.font='700 34px Segoe UI, Arial, sans-serif';
+  ctx.fillText(title,60,62);
+  const chartTop=98, chartHeight=height-235;
+  ctx.drawImage(chartCanvas,60,chartTop,width-120,chartHeight);
+  ctx.fillStyle='#68777d'; ctx.font='20px Segoe UI, Arial, sans-serif';
+  const sourceText=source.length>105?source.slice(0,102)+'...':source;
+  ctx.fillText(sourceText,60,height-92);
+  ctx.fillStyle='#3d6b47'; ctx.font='700 20px Segoe UI, Arial, sans-serif';
+  ctx.fillText('Danske A-kasser | Analytisk overblik - Arbejdsmarkedet',60,height-50);
+  ctx.textAlign='right'; ctx.font='18px Segoe UI, Arial, sans-serif';
+  ctx.fillText('ai-michelklos.github.io/Dashboard/',width-60,height-50);
+  ctx.textAlign='left';
+  return {{canvas:output,title}};
+}}
+function fileNameFor(title){{
+  return title.toLowerCase().normalize('NFD').replace(/[\\u0300-\\u036f]/g,'').replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'')+'.png';
+}}
+function downloadBlob(blob,name){{
+  const a=document.createElement('a');
+  a.href=URL.createObjectURL(blob); a.download=name; document.body.appendChild(a); a.click(); a.remove();
+  setTimeout(()=>URL.revokeObjectURL(a.href),1000);
+}}
+async function shareChart(card,chartCanvas){{
+  const exported=exportChartCanvas(card,chartCanvas);
+  const blob=await new Promise(resolve=>exported.canvas.toBlob(resolve,'image/png'));
+  if(!blob) return;
+  const file=new File([blob],fileNameFor(exported.title),{{type:'image/png'}});
+  const shareUrl=location.origin+location.pathname+'#'+card.id;
+  if(navigator.share && navigator.canShare && navigator.canShare({{files:[file]}})){{
+    try{{
+      await navigator.share({{files:[file],title:exported.title,text:'Graf fra Analytisk overblik - Arbejdsmarkedet. '+shareUrl}});
+      return;
+    }}catch(error){{
+      if(error && error.name==='AbortError') return;
+    }}
+  }}
+  downloadBlob(blob,file.name);
+}}
+function setupChartSharing(){{
+  document.querySelectorAll('#dak-dashboard .chart-card').forEach(card=>{{
+    const canvas=card.querySelector('canvas');
+    if(!canvas || card.querySelector('.share-chart')) return;
+    card.id=card.id||'graf-'+canvas.id;
+    const button=document.createElement('button');
+    button.type='button'; button.className='share-chart'; button.textContent='↗ Del graf';
+    button.setAttribute('aria-label','Del '+(card.querySelector('h3')?.textContent||'graf'));
+    button.addEventListener('click',()=>shareChart(card,canvas));
+    card.appendChild(button);
+  }});
+}}
+setupChartSharing();
+
 window.setPeriod=function(n,button){{
   document.querySelectorAll('#dak-dashboard [data-months]').forEach(el=>el.classList.remove('active'));
   if(button) button.classList.add('active');
@@ -1061,6 +1126,9 @@ def validate(data, html):
     assert "Opbrugt dagpengeret fordelt på dimittendstatus" in html
     assert "15 stillinger med flest forgæves rekrutteringsforsøg" in html
     assert html.count("Grafik og databehandling: Michel Klos") == 1
+    assert "setupChartSharing();" in html
+    assert "navigator.canShare" in html
+    assert "Danske A-kasser | Analytisk overblik - Arbejdsmarkedet" in html
     assert "–" not in html and "—" not in html
 
 
