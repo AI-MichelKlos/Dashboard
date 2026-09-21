@@ -12,6 +12,7 @@ on:
       - "scripts/run_dashboard_update.py"
       - "scripts/run_dashboard_update_with_inflation.py"
       - "scripts/fetch_senior_status.py"
+      - "scripts/generate_social_shares.py"
       - "data/dashboard-data.json"
       - ".github/workflows/update-dashboard.yml"
   schedule:
@@ -68,7 +69,7 @@ jobs:
 
       - name: Installer afhængigheder
         if: steps.gate.outputs.should_run == 'true'
-        run: python -m pip install pandas openpyxl
+        run: python -m pip install pandas openpyxl matplotlib
 
       - name: Hent officielle data og byg dashboard
         if: steps.gate.outputs.should_run == 'true'
@@ -79,7 +80,7 @@ jobs:
           started="$(date -u +'%Y-%m-%dT%H:%M:%SZ')"
           today="$(TZ=Europe/Copenhagen date +'%F')"
           set +e
-          python -m py_compile scripts/build_dashboard.py scripts/run_dashboard_update.py scripts/run_dashboard_update_with_inflation.py scripts/fetch_senior_status.py > status/run.log 2>&1
+          python -m py_compile scripts/build_dashboard.py scripts/run_dashboard_update.py scripts/run_dashboard_update_with_inflation.py scripts/fetch_senior_status.py scripts/generate_social_shares.py > status/run.log 2>&1
           code=$?
           if [ "$code" -eq 0 ]; then
             python scripts/run_dashboard_update_with_inflation.py >> status/run.log 2>&1
@@ -87,6 +88,10 @@ jobs:
           fi
           if [ "$code" -eq 0 ]; then
             python scripts/fetch_senior_status.py >> status/run.log 2>&1
+            code=$?
+          fi
+          if [ "$code" -eq 0 ]; then
+            python scripts/generate_social_shares.py >> status/run.log 2>&1
             code=$?
           fi
           if [ "$code" -eq 0 ]; then
@@ -126,11 +131,16 @@ jobs:
           grep -q '"workWithPension"' data/senior-status.json
           grep -q '"employmentDegree"' data/senior-status.json
           grep -q '"gender"' data/senior-status.json
+          test -s share/unemploymentTotal.png
+          test -s share/unemploymentTotal/index.html
+          test "$(find share -maxdepth 1 -type f -name '*.png' | wc -l)" -eq 18
+          test "$(find share -mindepth 2 -maxdepth 2 -type f -name 'index.html' | wc -l)" -eq 18
+          grep -q 'og:image' share/unemploymentTotal/index.html
 
       - name: Gem dashboarddata og status
         if: steps.gate.outputs.should_run == 'true' && always()
         run: |
-          git add index.html data/dashboard-data.json status/last-run.txt scripts/build_dashboard.py
+          git add index.html data/dashboard-data.json status/last-run.txt scripts/build_dashboard.py scripts/generate_social_shares.py share
           if [ -f data/senior-status.json ]; then git add data/senior-status.json; fi
           if [ -f app/index.html ]; then git add app/index.html; fi
           if git diff --cached --quiet; then
