@@ -1,5 +1,5 @@
 status: fejl
-tid_utc: 2026-09-21T19:43:41Z
-dato_dk: 2026-09-21
+tid_utc: 2026-09-22T12:36:31Z
+dato_dk: 2026-09-22
 trin: opdatering
 fejl: Starter opdatering fra Jobindsats. Færdig: Forgæves rekrutteringsforsøg. Jobindsats-tabel: y25i14. Traceback (most recent call last): File "/home/runner/work/Dashboard/Dashboard/scripts/run_dashboard_update_with_inflation.py", line 134, in <module> result = updater.main() ^^^^^^^^^^^^^^ File "/home/runner/work/Dashboard/Dashboard/scripts/run_dashboard_update.py", line 815, in main builder.validate(data, html) File "/home/runner/work/Dashboard/Dashboard/scripts/build_dashboard.py", line 1242, in validate assert "NaN" not in html and "Infinity" not in html ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ AssertionError 
