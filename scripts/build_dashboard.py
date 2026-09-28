@@ -1045,8 +1045,8 @@ function shareSummary(id){{
   if(id==='topRecruitmentOccupations'){{
     const labels=chart.data.labels||[];
     const values=chart.data.datasets?.[0]?.data||[];
-    let bestIndex=-1, bestValue=-Infinity;
-    values.forEach((raw,i)=>{{const value=Number(raw);if(Number.isFinite(value)&&value>bestValue){{bestValue=value;bestIndex=i;}}}});
+    let bestIndex=-1, bestValue=null;
+    values.forEach((raw,i)=>{{const value=Number(raw);if(Number.isFinite(value)&&(bestValue===null||value>bestValue)){{bestValue=value;bestIndex=i;}}}});
     if(bestIndex>=0){{
       return {{
         valueText:dkNumber(bestValue,0)+' forsøg',
