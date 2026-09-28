@@ -1,5 +1,3 @@
-status: fejl
-tid_utc: 2026-09-28T08:03:04Z
+status: ok
+tid_utc: 2026-09-28T08:05:27Z
 dato_dk: 2026-09-28
-trin: opdatering
-fejl:  return func( ^^^^^ File "/opt/hostedtoolcache/Python/3.12.14/x64/lib/python3.12/site-packages/matplotlib/axes/_axes.py", line 2603, in bar r = mpatches.Rectangle( ^^^^^^^^^^^^^^^^^^^ File "/opt/hostedtoolcache/Python/3.12.14/x64/lib/python3.12/site-packages/matplotlib/patches.py", line 895, in __init__ self._convert_units() # Validate the inputs. ^^^^^^^^^^^^^^^^^^^^^ File "/opt/hostedtoolcache/Python/3.12.14/x64/lib/python3.12/site-packages/matplotlib/patches.py", line 906, in _convert_units y1 = self.convert_yunits(self._y0 + self._height) ~~~~~~~~~^~~~~~~~~~~~~~ TypeError: unsupported operand type(s) for +: 'int' and 'NoneType' 
