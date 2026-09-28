@@ -395,6 +395,7 @@ def draw_chart(ax, spec):
         labels = spec["labels"]
         series = spec["series"]
 
+    # Matplotlib bar charts need NaN, not None, for missing observations.
     series = [
         (label, [math.nan if value is None else value for value in values])
         for label, values in series
