@@ -426,7 +426,8 @@ def draw_chart(ax, spec):
         ax.plot(x, first_values, color=COLORS[0], linewidth=2.0, label=first_label)
         configure_axis(ax)
         ax2 = ax.twinx()
-        ax2.bar(x, second_values, color=COLORS[1], alpha=0.35, width=0.72, label=second_label)
+        second_plot = [math.nan if value is None else value for value in second_values]
+        ax2.bar(x, second_plot, color=COLORS[1], alpha=0.35, width=0.72, label=second_label)
         ax2.tick_params(axis="y", labelsize=8, colors=MUTED)
         ax2.spines["top"].set_visible(False)
         ax2.spines["right"].set_color(GRID)
