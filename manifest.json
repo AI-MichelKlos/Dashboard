@@ -4,8 +4,8 @@
   "description": "Nøgletal for ledighed, beskæftigelse og arbejdsmarked",
   "start_url": "./index.html",
   "display": "standalone",
-  "background_color": "#0F2B36",
-  "theme_color": "#0F2B36",
+  "background_color": "#2B211B",
+  "theme_color": "#2B211B",
   "orientation": "portrait-primary",
   "icons": [
     {

@@ -17,11 +17,11 @@ DATA_PATH = BASE / "data" / "dashboard-data.json"
 SHARE_DIR = BASE / "share"
 PUBLIC_BASE = "https://ai-michelklos.github.io/Dashboard/"
 
-COLORS = ["#6B9E78", "#E07A40", "#4A90C4", "#9B59B6", "#3d6b47", "#0F2B36"]
-INK = "#0F2B36"
-GREEN = "#3d6b47"
-MUTED = "#68777d"
-GRID = "#E8EBE8"
+COLORS = ["#9A5B34", "#146298", "#8C9C41", "#8C7FCF", "#7D3659", "#1D9999"]
+INK = "#2B211B"
+GREEN = "#4a3428"
+MUTED = "#6f6258"
+GRID = "#E6DDD2"
 
 MONTHS = [
     "jan.", "feb.", "mar.", "apr.", "maj", "jun.",
@@ -543,10 +543,10 @@ def write_share_page(spec, value_text, detail_text):
   <meta name="twitter:image" content="{html.escape(image_url, quote=True)}">
   <link rel="canonical" href="{html.escape(target_url, quote=True)}">
   <style>
-    body {{font-family:Segoe UI,Arial,sans-serif; background:#f5f7f5; color:#0F2B36; margin:0; padding:40px}}
+    body {{font-family:Segoe UI,Arial,sans-serif; background:#f7f1ea; color:#2B211B; margin:0; padding:40px}}
     main {{max-width:720px; margin:0 auto; background:#fff; padding:28px; border-radius:12px}}
-    img {{max-width:100%; height:auto; display:block; border:1px solid #E8EBE8}}
-    a {{color:#3d6b47; font-weight:700}}
+    img {{max-width:100%; height:auto; display:block; border:1px solid #E6DDD2}}
+    a {{color:#4a3428; font-weight:700}}
   </style>
   <script>window.addEventListener('DOMContentLoaded',function(){{window.location.replace({json.dumps(target_url)});}});</script>
 </head>

@@ -707,24 +707,25 @@ def build_html(data):
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Analytisk overblik - Arbejdsmarkedet</title>
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+  <link rel="stylesheet" href="https://ai-michelklos.github.io/arbejdsmarked/stil/efteraar.css">
   <style>
-    body {{margin:0; background:#f5f7f5; font-family:'Segoe UI',Arial,sans-serif; color:#0F2B36}}
-    .dak-hero {{background-color:#0F2B36; background-image:url('assets/arbejdsmarkedets-puls.webp'),linear-gradient(135deg,#0F2B36,#244d4b); background-position:center 46%,center; background-size:cover,cover; background-repeat:no-repeat; color:#fff; padding:32px 20px}}
+    body {{margin:0; background:#f7f1ea; font-family:Arial,sans-serif; color:#2B211B}}
+    .dak-hero {{background-color:#2B211B; background-image:url('assets/arbejdsmarkedets-puls.webp'),linear-gradient(135deg,#2B211B,#4a3428); background-position:center 46%,center; background-size:cover,cover; background-repeat:no-repeat; color:#fff; padding:32px 20px}}
     .dak-hero-inner {{max-width:1280px; margin:0 auto}}
-    .dak-eyebrow {{font-size:.75rem; letter-spacing:.12em; text-transform:uppercase; font-weight:700; color:#c9dfcf}}
+    .dak-eyebrow {{font-size:.75rem; letter-spacing:.12em; text-transform:uppercase; font-weight:700; color:#e2d2bf}}
     .dak-hero h1 {{font-size:clamp(2.1rem,4vw,3.4rem); line-height:1.08; margin:5px 0 0; color:#fff}}
-    .dak-byline {{font-size:.78rem; color:#c9d8d5; font-weight:600; margin-top:5px}}
-    .dak-hero-sub {{max-width:900px; color:#e7eeee; line-height:1.5; margin:10px 0 0}}
+    .dak-byline {{font-size:.78rem; color:#e2d2bf; font-weight:600; margin-top:5px}}
+    .dak-hero-sub {{max-width:900px; color:#f7f1ea; line-height:1.5; margin:10px 0 0}}
     #dak-dashboard {{
-      --navy:#0F2B36; --blue:#4A90C4; --cyan:#6B9E78; --red:#b14f4a;
-      --green:#6B9E78; --green-dark:#3d6b47; --orange:#E07A40; --purple:#9B59B6; --ink:#0F2B36;
-      --muted:#68777d; --line:#E8EBE8; --paper:#fff; --soft:#f5f7f5;
+      --navy:#4A3428; --blue:#146298; --cyan:#9A5B34; --red:#b14f4a; --good:#3D6B47; --bad:#B14F4A;
+      --green:#9A5B34; --green-dark:#4a3428; --orange:#8C9C41; --purple:#8C7FCF; --ink:#2B211B;
+      --muted:#6f6258; --line:#E6DDD2; --paper:#fff; --soft:#f7f1ea;
       max-width:1280px; margin:0 auto; padding:28px 20px 55px; color:var(--ink);
-      font-family:'Segoe UI',Arial,sans-serif; box-sizing:border-box;
+      font-family:Arial,sans-serif; box-sizing:border-box;
     }}
     #dak-dashboard * {{box-sizing:border-box}}
     #dak-dashboard h1 {{font-size:32px; line-height:1.15; color:var(--navy); margin:0 0 8px}}
-    #dak-dashboard h2 {{font-size:23px; color:var(--navy); margin:44px 0 16px; border-bottom:3px solid var(--green); padding-bottom:8px}}
+    #dak-dashboard h2 {{font-size:23px; color:var(--navy); margin:44px 0 16px;}}
     #dak-dashboard h3 {{font-size:18px; color:var(--navy); margin:0 0 6px}}
     #dak-dashboard .intro {{color:var(--muted); margin:0 0 18px; line-height:1.55}}
     #dak-dashboard .toolbar {{display:flex; flex-wrap:wrap; align-items:center; gap:9px; padding:14px 16px; background:var(--soft); border-radius:8px; margin:18px 0 24px}}
@@ -736,25 +737,25 @@ def build_html(data):
     #dak-dashboard .kpi-grid.economy {{grid-template-columns:repeat(3,minmax(0,1fr))}}
     #dak-dashboard .kpi-grid.dynamics {{grid-template-columns:repeat(2,minmax(0,1fr))}}
     #dak-dashboard .kpi-grid.international {{grid-template-columns:repeat(2,minmax(0,1fr))}}
-    #dak-dashboard .kpi-card, #dak-dashboard .table-card {{background:var(--paper); border:1px solid var(--line); border-top:4px solid var(--green); border-radius:12px; padding:16px; box-shadow:0 6px 20px rgba(15,43,54,.07)}}
+    #dak-dashboard .kpi-card, #dak-dashboard .table-card {{background:var(--paper); border:1px solid var(--line); border-radius:12px; padding:16px; box-shadow:none}}
     #dak-dashboard .kpi-title {{font-weight:700; color:var(--navy); min-height:38px}}
     #dak-dashboard .kpi-value {{font-size:28px; color:var(--navy); font-weight:800; line-height:1.15; margin:8px 0 2px}}
     #dak-dashboard .kpi-value span {{font-size:13px; font-weight:400; color:var(--muted)}}
     #dak-dashboard .kpi-period {{font-size:13px; color:var(--muted); margin-bottom:10px}}
     #dak-dashboard .kpi-deltas {{border-top:1px solid var(--line); padding-top:8px; min-height:49px}}
     #dak-dashboard .delta-row {{font-size:12px; margin:3px 0}}
-    #dak-dashboard .delta-good {{color:var(--green); font-weight:700}}
-    #dak-dashboard .delta-bad {{color:var(--red); font-weight:700}}
+    #dak-dashboard .delta-good {{color:var(--good); font-weight:700}}
+    #dak-dashboard .delta-bad {{color:var(--bad); font-weight:700}}
     #dak-dashboard .delta-neutral {{color:var(--muted); font-weight:700}}
     #dak-dashboard .compare-label {{color:var(--muted)}}
     #dak-dashboard .kpi-note {{font-size:11px; color:var(--muted); margin-top:7px}}
     #dak-dashboard .chart-grid {{display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:18px; margin-top:20px}}
-    #dak-dashboard .chart-card {{background:#fff; border:1px solid var(--line); border-radius:12px; padding:20px; box-shadow:0 6px 20px rgba(15,43,54,.07)}}
+    #dak-dashboard .chart-card {{background:#fff; border:1px solid var(--line); border-radius:12px; padding:20px; box-shadow:none}}
     #dak-dashboard .chart-card {{position:relative}}
-    #dak-dashboard .share-chart {{position:absolute; top:14px; right:14px; z-index:3; padding:6px 9px; border:1px solid var(--line); background:#fff; color:var(--green-dark); border-radius:7px; font-size:12px; font-weight:700; line-height:1.2; box-shadow:0 2px 8px rgba(15,43,54,.08)}}
+    #dak-dashboard .share-chart {{position:absolute; top:14px; right:14px; z-index:3; padding:6px 9px; border:1px solid var(--line); background:#fff; color:var(--green-dark); border-radius:7px; font-size:12px; font-weight:700; line-height:1.2; box-shadow:0 2px 8px rgba(43,33,27,.08)}}
     #dak-dashboard .share-chart:hover, #dak-dashboard .share-chart:focus-visible {{background:var(--green-dark); color:#fff; border-color:var(--green-dark)}}
     #dak-dashboard .chart-card h3 {{padding-right:82px}}
-    #dak-dashboard .chart-card.share-target {{outline:3px solid var(--green); outline-offset:3px; box-shadow:0 10px 28px rgba(61,107,71,.22)}}
+    #dak-dashboard .chart-card.share-target {{outline:3px solid var(--green); outline-offset:3px; box-shadow:0 10px 28px rgba(74,52,40,.22)}}
     #dak-dashboard .chart-card.wide {{grid-column:1/-1}}
     #dak-dashboard .chart-wrap {{position:relative; height:390px}}
     #dak-dashboard .chart-card.wide .chart-wrap {{height:430px}}
@@ -763,7 +764,7 @@ def build_html(data):
     #dak-dashboard table {{width:100%; border-collapse:collapse; margin-top:5px}}
     #dak-dashboard th, #dak-dashboard td {{border-bottom:1px solid var(--line); padding:8px 4px; text-align:left; font-size:14px}}
     #dak-dashboard td {{text-align:right; font-weight:700; color:var(--navy)}}
-    #dak-dashboard .footnote {{margin-top:30px; background:var(--soft); padding:16px; border-left:4px solid var(--blue); font-size:13px; color:var(--muted); line-height:1.5}}
+    #dak-dashboard .footnote {{margin-top:30px; background:var(--soft); padding:16px; font-size:13px; color:var(--muted); line-height:1.5}}
     @media(max-width:900px) {{
       #dak-dashboard .kpi-grid, #dak-dashboard .kpi-grid.economy, #dak-dashboard .kpi-grid.dynamics {{grid-template-columns:repeat(2,minmax(0,1fr))}}
       #dak-dashboard .chart-grid {{grid-template-columns:1fr}}
@@ -835,7 +836,7 @@ def build_html(data):
 (function(){{
 const DATA={json_data};
 const COUNTRY_NAMES={country_names};
-const COLORS=['#6B9E78','#E07A40','#4A90C4','#9B59B6','#3d6b47','#0F2B36'];
+const COLORS=['#9A5B34','#146298','#8C9C41','#8C7FCF','#7D3659','#1D9999'];
 const charts={{}};
 let activeMonths=60;
 
@@ -878,7 +879,7 @@ function commonOptions(decimals=0){{
       legend:{{position:'top',align:'start',labels:{{boxWidth:12,boxHeight:12,padding:18,usePointStyle:true}}}},
       tooltip:{{callbacks:{{title:items=>periodLabel(items[0].label),label:ctx=>' '+ctx.dataset.label+': '+dkNumber(ctx.parsed.y,decimals)}}}}
     }},
-    scales:{{x:xAxis(),y:{{beginAtZero:false,grid:{{color:'#E8EBE8'}},ticks:{{padding:8,callback:v=>dkNumber(v,decimals)}}}}}}
+    scales:{{x:xAxis(),y:{{beginAtZero:false,grid:{{color:'#E6DDD2'}},ticks:{{padding:8,callback:v=>dkNumber(v,decimals)}}}}}}
   }};
 }}
 function replaceChart(id,config){{
@@ -904,7 +905,7 @@ function barChart(id,labels,datasets,decimals=0){{
 function stackedBarChart(id,labels,datasets){{
   const opts=commonOptions(0);
   opts.scales.x={{...xAxis(),stacked:true}};
-  opts.scales.y={{beginAtZero:true,stacked:true,grid:{{color:'#E8EBE8'}},ticks:{{callback:v=>dkNumber(v,0)}}}};
+  opts.scales.y={{beginAtZero:true,stacked:true,grid:{{color:'#E6DDD2'}},ticks:{{callback:v=>dkNumber(v,0)}}}};
   replaceChart(id,{{type:'bar',data:{{labels,datasets:datasets.map((d,i)=>({{
     ...d,backgroundColor:d.backgroundColor||COLORS[i],borderRadius:2
   }}))}},options:opts}});
@@ -923,7 +924,7 @@ function recruitmentChart(id,labels,attempts,rate){{
     ? ' '+ctx.dataset.label+': '+dkNumber(ctx.parsed.y,1)+' pct.'
     : ' '+ctx.dataset.label+': '+dkNumber(ctx.parsed.y,0);
   replaceChart(id,{{type:'bar',data:{{labels,datasets:[
-    {{label:'Forgæves rekrutteringsforsøg',data:attempts,backgroundColor:'rgba(107,158,120,.78)',borderColor:COLORS[0],borderWidth:1,borderRadius:2,yAxisID:'y'}},
+    {{label:'Forgæves rekrutteringsforsøg',data:attempts,backgroundColor:'rgba(154,91,52,.78)',borderColor:COLORS[0],borderWidth:1,borderRadius:2,yAxisID:'y'}},
     {{type:'line',label:'FRR',data:rate,borderColor:COLORS[1],backgroundColor:COLORS[1],pointRadius:0,pointHoverRadius:4,borderWidth:2.5,tension:.18,yAxisID:'y1'}}
   ]}},options:opts}});
 }}
@@ -934,7 +935,7 @@ function horizontalValueBar(id,labels,values,label){{
       indexAxis:'y',responsive:true,maintainAspectRatio:false,
       plugins:{{legend:{{display:false}},tooltip:{{callbacks:{{label:ctx=>' '+dkNumber(ctx.parsed.x,0)+' forsøg'}}}}}},
       scales:{{
-        x:{{beginAtZero:true,grid:{{color:'#E8EBE8'}},ticks:{{callback:v=>dkNumber(v,0)}}}},
+        x:{{beginAtZero:true,grid:{{color:'#E6DDD2'}},ticks:{{callback:v=>dkNumber(v,0)}}}},
         y:{{grid:{{display:false}}}}
       }}
     }}
@@ -954,7 +955,7 @@ function dualAxisChart(id,labels,left,right){{
   }};
   replaceChart(id,{{type:'line',data:{{labels,datasets:[
     {{label:left.label+' (venstre akse)',data:left.data,borderColor:COLORS[0],backgroundColor:COLORS[0],pointRadius:0,borderWidth:2,tension:.18,yAxisID:'y'}},
-    {{label:right.label+' (højre akse)',data:right.data,borderColor:COLORS[1],backgroundColor:'rgba(227,74,69,.32)',type:'bar',borderRadius:2,yAxisID:'y1'}}
+    {{label:right.label+' (højre akse)',data:right.data,borderColor:COLORS[1],backgroundColor:'rgba(20,98,152,.32)',type:'bar',borderRadius:2,yAxisID:'y1'}}
   ]}},options:opts}});
 }}
 function horizontalBar(id,labels,values){{
@@ -965,7 +966,7 @@ function horizontalBar(id,labels,values){{
       indexAxis:'y',responsive:true,maintainAspectRatio:false,
       plugins:{{legend:{{display:false}},tooltip:{{callbacks:{{label:ctx=>' '+dkNumber(ctx.parsed.x,1)+' pct.'}}}}}},
       scales:{{
-        x:{{beginAtZero:true,grid:{{color:'#E8EBE8'}},ticks:{{callback:v=>dkNumber(v,1)+' %'}}}},
+        x:{{beginAtZero:true,grid:{{color:'#E6DDD2'}},ticks:{{callback:v=>dkNumber(v,1)+' %'}}}},
         y:{{grid:{{display:false}},ticks:{{autoSkip:false,callback:function(val,idx){{const labels=this.chart.data.labels||[];const code=labels[val]??labels[idx]??val;return COUNTRY_NAMES[code]||code;}}}}}}
       }}
     }}
@@ -1097,20 +1098,20 @@ function exportChartCanvas(card,chartCanvas){{
   const ctx=output.getContext('2d');
   ctx.fillStyle='#ffffff'; ctx.fillRect(0,0,width,height);
 
-  ctx.fillStyle='#3d6b47'; ctx.font='700 17px Segoe UI, Arial, sans-serif';
+  ctx.fillStyle='#4a3428'; ctx.font='700 17px Segoe UI, Arial, sans-serif';
   ctx.fillText('ANALYTISK OVERBLIK | ARBEJDSMARKEDET',58,38);
-  ctx.fillStyle='#6B9E78'; ctx.fillRect(58,53,72,4);
+  ctx.fillStyle='#9A5B34'; ctx.fillRect(58,53,72,4);
 
-  ctx.fillStyle='#0F2B36'; ctx.font='700 34px Segoe UI, Arial, sans-serif';
+  ctx.fillStyle='#2B211B'; ctx.font='700 34px Segoe UI, Arial, sans-serif';
   const titleBottom=wrapCanvasText(ctx,title,58,91,width-116,40,2);
   let summaryY=Math.max(142,titleBottom+8);
   if(summary.valueText){{
-    ctx.fillStyle='#3d6b47'; ctx.font='800 38px Segoe UI, Arial, sans-serif';
+    ctx.fillStyle='#4a3428'; ctx.font='800 38px Segoe UI, Arial, sans-serif';
     ctx.fillText(summary.valueText,58,summaryY);
     summaryY+=29;
   }}
   if(summary.detailText){{
-    ctx.fillStyle='#68777d'; ctx.font='600 18px Segoe UI, Arial, sans-serif';
+    ctx.fillStyle='#6f6258'; ctx.font='600 18px Segoe UI, Arial, sans-serif';
     ctx.fillText(summary.detailText,58,summaryY);
     summaryY+=20;
   }}
@@ -1119,16 +1120,16 @@ function exportChartCanvas(card,chartCanvas){{
   const chartBottom=536;
   ctx.drawImage(chartCanvas,58,chartTop,width-116,Math.max(210,chartBottom-chartTop));
 
-  ctx.strokeStyle='#E8EBE8'; ctx.lineWidth=1; ctx.beginPath(); ctx.moveTo(58,558); ctx.lineTo(width-58,558); ctx.stroke();
-  ctx.fillStyle='#68777d'; ctx.font='17px Segoe UI, Arial, sans-serif';
+  ctx.strokeStyle='#E6DDD2'; ctx.lineWidth=1; ctx.beginPath(); ctx.moveTo(58,558); ctx.lineTo(width-58,558); ctx.stroke();
+  ctx.fillStyle='#6f6258'; ctx.font='17px Segoe UI, Arial, sans-serif';
   const sourceText=source.length>120?source.slice(0,117)+'...':source;
   ctx.fillText(sourceText,58,589);
-  ctx.fillStyle='#0F2B36'; ctx.font='700 18px Segoe UI, Arial, sans-serif';
+  ctx.fillStyle='#2B211B'; ctx.font='700 18px Segoe UI, Arial, sans-serif';
   ctx.fillText('Danske A-kasser',58,629);
-  ctx.fillStyle='#68777d'; ctx.font='17px Segoe UI, Arial, sans-serif';
+  ctx.fillStyle='#6f6258'; ctx.font='17px Segoe UI, Arial, sans-serif';
   ctx.fillText('Analytisk overblik - Arbejdsmarkedet',205,629);
   ctx.textAlign='right';
-  ctx.fillStyle='#3d6b47'; ctx.font='600 16px Segoe UI, Arial, sans-serif';
+  ctx.fillStyle='#4a3428'; ctx.font='600 16px Segoe UI, Arial, sans-serif';
   ctx.fillText('ai-michelklos.github.io/Dashboard/',width-58,629);
   ctx.textAlign='left';
   return {{canvas:output,title}};

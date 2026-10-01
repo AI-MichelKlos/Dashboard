@@ -3,27 +3,27 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <meta name="theme-color" content="#0F2B36">
+  <meta name="theme-color" content="#2B211B">
   <meta name="description" content="Samlet adgang til dashboards og analyser.">
   <title>Analyse og dashboards</title>
   <link rel="manifest" href="./manifest.webmanifest">
   <link rel="icon" href="./icon.svg" type="image/svg+xml">
   <style>
     :root{
-      --green:#6B9E78;--green-dark:#3d6b47;--ink:#0F2B36;--orange:#E07A40;
-      --blue:#4A90C4;--purple:#9B59B6;--grid:#E8EBE8;--muted:#64737A;
-      --paper:#fff;--page:#f5f7f5;--shadow:0 10px 34px rgba(15,43,54,.08);
+      --green:#9A5B34;--green-dark:#4a3428;--ink:#2B211B;--orange:#8C9C41;
+      --blue:#146298;--purple:#8C7FCF;--grid:#E6DDD2;--muted:#64737A;
+      --paper:#fff;--page:#f7f1ea;--shadow:0 10px 34px rgba(43,33,27,.08);
     }
     *{box-sizing:border-box}
-    html,body{margin:0;min-height:100%;background:var(--page);font-family:'Segoe UI',Arial,sans-serif;color:var(--ink)}
+    html,body{margin:0;min-height:100%;background:var(--page);font-family:Arial,sans-serif;color:var(--ink)}
     body{min-height:100dvh}
     button,a{font:inherit}
     a{color:inherit}
-    .appbar{position:sticky;top:0;z-index:100;background:linear-gradient(135deg,#0F2B36,#244d4b);color:#fff;box-shadow:0 2px 16px rgba(15,43,54,.16)}
+    .appbar{position:sticky;top:0;z-index:100;background:linear-gradient(135deg,#2B211B,#4a3428);color:#fff;box-shadow:0 2px 16px rgba(43,33,27,.16)}
     .appbar-inner{max-width:1440px;margin:0 auto;min-height:68px;padding:10px 18px;display:flex;align-items:center;gap:14px}
     .brand{border:0;background:transparent;color:#fff;padding:0;text-align:left;cursor:pointer;display:flex;align-items:center;gap:11px;min-width:0}
     .mark{width:38px;height:38px;border-radius:11px;background:var(--green);display:grid;place-items:center;font-weight:850;color:#fff;flex:0 0 auto;box-shadow:inset 0 0 0 1px rgba(255,255,255,.2)}
-    .brand-text{min-width:0}.brand-title{font-weight:780;font-size:1rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.brand-sub{font-size:.72rem;color:#c9d8d5;margin-top:2px}
+    .brand-text{min-width:0}.brand-title{font-weight:780;font-size:1rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.brand-sub{font-size:.72rem;color:#e2d2bf;margin-top:2px}
     .app-actions{margin-left:auto;display:flex;gap:8px;align-items:center}
     .top-btn{border:1px solid rgba(255,255,255,.22);background:rgba(255,255,255,.08);color:#fff;border-radius:9px;padding:8px 11px;font-weight:700;font-size:.82rem;cursor:pointer;text-decoration:none}
     .top-btn:hover,.top-btn:focus{background:rgba(255,255,255,.16);outline:none}
@@ -84,35 +84,35 @@
     </section>
 
     <section class="grid" aria-label="Dashboards">
-      <article class="card" style="--accent:#6B9E78">
+      <article class="card" style="--accent:#9A5B34">
         <div class="card-kicker"><span>A-kasser</span><span class="badge">Nyt</span></div>
         <h2>A-kasseindsigt</h2>
         <p>Centrale nøgletal for den valgte a-kasse med mulighed for at sammenligne udviklingen med I alt og andre a-kasser.</p>
         <div class="card-actions"><button class="primary open-dashboard" data-dashboard="akasse" type="button">Åbn dashboard</button><a class="secondary" href="https://ai-michelklos.github.io/A-kasseindsigt-dashboard/" target="_blank" rel="noopener">Åbn separat ↗</a></div>
       </article>
 
-      <article class="card" style="--accent:#9B59B6">
+      <article class="card" style="--accent:#8C7FCF">
         <div class="card-kicker"><span>JUR</span></div>
         <h2>JUR – Arbejdsmarkedsoverblik</h2>
         <p>Internt orienteret overblik med a-kassetal og bredere arbejdsmarkedsindikatorer som varslinger, konkurser, rekruttering og sanktioner.</p>
         <div class="card-actions"><button class="primary open-dashboard" data-dashboard="jur" type="button">Åbn dashboard</button><a class="secondary" href="https://ai-michelklos.github.io/Dashboard-dak-jur/" target="_blank" rel="noopener">Åbn separat ↗</a></div>
       </article>
 
-      <article class="card" style="--accent:#4A90C4">
+      <article class="card" style="--accent:#146298">
         <div class="card-kicker"><span>Arbejdsmarked</span></div>
         <h2>Analytisk overblik – Arbejdsmarkedet</h2>
         <p>Bredt overblik over ledighed, beskæftigelse, økonomi og international udvikling med løbende automatisk opdatering.</p>
         <div class="card-actions"><button class="primary open-dashboard" data-dashboard="arbejdsmarked" type="button">Åbn dashboard</button><a class="secondary" href="https://ai-michelklos.github.io/Dashboard/" target="_blank" rel="noopener">Åbn separat ↗</a></div>
       </article>
 
-      <article class="card" style="--accent:#E07A40">
+      <article class="card" style="--accent:#8C9C41">
         <div class="card-kicker"><span>Arbejdskraft</span></div>
         <h2>Udenlandske lønmodtagere i Danmark</h2>
         <p>Udvikling, andel af beskæftigelsen samt fordeling på statsborgerskab og branche for udenlandske lønmodtagere.</p>
         <div class="card-actions"><button class="primary open-dashboard" data-dashboard="udenlandske" type="button">Åbn dashboard</button><a class="secondary" href="https://ai-michelklos.github.io/udenlandskeloenmodtagere/" target="_blank" rel="noopener">Åbn separat ↗</a></div>
       </article>
 
-      <article class="card" style="--accent:#0F2B36">
+      <article class="card" style="--accent:#2B211B">
         <div class="card-kicker"><span>Virksomheder</span></div>
         <h2>Ansatte i Danmarks største virksomheder</h2>
         <p>Interaktivt overblik over udviklingen i antal ansatte i store danske virksomheder baseret på CVR-data.</p>
