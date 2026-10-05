@@ -1,8 +1,8 @@
 {
   "meta": {
-    "updated": "4. oktober 2026",
+    "updated": "5. oktober 2026",
     "sourceFile": "Samlet overblik.xlsx",
-    "retrievedAt": "2026-10-04",
+    "retrievedAt": "2026-10-05",
     "sourceRegister": {
       "unemployment": {
         "source": "Jobindsats API v3",
@@ -86,7 +86,7 @@
         "seasonalAdjustment": "sæsonkorrigeret",
         "sourceUpdated": "2026-09-24T06:00:00Z",
         "latestPeriod": "2026M07",
-        "fetchedAt": "2026-10-04T15:11:34+02:00"
+        "fetchedAt": "2026-10-05T17:59:45+02:00"
       },
       "bankruptcies": {
         "source": "Danmarks Statistik",
@@ -102,7 +102,7 @@
         "seasonalAdjustment": "kun serie A1",
         "sourceUpdated": "2026-09-04T06:00:00Z",
         "latestPeriod": "2026M08",
-        "fetchedAt": "2026-10-04T15:11:34+02:00"
+        "fetchedAt": "2026-10-05T17:59:45+02:00"
       },
       "consumerConfidence": {
         "source": "Danmarks Statistik",
@@ -116,7 +116,7 @@
         "seasonalAdjustment": "ikke oplyst",
         "sourceUpdated": "2026-09-22T06:00:00Z",
         "latestPeriod": "2026M09",
-        "fetchedAt": "2026-10-04T15:11:34+02:00"
+        "fetchedAt": "2026-10-05T17:59:45+02:00"
       },
       "jobindsats": {
         "source": "Jobindsats",
@@ -154,7 +154,7 @@
         "seasonalAdjustment": "ikke relevant",
         "sourceUpdated": "2026-09-10T06:00:00Z",
         "latestPeriod": "2026M08",
-        "fetchedAt": "2026-10-04T15:11:47+02:00"
+        "fetchedAt": "2026-10-05T17:59:58+02:00"
       }
     },
     "updateStatus": {
@@ -176,9 +176,9 @@
         "Opbrugt dagpengeret"
       ],
       "failed": [
-        "Forgæves rekrutteringsforsøg: Jobindsats-kaldet fejlede efter 3 forsøg: data/y25i14?mgroup.*=*&period.M=latest:24&hierarchy._region=/&format=json: Jobindsats returnerede HTTP 500: {\"code\":500,\"cause\":\"Internal server error\",\"request_id\":\"031c324c-6e1e-4a8d-bd4c-6008e855c80b\"}"
+        "Forgæves rekrutteringsforsøg: Jobindsats-kaldet fejlede efter 3 forsøg: data/y25i14?mgroup.*=*&period.M=latest:24&hierarchy._region=/&format=json: Jobindsats returnerede HTTP 500: {\"code\":500,\"cause\":\"Internal server error\",\"request_id\":\"2cb9f85b-a7ff-4a39-bd38-88048102db99\"}"
       ],
-      "checkedAt": "2026-10-04T15:12:46+02:00"
+      "checkedAt": "2026-10-05T18:01:01+02:00"
     },
     "jobindsatsUpdateStatus": {
       "successful": [
@@ -194,28 +194,28 @@
         "Opbrugt dagpengeret"
       ],
       "failed": [
-        "Forgæves rekrutteringsforsøg: Jobindsats-kaldet fejlede efter 3 forsøg: data/y25i14?mgroup.*=*&period.M=latest:24&hierarchy._region=/&format=json: Jobindsats returnerede HTTP 500: {\"code\":500,\"cause\":\"Internal server error\",\"request_id\":\"031c324c-6e1e-4a8d-bd4c-6008e855c80b\"}"
+        "Forgæves rekrutteringsforsøg: Jobindsats-kaldet fejlede efter 3 forsøg: data/y25i14?mgroup.*=*&period.M=latest:24&hierarchy._region=/&format=json: Jobindsats returnerede HTTP 500: {\"code\":500,\"cause\":\"Internal server error\",\"request_id\":\"2cb9f85b-a7ff-4a39-bd38-88048102db99\"}"
       ]
     },
     "sourceStatus": {
       "workSharing": {
         "state": "ok",
         "latestPeriod": "2026M08",
-        "checkedAt": "2026-10-04T15:12:46+02:00",
+        "checkedAt": "2026-10-05T18:01:01+02:00",
         "source": "Jobindsats API v3",
         "dataset": "y25i06"
       },
       "expiredBenefits": {
         "state": "ok",
         "latestPeriod": "2026M06",
-        "checkedAt": "2026-10-04T15:12:46+02:00",
+        "checkedAt": "2026-10-05T18:01:01+02:00",
         "source": "Jobindsats API v3",
         "dataset": "y01ud01di"
       },
       "failedRecruitment": {
         "state": "stale",
         "latestPeriod": "2026M06",
-        "checkedAt": "2026-10-04T15:12:46+02:00",
+        "checkedAt": "2026-10-05T18:01:01+02:00",
         "source": "Jobindsats API v3",
         "dataset": "y25i14"
       }
