@@ -1,8 +1,8 @@
 {
   "meta": {
-    "updated": "6. oktober 2026",
+    "updated": "7. oktober 2026",
     "sourceFile": "Samlet overblik.xlsx",
-    "retrievedAt": "2026-10-06",
+    "retrievedAt": "2026-10-07",
     "sourceRegister": {
       "unemployment": {
         "source": "Jobindsats API v3",
@@ -86,7 +86,7 @@
         "seasonalAdjustment": "sæsonkorrigeret",
         "sourceUpdated": "2026-09-24T06:00:00Z",
         "latestPeriod": "2026M07",
-        "fetchedAt": "2026-10-06T16:11:15+02:00"
+        "fetchedAt": "2026-10-07T16:29:41+02:00"
       },
       "bankruptcies": {
         "source": "Danmarks Statistik",
@@ -102,7 +102,7 @@
         "seasonalAdjustment": "kun serie A1",
         "sourceUpdated": "2026-10-06T06:00:00Z",
         "latestPeriod": "2026M09",
-        "fetchedAt": "2026-10-06T16:11:15+02:00"
+        "fetchedAt": "2026-10-07T16:29:41+02:00"
       },
       "consumerConfidence": {
         "source": "Danmarks Statistik",
@@ -116,7 +116,7 @@
         "seasonalAdjustment": "ikke oplyst",
         "sourceUpdated": "2026-09-22T06:00:00Z",
         "latestPeriod": "2026M09",
-        "fetchedAt": "2026-10-06T16:11:15+02:00"
+        "fetchedAt": "2026-10-07T16:29:41+02:00"
       },
       "jobindsats": {
         "source": "Jobindsats",
@@ -154,7 +154,7 @@
         "seasonalAdjustment": "ikke relevant",
         "sourceUpdated": "2026-09-10T06:00:00Z",
         "latestPeriod": "2026M08",
-        "fetchedAt": "2026-10-06T16:11:32+02:00"
+        "fetchedAt": "2026-10-07T16:29:55+02:00"
       }
     },
     "updateStatus": {
@@ -176,9 +176,9 @@
         "Opbrugt dagpengeret"
       ],
       "failed": [
-        "Forgæves rekrutteringsforsøg: Jobindsats-kaldet fejlede efter 3 forsøg: data/y25i14?mgroup.*=*&period.M=latest:24&hierarchy._region=/&format=json: Jobindsats returnerede HTTP 500: {\"code\":500,\"cause\":\"Internal server error\",\"request_id\":\"7d0c5d15-9d9e-4a86-8a8d-d39684c862d4\"}"
+        "Forgæves rekrutteringsforsøg: Jobindsats-kaldet fejlede efter 3 forsøg: data/y25i14?mgroup.*=*&period.M=latest:24&hierarchy._region=/&format=json: Jobindsats returnerede HTTP 500: {\"code\":500,\"cause\":\"Internal server error\",\"request_id\":\"b2389fe0-6deb-416c-b280-5f79f1f6efc2\"}"
       ],
-      "checkedAt": "2026-10-06T16:12:31+02:00"
+      "checkedAt": "2026-10-07T16:30:55+02:00"
     },
     "jobindsatsUpdateStatus": {
       "successful": [
@@ -194,28 +194,28 @@
         "Opbrugt dagpengeret"
       ],
       "failed": [
-        "Forgæves rekrutteringsforsøg: Jobindsats-kaldet fejlede efter 3 forsøg: data/y25i14?mgroup.*=*&period.M=latest:24&hierarchy._region=/&format=json: Jobindsats returnerede HTTP 500: {\"code\":500,\"cause\":\"Internal server error\",\"request_id\":\"7d0c5d15-9d9e-4a86-8a8d-d39684c862d4\"}"
+        "Forgæves rekrutteringsforsøg: Jobindsats-kaldet fejlede efter 3 forsøg: data/y25i14?mgroup.*=*&period.M=latest:24&hierarchy._region=/&format=json: Jobindsats returnerede HTTP 500: {\"code\":500,\"cause\":\"Internal server error\",\"request_id\":\"b2389fe0-6deb-416c-b280-5f79f1f6efc2\"}"
       ]
     },
     "sourceStatus": {
       "workSharing": {
         "state": "ok",
         "latestPeriod": "2026M08",
-        "checkedAt": "2026-10-06T16:12:31+02:00",
+        "checkedAt": "2026-10-07T16:30:55+02:00",
         "source": "Jobindsats API v3",
         "dataset": "y25i06"
       },
       "expiredBenefits": {
         "state": "ok",
         "latestPeriod": "2026M06",
-        "checkedAt": "2026-10-06T16:12:31+02:00",
+        "checkedAt": "2026-10-07T16:30:55+02:00",
         "source": "Jobindsats API v3",
         "dataset": "y01ud01di"
       },
       "failedRecruitment": {
         "state": "stale",
         "latestPeriod": "2026M06",
-        "checkedAt": "2026-10-06T16:12:31+02:00",
+        "checkedAt": "2026-10-07T16:30:55+02:00",
         "source": "Jobindsats API v3",
         "dataset": "y25i14"
       }
@@ -966,7 +966,8 @@
       "2026M05",
       "2026M06",
       "2026M07",
-      "2026M08"
+      "2026M08",
+      "2026M09"
     ],
     "values": [
       13986,
@@ -1090,7 +1091,8 @@
       29640,
       27782,
       20889,
-      25344
+      25355,
+      27294
     ]
   },
   "wages": {
