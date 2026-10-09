@@ -1,8 +1,8 @@
 {
   "meta": {
-    "updated": "8. oktober 2026",
+    "updated": "9. oktober 2026",
     "sourceFile": "Samlet overblik.xlsx",
-    "retrievedAt": "2026-10-08",
+    "retrievedAt": "2026-10-09",
     "sourceRegister": {
       "unemployment": {
         "source": "Jobindsats API v3",
@@ -86,7 +86,7 @@
         "seasonalAdjustment": "sæsonkorrigeret",
         "sourceUpdated": "2026-09-24T06:00:00Z",
         "latestPeriod": "2026M07",
-        "fetchedAt": "2026-10-08T16:34:26+02:00"
+        "fetchedAt": "2026-10-09T16:21:55+02:00"
       },
       "bankruptcies": {
         "source": "Danmarks Statistik",
@@ -102,7 +102,7 @@
         "seasonalAdjustment": "kun serie A1",
         "sourceUpdated": "2026-10-06T06:00:00Z",
         "latestPeriod": "2026M09",
-        "fetchedAt": "2026-10-08T16:34:26+02:00"
+        "fetchedAt": "2026-10-09T16:21:55+02:00"
       },
       "consumerConfidence": {
         "source": "Danmarks Statistik",
@@ -116,7 +116,7 @@
         "seasonalAdjustment": "ikke oplyst",
         "sourceUpdated": "2026-09-22T06:00:00Z",
         "latestPeriod": "2026M09",
-        "fetchedAt": "2026-10-08T16:34:26+02:00"
+        "fetchedAt": "2026-10-09T16:21:55+02:00"
       },
       "jobindsats": {
         "source": "Jobindsats",
@@ -154,7 +154,7 @@
         "seasonalAdjustment": "ikke relevant",
         "sourceUpdated": "2026-09-10T06:00:00Z",
         "latestPeriod": "2026M08",
-        "fetchedAt": "2026-10-08T16:34:41+02:00"
+        "fetchedAt": "2026-10-09T16:22:13+02:00"
       }
     },
     "updateStatus": {
@@ -176,9 +176,9 @@
         "Opbrugt dagpengeret"
       ],
       "failed": [
-        "Forgæves rekrutteringsforsøg: Jobindsats-kaldet fejlede efter 3 forsøg: data/y25i14?mgroup.*=*&period.M=latest:24&hierarchy._region=/&format=json: Jobindsats returnerede HTTP 500: {\"code\":500,\"cause\":\"Internal server error\",\"request_id\":\"93a4aad4-2057-4200-8db3-1506a32b5ea8\"}"
+        "Forgæves rekrutteringsforsøg: Jobindsats-kaldet fejlede efter 3 forsøg: data/y25i14?mgroup.*=*&period.M=latest:24&hierarchy._region=/&format=json: Jobindsats returnerede HTTP 500: {\"code\":500,\"cause\":\"Internal server error\",\"request_id\":\"f59f3bae-adb4-4bd3-a01f-4f9101e8c580\"}"
       ],
-      "checkedAt": "2026-10-08T16:35:40+02:00"
+      "checkedAt": "2026-10-09T16:23:11+02:00"
     },
     "jobindsatsUpdateStatus": {
       "successful": [
@@ -194,28 +194,28 @@
         "Opbrugt dagpengeret"
       ],
       "failed": [
-        "Forgæves rekrutteringsforsøg: Jobindsats-kaldet fejlede efter 3 forsøg: data/y25i14?mgroup.*=*&period.M=latest:24&hierarchy._region=/&format=json: Jobindsats returnerede HTTP 500: {\"code\":500,\"cause\":\"Internal server error\",\"request_id\":\"93a4aad4-2057-4200-8db3-1506a32b5ea8\"}"
+        "Forgæves rekrutteringsforsøg: Jobindsats-kaldet fejlede efter 3 forsøg: data/y25i14?mgroup.*=*&period.M=latest:24&hierarchy._region=/&format=json: Jobindsats returnerede HTTP 500: {\"code\":500,\"cause\":\"Internal server error\",\"request_id\":\"f59f3bae-adb4-4bd3-a01f-4f9101e8c580\"}"
       ]
     },
     "sourceStatus": {
       "workSharing": {
         "state": "ok",
-        "latestPeriod": "2026M08",
-        "checkedAt": "2026-10-08T16:35:40+02:00",
+        "latestPeriod": "2026M09",
+        "checkedAt": "2026-10-09T16:23:11+02:00",
         "source": "Jobindsats API v3",
         "dataset": "y25i06"
       },
       "expiredBenefits": {
         "state": "ok",
         "latestPeriod": "2026M06",
-        "checkedAt": "2026-10-08T16:35:40+02:00",
+        "checkedAt": "2026-10-09T16:23:11+02:00",
         "source": "Jobindsats API v3",
         "dataset": "y01ud01di"
       },
       "failedRecruitment": {
         "state": "stale",
         "latestPeriod": "2026M06",
-        "checkedAt": "2026-10-08T16:35:40+02:00",
+        "checkedAt": "2026-10-09T16:23:11+02:00",
         "source": "Jobindsats API v3",
         "dataset": "y25i14"
       }
@@ -1640,7 +1640,8 @@
       "2026M05",
       "2026M06",
       "2026M07",
-      "2026M08"
+      "2026M08",
+      "2026M09"
     ],
     "people": [
       216,
@@ -1746,7 +1747,7 @@
       482,
       98,
       831,
-      394,
+      380,
       403,
       1024,
       1160,
@@ -1754,17 +1755,18 @@
       119,
       648,
       6173,
-      1256,
+      1180,
       1068,
       969,
       1207,
       676,
-      1904,
+      1889,
       406,
-      995,
+      979,
       309,
       null,
-      1662
+      1482,
+      1414
     ],
     "companies": [
       7,
@@ -1888,7 +1890,8 @@
       30,
       55,
       null,
-      18
+      29,
+      78
     ]
   },
   "bankruptcies": {
@@ -7972,7 +7975,8 @@
       "2026M05",
       "2026M06",
       "2026M07",
-      "2026M08"
+      "2026M08",
+      "2026M09"
     ],
     "under13Weeks": [
       460,
@@ -8198,7 +8202,8 @@
       133,
       189,
       123,
-      113
+      113,
+      132
     ],
     "over13Weeks": [
       48,
@@ -8424,7 +8429,8 @@
       28,
       25,
       8,
-      8
+      8,
+      null
     ],
     "total": [
       508,
@@ -8650,7 +8656,8 @@
       161,
       214,
       131,
-      121
+      121,
+      132
     ]
   },
   "expiredBenefits": {
