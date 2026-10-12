@@ -1,8 +1,8 @@
 {
   "meta": {
-    "updated": "11. oktober 2026",
+    "updated": "12. oktober 2026",
     "sourceFile": "Samlet overblik.xlsx",
-    "retrievedAt": "2026-10-11",
+    "retrievedAt": "2026-10-12",
     "sourceRegister": {
       "unemployment": {
         "source": "Jobindsats API v3",
@@ -86,7 +86,7 @@
         "seasonalAdjustment": "sæsonkorrigeret",
         "sourceUpdated": "2026-09-24T06:00:00Z",
         "latestPeriod": "2026M07",
-        "fetchedAt": "2026-10-11T16:02:34+02:00"
+        "fetchedAt": "2026-10-12T18:43:46+02:00"
       },
       "bankruptcies": {
         "source": "Danmarks Statistik",
@@ -102,7 +102,7 @@
         "seasonalAdjustment": "kun serie A1",
         "sourceUpdated": "2026-10-06T06:00:00Z",
         "latestPeriod": "2026M09",
-        "fetchedAt": "2026-10-11T16:02:34+02:00"
+        "fetchedAt": "2026-10-12T18:43:46+02:00"
       },
       "consumerConfidence": {
         "source": "Danmarks Statistik",
@@ -116,7 +116,7 @@
         "seasonalAdjustment": "ikke oplyst",
         "sourceUpdated": "2026-09-22T06:00:00Z",
         "latestPeriod": "2026M09",
-        "fetchedAt": "2026-10-11T16:02:34+02:00"
+        "fetchedAt": "2026-10-12T18:43:46+02:00"
       },
       "jobindsats": {
         "source": "Jobindsats",
@@ -152,9 +152,9 @@
         },
         "unit": "pct. år til år",
         "seasonalAdjustment": "ikke relevant",
-        "sourceUpdated": "2026-09-10T06:00:00Z",
-        "latestPeriod": "2026M08",
-        "fetchedAt": "2026-10-11T16:02:50+02:00"
+        "sourceUpdated": "2026-10-12T06:00:00Z",
+        "latestPeriod": "2026M09",
+        "fetchedAt": "2026-10-12T18:44:02+02:00"
       }
     },
     "updateStatus": {
@@ -176,9 +176,9 @@
         "Opbrugt dagpengeret"
       ],
       "failed": [
-        "Forgæves rekrutteringsforsøg: Jobindsats-kaldet fejlede efter 3 forsøg: data/y25i14?mgroup.*=*&period.M=latest:24&hierarchy._region=/&format=json: Jobindsats returnerede HTTP 500: {\"code\":500,\"cause\":\"Internal server error\",\"request_id\":\"0d92d3f5-a5aa-42f9-a7ea-431367298b50\"}"
+        "Forgæves rekrutteringsforsøg: Jobindsats-kaldet fejlede efter 3 forsøg: data/y25i14?mgroup.*=*&period.M=latest:24&hierarchy._region=/&format=json: Jobindsats returnerede HTTP 500: {\"code\":500,\"cause\":\"Internal server error\",\"request_id\":\"c5634200-223e-41b5-8054-dd0213163aff\"}"
       ],
-      "checkedAt": "2026-10-11T16:03:48+02:00"
+      "checkedAt": "2026-10-12T18:45:02+02:00"
     },
     "jobindsatsUpdateStatus": {
       "successful": [
@@ -194,28 +194,28 @@
         "Opbrugt dagpengeret"
       ],
       "failed": [
-        "Forgæves rekrutteringsforsøg: Jobindsats-kaldet fejlede efter 3 forsøg: data/y25i14?mgroup.*=*&period.M=latest:24&hierarchy._region=/&format=json: Jobindsats returnerede HTTP 500: {\"code\":500,\"cause\":\"Internal server error\",\"request_id\":\"0d92d3f5-a5aa-42f9-a7ea-431367298b50\"}"
+        "Forgæves rekrutteringsforsøg: Jobindsats-kaldet fejlede efter 3 forsøg: data/y25i14?mgroup.*=*&period.M=latest:24&hierarchy._region=/&format=json: Jobindsats returnerede HTTP 500: {\"code\":500,\"cause\":\"Internal server error\",\"request_id\":\"c5634200-223e-41b5-8054-dd0213163aff\"}"
       ]
     },
     "sourceStatus": {
       "workSharing": {
         "state": "ok",
         "latestPeriod": "2026M09",
-        "checkedAt": "2026-10-11T16:03:48+02:00",
+        "checkedAt": "2026-10-12T18:45:02+02:00",
         "source": "Jobindsats API v3",
         "dataset": "y25i06"
       },
       "expiredBenefits": {
         "state": "ok",
         "latestPeriod": "2026M06",
-        "checkedAt": "2026-10-11T16:03:48+02:00",
+        "checkedAt": "2026-10-12T18:45:02+02:00",
         "source": "Jobindsats API v3",
         "dataset": "y01ud01di"
       },
       "failedRecruitment": {
         "state": "stale",
         "latestPeriod": "2026M06",
-        "checkedAt": "2026-10-11T16:03:48+02:00",
+        "checkedAt": "2026-10-12T18:45:02+02:00",
         "source": "Jobindsats API v3",
         "dataset": "y25i14"
       }
@@ -3564,7 +3564,8 @@
       "2026M05",
       "2026M06",
       "2026M07",
-      "2026M08"
+      "2026M08",
+      "2026M09"
     ],
     "total": [
       null,
@@ -3875,7 +3876,8 @@
       1.9,
       1.9,
       1.7,
-      2
+      2,
+      2.2
     ],
     "core": [
       null,
@@ -4186,7 +4188,8 @@
       2.1,
       2.3,
       2.3,
-      2.2
+      2.2,
+      1.9
     ]
   },
   "confidence": {
