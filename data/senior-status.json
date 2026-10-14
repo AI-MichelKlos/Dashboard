@@ -2,34 +2,34 @@
   "meta": {
     "source": "Jobindsats.dk / STAR",
     "dataset": "snr_arbstatus",
-    "latestPeriod": "2026M07",
-    "checkedAt": "2026-10-13T17:04:00+02:00",
+    "latestPeriod": "2026M08",
+    "checkedAt": "2026-10-14T14:53:26+02:00",
     "measure": "Arbejdsmarkedsstatus for seniorer",
     "status": "Lønmodtagerbeskæftigelse i alt",
     "unit": "pct.",
     "historyMonthsRequested": 72
   },
-  "period": "2026M07",
+  "period": "2026M08",
   "items": [
     {
       "age": 55,
       "label": "55 år",
-      "employmentShare": 76.8
+      "employmentShare": 76.9
     },
     {
       "age": 56,
       "label": "56 år",
-      "employmentShare": 75.5
+      "employmentShare": 75.8
     },
     {
       "age": 57,
       "label": "57 år",
-      "employmentShare": 75.1
+      "employmentShare": 75.2
     },
     {
       "age": 58,
       "label": "58 år",
-      "employmentShare": 74.2
+      "employmentShare": 74.3
     },
     {
       "age": 59,
@@ -39,236 +39,235 @@
     {
       "age": 60,
       "label": "60 år",
-      "employmentShare": 72.3
+      "employmentShare": 72.5
     },
     {
       "age": 61,
       "label": "61 år",
-      "employmentShare": 70.7
+      "employmentShare": 70.8
     },
     {
       "age": 62,
       "label": "62 år",
-      "employmentShare": 68.1
+      "employmentShare": 68.2
     },
     {
       "age": 63,
       "label": "63 år",
-      "employmentShare": 64.8
+      "employmentShare": 64.9
     },
     {
       "age": 64,
       "label": "64 år",
-      "employmentShare": 56.4
+      "employmentShare": 56.5
     },
     {
       "age": 65,
       "label": "65 år",
-      "employmentShare": 47.7
+      "employmentShare": 48.0
     },
     {
       "age": 66,
       "label": "66 år",
-      "employmentShare": 41.2
+      "employmentShare": 41.3
     },
     {
       "age": 67,
       "label": "67 år",
-      "employmentShare": 30.8
+      "employmentShare": 31.0
     },
     {
       "age": 68,
       "label": "68 år",
-      "employmentShare": 24.1
+      "employmentShare": 24.5
     },
     {
       "age": 69,
       "label": "69 år",
-      "employmentShare": 19.7
+      "employmentShare": 20.2
     },
     {
       "age": 70,
       "label": "70 år",
-      "employmentShare": 15.6
+      "employmentShare": 16.1
     },
     {
       "age": 71,
       "label": "71 år",
-      "employmentShare": 12.7
+      "employmentShare": 13.1
     },
     {
       "age": 72,
       "label": "72 år",
-      "employmentShare": 10.3
+      "employmentShare": 10.7
     },
     {
       "age": 73,
       "label": "73 år",
-      "employmentShare": 8.8
+      "employmentShare": 9.2
     },
     {
       "age": 74,
       "label": "74 år",
-      "employmentShare": 7.4
+      "employmentShare": 7.7
     },
     {
       "age": 75,
       "label": "75+ år",
-      "employmentShare": 2.9
+      "employmentShare": 3.0
     }
   ],
   "statusByAge": [
     {
       "age": 55,
       "label": "55 år",
-      "employment": 76.8,
-      "publicSupport": 15.2,
-      "privatePensionOrSelfSupport": 8.1
+      "employment": 76.9,
+      "publicSupport": 15.1,
+      "privatePensionOrSelfSupport": 8.0
     },
     {
       "age": 56,
       "label": "56 år",
-      "employment": 75.5,
-      "publicSupport": 16.3,
-      "privatePensionOrSelfSupport": 8.2
+      "employment": 75.8,
+      "publicSupport": 16.1,
+      "privatePensionOrSelfSupport": 8.0
     },
     {
       "age": 57,
       "label": "57 år",
-      "employment": 75.1,
-      "publicSupport": 16.7,
-      "privatePensionOrSelfSupport": 8.3
+      "employment": 75.2,
+      "publicSupport": 16.6,
+      "privatePensionOrSelfSupport": 8.2
     },
     {
       "age": 58,
       "label": "58 år",
-      "employment": 74.2,
+      "employment": 74.3,
       "publicSupport": 17.5,
-      "privatePensionOrSelfSupport": 8.3
+      "privatePensionOrSelfSupport": 8.2
     },
     {
       "age": 59,
       "label": "59 år",
       "employment": 74.0,
       "publicSupport": 17.8,
-      "privatePensionOrSelfSupport": 8.3
+      "privatePensionOrSelfSupport": 8.2
     },
     {
       "age": 60,
       "label": "60 år",
-      "employment": 72.3,
-      "publicSupport": 19.1,
+      "employment": 72.5,
+      "publicSupport": 18.9,
       "privatePensionOrSelfSupport": 8.6
     },
     {
       "age": 61,
       "label": "61 år",
-      "employment": 70.7,
-      "publicSupport": 20.1,
-      "privatePensionOrSelfSupport": 9.2
+      "employment": 70.8,
+      "publicSupport": 20.0,
+      "privatePensionOrSelfSupport": 9.1
     },
     {
       "age": 62,
       "label": "62 år",
-      "employment": 68.1,
+      "employment": 68.2,
       "publicSupport": 22.4,
-      "privatePensionOrSelfSupport": 9.5
+      "privatePensionOrSelfSupport": 9.4
     },
     {
       "age": 63,
       "label": "63 år",
-      "employment": 64.8,
-      "publicSupport": 24.5,
-      "privatePensionOrSelfSupport": 10.7
+      "employment": 64.9,
+      "publicSupport": 24.6,
+      "privatePensionOrSelfSupport": 10.5
     },
     {
       "age": 64,
       "label": "64 år",
-      "employment": 56.4,
-      "publicSupport": 32.6,
+      "employment": 56.5,
+      "publicSupport": 32.5,
       "privatePensionOrSelfSupport": 11.0
     },
     {
       "age": 65,
       "label": "65 år",
-      "employment": 47.7,
-      "publicSupport": 40.2,
+      "employment": 48.0,
+      "publicSupport": 39.9,
       "privatePensionOrSelfSupport": 12.1
     },
     {
       "age": 66,
       "label": "66 år",
-      "employment": 41.2,
-      "publicSupport": 45.7,
+      "employment": 41.3,
+      "publicSupport": 45.5,
       "privatePensionOrSelfSupport": 13.1
     },
     {
       "age": 67,
       "label": "67 år",
-      "employment": 30.8,
+      "employment": 31.0,
       "publicSupport": 66.0,
-      "privatePensionOrSelfSupport": 3.2
+      "privatePensionOrSelfSupport": 3.1
     },
     {
       "age": 68,
       "label": "68 år",
-      "employment": 24.1,
-      "publicSupport": 74.8,
+      "employment": 24.5,
+      "publicSupport": 74.4,
       "privatePensionOrSelfSupport": 1.1
     },
     {
       "age": 69,
       "label": "69 år",
-      "employment": 19.7,
-      "publicSupport": 79.4,
+      "employment": 20.2,
+      "publicSupport": 78.9,
       "privatePensionOrSelfSupport": 90.0
     },
     {
       "age": 70,
       "label": "70 år",
-      "employment": 15.6,
-      "publicSupport": 83.4,
-      "privatePensionOrSelfSupport": 100.0
+      "employment": 16.1,
+      "publicSupport": 83.0,
+      "privatePensionOrSelfSupport": 90.0
     },
     {
       "age": 71,
       "label": "71 år",
-      "employment": 12.7,
-      "publicSupport": 86.4,
+      "employment": 13.1,
+      "publicSupport": 86.0,
       "privatePensionOrSelfSupport": 90.0
     },
     {
       "age": 72,
       "label": "72 år",
-      "employment": 10.3,
-      "publicSupport": 88.9,
+      "employment": 10.7,
+      "publicSupport": 88.5,
       "privatePensionOrSelfSupport": 80.0
     },
     {
       "age": 73,
       "label": "73 år",
-      "employment": 8.8,
-      "publicSupport": 90.5,
+      "employment": 9.2,
+      "publicSupport": 90.1,
       "privatePensionOrSelfSupport": 70.0
     },
     {
       "age": 74,
       "label": "74 år",
-      "employment": 7.4,
-      "publicSupport": 92.0,
+      "employment": 7.7,
+      "publicSupport": 91.7,
       "privatePensionOrSelfSupport": 60.0
     },
     {
       "age": 75,
       "label": "75+ år",
-      "employment": 2.9,
-      "publicSupport": 96.7,
+      "employment": 3.0,
+      "publicSupport": 96.6,
       "privatePensionOrSelfSupport": 40.0
     }
   ],
   "history": {
     "labels": [
-      "2020M08",
       "2020M09",
       "2020M10",
       "2020M11",
@@ -339,14 +338,14 @@
       "2026M04",
       "2026M05",
       "2026M06",
-      "2026M07"
+      "2026M07",
+      "2026M08"
     ],
     "series": [
       {
         "age": 60,
         "label": "60 år",
         "values": [
-          69.9,
           70.1,
           70.0,
           69.9,
@@ -414,17 +413,17 @@
           72.2,
           71.9,
           72.3,
-          72.5,
+          72.6,
           72.5,
           72.6,
-          72.3
+          72.1,
+          72.5
         ]
       },
       {
         "age": 65,
         "label": "65 år",
         "values": [
-          34.0,
           34.4,
           34.5,
           34.4,
@@ -495,14 +494,14 @@
           47.9,
           48.2,
           48.4,
-          47.7
+          47.7,
+          48.0
         ]
       },
       {
         "age": 67,
         "label": "67 år",
         "values": [
-          18.1,
           18.5,
           18.5,
           18.7,
@@ -560,7 +559,7 @@
           29.2,
           29.4,
           29.6,
-          29.9,
+          30.0,
           29.2,
           29.4,
           29.9,
@@ -572,15 +571,15 @@
           30.7,
           31.1,
           31.4,
-          31.7,
-          30.8
+          31.8,
+          30.8,
+          31.0
         ]
       },
       {
         "age": 70,
         "label": "70 år",
         "values": [
-          10.2,
           10.6,
           10.5,
           10.7,
@@ -648,10 +647,11 @@
           15.4,
           15.3,
           15.9,
-          16.1,
+          16.2,
           16.4,
           16.6,
-          15.6
+          15.7,
+          16.1
         ]
       }
     ]
@@ -661,75 +661,75 @@
       {
         "age": 67,
         "label": "67 år",
-        "share": 24.6,
-        "count": 16342
+        "share": 24.9,
+        "count": 16596
       },
       {
         "age": 68,
         "label": "68 år",
-        "share": 21.9,
-        "count": 14445
+        "share": 22.3,
+        "count": 14667
       },
       {
         "age": 69,
         "label": "69 år",
-        "share": 18.0,
-        "count": 11602
+        "share": 18.6,
+        "count": 11894
       },
       {
         "age": 70,
         "label": "70 år",
-        "share": 14.4,
-        "count": 9070
+        "share": 14.8,
+        "count": 9395
       },
       {
         "age": 71,
         "label": "71 år",
-        "share": 11.9,
-        "count": 7285
+        "share": 12.3,
+        "count": 7559
       },
       {
         "age": 72,
         "label": "72 år",
-        "share": 9.8,
-        "count": 5814
+        "share": 10.2,
+        "count": 6038
       },
       {
         "age": 73,
         "label": "73 år",
-        "share": 8.4,
-        "count": 5005
+        "share": 8.9,
+        "count": 5294
       },
       {
         "age": 74,
         "label": "74 år",
-        "share": 7.2,
-        "count": 3990
+        "share": 7.5,
+        "count": 4147
       },
       {
         "age": 75,
         "label": "75+ år",
-        "share": 2.8,
-        "count": 18597
+        "share": 3.0,
+        "count": 19474
       }
     ],
-    "totalCount67Plus": 92150
+    "totalCount67Plus": 95064
   },
   "employmentDegree": [
     {
       "age": 55,
       "label": "55 år",
-      "value": 89.0
+      "value": 90.0
     },
     {
       "age": 56,
       "label": "56 år",
-      "value": 89.0
+      "value": 90.0
     },
     {
       "age": 57,
       "label": "57 år",
-      "value": 89.0
+      "value": 90.0
     },
     {
       "age": 58,
@@ -739,7 +739,7 @@
     {
       "age": 59,
       "label": "59 år",
-      "value": 88.0
+      "value": 89.0
     },
     {
       "age": 60,
@@ -754,7 +754,7 @@
     {
       "age": 62,
       "label": "62 år",
-      "value": 86.0
+      "value": 87.0
     },
     {
       "age": 63,
@@ -819,135 +819,135 @@
     {
       "age": 75,
       "label": "75+ år",
-      "value": 37.0
+      "value": 36.0
     }
   ],
   "gender": [
     {
       "age": 55,
       "label": "55 år",
-      "women": 75.3,
+      "women": 75.5,
       "men": 78.3
     },
     {
       "age": 56,
       "label": "56 år",
-      "women": 74.1,
-      "men": 77.0
+      "women": 74.4,
+      "men": 77.3
     },
     {
       "age": 57,
       "label": "57 år",
-      "women": 73.9,
-      "men": 76.2
+      "women": 74.0,
+      "men": 76.5
     },
     {
       "age": 58,
       "label": "58 år",
-      "women": 72.7,
-      "men": 75.6
+      "women": 72.8,
+      "men": 75.8
     },
     {
       "age": 59,
       "label": "59 år",
-      "women": 72.8,
-      "men": 75.1
+      "women": 72.6,
+      "men": 75.3
     },
     {
       "age": 60,
       "label": "60 år",
-      "women": 70.7,
-      "men": 73.8
+      "women": 71.0,
+      "men": 74.0
     },
     {
       "age": 61,
       "label": "61 år",
-      "women": 68.9,
-      "men": 72.4
+      "women": 69.0,
+      "men": 72.6
     },
     {
       "age": 62,
       "label": "62 år",
-      "women": 66.4,
-      "men": 69.9
+      "women": 66.5,
+      "men": 70.0
     },
     {
       "age": 63,
       "label": "63 år",
       "women": 62.8,
-      "men": 66.8
+      "men": 67.0
     },
     {
       "age": 64,
       "label": "64 år",
       "women": 52.0,
-      "men": 61.0
+      "men": 61.1
     },
     {
       "age": 65,
       "label": "65 år",
-      "women": 42.1,
-      "men": 53.5
+      "women": 42.4,
+      "men": 53.8
     },
     {
       "age": 66,
       "label": "66 år",
-      "women": 34.7,
-      "men": 47.8
+      "women": 34.9,
+      "men": 48.0
     },
     {
       "age": 67,
       "label": "67 år",
-      "women": 23.3,
-      "men": 38.7
+      "women": 23.5,
+      "men": 38.8
     },
     {
       "age": 68,
       "label": "68 år",
-      "women": 17.3,
-      "men": 31.2
+      "women": 17.7,
+      "men": 31.6
     },
     {
       "age": 69,
       "label": "69 år",
-      "women": 13.5,
-      "men": 26.1
+      "women": 13.9,
+      "men": 26.7
     },
     {
       "age": 70,
       "label": "70 år",
-      "women": 10.3,
-      "men": 21.3
+      "women": 10.7,
+      "men": 21.8
     },
     {
       "age": 71,
       "label": "71 år",
-      "women": 8.2,
-      "men": 17.6
+      "women": 8.5,
+      "men": 18.0
     },
     {
       "age": 72,
       "label": "72 år",
-      "women": 6.5,
-      "men": 14.5
+      "women": 6.8,
+      "men": 15.0
     },
     {
       "age": 73,
       "label": "73 år",
-      "women": 5.1,
-      "men": 12.7
+      "women": 5.5,
+      "men": 13.2
     },
     {
       "age": 74,
       "label": "74 år",
-      "women": 4.5,
-      "men": 10.7
+      "women": 4.6,
+      "men": 11.1
     },
     {
       "age": 75,
       "label": "75+ år",
-      "women": 1.6,
-      "men": 4.5
+      "women": 1.7,
+      "men": 4.6
     }
   ]
 }
