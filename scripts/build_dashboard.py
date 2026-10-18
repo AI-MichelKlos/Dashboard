@@ -317,18 +317,20 @@ def change_html(current, comparison, comparison_period, decimals, good_if_up):
         return ""
     delta = current - comparison
     if abs(delta) < 10 ** (-(decimals + 1)):
-        cls, arrow = "delta-neutral", "●"
+        cls, arrow, meaning = "delta-neutral", "●", "uændret"
     else:
         up = delta > 0
         cls = "delta-good" if up == good_if_up else "delta-bad"
         arrow = "▲" if up else "▼"
+        meaning = "bedre" if cls == "delta-good" else "værre"
     return (
-        f'<span class="{cls}">{arrow} {fmt_number(abs(delta), decimals)}</span>'
+        f'<span class="{cls}">{arrow} {fmt_number(abs(delta), decimals)}'
+        f'<span class="change-meaning">{meaning}</span></span>'
         f'<span class="compare-label"> siden {fmt_period(comparison_period)}</span>'
     )
 
 
-def card(title, series, unit="", decimals=0, good_if_up=True, note=""):
+def card(title, series, unit="", decimals=0, good_if_up=True, note="", priority=False):
     current = kpi(series["labels"], series["values"])
     suffix = f" {unit}" if unit else ""
     previous = change_html(
@@ -343,12 +345,40 @@ def card(title, series, unit="", decimals=0, good_if_up=True, note=""):
     if annual:
         rows.append(f'<div class="delta-row">{annual}</div>')
     return f"""
-      <article class="kpi-card">
+      <article class="kpi-card{' priority' if priority else ''}">
         <div class="kpi-title">{title}</div>
         <div class="kpi-value">{fmt_number(current["value"], decimals)}<span>{suffix}</span></div>
         <div class="kpi-period">{fmt_period(current["period"])}</div>
         <div class="kpi-deltas">{''.join(rows)}</div>
         {f'<div class="kpi-note">{note}</div>' if note else ''}
+      </article>"""
+
+
+def insight_card(title, series, unit="", decimals=0, good_if_up=True):
+    current = kpi(series["labels"], series["values"])
+    comparison = current["yearValue"]
+    comparison_period = current["yearPeriod"]
+    if comparison is None:
+        comparison = current["previousValue"]
+        comparison_period = current["previousPeriod"]
+    delta = current["value"] - comparison if comparison is not None else None
+    if delta is None or abs(delta) < 10 ** (-(decimals + 1)):
+        direction = "er uændret"
+        tone = "neutral"
+        change = ""
+    else:
+        up = delta > 0
+        direction = "er steget" if up else "er faldet"
+        tone = "good" if up == good_if_up else "bad"
+        change = f" med {fmt_number(abs(delta), decimals)} {unit}".rstrip()
+    period_text = f" siden {fmt_period(comparison_period)}" if comparison_period else ""
+    value_text = fmt_number(current["value"], decimals)
+    value_unit = f" {unit}" if unit else ""
+    return f"""
+      <article class="insight-card {tone}">
+        <div class="insight-kicker">{title}</div>
+        <div class="insight-value">{value_text}<span>{value_unit}</span></div>
+        <p>{title} {direction}{change}{period_text}.</p>
       </article>"""
 
 
@@ -621,7 +651,7 @@ def build_html(data):
         card(
             "Bruttoledige",
             {"labels": data["unemployment"]["labels"], "values": data["unemployment"]["total"]},
-            "fuldtidspersoner", 0, False, "Sæsonkorrigeret",
+            "fuldtidspersoner", 0, False, "Sæsonkorrigeret", True,
         ),
         card(
             "A-dagpengemodtagere",
@@ -633,16 +663,16 @@ def build_html(data):
             {"labels": data["longterm"]["labels"], "values": data["longterm"]["total"]},
             "personer", 0, False,
         ),
-        card("Nyopslåede stillinger", data["vacancies"], "stillinger", 0, True),
+        card("Nyopslåede stillinger", data["vacancies"], "stillinger", 0, True, priority=True),
         card(
             "Lønmodtagere",
             {"labels": data["wages"]["labels"], "values": data["wages"]["total"]},
-            "personer", 0, True, "Sæsonkorrigeret",
+            "personer", 0, True, "Sæsonkorrigeret", True,
         ),
         card(
             "Varslede afskedigelser",
             {"labels": data["notices"]["labels"], "values": data["notices"]["people"]},
-            "personer", 0, False,
+            "personer", 0, False, priority=True,
         ),
         card(
             "Tabte job ved konkurser",
@@ -696,6 +726,19 @@ def build_html(data):
             f"FRR: {fmt_number(recruitment_rate, 1)} pct. i {fmt_period(recruitment_period)}",
         ),
     ]
+    insight_cards = [
+        insight_card(
+            "Bruttoledigheden",
+            {"labels": data["unemployment"]["labels"], "values": data["unemployment"]["total"]},
+            "fuldtidspersoner", 0, False,
+        ),
+        insight_card("Nyopslåede stillinger", data["vacancies"], "stillinger", 0, True),
+        insight_card(
+            "Forbrugertilliden",
+            {"labels": data["confidence"]["labels"], "values": data["confidence"]["value"]},
+            "point", 1, True,
+        ),
+    ]
     safe_data = json_safe(data)
     json_data = json.dumps(safe_data, ensure_ascii=False, separators=(",", ":"), allow_nan=False)
     country_names = json.dumps(COUNTRY_NAMES, ensure_ascii=False, separators=(",", ":"))
@@ -730,14 +773,32 @@ def build_html(data):
     #dak-dashboard .intro {{color:var(--muted); margin:0 0 18px; line-height:1.55}}
     #dak-dashboard .toolbar {{display:flex; flex-wrap:wrap; align-items:center; gap:9px; padding:14px 16px; background:var(--soft); border-radius:8px; margin:18px 0 24px}}
     #dak-dashboard .toolbar-label {{font-weight:700; margin-right:4px}}
-    #dak-dashboard button {{border:1px solid var(--green-dark); background:#fff; color:var(--green-dark); border-radius:8px; padding:9px 14px; font-weight:700; cursor:pointer}}
+    #dak-dashboard button {{border:1px solid var(--green-dark); background:#fff; color:var(--green-dark); border-radius:8px; min-height:42px; padding:9px 14px; font-weight:700; cursor:pointer}}
     #dak-dashboard button.active, #dak-dashboard button:hover {{background:var(--green-dark); color:#fff}}
+    #dak-dashboard button:focus-visible, #dak-dashboard a:focus-visible {{outline:3px solid #146298; outline-offset:3px}}
     #dak-dashboard .updated {{margin-left:auto; color:var(--muted); font-size:13px}}
+    #dak-dashboard .section-nav {{position:sticky; top:0; z-index:20; display:flex; gap:8px; overflow-x:auto; padding:10px 0; margin:0 0 22px; background:rgba(247,241,234,.96); backdrop-filter:blur(8px); border-bottom:1px solid var(--line)}}
+    #dak-dashboard .section-nav a {{white-space:nowrap; color:var(--green-dark); background:#fff; border:1px solid var(--line); border-radius:999px; padding:9px 13px; text-decoration:none; font-size:13px; font-weight:700}}
+    #dak-dashboard .section-nav a:hover {{background:var(--green-dark); color:#fff}}
+    #dak-dashboard .insights {{margin:8px 0 30px}}
+    #dak-dashboard .insights-heading {{display:flex; align-items:flex-end; justify-content:space-between; gap:16px; margin-bottom:12px}}
+    #dak-dashboard .insights-heading h2 {{margin:0}}
+    #dak-dashboard .insights-heading p {{margin:0; color:var(--muted); font-size:13px}}
+    #dak-dashboard .insight-grid {{display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:14px}}
+    #dak-dashboard .insight-card {{position:relative; overflow:hidden; background:#fff; border:1px solid var(--line); border-radius:14px; padding:18px 18px 17px}}
+    #dak-dashboard .insight-card::before {{content:''; position:absolute; inset:0 auto 0 0; width:5px; background:var(--muted)}}
+    #dak-dashboard .insight-card.good::before {{background:var(--good)}}
+    #dak-dashboard .insight-card.bad::before {{background:var(--bad)}}
+    #dak-dashboard .insight-kicker {{font-weight:800; color:var(--navy); font-size:14px}}
+    #dak-dashboard .insight-value {{font-size:25px; font-weight:800; color:var(--navy); margin:7px 0 5px}}
+    #dak-dashboard .insight-value span {{font-size:12px; font-weight:400; color:var(--muted)}}
+    #dak-dashboard .insight-card p {{margin:0; color:var(--muted); line-height:1.45; font-size:13px}}
     #dak-dashboard .kpi-grid {{display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:14px}}
     #dak-dashboard .kpi-grid.economy {{grid-template-columns:repeat(3,minmax(0,1fr))}}
     #dak-dashboard .kpi-grid.dynamics {{grid-template-columns:repeat(2,minmax(0,1fr))}}
     #dak-dashboard .kpi-grid.international {{grid-template-columns:repeat(2,minmax(0,1fr))}}
     #dak-dashboard .kpi-card, #dak-dashboard .table-card {{background:var(--paper); border:1px solid var(--line); border-radius:12px; padding:16px; box-shadow:none}}
+    #dak-dashboard .kpi-card.priority {{border-top:4px solid var(--green); padding-top:13px; box-shadow:0 8px 24px rgba(74,52,40,.08)}}
     #dak-dashboard .kpi-title {{font-weight:700; color:var(--navy); min-height:38px}}
     #dak-dashboard .kpi-value {{font-size:28px; color:var(--navy); font-weight:800; line-height:1.15; margin:8px 0 2px}}
     #dak-dashboard .kpi-value span {{font-size:13px; font-weight:400; color:var(--muted)}}
@@ -747,26 +808,36 @@ def build_html(data):
     #dak-dashboard .delta-good {{color:var(--good); font-weight:700}}
     #dak-dashboard .delta-bad {{color:var(--bad); font-weight:700}}
     #dak-dashboard .delta-neutral {{color:var(--muted); font-weight:700}}
+    #dak-dashboard .change-meaning {{display:inline-block; margin-left:5px; padding:1px 5px; border:1px solid currentColor; border-radius:999px; font-size:9px; text-transform:uppercase; letter-spacing:.04em}}
     #dak-dashboard .compare-label {{color:var(--muted)}}
     #dak-dashboard .kpi-note {{font-size:11px; color:var(--muted); margin-top:7px}}
     #dak-dashboard .chart-grid {{display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:18px; margin-top:20px}}
     #dak-dashboard .chart-card {{background:#fff; border:1px solid var(--line); border-radius:12px; padding:20px; box-shadow:none}}
     #dak-dashboard .chart-card {{position:relative}}
-    #dak-dashboard .share-chart {{position:absolute; top:14px; right:14px; z-index:3; padding:6px 9px; border:1px solid var(--line); background:#fff; color:var(--green-dark); border-radius:7px; font-size:12px; font-weight:700; line-height:1.2; box-shadow:0 2px 8px rgba(43,33,27,.08)}}
+    #dak-dashboard .chart-actions {{position:absolute; top:14px; right:14px; z-index:6}}
+    #dak-dashboard .share-chart {{padding:6px 9px; min-height:34px; border:1px solid var(--line); background:#fff; color:var(--green-dark); border-radius:7px; font-size:12px; font-weight:700; line-height:1.2; box-shadow:0 2px 8px rgba(43,33,27,.08)}}
     #dak-dashboard .share-chart:hover, #dak-dashboard .share-chart:focus-visible {{background:var(--green-dark); color:#fff; border-color:var(--green-dark)}}
+    #dak-dashboard .chart-menu {{position:absolute; right:0; top:42px; width:185px; display:grid; gap:4px; padding:7px; background:#fff; border:1px solid var(--line); border-radius:10px; box-shadow:0 12px 30px rgba(43,33,27,.18)}}
+    #dak-dashboard .chart-menu[hidden] {{display:none}}
+    #dak-dashboard .chart-menu button {{min-height:38px; width:100%; text-align:left; border:0; padding:8px 10px; font-size:12px}}
     #dak-dashboard .chart-card h3 {{padding-right:82px}}
+    #dak-dashboard .chart-insight {{margin:8px 92px 10px 0; color:var(--muted); font-size:13px; line-height:1.45; min-height:19px}}
     #dak-dashboard .chart-card.share-target {{outline:3px solid var(--green); outline-offset:3px; box-shadow:0 10px 28px rgba(74,52,40,.22)}}
     #dak-dashboard .chart-card.wide {{grid-column:1/-1}}
     #dak-dashboard .chart-wrap {{position:relative; height:390px}}
     #dak-dashboard .chart-card.wide .chart-wrap {{height:430px}}
     #dak-dashboard .chart-card.tall .chart-wrap {{height:650px}}
     #dak-dashboard .source {{font-size:11px; color:var(--muted); line-height:1.5; margin:12px 0 0; padding-top:10px; border-top:1px solid var(--line)}}
+    #dak-dashboard .chart-toggle-row {{display:flex; justify-content:flex-end; margin:10px 0 0}}
+    #dak-dashboard .chart-toggle {{background:transparent; min-height:40px}}
+    #dak-dashboard .chart-card[hidden] {{display:none}}
     #dak-dashboard table {{width:100%; border-collapse:collapse; margin-top:5px}}
     #dak-dashboard th, #dak-dashboard td {{border-bottom:1px solid var(--line); padding:8px 4px; text-align:left; font-size:14px}}
     #dak-dashboard td {{text-align:right; font-weight:700; color:var(--navy)}}
     #dak-dashboard .footnote {{margin-top:30px; background:var(--soft); padding:16px; font-size:13px; color:var(--muted); line-height:1.5}}
     @media(max-width:900px) {{
       #dak-dashboard .kpi-grid, #dak-dashboard .kpi-grid.economy, #dak-dashboard .kpi-grid.dynamics {{grid-template-columns:repeat(2,minmax(0,1fr))}}
+      #dak-dashboard .insight-grid {{grid-template-columns:1fr}}
       #dak-dashboard .chart-grid {{grid-template-columns:1fr}}
       #dak-dashboard .chart-card.wide {{grid-column:auto}}
     }}
@@ -777,7 +848,15 @@ def build_html(data):
       #dak-dashboard .kpi-grid, #dak-dashboard .kpi-grid.economy, #dak-dashboard .kpi-grid.dynamics, #dak-dashboard .kpi-grid.international {{grid-template-columns:1fr}}
       #dak-dashboard .updated {{width:100%; margin:6px 0 0}}
       #dak-dashboard .chart-wrap, #dak-dashboard .chart-card.wide .chart-wrap {{height:340px}}
+      #dak-dashboard button {{min-height:44px}}
+      #dak-dashboard .section-nav {{margin-left:-14px; margin-right:-14px; padding-left:14px; padding-right:14px}}
+      #dak-dashboard .insights-heading {{display:block}}
+      #dak-dashboard .insights-heading p {{margin-top:5px}}
+      #dak-dashboard .chart-card {{padding:16px}}
+      #dak-dashboard .chart-insight {{margin-right:0; padding-right:72px}}
+      #dak-dashboard .chart-actions {{right:12px; top:12px}}
     }}
+    @media(prefers-reduced-motion:reduce) {{html {{scroll-behavior:auto}} #dak-dashboard * {{scroll-behavior:auto!important; transition:none!important}}}}
   </style>
 </head>
 <body>
@@ -785,15 +864,29 @@ def build_html(data):
 <main id="dak-dashboard">
   <div class="toolbar">
     <span class="toolbar-label">Vis periode:</span>
-    <button type="button" data-months="12" onclick="setPeriod(12,this)">12 måneder</button>
-    <button type="button" data-months="36" onclick="setPeriod(36,this)">36 måneder</button>
-    <button type="button" class="active" data-months="60" onclick="setPeriod(60,this)">60 måneder</button>
+    <button type="button" data-months="12" aria-pressed="false" onclick="setPeriod(12,this)">12 måneder</button>
+    <button type="button" data-months="36" aria-pressed="false" onclick="setPeriod(36,this)">36 måneder</button>
+    <button type="button" class="active" data-months="60" aria-pressed="true" onclick="setPeriod(60,this)">60 måneder</button>
     <span class="updated">Opdateret {data["meta"]["updated"]}</span>
   </div>
 
-  <h2>Ledighed og beskæftigelse</h2>
+  <nav class="section-nav" aria-label="Gå til emne">
+    <a href="#vigtigste">Det vigtigste</a>
+    <a href="#ledighed">Ledighed</a>
+    <a href="#rekruttering">Rekruttering</a>
+    <a href="#samfundsoekonomi">Samfundsøkonomi</a>
+    <a href="#internationalt">Internationalt</a>
+  </nav>
+
+  <section class="insights" id="vigtigste" aria-labelledby="vigtigste-heading">
+    <div class="insights-heading"><h2 id="vigtigste-heading">Det vigtigste lige nu</h2><p>Tre udviklinger, der er værd at bemærke</p></div>
+    <div class="insight-grid">{''.join(insight_cards)}</div>
+  </section>
+
+  <h2 id="ledighed">Ledighed og beskæftigelse</h2>
   <div class="kpi-grid">{''.join(kpi_cards)}</div>
-  <div class="chart-grid">
+  <div class="chart-toggle-row"><button type="button" class="chart-toggle" aria-expanded="false">Vis alle grafer</button></div>
+  <div class="chart-grid" data-collapsible data-preview="4">
     <article class="chart-card"><h3>Bruttoledighed</h3><div class="chart-wrap"><canvas id="unemploymentTotal"></canvas></div><p class="source">Kilde: Danmarks Statistik og Jobindsats</p></article>
     <article class="chart-card"><h3>Ledighedsprocent</h3><div class="chart-wrap"><canvas id="unemploymentRate"></canvas></div><p class="source">Kilde: Danmarks Statistik og Jobindsats</p></article>
     <article class="chart-card"><h3>Ledige fordelt på ydelse</h3><div class="chart-wrap"><canvas id="unemploymentType"></canvas></div><p class="source">Kilde: Jobindsats</p></article>
@@ -805,26 +898,29 @@ def build_html(data):
     <article class="chart-card wide"><h3>Opbrugt dagpengeret fordelt på dimittendstatus</h3><div class="chart-wrap"><canvas id="expiredBenefits"></canvas></div><p class="source">Kilde: Jobindsats. Antal personer med opbrugt dagpengeret fordelt på 1 års dimittendret, øvrige dimittender og øvrige ledige.</p></article>
   </div>
 
-  <h2>Rekruttering og arbejdsfordeling</h2>
+  <h2 id="rekruttering">Rekruttering og arbejdsfordeling</h2>
   <p class="intro">Udviklingen i arbejdsfordelinger samt virksomhedernes forgæves rekrutteringsforsøg på baggrund af STARs rekrutteringssurvey.</p>
   <div class="kpi-grid dynamics">{''.join(dynamics_cards)}</div>
-  <div class="chart-grid">
+  <div class="chart-toggle-row"><button type="button" class="chart-toggle" aria-expanded="false">Vis alle grafer</button></div>
+  <div class="chart-grid" data-collapsible data-preview="2">
     <article class="chart-card"><h3>Arbejdsfordelinger under og over 13 uger</h3><div class="chart-wrap"><canvas id="workSharing"></canvas></div><p class="source">Kilde: Jobindsats</p></article>
     <article class="chart-card"><h3>Forgæves rekrutteringsforsøg over tid</h3><div class="chart-wrap"><canvas id="failedRecruitment"></canvas></div><p class="source">Kilde: Jobindsats og STAR. FR omfatter både ikke besatte rekrutteringer og rekrutteringer besat med en anden profil.</p></article>
     <article class="chart-card wide tall"><h3>15 stillinger med flest forgæves rekrutteringsforsøg</h3><div class="chart-wrap"><canvas id="topRecruitmentOccupations"></canvas></div><p class="source">Kilde: Jobindsats og STAR. Seneste surveyperiode: {fmt_period(data["failedRecruitment"]["topPeriod"])}.</p></article>
   </div>
 
-  <h2>Samfundsøkonomi</h2>
+  <h2 id="samfundsoekonomi">Samfundsøkonomi</h2>
   <div class="kpi-grid economy">{''.join(economy_cards)}</div>
-  <div class="chart-grid">
+  <div class="chart-toggle-row"><button type="button" class="chart-toggle" aria-expanded="false">Vis alle grafer</button></div>
+  <div class="chart-grid" data-collapsible data-preview="2">
     <article class="chart-card"><h3>Forbrugertillid</h3><div class="chart-wrap"><canvas id="confidence"></canvas></div><p class="source">Kilde: Danmarks Statistik</p></article>
     <article class="chart-card"><h3>Erhvervstillid</h3><div class="chart-wrap"><canvas id="business"></canvas></div><p class="source">Kilde: Danmarks Statistik</p></article>
     <article class="chart-card wide"><h3>Inflation</h3><div class="chart-wrap"><canvas id="inflation"></canvas></div><p class="source">Kilde: Danmarks Statistik</p></article>
   </div>
 
-  <h2>Internationalt</h2>
+  <h2 id="internationalt">Internationalt</h2>
   <div class="kpi-grid international">{international_table(data, "eurostat")}{international_table(data, "confidence")}</div>
-  <div class="chart-grid">
+  <div class="chart-toggle-row"><button type="button" class="chart-toggle" aria-expanded="false">Vis alle grafer</button></div>
+  <div class="chart-grid" data-collapsible data-preview="1">
     <article class="chart-card wide"><h3>Ledighed i udvalgte lande</h3><div class="chart-wrap"><canvas id="eurostatTrend"></canvas></div><p class="source">Kilde: Eurostat</p></article>
     <article class="chart-card wide tall"><h3>Ledighed i Europa, seneste kvartal</h3><div class="chart-wrap"><canvas id="eurostatLatest"></canvas></div><p class="source">Kilde: Eurostat</p></article>
     <article class="chart-card wide"><h3>Forbrugertillid i udvalgte lande</h3><div class="chart-wrap"><canvas id="euConfidence"></canvas></div><p class="source">Kilde: Europa-Kommissionen, DG ECFIN</p></article>
@@ -839,6 +935,46 @@ const COUNTRY_NAMES={country_names};
 const COLORS=['#9A5B34','#146298','#8C9C41','#8C7FCF','#7D3659','#1D9999'];
 const charts={{}};
 let activeMonths=60;
+
+const latestValueLabel={{
+  id:'latestValueLabel',
+  afterDatasetsDraw(chart,args,options){{
+    if(options?.display===false) return;
+    const datasetIndex=options?.datasetIndex||0;
+    const dataset=chart.data.datasets?.[datasetIndex];
+    const meta=chart.getDatasetMeta(datasetIndex);
+    if(!dataset || !meta || meta.hidden) return;
+    let index=(dataset.data||[]).length-1;
+    while(index>=0 && !Number.isFinite(Number(dataset.data[index]))) index--;
+    const point=meta.data?.[index];
+    if(index<0 || !point) return;
+    const value=Number(dataset.data[index]);
+    const decimals=Number(options?.decimals||0);
+    const text=dkNumber(value,decimals)+(options?.suffix||'');
+    const ctx=chart.ctx;
+    ctx.save(); ctx.font='700 11px Arial';
+    const width=ctx.measureText(text).width+14;
+    const x=Math.min(chart.chartArea.right-width/2,Math.max(chart.chartArea.left+width/2,point.x));
+    const y=Math.max(chart.chartArea.top+11,point.y-16);
+    ctx.fillStyle='rgba(74,52,40,.92)';
+    ctx.beginPath(); ctx.roundRect(x-width/2,y-11,width,20,6); ctx.fill();
+    ctx.fillStyle='#fff'; ctx.textAlign='center'; ctx.textBaseline='middle'; ctx.fillText(text,x,y-1); ctx.restore();
+  }}
+}};
+const referenceLine={{
+  id:'referenceLine',
+  beforeDatasetsDraw(chart,args,options){{
+    const value=Number(options?.value);
+    if(!Number.isFinite(value) || !chart.scales?.y) return;
+    const y=chart.scales.y.getPixelForValue(value);
+    if(y<chart.chartArea.top || y>chart.chartArea.bottom) return;
+    const ctx=chart.ctx; ctx.save(); ctx.setLineDash([6,5]); ctx.strokeStyle='#6f6258'; ctx.lineWidth=1;
+    ctx.beginPath(); ctx.moveTo(chart.chartArea.left,y); ctx.lineTo(chart.chartArea.right,y); ctx.stroke();
+    ctx.setLineDash([]); ctx.fillStyle='#6f6258'; ctx.font='600 10px Arial'; ctx.textAlign='right';
+    ctx.fillText(options?.label||dkNumber(value,1),chart.chartArea.right-4,y-5); ctx.restore();
+  }}
+}};
+Chart.register(latestValueLabel,referenceLine);
 
 function dkNumber(value,decimals=0){{
   if(value===null || value===undefined) return '';
@@ -877,7 +1013,8 @@ function commonOptions(decimals=0){{
     responsive:true,maintainAspectRatio:false,interaction:{{mode:'index',intersect:false}},
     plugins:{{
       legend:{{position:'top',align:'start',labels:{{boxWidth:12,boxHeight:12,padding:18,usePointStyle:true}}}},
-      tooltip:{{callbacks:{{title:items=>periodLabel(items[0].label),label:ctx=>' '+ctx.dataset.label+': '+dkNumber(ctx.parsed.y,decimals)}}}}
+      tooltip:{{callbacks:{{title:items=>periodLabel(items[0].label),label:ctx=>' '+ctx.dataset.label+': '+dkNumber(ctx.parsed.y,decimals)}}}},
+      latestValueLabel:{{decimals}}
     }},
     scales:{{x:xAxis(),y:{{beginAtZero:false,grid:{{color:'#E6DDD2'}},ticks:{{padding:8,callback:v=>dkNumber(v,decimals)}}}}}}
   }};
@@ -886,9 +1023,10 @@ function replaceChart(id,config){{
   if(charts[id]) charts[id].destroy();
   charts[id]=new Chart(document.getElementById(id),config);
 }}
-function lineChart(id,labels,datasets,decimals=0,yMin){{
+function lineChart(id,labels,datasets,decimals=0,yMin,reference){{
   const opts=commonOptions(decimals);
   if(yMin!==undefined) opts.scales.y.min=yMin;
+  if(reference) opts.plugins.referenceLine=reference;
   opts.plugins.legend.display=datasets.length>1;
   replaceChart(id,{{type:'line',data:{{labels,datasets:datasets.map((d,i)=>({{
     ...d,borderColor:d.borderColor||COLORS[i],backgroundColor:d.backgroundColor||COLORS[i],
@@ -933,7 +1071,7 @@ function horizontalValueBar(id,labels,values,label){{
     type:'bar',data:{{labels,datasets:[{{label,data:values,backgroundColor:COLORS[2],borderRadius:2}}]}},
     options:{{
       indexAxis:'y',responsive:true,maintainAspectRatio:false,
-      plugins:{{legend:{{display:false}},tooltip:{{callbacks:{{label:ctx=>' '+dkNumber(ctx.parsed.x,0)+' forsøg'}}}}}},
+      plugins:{{legend:{{display:false}},latestValueLabel:{{display:false}},tooltip:{{callbacks:{{label:ctx=>' '+dkNumber(ctx.parsed.x,0)+' forsøg'}}}}}},
       scales:{{
         x:{{beginAtZero:true,grid:{{color:'#E6DDD2'}},ticks:{{callback:v=>dkNumber(v,0)}}}},
         y:{{grid:{{display:false}}}}
@@ -964,7 +1102,7 @@ function horizontalBar(id,labels,values){{
     data:{{labels,datasets:[{{label:'Ledighed, pct.',data:values,backgroundColor:labels.map(v=>v==='DK'?COLORS[1]:COLORS[0]),borderRadius:2}}]}},
     options:{{
       indexAxis:'y',responsive:true,maintainAspectRatio:false,
-      plugins:{{legend:{{display:false}},tooltip:{{callbacks:{{label:ctx=>' '+dkNumber(ctx.parsed.x,1)+' pct.'}}}}}},
+      plugins:{{legend:{{display:false}},latestValueLabel:{{display:false}},tooltip:{{callbacks:{{label:ctx=>' '+dkNumber(ctx.parsed.x,1)+' pct.'}}}}}},
       scales:{{
         x:{{beginAtZero:true,grid:{{color:'#E6DDD2'}},ticks:{{callback:v=>dkNumber(v,1)+' %'}}}},
         y:{{grid:{{display:false}},ticks:{{autoSkip:false,callback:function(val,idx){{const labels=this.chart.data.labels||[];const code=labels[val]??labels[idx]??val;return COUNTRY_NAMES[code]||code;}}}}}}
@@ -1004,11 +1142,11 @@ function drawAll(n){{
     'Forgæves rekrutteringsforsøg'
   );
   s=sliced(DATA.confidence.labels,[DATA.confidence.value],n);
-  lineChart('confidence',s.labels,[{{label:'Forbrugertillid',data:s.series[0]}}],1);
+  lineChart('confidence',s.labels,[{{label:'Forbrugertillid',data:s.series[0]}}],1,undefined,{{value:0,label:'Neutral'}});
   s=sliced(DATA.business.labels,[DATA.business.value],n);
-  lineChart('business',s.labels,[{{label:'Erhvervstillid',data:s.series[0]}}],1);
+  lineChart('business',s.labels,[{{label:'Erhvervstillid',data:s.series[0]}}],1,undefined,{{value:100,label:'Indeks 100'}});
   s=sliced(DATA.inflation.labels,[DATA.inflation.total,DATA.inflation.core],n);
-  lineChart('inflation',s.labels,[{{label:'Forbrugerpriser',data:s.series[0]}},{{label:'Kerneinflation',data:s.series[1]}}],1);
+  lineChart('inflation',s.labels,[{{label:'Forbrugerpriser',data:s.series[0]}},{{label:'Kerneinflation',data:s.series[1]}}],1,undefined,{{value:2,label:'2 pct.'}});
   const quarters=Math.max(4,Math.ceil(n/3));
   s=sliced(DATA.eurostat.labels,[DATA.eurostat.series.DK,DATA.eurostat.series.EU27_2020,DATA.eurostat.series.DE,DATA.eurostat.series.SE,DATA.eurostat.series.FR],quarters);
   lineChart('eurostatTrend',s.labels,[{{label:'Danmark',data:s.series[0]}},{{label:'EU-27',data:s.series[1]}},{{label:'Tyskland',data:s.series[2]}},{{label:'Sverige',data:s.series[3]}},{{label:'Frankrig',data:s.series[4]}}],1);
@@ -1069,6 +1207,42 @@ function shareSummary(id){{
   const valueText=point.value===null?'':dkNumber(point.value,decimals)+suffix;
   const periodText=point.period!==''?periodLabel(point.period):'';
   return {{valueText,detailText:[detail,periodText].filter(Boolean).join(' | ')}};
+}}
+const CHART_MEANING={{
+  unemploymentTotal:{{label:'Bruttoledigheden',goodIfUp:false}}, unemploymentRate:{{label:'Ledighedsprocenten',goodIfUp:false}},
+  unemploymentType:{{label:'Antallet på A-dagpenge',goodIfUp:false}}, longterm:{{label:'Langtidsledigheden',goodIfUp:false}},
+  vacancies:{{label:'Antallet af nyopslåede stillinger',goodIfUp:true}}, wages:{{label:'Antallet af lønmodtagere',goodIfUp:true}},
+  notices:{{label:'Antallet af varslede personer',goodIfUp:false}}, bankruptcies:{{label:'Antallet af konkurser',goodIfUp:false}},
+  expiredBenefits:{{label:'Antallet med opbrugt dagpengeret',goodIfUp:false}}, workSharing:{{label:'Arbejdsfordelinger',goodIfUp:false}},
+  failedRecruitment:{{label:'Forgæves rekrutteringsforsøg',goodIfUp:false}}, confidence:{{label:'Forbrugertilliden',goodIfUp:true}},
+  business:{{label:'Erhvervstilliden',goodIfUp:true}}, inflation:{{label:'Inflationen',goodIfUp:false}},
+  eurostatTrend:{{label:'Ledigheden i Danmark',goodIfUp:false}}, euConfidence:{{label:'Forbrugertilliden i Danmark',goodIfUp:true}}
+}};
+function previousChartPoint(chart,datasetIndex,latestIndex){{
+  const labels=chart?.data?.labels||[]; const values=chart?.data?.datasets?.[datasetIndex]?.data||[];
+  for(let i=Math.min(latestIndex-1,values.length-1);i>=0;i--){{const value=Number(values[i]);if(Number.isFinite(value)) return {{value,period:labels[i],index:i}};}}
+  return {{value:null,period:'',index:-1}};
+}}
+function chartInsightText(id){{
+  const chart=charts[id]; const summary=shareSummary(id);
+  if(!chart) return '';
+  if(id==='topRecruitmentOccupations' || id==='eurostatLatest') return ['Seneste billede:',summary.valueText,summary.detailText].filter(Boolean).join(' ')+'.';
+  const latest=latestChartPoint(chart,0); const previous=previousChartPoint(chart,0,latest.index); const meaning=CHART_MEANING[id];
+  if(!meaning || latest.value===null || previous.value===null) return ['Seneste:',summary.valueText,summary.detailText].filter(Boolean).join(' ')+'.';
+  const delta=latest.value-previous.value; const direction=delta>0?'steget':delta<0?'faldet':'uændret';
+  const assessment=delta===0?'stabilt':((delta>0)===meaning.goodIfUp?'en forbedring':'en forværring');
+  return `${{meaning.label}} er ${{direction}} siden ${{periodLabel(previous.period)}}. Seneste observation er ${{summary.valueText||dkNumber(latest.value,1)}} (${{assessment}}).`;
+}}
+function updateChartInsights(){{
+  document.querySelectorAll('#dak-dashboard .chart-card').forEach(card=>{{
+    const canvas=card.querySelector('canvas'); if(!canvas) return;
+    let insight=card.querySelector('.chart-insight');
+    if(!insight){{insight=document.createElement('p'); insight.className='chart-insight'; card.querySelector('h3')?.insertAdjacentElement('afterend',insight);}}
+    insight.textContent=chartInsightText(canvas.id);
+    const title=(card.querySelector('h3')?.textContent||'Graf').trim();
+    canvas.setAttribute('role','img'); canvas.setAttribute('aria-label',title+'. '+insight.textContent);
+    canvas.textContent=title+'. '+insight.textContent;
+  }});
 }}
 function wrapCanvasText(ctx,text,x,y,maxWidth,lineHeight,maxLines=2){{
   const words=String(text).split(/\\s+/);
@@ -1158,16 +1332,60 @@ async function shareChart(card,chartCanvas){{
   }}
   downloadBlob(blob,file.name);
 }}
+async function downloadChartImage(card,chartCanvas){{
+  const exported=exportChartCanvas(card,chartCanvas);
+  const blob=await new Promise(resolve=>exported.canvas.toBlob(resolve,'image/png'));
+  if(blob) downloadBlob(blob,fileNameFor(exported.title));
+}}
+function downloadChartCsv(card,chartCanvas){{
+  const chart=charts[chartCanvas.id];
+  if(!chart) return;
+  const datasets=chart.data.datasets||[];
+  const rows=[['Periode',...datasets.map(item=>item.label||'Værdi')]];
+  (chart.data.labels||[]).forEach((label,index)=>{{
+    rows.push([periodLabel(label),...datasets.map(item=>item.data?.[index]??'')]);
+  }});
+  const csv='\ufeff'+rows.map(row=>row.map(value=>'"'+String(value).replace(/"/g,'""')+'"').join(';')).join('\\n');
+  const title=(card.querySelector('h3')?.textContent||'graf').trim();
+  downloadBlob(new Blob([csv],{{type:'text/csv;charset=utf-8'}}),fileNameFor(title).replace(/[.]png$/,'.csv'));
+}}
+async function copyChartLink(chartCanvas,button){{
+  const url=location.origin+location.pathname+'share/'+chartCanvas.id+'/';
+  try{{
+    await navigator.clipboard.writeText(url);
+    const original=button.textContent; button.textContent='Kopieret';
+    setTimeout(()=>button.textContent=original,1400);
+  }}catch(error){{
+    prompt('Kopiér linket til grafen:',url);
+  }}
+}}
 function setupChartSharing(){{
   document.querySelectorAll('#dak-dashboard .chart-card').forEach(card=>{{
     const canvas=card.querySelector('canvas');
-    if(!canvas || card.querySelector('.share-chart')) return;
+    if(!canvas || card.querySelector('.chart-actions')) return;
     card.id=card.id||'graf-'+canvas.id;
+    const actions=document.createElement('div'); actions.className='chart-actions';
     const button=document.createElement('button');
-    button.type='button'; button.className='share-chart'; button.textContent='↗ Del graf';
-    button.setAttribute('aria-label','Del '+(card.querySelector('h3')?.textContent||'graf'));
-    button.addEventListener('click',()=>shareChart(card,canvas));
-    card.appendChild(button);
+    button.type='button'; button.className='share-chart'; button.textContent='Del / hent';
+    button.setAttribute('aria-label','Del eller hent '+(card.querySelector('h3')?.textContent||'graf'));
+    button.setAttribute('aria-expanded','false');
+    const menu=document.createElement('div'); menu.className='chart-menu'; menu.hidden=true;
+    const items=[
+      ['Del billede',()=>shareChart(card,canvas)],
+      ['Kopiér link',event=>copyChartLink(canvas,event.currentTarget)],
+      ['Hent billede (PNG)',()=>downloadChartImage(card,canvas)],
+      ['Hent data (CSV)',()=>downloadChartCsv(card,canvas)]
+    ];
+    items.forEach(([label,handler])=>{{const item=document.createElement('button');item.type='button';item.textContent=label;item.addEventListener('click',async event=>{{await handler(event);menu.hidden=true;button.setAttribute('aria-expanded','false');}});menu.appendChild(item);}});
+    button.addEventListener('click',()=>{{menu.hidden=!menu.hidden;button.setAttribute('aria-expanded',String(!menu.hidden));}});
+    actions.append(button,menu); card.appendChild(actions);
+  }});
+  document.addEventListener('click',event=>{{
+    document.querySelectorAll('.chart-actions').forEach(actions=>{{
+      if(actions.contains(event.target)) return;
+      const menu=actions.querySelector('.chart-menu'); const button=actions.querySelector('.share-chart');
+      if(menu) menu.hidden=true; if(button) button.setAttribute('aria-expanded','false');
+    }});
   }});
 }}
 setupChartSharing();
@@ -1185,12 +1403,34 @@ function focusSharedChart(){{
 window.addEventListener('hashchange',focusSharedChart);
 setTimeout(focusSharedChart,150);
 
+function setupChartToggles(){{
+  document.querySelectorAll('#dak-dashboard .chart-grid[data-collapsible]').forEach(grid=>{{
+    const cards=[...grid.querySelectorAll('.chart-card')];
+    const row=grid.previousElementSibling; const button=row?.querySelector('.chart-toggle');
+    if(!button || !cards.length) return;
+    const desktopPreview=Number(grid.dataset.preview||2);
+    const preview=matchMedia('(max-width:560px)').matches?Math.min(2,desktopPreview):desktopPreview;
+    if(cards.length<=preview){{row.hidden=true;return;}}
+    let expanded=false;
+    const apply=()=>{{
+      cards.forEach((card,index)=>card.hidden=!expanded && index>=preview);
+      button.textContent=expanded?'Vis færre grafer':`Vis alle ${{cards.length}} grafer`;
+      button.setAttribute('aria-expanded',String(expanded));
+      if(expanded) cards.forEach(card=>{{const canvas=card.querySelector('canvas');if(canvas&&charts[canvas.id])charts[canvas.id].resize();}});
+    }};
+    button.addEventListener('click',()=>{{expanded=!expanded;apply();}}); apply();
+  }});
+}}
+
 window.setPeriod=function(n,button){{
-  document.querySelectorAll('#dak-dashboard [data-months]').forEach(el=>el.classList.remove('active'));
-  if(button) button.classList.add('active');
+  document.querySelectorAll('#dak-dashboard [data-months]').forEach(el=>{{el.classList.remove('active');el.setAttribute('aria-pressed','false');}});
+  if(button){{button.classList.add('active');button.setAttribute('aria-pressed','true');}}
   drawAll(n);
+  updateChartInsights();
 }};
 drawAll(60);
+updateChartInsights();
+setupChartToggles();
 }})();
 </script>
 <script data-goatcounter="https://arbejdsmarkedsoverblikket.goatcounter.com/count"
@@ -1242,7 +1482,7 @@ def validate(data, html):
     assert data["meta"]["officialApi"]["jobindsats"]["tables"]["failedRecruitment"]
     assert "NaN" not in html and "Infinity" not in html
     assert html.count("<canvas") == 18
-    assert html.count('class="kpi-card"') == 13
+    assert len(re.findall(r'class="kpi-card(?: priority)?"', html)) == 13
     assert html.count('class="table-card"') == 2
     assert "type:'category'" in html
     assert "indexAxis:'y'" in html
@@ -1260,6 +1500,13 @@ def validate(data, html):
     assert "const width=1200, height=675" in html
     assert "share/'+chartCanvas.id+'/'" in html
     assert "share-target" in html
+    assert "Det vigtigste lige nu" in html
+    assert 'class="section-nav"' in html
+    assert html.count("data-collapsible data-preview") == 4
+    assert "Hent data (CSV)" in html
+    assert "updateChartInsights();" in html
+    assert "aria-pressed=\"true\"" in html
+    assert "referenceLine" in html
     assert "–" not in html and "—" not in html
 
 
