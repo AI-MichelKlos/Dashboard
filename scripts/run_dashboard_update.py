@@ -769,35 +769,6 @@ def set_status(data, successes: list[str], failures: list[str]) -> None:
         data["meta"]["retrievedAt"] = now.date().isoformat()
 
 
-def add_visible_status(html: str, data: dict) -> str:
-    status = data.get("meta", {}).get("updateStatus", {})
-    state = status.get("state")
-    if state == "ok":
-        return html
-
-    if state == "partial":
-        failed_labels = [item.split(":", 1)[0] for item in status.get("failed", [])]
-        message = "Delvist opdateret. Viser seneste gyldige data for: " + ", ".join(failed_labels) + "."
-        background, border = "#fff4d6", "#ef8b2c"
-    else:
-        message = "Seneste dataopdatering fejlede. Dashboardet viser seneste gyldige data."
-        background, border = "#fde9e8", "#e34a45"
-
-    banner = (
-        f'<div role="status" style="margin:0 0 24px;padding:12px 14px;'
-        f'background:{background};border-left:4px solid {border};'
-        f'font-size:13px;line-height:1.45">{message}</div>'
-    )
-    marker = "  </div>\n\n  <h2>Ledighed og beskæftigelse</h2>"
-    if marker not in html:
-        raise RuntimeError("Kunne ikke placere opdateringsstatus i dashboardets HTML")
-    return html.replace(
-        marker,
-        f"  </div>\n  {banner}\n\n  <h2>Ledighed og beskæftigelse</h2>",
-        1,
-    )
-
-
 def main() -> int:
     builder.jobindsats_get = robust_jobindsats_get
     if not builder.DATA_OUTPUT.exists():
@@ -811,7 +782,7 @@ def main() -> int:
     set_status(data, stat_successes + job_successes, stat_failures + job_failures)
     data = builder.json_safe(data)
 
-    html = add_visible_status(builder.build_html(data), data)
+    html = builder.build_html(data)
     builder.validate(data, html)
     builder.OUTPUT.write_text(html, encoding="utf-8")
     builder.DATA_OUTPUT.write_text(

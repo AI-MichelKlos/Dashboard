@@ -32,6 +32,9 @@
     #dak-dashboard button.active, #dak-dashboard button:hover {background:var(--green-dark); color:#fff}
     #dak-dashboard button:focus-visible, #dak-dashboard a:focus-visible {outline:3px solid #146298; outline-offset:3px}
     #dak-dashboard .updated {margin-left:auto; color:var(--muted); font-size:13px}
+    #dak-dashboard .update-status {margin:0 0 22px; padding:12px 14px; font-size:13px; line-height:1.45; border-left:4px solid}
+    #dak-dashboard .update-status.partial {background:#fff4d6; border-color:#ef8b2c}
+    #dak-dashboard .update-status.stale {background:#fde9e8; border-color:#e34a45}
     #dak-dashboard .section-nav {position:sticky; top:0; z-index:20; display:flex; gap:8px; overflow-x:auto; padding:10px 0; margin:0 0 22px; background:rgba(247,241,234,.96); backdrop-filter:blur(8px); border-bottom:1px solid var(--line)}
     #dak-dashboard .section-nav a {white-space:nowrap; color:var(--green-dark); background:#fff; border:1px solid var(--line); border-radius:999px; padding:9px 13px; text-decoration:none; font-size:13px; font-weight:700}
     #dak-dashboard .section-nav a:hover {background:var(--green-dark); color:#fff}
@@ -132,6 +135,7 @@
     <a href="#samfundsoekonomi">Samfundsøkonomi</a>
     <a href="#internationalt">Internationalt</a>
   </nav>
+  <div class="update-status partial" role="status">Delvist opdateret. Viser seneste gyldige data for: Forgæves rekrutteringsforsøg.</div>
 
   <section class="insights" id="vigtigste" aria-labelledby="vigtigste-heading">
     <div class="insights-heading"><h2 id="vigtigste-heading">Det vigtigste lige nu</h2><p>Tre udviklinger, der er værd at bemærke</p></div>

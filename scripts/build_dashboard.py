@@ -382,6 +382,21 @@ def insight_card(title, series, unit="", decimals=0, good_if_up=True):
       </article>"""
 
 
+def update_status_banner(data):
+    status = data.get("meta", {}).get("updateStatus", {})
+    state = status.get("state")
+    if not state or state == "ok":
+        return ""
+    if state == "partial":
+        failed_labels = [item.split(":", 1)[0] for item in status.get("failed", [])]
+        message = "Delvist opdateret. Viser seneste gyldige data for: " + ", ".join(failed_labels) + "."
+        tone = "partial"
+    else:
+        message = "Seneste dataopdatering fejlede. Dashboardet viser seneste gyldige data."
+        tone = "stale"
+    return f'<div class="update-status {tone}" role="status">{message}</div>'
+
+
 def build_data():
     if DATA_OUTPUT.exists():
         data = json.loads(DATA_OUTPUT.read_text(encoding="utf-8"))
@@ -742,6 +757,7 @@ def build_html(data):
     safe_data = json_safe(data)
     json_data = json.dumps(safe_data, ensure_ascii=False, separators=(",", ":"), allow_nan=False)
     country_names = json.dumps(COUNTRY_NAMES, ensure_ascii=False, separators=(",", ":"))
+    status_banner = update_status_banner(data)
 
     return f"""<!doctype html>
 <html lang="da">
@@ -777,6 +793,9 @@ def build_html(data):
     #dak-dashboard button.active, #dak-dashboard button:hover {{background:var(--green-dark); color:#fff}}
     #dak-dashboard button:focus-visible, #dak-dashboard a:focus-visible {{outline:3px solid #146298; outline-offset:3px}}
     #dak-dashboard .updated {{margin-left:auto; color:var(--muted); font-size:13px}}
+    #dak-dashboard .update-status {{margin:0 0 22px; padding:12px 14px; font-size:13px; line-height:1.45; border-left:4px solid}}
+    #dak-dashboard .update-status.partial {{background:#fff4d6; border-color:#ef8b2c}}
+    #dak-dashboard .update-status.stale {{background:#fde9e8; border-color:#e34a45}}
     #dak-dashboard .section-nav {{position:sticky; top:0; z-index:20; display:flex; gap:8px; overflow-x:auto; padding:10px 0; margin:0 0 22px; background:rgba(247,241,234,.96); backdrop-filter:blur(8px); border-bottom:1px solid var(--line)}}
     #dak-dashboard .section-nav a {{white-space:nowrap; color:var(--green-dark); background:#fff; border:1px solid var(--line); border-radius:999px; padding:9px 13px; text-decoration:none; font-size:13px; font-weight:700}}
     #dak-dashboard .section-nav a:hover {{background:var(--green-dark); color:#fff}}
@@ -877,6 +896,7 @@ def build_html(data):
     <a href="#samfundsoekonomi">Samfundsøkonomi</a>
     <a href="#internationalt">Internationalt</a>
   </nav>
+  {status_banner}
 
   <section class="insights" id="vigtigste" aria-labelledby="vigtigste-heading">
     <div class="insights-heading"><h2 id="vigtigste-heading">Det vigtigste lige nu</h2><p>Tre udviklinger, der er værd at bemærke</p></div>
