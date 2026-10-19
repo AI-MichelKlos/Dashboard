@@ -12,8 +12,8 @@ import run_dashboard_update as updater
 _original_refresh_statbank = updater.refresh_statbank
 BASE = Path(__file__).resolve().parents[1]
 INDEX = BASE / "index.html"
-OLD_DASHBOARD_TITLE = "Analytisk overblik - Arbejdsmarkedet"
-NEW_DASHBOARD_TITLE = "Arbejdsmarkedet generelt - nøgletal"
+LEGACY_DASHBOARD_TITLE = "Arbejdsmarkedet generelt - nøgletal"
+EXPECTED_DASHBOARD_TITLE = "Analytisk overblik - Arbejdsmarkedet"
 
 
 def _dataset(payload: dict) -> dict:
@@ -119,11 +119,11 @@ def refresh_statbank(data):
 
 def apply_dashboard_title() -> None:
     html = INDEX.read_text(encoding="utf-8")
-    if OLD_DASHBOARD_TITLE in html:
-        html = html.replace(OLD_DASHBOARD_TITLE, NEW_DASHBOARD_TITLE)
+    if LEGACY_DASHBOARD_TITLE in html:
+        html = html.replace(LEGACY_DASHBOARD_TITLE, EXPECTED_DASHBOARD_TITLE)
         INDEX.write_text(html, encoding="utf-8")
-        print(f"Opdaterede dashboardtitel til: {NEW_DASHBOARD_TITLE}", flush=True)
-    elif NEW_DASHBOARD_TITLE not in html:
+        print(f"Opdaterede dashboardtitel til: {EXPECTED_DASHBOARD_TITLE}", flush=True)
+    elif EXPECTED_DASHBOARD_TITLE not in html:
         raise RuntimeError("Kunne ikke finde dashboardtitlen i index.html")
 
 

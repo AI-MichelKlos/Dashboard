@@ -116,7 +116,7 @@ jobs:
           test -s index.html
           test -s data/dashboard-data.json
           test -s data/senior-status.json
-          grep -q "Arbejdsmarkedet generelt - nøgletal" index.html
+          grep -q "Analytisk overblik - Arbejdsmarkedet" index.html
           grep -q "const DATA=" index.html
           grep -q "Arbejdsfordelinger under og over 13 uger" index.html
           grep -q "Opbrugt dagpengeret fordelt på dimittendstatus" index.html
