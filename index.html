@@ -47,7 +47,9 @@
     #dak-dashboard .insight-card::before {content:''; position:absolute; inset:0 auto 0 0; width:5px; background:var(--muted)}
     #dak-dashboard .insight-card.good::before {background:var(--good)}
     #dak-dashboard .insight-card.bad::before {background:var(--bad)}
+    #dak-dashboard .insight-head {display:flex; align-items:baseline; justify-content:space-between; gap:12px}
     #dak-dashboard .insight-kicker {font-weight:800; color:var(--navy); font-size:14px}
+    #dak-dashboard .insight-period {flex:0 0 auto; color:var(--muted); font-size:12px; font-weight:700}
     #dak-dashboard .insight-value {font-size:25px; font-weight:800; color:var(--navy); margin:7px 0 5px}
     #dak-dashboard .insight-value span {font-size:12px; font-weight:400; color:var(--muted)}
     #dak-dashboard .insight-card p {margin:0; color:var(--muted); line-height:1.45; font-size:13px}
@@ -141,19 +143,28 @@
     <div class="insights-heading"><h2 id="vigtigste-heading">Det vigtigste lige nu</h2><p>Tre udviklinger, der er værd at bemærke</p></div>
     <div class="insight-grid">
       <article class="insight-card bad">
-        <div class="insight-kicker">Bruttoledigheden</div>
+        <div class="insight-head">
+          <div class="insight-kicker">Bruttoledigheden</div>
+          <div class="insight-period">sep. 2026</div>
+        </div>
         <div class="insight-value">93.971<span> fuldtidspersoner</span></div>
         <p>Bruttoledigheden er steget med 5.914 fuldtidspersoner siden sep. 2025.</p>
       </article>
       <article class="insight-card good">
-        <div class="insight-kicker">Nyopslåede stillinger</div>
+        <div class="insight-head">
+          <div class="insight-kicker">Nyopslåede stillinger</div>
+          <div class="insight-period">sep. 2026</div>
+        </div>
         <div class="insight-value">27.294<span> stillinger</span></div>
         <p>Nyopslåede stillinger er steget med 2.804 stillinger siden sep. 2025.</p>
       </article>
       <article class="insight-card good">
-        <div class="insight-kicker">Forbrugertilliden</div>
-        <div class="insight-value">-13,7<span> point</span></div>
-        <p>Forbrugertilliden er steget med 5,0 point siden sep. 2025.</p>
+        <div class="insight-head">
+          <div class="insight-kicker">Lønmodtagere</div>
+          <div class="insight-period">jul. 2026</div>
+        </div>
+        <div class="insight-value">3.090.533<span> personer</span></div>
+        <p>Lønmodtagere er steget med 28.896 personer siden jul. 2025.</p>
       </article></div>
   </section>
 

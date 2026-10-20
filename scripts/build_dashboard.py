@@ -376,7 +376,10 @@ def insight_card(title, series, unit="", decimals=0, good_if_up=True):
     value_unit = f" {unit}" if unit else ""
     return f"""
       <article class="insight-card {tone}">
-        <div class="insight-kicker">{title}</div>
+        <div class="insight-head">
+          <div class="insight-kicker">{title}</div>
+          <div class="insight-period">{fmt_period(current["period"])}</div>
+        </div>
         <div class="insight-value">{value_text}<span>{value_unit}</span></div>
         <p>{title} {direction}{change}{period_text}.</p>
       </article>"""
@@ -749,9 +752,9 @@ def build_html(data):
         ),
         insight_card("Nyopslåede stillinger", data["vacancies"], "stillinger", 0, True),
         insight_card(
-            "Forbrugertilliden",
-            {"labels": data["confidence"]["labels"], "values": data["confidence"]["value"]},
-            "point", 1, True,
+            "Lønmodtagere",
+            {"labels": data["wages"]["labels"], "values": data["wages"]["total"]},
+            "personer", 0, True,
         ),
     ]
     safe_data = json_safe(data)
@@ -808,7 +811,9 @@ def build_html(data):
     #dak-dashboard .insight-card::before {{content:''; position:absolute; inset:0 auto 0 0; width:5px; background:var(--muted)}}
     #dak-dashboard .insight-card.good::before {{background:var(--good)}}
     #dak-dashboard .insight-card.bad::before {{background:var(--bad)}}
+    #dak-dashboard .insight-head {{display:flex; align-items:baseline; justify-content:space-between; gap:12px}}
     #dak-dashboard .insight-kicker {{font-weight:800; color:var(--navy); font-size:14px}}
+    #dak-dashboard .insight-period {{flex:0 0 auto; color:var(--muted); font-size:12px; font-weight:700}}
     #dak-dashboard .insight-value {{font-size:25px; font-weight:800; color:var(--navy); margin:7px 0 5px}}
     #dak-dashboard .insight-value span {{font-size:12px; font-weight:400; color:var(--muted)}}
     #dak-dashboard .insight-card p {{margin:0; color:var(--muted); line-height:1.45; font-size:13px}}
@@ -1521,6 +1526,9 @@ def validate(data, html):
     assert "share/'+chartCanvas.id+'/'" in html
     assert "share-target" in html
     assert "Det vigtigste lige nu" in html
+    assert html.count('class="insight-period"') == 3
+    assert 'class="insight-kicker">Lønmodtagere' in html
+    assert 'class="insight-kicker">Forbrugertilliden' not in html
     assert 'class="section-nav"' in html
     assert html.count("data-collapsible data-preview") == 4
     assert "Hent data (CSV)" in html
