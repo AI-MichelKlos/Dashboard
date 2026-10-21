@@ -1,0 +1,35 @@
+name: Seniorer - kommuner og alder
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths: ["scripts/fetch_senior_dashboard.py", ".github/workflows/senior-dashboard.yml"]
+  schedule:
+    - cron: "42 8 * * 1-5"
+permissions:
+  contents: write
+concurrency:
+  group: senior-dashboard-data
+  cancel-in-progress: false
+jobs:
+  data:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      JOBINDSATS_API_TOKEN: ${{ secrets.API_ADGANG }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Hent seniorernes arbejdsmarkedsstatus
+        run: python scripts/fetch_senior_dashboard.py
+      - name: Gem kontrollerede data
+        run: |
+          git add data/senior-dashboard*.json
+          if git diff --cached --quiet; then exit 0; fi
+          git config user.name "Dashboard automation"
+          git config user.email "dashboard-automation@users.noreply.github.com"
+          git commit -m "Opdater seniorernes arbejdsmarkedsstatus"
+          git pull --rebase
+          git push
