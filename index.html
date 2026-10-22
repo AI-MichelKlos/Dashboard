@@ -88,9 +88,6 @@
     #dak-dashboard .chart-card.wide .chart-wrap {height:430px}
     #dak-dashboard .chart-card.tall .chart-wrap {height:650px}
     #dak-dashboard .source {font-size:11px; color:var(--muted); line-height:1.5; margin:12px 0 0; padding-top:10px; border-top:1px solid var(--line)}
-    #dak-dashboard .chart-toggle-row {display:flex; justify-content:flex-end; margin:10px 0 0}
-    #dak-dashboard .chart-toggle {background:transparent; min-height:40px}
-    #dak-dashboard .chart-card[hidden] {display:none}
     #dak-dashboard table {width:100%; border-collapse:collapse; margin-top:5px}
     #dak-dashboard th, #dak-dashboard td {border-bottom:1px solid var(--line); padding:8px 4px; text-align:left; font-size:14px}
     #dak-dashboard td {text-align:right; font-weight:700; color:var(--navy)}
@@ -226,8 +223,7 @@
         <div class="kpi-deltas"><div class="delta-row"><span class="delta-bad">▲ 87<span class="change-meaning">værre</span></span><span class="compare-label"> siden jun. 2026</span></div><div class="delta-row"><span class="delta-bad">▲ 167<span class="change-meaning">værre</span></span><span class="compare-label"> siden jul. 2025</span></div></div>
         <div class="kpi-note">Heraf 322 med 1 års dimittendret i jul. 2026</div>
       </article></div>
-  <div class="chart-toggle-row"><button type="button" class="chart-toggle" aria-expanded="false">Vis alle grafer</button></div>
-  <div class="chart-grid" data-collapsible data-preview="4">
+  <div class="chart-grid">
     <article class="chart-card"><h3>Bruttoledighed</h3><div class="chart-wrap"><canvas id="unemploymentTotal"></canvas></div><p class="source">Kilde: Danmarks Statistik og Jobindsats</p></article>
     <article class="chart-card"><h3>Ledighedsprocent</h3><div class="chart-wrap"><canvas id="unemploymentRate"></canvas></div><p class="source">Kilde: Danmarks Statistik og Jobindsats</p></article>
     <article class="chart-card"><h3>Ledige fordelt på ydelse</h3><div class="chart-wrap"><canvas id="unemploymentType"></canvas></div><p class="source">Kilde: Jobindsats</p></article>
@@ -256,8 +252,7 @@
         <div class="kpi-deltas"><div class="delta-row"><span class="delta-good">▼ 9.578<span class="change-meaning">bedre</span></span><span class="compare-label"> siden mar. 2026</span></div><div class="delta-row"><span class="delta-bad">▲ 1.018<span class="change-meaning">værre</span></span><span class="compare-label"> siden jun. 2025</span></div></div>
         <div class="kpi-note">FRR: 22,0 pct. i jun. 2026</div>
       </article></div>
-  <div class="chart-toggle-row"><button type="button" class="chart-toggle" aria-expanded="false">Vis alle grafer</button></div>
-  <div class="chart-grid" data-collapsible data-preview="2">
+  <div class="chart-grid">
     <article class="chart-card"><h3>Arbejdsfordelinger under og over 13 uger</h3><div class="chart-wrap"><canvas id="workSharing"></canvas></div><p class="source">Kilde: Jobindsats</p></article>
     <article class="chart-card"><h3>Forgæves rekrutteringsforsøg over tid</h3><div class="chart-wrap"><canvas id="failedRecruitment"></canvas></div><p class="source">Kilde: Jobindsats og STAR. FR omfatter både ikke besatte rekrutteringer og rekrutteringer besat med en anden profil.</p></article>
     <article class="chart-card wide tall"><h3>15 stillinger med flest forgæves rekrutteringsforsøg</h3><div class="chart-wrap"><canvas id="topRecruitmentOccupations"></canvas></div><p class="source">Kilde: Jobindsats og STAR. Seneste surveyperiode: jun. 2026.</p></article>
@@ -286,8 +281,7 @@
         <div class="kpi-deltas"><div class="delta-row"><span class="delta-bad">▲ 0,2<span class="change-meaning">værre</span></span><span class="compare-label"> siden aug. 2026</span></div><div class="delta-row"><span class="delta-neutral">● 0,0<span class="change-meaning">uændret</span></span><span class="compare-label"> siden sep. 2025</span></div></div>
         
       </article></div>
-  <div class="chart-toggle-row"><button type="button" class="chart-toggle" aria-expanded="false">Vis alle grafer</button></div>
-  <div class="chart-grid" data-collapsible data-preview="2">
+  <div class="chart-grid">
     <article class="chart-card"><h3>Forbrugertillid</h3><div class="chart-wrap"><canvas id="confidence"></canvas></div><p class="source">Kilde: Danmarks Statistik</p></article>
     <article class="chart-card"><h3>Erhvervstillid</h3><div class="chart-wrap"><canvas id="business"></canvas></div><p class="source">Kilde: Danmarks Statistik</p></article>
     <article class="chart-card wide"><h3>Inflation</h3><div class="chart-wrap"><canvas id="inflation"></canvas></div><p class="source">Kilde: Danmarks Statistik</p></article>
@@ -305,8 +299,7 @@
           <div class="kpi-period">jun. 2026</div>
           <table><tbody><tr><th>Danmark</th><td>-12,0</td></tr><tr><th>EU-27</th><td>-17,0</td></tr><tr><th>Tyskland</th><td>-14,6</td></tr><tr><th>Sverige</th><td>-5,1</td></tr><tr><th>Frankrig</th><td>-19,3</td></tr></tbody></table>
         </article></div>
-  <div class="chart-toggle-row"><button type="button" class="chart-toggle" aria-expanded="false">Vis alle grafer</button></div>
-  <div class="chart-grid" data-collapsible data-preview="1">
+  <div class="chart-grid">
     <article class="chart-card wide"><h3>Ledighed i udvalgte lande</h3><div class="chart-wrap"><canvas id="eurostatTrend"></canvas></div><p class="source">Kilde: Eurostat</p></article>
     <article class="chart-card wide tall"><h3>Ledighed i Europa, seneste kvartal</h3><div class="chart-wrap"><canvas id="eurostatLatest"></canvas></div><p class="source">Kilde: Eurostat</p></article>
     <article class="chart-card wide"><h3>Forbrugertillid i udvalgte lande</h3><div class="chart-wrap"><canvas id="euConfidence"></canvas></div><p class="source">Kilde: Europa-Kommissionen, DG ECFIN</p></article>
@@ -789,25 +782,6 @@ function focusSharedChart(){
 window.addEventListener('hashchange',focusSharedChart);
 setTimeout(focusSharedChart,150);
 
-function setupChartToggles(){
-  document.querySelectorAll('#dak-dashboard .chart-grid[data-collapsible]').forEach(grid=>{
-    const cards=[...grid.querySelectorAll('.chart-card')];
-    const row=grid.previousElementSibling; const button=row?.querySelector('.chart-toggle');
-    if(!button || !cards.length) return;
-    const desktopPreview=Number(grid.dataset.preview||2);
-    const preview=matchMedia('(max-width:560px)').matches?Math.min(2,desktopPreview):desktopPreview;
-    if(cards.length<=preview){row.hidden=true;return;}
-    let expanded=false;
-    const apply=()=>{
-      cards.forEach((card,index)=>card.hidden=!expanded && index>=preview);
-      button.textContent=expanded?'Vis færre grafer':`Vis alle ${cards.length} grafer`;
-      button.setAttribute('aria-expanded',String(expanded));
-      if(expanded) cards.forEach(card=>{const canvas=card.querySelector('canvas');if(canvas&&charts[canvas.id])charts[canvas.id].resize();});
-    };
-    button.addEventListener('click',()=>{expanded=!expanded;apply();}); apply();
-  });
-}
-
 window.setPeriod=function(n,button){
   document.querySelectorAll('#dak-dashboard [data-months]').forEach(el=>{el.classList.remove('active');el.setAttribute('aria-pressed','false');});
   if(button){button.classList.add('active');button.setAttribute('aria-pressed','true');}
@@ -816,7 +790,6 @@ window.setPeriod=function(n,button){
 };
 drawAll(60);
 updateChartInsights();
-setupChartToggles();
 })();
 </script>
 <script data-goatcounter="https://arbejdsmarkedsoverblikket.goatcounter.com/count"
