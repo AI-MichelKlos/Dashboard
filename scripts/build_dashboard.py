@@ -852,9 +852,6 @@ def build_html(data):
     #dak-dashboard .chart-card.wide .chart-wrap {{height:430px}}
     #dak-dashboard .chart-card.tall .chart-wrap {{height:650px}}
     #dak-dashboard .source {{font-size:11px; color:var(--muted); line-height:1.5; margin:12px 0 0; padding-top:10px; border-top:1px solid var(--line)}}
-    #dak-dashboard .chart-toggle-row {{display:flex; justify-content:flex-end; margin:10px 0 0}}
-    #dak-dashboard .chart-toggle {{background:transparent; min-height:40px}}
-    #dak-dashboard .chart-card[hidden] {{display:none}}
     #dak-dashboard table {{width:100%; border-collapse:collapse; margin-top:5px}}
     #dak-dashboard th, #dak-dashboard td {{border-bottom:1px solid var(--line); padding:8px 4px; text-align:left; font-size:14px}}
     #dak-dashboard td {{text-align:right; font-weight:700; color:var(--navy)}}
@@ -910,8 +907,7 @@ def build_html(data):
 
   <h2 id="ledighed">Ledighed og beskæftigelse</h2>
   <div class="kpi-grid">{''.join(kpi_cards)}</div>
-  <div class="chart-toggle-row"><button type="button" class="chart-toggle" aria-expanded="false">Vis alle grafer</button></div>
-  <div class="chart-grid" data-collapsible data-preview="4">
+  <div class="chart-grid">
     <article class="chart-card"><h3>Bruttoledighed</h3><div class="chart-wrap"><canvas id="unemploymentTotal"></canvas></div><p class="source">Kilde: Danmarks Statistik og Jobindsats</p></article>
     <article class="chart-card"><h3>Ledighedsprocent</h3><div class="chart-wrap"><canvas id="unemploymentRate"></canvas></div><p class="source">Kilde: Danmarks Statistik og Jobindsats</p></article>
     <article class="chart-card"><h3>Ledige fordelt på ydelse</h3><div class="chart-wrap"><canvas id="unemploymentType"></canvas></div><p class="source">Kilde: Jobindsats</p></article>
@@ -926,8 +922,7 @@ def build_html(data):
   <h2 id="rekruttering">Rekruttering og arbejdsfordeling</h2>
   <p class="intro">Udviklingen i arbejdsfordelinger samt virksomhedernes forgæves rekrutteringsforsøg på baggrund af STARs rekrutteringssurvey.</p>
   <div class="kpi-grid dynamics">{''.join(dynamics_cards)}</div>
-  <div class="chart-toggle-row"><button type="button" class="chart-toggle" aria-expanded="false">Vis alle grafer</button></div>
-  <div class="chart-grid" data-collapsible data-preview="2">
+  <div class="chart-grid">
     <article class="chart-card"><h3>Arbejdsfordelinger under og over 13 uger</h3><div class="chart-wrap"><canvas id="workSharing"></canvas></div><p class="source">Kilde: Jobindsats</p></article>
     <article class="chart-card"><h3>Forgæves rekrutteringsforsøg over tid</h3><div class="chart-wrap"><canvas id="failedRecruitment"></canvas></div><p class="source">Kilde: Jobindsats og STAR. FR omfatter både ikke besatte rekrutteringer og rekrutteringer besat med en anden profil.</p></article>
     <article class="chart-card wide tall"><h3>15 stillinger med flest forgæves rekrutteringsforsøg</h3><div class="chart-wrap"><canvas id="topRecruitmentOccupations"></canvas></div><p class="source">Kilde: Jobindsats og STAR. Seneste surveyperiode: {fmt_period(data["failedRecruitment"]["topPeriod"])}.</p></article>
@@ -935,8 +930,7 @@ def build_html(data):
 
   <h2 id="samfundsoekonomi">Samfundsøkonomi</h2>
   <div class="kpi-grid economy">{''.join(economy_cards)}</div>
-  <div class="chart-toggle-row"><button type="button" class="chart-toggle" aria-expanded="false">Vis alle grafer</button></div>
-  <div class="chart-grid" data-collapsible data-preview="2">
+  <div class="chart-grid">
     <article class="chart-card"><h3>Forbrugertillid</h3><div class="chart-wrap"><canvas id="confidence"></canvas></div><p class="source">Kilde: Danmarks Statistik</p></article>
     <article class="chart-card"><h3>Erhvervstillid</h3><div class="chart-wrap"><canvas id="business"></canvas></div><p class="source">Kilde: Danmarks Statistik</p></article>
     <article class="chart-card wide"><h3>Inflation</h3><div class="chart-wrap"><canvas id="inflation"></canvas></div><p class="source">Kilde: Danmarks Statistik</p></article>
@@ -944,8 +938,7 @@ def build_html(data):
 
   <h2 id="internationalt">Internationalt</h2>
   <div class="kpi-grid international">{international_table(data, "eurostat")}{international_table(data, "confidence")}</div>
-  <div class="chart-toggle-row"><button type="button" class="chart-toggle" aria-expanded="false">Vis alle grafer</button></div>
-  <div class="chart-grid" data-collapsible data-preview="1">
+  <div class="chart-grid">
     <article class="chart-card wide"><h3>Ledighed i udvalgte lande</h3><div class="chart-wrap"><canvas id="eurostatTrend"></canvas></div><p class="source">Kilde: Eurostat</p></article>
     <article class="chart-card wide tall"><h3>Ledighed i Europa, seneste kvartal</h3><div class="chart-wrap"><canvas id="eurostatLatest"></canvas></div><p class="source">Kilde: Eurostat</p></article>
     <article class="chart-card wide"><h3>Forbrugertillid i udvalgte lande</h3><div class="chart-wrap"><canvas id="euConfidence"></canvas></div><p class="source">Kilde: Europa-Kommissionen, DG ECFIN</p></article>
@@ -1428,25 +1421,6 @@ function focusSharedChart(){{
 window.addEventListener('hashchange',focusSharedChart);
 setTimeout(focusSharedChart,150);
 
-function setupChartToggles(){{
-  document.querySelectorAll('#dak-dashboard .chart-grid[data-collapsible]').forEach(grid=>{{
-    const cards=[...grid.querySelectorAll('.chart-card')];
-    const row=grid.previousElementSibling; const button=row?.querySelector('.chart-toggle');
-    if(!button || !cards.length) return;
-    const desktopPreview=Number(grid.dataset.preview||2);
-    const preview=matchMedia('(max-width:560px)').matches?Math.min(2,desktopPreview):desktopPreview;
-    if(cards.length<=preview){{row.hidden=true;return;}}
-    let expanded=false;
-    const apply=()=>{{
-      cards.forEach((card,index)=>card.hidden=!expanded && index>=preview);
-      button.textContent=expanded?'Vis færre grafer':`Vis alle ${{cards.length}} grafer`;
-      button.setAttribute('aria-expanded',String(expanded));
-      if(expanded) cards.forEach(card=>{{const canvas=card.querySelector('canvas');if(canvas&&charts[canvas.id])charts[canvas.id].resize();}});
-    }};
-    button.addEventListener('click',()=>{{expanded=!expanded;apply();}}); apply();
-  }});
-}}
-
 window.setPeriod=function(n,button){{
   document.querySelectorAll('#dak-dashboard [data-months]').forEach(el=>{{el.classList.remove('active');el.setAttribute('aria-pressed','false');}});
   if(button){{button.classList.add('active');button.setAttribute('aria-pressed','true');}}
@@ -1455,7 +1429,6 @@ window.setPeriod=function(n,button){{
 }};
 drawAll(60);
 updateChartInsights();
-setupChartToggles();
 }})();
 </script>
 <script data-goatcounter="https://arbejdsmarkedsoverblikket.goatcounter.com/count"
@@ -1530,7 +1503,13 @@ def validate(data, html):
     assert 'class="insight-kicker">Lønmodtagere' in html
     assert 'class="insight-kicker">Forbrugertilliden' not in html
     assert 'class="section-nav"' in html
-    assert html.count("data-collapsible data-preview") == 4
+    assert html.count('class="chart-grid"') == 4
+    assert 'chart-toggle' not in html
+    assert 'data-collapsible' not in html
+    assert 'data-preview' not in html
+    assert 'setupChartToggles' not in html
+    assert 'Vis færre grafer' not in html
+    assert 'Vis alle grafer' not in html
     assert "Hent data (CSV)" in html
     assert "updateChartInsights();" in html
     assert "aria-pressed=\"true\"" in html
