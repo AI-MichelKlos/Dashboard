@@ -1,8 +1,8 @@
 {
   "meta": {
-    "updated": "31. oktober 2026",
+    "updated": "1. november 2026",
     "sourceFile": "Samlet overblik.xlsx",
-    "retrievedAt": "2026-10-31",
+    "retrievedAt": "2026-11-01",
     "sourceRegister": {
       "unemployment": {
         "source": "Jobindsats API v3",
@@ -86,7 +86,7 @@
         "seasonalAdjustment": "sæsonkorrigeret",
         "sourceUpdated": "2026-10-21T06:00:00Z",
         "latestPeriod": "2026M08",
-        "fetchedAt": "2026-10-31T14:39:02+01:00"
+        "fetchedAt": "2026-11-01T15:15:49+01:00"
       },
       "bankruptcies": {
         "source": "Danmarks Statistik",
@@ -102,7 +102,7 @@
         "seasonalAdjustment": "kun serie A1",
         "sourceUpdated": "2026-10-06T06:00:00Z",
         "latestPeriod": "2026M09",
-        "fetchedAt": "2026-10-31T14:39:02+01:00"
+        "fetchedAt": "2026-11-01T15:15:49+01:00"
       },
       "consumerConfidence": {
         "source": "Danmarks Statistik",
@@ -116,7 +116,7 @@
         "seasonalAdjustment": "ikke oplyst",
         "sourceUpdated": "2026-10-22T06:00:00Z",
         "latestPeriod": "2026M10",
-        "fetchedAt": "2026-10-31T14:39:02+01:00"
+        "fetchedAt": "2026-11-01T15:15:49+01:00"
       },
       "jobindsats": {
         "source": "Jobindsats",
@@ -154,7 +154,7 @@
         "seasonalAdjustment": "ikke relevant",
         "sourceUpdated": "2026-10-12T06:00:00Z",
         "latestPeriod": "2026M09",
-        "fetchedAt": "2026-10-31T14:39:15+01:00"
+        "fetchedAt": "2026-11-01T15:16:05+01:00"
       }
     },
     "updateStatus": {
@@ -178,7 +178,7 @@
       "failed": [
         "Forgæves rekrutteringsforsøg: Kunne ikke finde kolonnen med ('forgaeves', 'rekrutteringsforsoeg'). Tilgængelige kolonner: ['Periode', 'Område', 'Jobopslag', 'Andel ubesatte rekrutteringsforsøg', 'Antal ubesatte rekrutteringsforsøg', 'Andel rekrutteringsforsøg besat med manglende kvalifikationer', 'Antal rekrutteringsforsøg besat med manglende kvalifikationer', 'Rekrutteringer', 'Rekrutteringsforsøg', 'Manglende kvalifikationer, erhvervserfaring', 'Manglende kvalifikationer, formel uddannelse', 'Manglende kvalifikationer, efter- og videreuddannelse', 'Manglende kvalifikationer, personlige/sociale kvalifikationer', 'Manglende kvalifikationer, sprogkompetencer', 'Manglende kvalifikationer, særlige faglige kvalifikationer', 'Manglende kvalifikationer, andre kvalifikationer']"
       ],
-      "checkedAt": "2026-10-31T14:39:27+01:00"
+      "checkedAt": "2026-11-01T15:16:22+01:00"
     },
     "jobindsatsUpdateStatus": {
       "successful": [
@@ -201,21 +201,21 @@
       "workSharing": {
         "state": "ok",
         "latestPeriod": "2026M09",
-        "checkedAt": "2026-10-31T14:39:27+01:00",
+        "checkedAt": "2026-11-01T15:16:22+01:00",
         "source": "Jobindsats API v3",
         "dataset": "y25i06"
       },
       "expiredBenefits": {
         "state": "ok",
         "latestPeriod": "2026M07",
-        "checkedAt": "2026-10-31T14:39:27+01:00",
+        "checkedAt": "2026-11-01T15:16:22+01:00",
         "source": "Jobindsats API v3",
         "dataset": "y01ud01di"
       },
       "failedRecruitment": {
         "state": "stale",
         "latestPeriod": "2026M06",
-        "checkedAt": "2026-10-31T14:39:27+01:00",
+        "checkedAt": "2026-11-01T15:16:22+01:00",
         "source": "Jobindsats API v3",
         "dataset": "y25i14"
       }
