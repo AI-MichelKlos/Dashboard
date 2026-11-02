@@ -1,8 +1,8 @@
 {
   "meta": {
-    "updated": "1. november 2026",
+    "updated": "2. november 2026",
     "sourceFile": "Samlet overblik.xlsx",
-    "retrievedAt": "2026-11-01",
+    "retrievedAt": "2026-11-02",
     "sourceRegister": {
       "unemployment": {
         "source": "Jobindsats API v3",
@@ -86,7 +86,7 @@
         "seasonalAdjustment": "sæsonkorrigeret",
         "sourceUpdated": "2026-10-21T06:00:00Z",
         "latestPeriod": "2026M08",
-        "fetchedAt": "2026-11-01T15:15:49+01:00"
+        "fetchedAt": "2026-11-02T10:12:01+01:00"
       },
       "bankruptcies": {
         "source": "Danmarks Statistik",
@@ -102,7 +102,7 @@
         "seasonalAdjustment": "kun serie A1",
         "sourceUpdated": "2026-10-06T06:00:00Z",
         "latestPeriod": "2026M09",
-        "fetchedAt": "2026-11-01T15:15:49+01:00"
+        "fetchedAt": "2026-11-02T10:12:01+01:00"
       },
       "consumerConfidence": {
         "source": "Danmarks Statistik",
@@ -116,7 +116,7 @@
         "seasonalAdjustment": "ikke oplyst",
         "sourceUpdated": "2026-10-22T06:00:00Z",
         "latestPeriod": "2026M10",
-        "fetchedAt": "2026-11-01T15:15:49+01:00"
+        "fetchedAt": "2026-11-02T10:12:01+01:00"
       },
       "jobindsats": {
         "source": "Jobindsats",
@@ -154,11 +154,11 @@
         "seasonalAdjustment": "ikke relevant",
         "sourceUpdated": "2026-10-12T06:00:00Z",
         "latestPeriod": "2026M09",
-        "fetchedAt": "2026-11-01T15:16:05+01:00"
+        "fetchedAt": "2026-11-02T10:12:23+01:00"
       }
     },
     "updateStatus": {
-      "state": "partial",
+      "state": "ok",
       "successful": [
         "Danmarks Statistik - lønmodtagere (LBESK104)",
         "Danmarks Statistik - konkurser (KONK3)",
@@ -173,12 +173,11 @@
         "Langtidsledige på kontanthjælp",
         "Varslede afskedigelser",
         "Arbejdsfordelinger",
-        "Opbrugt dagpengeret"
+        "Opbrugt dagpengeret",
+        "Forgæves rekrutteringsforsøg"
       ],
-      "failed": [
-        "Forgæves rekrutteringsforsøg: Kunne ikke finde kolonnen med ('forgaeves', 'rekrutteringsforsoeg'). Tilgængelige kolonner: ['Periode', 'Område', 'Jobopslag', 'Andel ubesatte rekrutteringsforsøg', 'Antal ubesatte rekrutteringsforsøg', 'Andel rekrutteringsforsøg besat med manglende kvalifikationer', 'Antal rekrutteringsforsøg besat med manglende kvalifikationer', 'Rekrutteringer', 'Rekrutteringsforsøg', 'Manglende kvalifikationer, erhvervserfaring', 'Manglende kvalifikationer, formel uddannelse', 'Manglende kvalifikationer, efter- og videreuddannelse', 'Manglende kvalifikationer, personlige/sociale kvalifikationer', 'Manglende kvalifikationer, sprogkompetencer', 'Manglende kvalifikationer, særlige faglige kvalifikationer', 'Manglende kvalifikationer, andre kvalifikationer']"
-      ],
-      "checkedAt": "2026-11-01T15:16:22+01:00"
+      "failed": [],
+      "checkedAt": "2026-11-02T10:12:40+01:00"
     },
     "jobindsatsUpdateStatus": {
       "successful": [
@@ -191,31 +190,30 @@
         "Langtidsledige på kontanthjælp",
         "Varslede afskedigelser",
         "Arbejdsfordelinger",
-        "Opbrugt dagpengeret"
+        "Opbrugt dagpengeret",
+        "Forgæves rekrutteringsforsøg"
       ],
-      "failed": [
-        "Forgæves rekrutteringsforsøg: Kunne ikke finde kolonnen med ('forgaeves', 'rekrutteringsforsoeg'). Tilgængelige kolonner: ['Periode', 'Område', 'Jobopslag', 'Andel ubesatte rekrutteringsforsøg', 'Antal ubesatte rekrutteringsforsøg', 'Andel rekrutteringsforsøg besat med manglende kvalifikationer', 'Antal rekrutteringsforsøg besat med manglende kvalifikationer', 'Rekrutteringer', 'Rekrutteringsforsøg', 'Manglende kvalifikationer, erhvervserfaring', 'Manglende kvalifikationer, formel uddannelse', 'Manglende kvalifikationer, efter- og videreuddannelse', 'Manglende kvalifikationer, personlige/sociale kvalifikationer', 'Manglende kvalifikationer, sprogkompetencer', 'Manglende kvalifikationer, særlige faglige kvalifikationer', 'Manglende kvalifikationer, andre kvalifikationer']"
-      ]
+      "failed": []
     },
     "sourceStatus": {
       "workSharing": {
         "state": "ok",
         "latestPeriod": "2026M09",
-        "checkedAt": "2026-11-01T15:16:22+01:00",
+        "checkedAt": "2026-11-02T10:12:40+01:00",
         "source": "Jobindsats API v3",
         "dataset": "y25i06"
       },
       "expiredBenefits": {
         "state": "ok",
         "latestPeriod": "2026M07",
-        "checkedAt": "2026-11-01T15:16:22+01:00",
+        "checkedAt": "2026-11-02T10:12:40+01:00",
         "source": "Jobindsats API v3",
         "dataset": "y01ud01di"
       },
       "failedRecruitment": {
-        "state": "stale",
-        "latestPeriod": "2026M06",
-        "checkedAt": "2026-11-01T15:16:22+01:00",
+        "state": "ok",
+        "latestPeriod": "2026M09",
+        "checkedAt": "2026-11-02T10:12:40+01:00",
         "source": "Jobindsats API v3",
         "dataset": "y25i14"
       }
@@ -8996,69 +8994,70 @@
       "2025M09",
       "2025M12",
       "2026M03",
-      "2026M06"
+      "2026M06",
+      "2026M09"
     ],
-    "topPeriod": "2026M06",
+    "topPeriod": "2026M09",
     "topOccupations": [
       {
-        "name": "Butiksassistent",
-        "value": 4345
-      },
-      {
         "name": "Social- og sundhedshjælper",
-        "value": 3949
-      },
-      {
-        "name": "Lager- og logistikmedarbejder",
-        "value": 3489
+        "value": 3123
       },
       {
         "name": "Pædagog",
-        "value": 3436
+        "value": 2372
       },
       {
-        "name": "Rengøringsassistent",
-        "value": 2562
-      },
-      {
-        "name": "Kontormedhjælper",
-        "value": 1867
-      },
-      {
-        "name": "Folkeskolelærer",
-        "value": 1771
-      },
-      {
-        "name": "Sygeplejerske",
-        "value": 1613
-      },
-      {
-        "name": "Elektriker",
-        "value": 1513
-      },
-      {
-        "name": "Butiksmedhjælper",
-        "value": 1466
+        "name": "Lager- og logistikmedarbejder",
+        "value": 1669
       },
       {
         "name": "Social- og sundhedsassistent",
-        "value": 1385
+        "value": 1137
       },
       {
-        "name": "Kok",
-        "value": 1320
+        "name": "Sygeplejerske",
+        "value": 1132
       },
       {
         "name": "Specialarbejder, jord og beton",
-        "value": 1299
+        "value": 1059
+      },
+      {
+        "name": "Butiksassistent",
+        "value": 1035
+      },
+      {
+        "name": "Elektriker",
+        "value": 1000
+      },
+      {
+        "name": "Rengøringsassistent",
+        "value": 999
+      },
+      {
+        "name": "Kok",
+        "value": 844
+      },
+      {
+        "name": "Murer",
+        "value": 813
+      },
+      {
+        "name": "Handicaphjælper",
+        "value": 786
       },
       {
         "name": "Tømrer",
-        "value": 1258
+        "value": 749
       },
       {
         "name": "Chauffør, fragt, distribution, blandet kørsel",
-        "value": 1177
+        "value": 728
+      },
+      {
+        "name": "Anlægsgartner",
+        "value": 676
       }
     ],
     "attempts": [
@@ -9069,29 +9068,30 @@
       45732,
       35461,
       55964,
-      79763,
-      103535,
-      99385,
-      145605,
-      200031,
-      177153,
-      172245,
-      170316,
-      152019,
-      145553,
-      110845,
-      110529,
-      119519,
-      104553,
-      94322,
-      109146,
-      118202,
-      105648,
-      94765,
-      100948,
-      111847,
-      105361,
-      95783
+      34662,
+      56061,
+      57928,
+      81604,
+      116716,
+      101587,
+      103190,
+      101802,
+      80717,
+      76283,
+      51744,
+      51579,
+      58513,
+      48452,
+      43534,
+      50125,
+      52449,
+      46156,
+      41653,
+      46350,
+      50721,
+      46717,
+      45961,
+      49615
     ],
     "rate": [
       23,
@@ -9101,29 +9101,30 @@
       22,
       20,
       18.0,
-      22.0,
-      24.0,
-      24.0,
-      32.0,
-      34.0,
-      30.0,
-      31.0,
-      31.0,
-      28.0,
-      28.0,
-      24.0,
-      24.0,
-      25.0,
-      23.0,
-      22.0,
-      24.0,
-      25.0,
-      23.0,
-      22.0,
-      23.0,
-      25.0,
-      24.0,
-      22.0
+      9.0,
+      13.0,
+      14.0,
+      18.0,
+      20.0,
+      17.0,
+      19.0,
+      18.0,
+      15.0,
+      15.0,
+      11.0,
+      11.0,
+      12.0,
+      10.0,
+      10.0,
+      11.0,
+      11.0,
+      10.0,
+      10.0,
+      11.0,
+      11.0,
+      10.0,
+      11.0,
+      11.0
     ]
   }
 }
