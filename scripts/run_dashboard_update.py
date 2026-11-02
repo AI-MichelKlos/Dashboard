@@ -422,6 +422,23 @@ def find_record_column(records: list[dict], include: tuple[str, ...], exclude: t
     )
 
 
+def find_record_column_any(
+    records: list[dict],
+    alternatives: tuple[tuple[str, ...], ...],
+    exclude: tuple[str, ...] = (),
+) -> str:
+    for include in alternatives:
+        try:
+            return find_record_column(records, include, exclude)
+        except RuntimeError:
+            continue
+    columns = list(records[0]) if records else []
+    raise RuntimeError(
+        f"Kunne ikke finde en kolonne med nogen af {alternatives}. "
+        f"Tilgængelige kolonner: {columns}"
+    )
+
+
 def merge_work_sharing(target: dict, records: list[dict]) -> None:
     type_column = find_record_column(records, ("arbejdsfordelingstype",))
     value_column = find_record_column(records, ("antal", "person"))
@@ -506,14 +523,20 @@ def update_failed_recruitment(
     national_records: list[dict],
     occupation_records: list[dict],
 ) -> None:
-    attempts_column = find_record_column(
+    attempts_column = find_record_column_any(
         national_records,
-        ("forgaeves", "rekrutteringsforsoeg"),
-        ("rate",),
+        (
+            ("ubesatte", "rekrutteringsforsoeg"),
+            ("forgaeves", "rekrutteringsforsoeg"),
+        ),
+        ("andel", "rate"),
     )
-    rate_column = find_record_column(
+    rate_column = find_record_column_any(
         national_records,
-        ("forgaeves", "rekrutteringsrate"),
+        (
+            ("andel", "ubesatte", "rekrutteringsforsoeg"),
+            ("forgaeves", "rekrutteringsrate"),
+        ),
     )
     previous_attempts = target.get("attempts", target.get("notFilled", []))
     previous_rate = target.get("rate", target.get("frr", []))
@@ -543,10 +566,13 @@ def update_failed_recruitment(
     target.pop("kpi", None)
 
     occupation_column = find_record_column(occupation_records, ("stillingsbetegn",))
-    occupation_attempts_column = find_record_column(
+    occupation_attempts_column = find_record_column_any(
         occupation_records,
-        ("forgaeves", "rekrutteringsforsoeg"),
-        ("rate",),
+        (
+            ("ubesatte", "rekrutteringsforsoeg"),
+            ("forgaeves", "rekrutteringsforsoeg"),
+        ),
+        ("andel", "rate"),
     )
     latest_period = max(str(record["Periode"]) for record in occupation_records)
     occupations = []
