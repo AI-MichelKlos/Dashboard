@@ -735,13 +735,13 @@ def build_html(data):
             "personer", 0, False, "Under og over 13 uger",
         ),
         card(
-            "Forgæves rekrutteringsforsøg",
+            "Ubesatte rekrutteringsforsøg",
             {
                 "labels": data["failedRecruitment"]["labels"],
                 "values": data["failedRecruitment"]["attempts"],
             },
             "forsøg", 0, False,
-            f"FRR: {fmt_number(recruitment_rate, 1)} pct. i {fmt_period(recruitment_period)}",
+            f"Andel ubesatte: {fmt_number(recruitment_rate, 1)} pct. i {fmt_period(recruitment_period)}",
         ),
     ]
     insight_cards = [
@@ -920,12 +920,12 @@ def build_html(data):
   </div>
 
   <h2 id="rekruttering">Rekruttering og arbejdsfordeling</h2>
-  <p class="intro">Udviklingen i arbejdsfordelinger samt virksomhedernes forgæves rekrutteringsforsøg på baggrund af STARs rekrutteringssurvey.</p>
+  <p class="intro">Udviklingen i arbejdsfordelinger samt virksomhedernes ubesatte rekrutteringsforsøg på baggrund af STARs rekrutteringssurvey.</p>
   <div class="kpi-grid dynamics">{''.join(dynamics_cards)}</div>
   <div class="chart-grid">
     <article class="chart-card"><h3>Arbejdsfordelinger under og over 13 uger</h3><div class="chart-wrap"><canvas id="workSharing"></canvas></div><p class="source">Kilde: Jobindsats</p></article>
-    <article class="chart-card"><h3>Forgæves rekrutteringsforsøg over tid</h3><div class="chart-wrap"><canvas id="failedRecruitment"></canvas></div><p class="source">Kilde: Jobindsats og STAR. FR omfatter både ikke besatte rekrutteringer og rekrutteringer besat med en anden profil.</p></article>
-    <article class="chart-card wide tall"><h3>15 stillinger med flest forgæves rekrutteringsforsøg</h3><div class="chart-wrap"><canvas id="topRecruitmentOccupations"></canvas></div><p class="source">Kilde: Jobindsats og STAR. Seneste surveyperiode: {fmt_period(data["failedRecruitment"]["topPeriod"])}.</p></article>
+    <article class="chart-card"><h3>Ubesatte rekrutteringsforsøg over tid</h3><div class="chart-wrap"><canvas id="failedRecruitment"></canvas></div><p class="source">Kilde: Jobindsats og STAR. Målingen viser rekrutteringsforsøg, som ikke blev besat.</p></article>
+    <article class="chart-card wide tall"><h3>15 stillinger med flest ubesatte rekrutteringsforsøg</h3><div class="chart-wrap"><canvas id="topRecruitmentOccupations"></canvas></div><p class="source">Kilde: Jobindsats og STAR. Seneste surveyperiode: {fmt_period(data["failedRecruitment"]["topPeriod"])}.</p></article>
   </div>
 
   <h2 id="samfundsoekonomi">Samfundsøkonomi</h2>
@@ -1069,19 +1069,19 @@ function stackedBarChart(id,labels,datasets){{
 function recruitmentChart(id,labels,attempts,rate){{
   const opts=commonOptions(0);
   opts.scales.y={{
-    beginAtZero:true,position:'left',title:{{display:true,text:'Forgæves rekrutteringsforsøg'}},
+    beginAtZero:true,position:'left',title:{{display:true,text:'Ubesatte rekrutteringsforsøg'}},
     ticks:{{callback:v=>dkNumber(v,0)}}
   }};
   opts.scales.y1={{
-    beginAtZero:true,position:'right',title:{{display:true,text:'FRR, pct.'}},
+    beginAtZero:true,position:'right',title:{{display:true,text:'Andel ubesatte, pct.'}},
     grid:{{drawOnChartArea:false}},ticks:{{callback:v=>dkNumber(v,1)+' %'}}
   }};
   opts.plugins.tooltip.callbacks.label=ctx=>ctx.dataset.yAxisID==='y1'
     ? ' '+ctx.dataset.label+': '+dkNumber(ctx.parsed.y,1)+' pct.'
     : ' '+ctx.dataset.label+': '+dkNumber(ctx.parsed.y,0);
   replaceChart(id,{{type:'bar',data:{{labels,datasets:[
-    {{label:'Forgæves rekrutteringsforsøg',data:attempts,backgroundColor:'rgba(154,91,52,.78)',borderColor:COLORS[0],borderWidth:1,borderRadius:2,yAxisID:'y'}},
-    {{type:'line',label:'FRR',data:rate,borderColor:COLORS[1],backgroundColor:COLORS[1],pointRadius:0,pointHoverRadius:4,borderWidth:2.5,tension:.18,yAxisID:'y1'}}
+    {{label:'Ubesatte rekrutteringsforsøg',data:attempts,backgroundColor:'rgba(154,91,52,.78)',borderColor:COLORS[0],borderWidth:1,borderRadius:2,yAxisID:'y'}},
+    {{type:'line',label:'Andel ubesatte',data:rate,borderColor:COLORS[1],backgroundColor:COLORS[1],pointRadius:0,pointHoverRadius:4,borderWidth:2.5,tension:.18,yAxisID:'y1'}}
   ]}},options:opts}});
 }}
 function horizontalValueBar(id,labels,values,label){{
@@ -1157,7 +1157,7 @@ function drawAll(n){{
     'topRecruitmentOccupations',
     DATA.failedRecruitment.topOccupations.map(item=>item.name),
     DATA.failedRecruitment.topOccupations.map(item=>item.value),
-    'Forgæves rekrutteringsforsøg'
+    'Ubesatte rekrutteringsforsøg'
   );
   s=sliced(DATA.confidence.labels,[DATA.confidence.value],n);
   lineChart('confidence',s.labels,[{{label:'Forbrugertillid',data:s.series[0]}}],1,undefined,{{value:0,label:'Neutral'}});
@@ -1232,7 +1232,7 @@ const CHART_MEANING={{
   vacancies:{{label:'Antallet af nyopslåede stillinger',goodIfUp:true}}, wages:{{label:'Antallet af lønmodtagere',goodIfUp:true}},
   notices:{{label:'Antallet af varslede personer',goodIfUp:false}}, bankruptcies:{{label:'Antallet af konkurser',goodIfUp:false}},
   expiredBenefits:{{label:'Antallet med opbrugt dagpengeret',goodIfUp:false}}, workSharing:{{label:'Arbejdsfordelinger',goodIfUp:false}},
-  failedRecruitment:{{label:'Forgæves rekrutteringsforsøg',goodIfUp:false}}, confidence:{{label:'Forbrugertilliden',goodIfUp:true}},
+  failedRecruitment:{{label:'Ubesatte rekrutteringsforsøg',goodIfUp:false}}, confidence:{{label:'Forbrugertilliden',goodIfUp:true}},
   business:{{label:'Erhvervstilliden',goodIfUp:true}}, inflation:{{label:'Inflationen',goodIfUp:false}},
   eurostatTrend:{{label:'Ledigheden i Danmark',goodIfUp:false}}, euConfidence:{{label:'Forbrugertilliden i Danmark',goodIfUp:true}}
 }};
@@ -1489,7 +1489,7 @@ def validate(data, html):
     assert "right.label+' (højre akse)'" in html
     assert "Arbejdsfordelinger under og over 13 uger" in html
     assert "Opbrugt dagpengeret fordelt på dimittendstatus" in html
-    assert "15 stillinger med flest forgæves rekrutteringsforsøg" in html
+    assert "15 stillinger med flest ubesatte rekrutteringsforsøg" in html
     assert html.count("Grafik og databehandling: Michel Klos") == 1
     assert "setupChartSharing();" in html
     assert "navigator.canShare" in html

@@ -698,16 +698,30 @@ def refresh_jobindsats(data):
             national_records,
             occupation_records,
         )
-        successes.append("Forgæves rekrutteringsforsøg")
+        data.setdefault("meta", {}).setdefault("sourceRegister", {}).setdefault(
+            "failedRecruitment", {}
+        ).update(
+            {
+                "source": "Jobindsats API v3",
+                "dataset": recruitment_table_id,
+                "unit": "antal ubesatte rekrutteringsforsøg og andel i pct.",
+                "seasonalAdjustment": "ikke relevant",
+                "note": (
+                    "Serien følger API-kolonnerne Antal ubesatte "
+                    "rekrutteringsforsøg og Andel ubesatte rekrutteringsforsøg."
+                ),
+            }
+        )
+        successes.append("Ubesatte rekrutteringsforsøg")
         print(
-            "Færdig: Forgæves rekrutteringsforsøg. "
+            "Færdig: Ubesatte rekrutteringsforsøg. "
             f"Jobindsats-tabel: {recruitment_table_id}.",
             flush=True,
         )
     except Exception as exc:
-        failures.append(f"Forgæves rekrutteringsforsøg: {exc}")
+        failures.append(f"Ubesatte rekrutteringsforsøg: {exc}")
         print(
-            f"ADVARSEL: Forgæves rekrutteringsforsøg blev ikke opdateret: {exc}",
+            f"ADVARSEL: Ubesatte rekrutteringsforsøg blev ikke opdateret: {exc}",
             flush=True,
         )
 
@@ -739,7 +753,7 @@ def refresh_jobindsats(data):
         "Varslede afskedigelser": "notices",
         "Arbejdsfordelinger": "workSharing",
         "Opbrugt dagpengeret": "expiredBenefits",
-        "Forgæves rekrutteringsforsøg": "failedRecruitment",
+        "Ubesatte rekrutteringsforsøg": "failedRecruitment",
     }
     for label, key in source_keys.items():
         if label in successes and key in data["meta"].get("sourceRegister", {}):
@@ -756,7 +770,7 @@ def refresh_jobindsats(data):
             data["expiredBenefits"],
         ),
         (
-            "Forgæves rekrutteringsforsøg",
+            "Ubesatte rekrutteringsforsøg",
             "failedRecruitment",
             recruitment_table_id or "automatisk opslag",
             data["failedRecruitment"],
@@ -770,6 +784,16 @@ def refresh_jobindsats(data):
             "source": "Jobindsats API v3",
             "dataset": dataset,
         }
+        if key == "failedRecruitment":
+            source_status[key].update(
+                {
+                    "definition": "Ubesatte rekrutteringsforsøg",
+                    "note": (
+                        "Serien følger de aktuelle Jobindsats-kolonner for "
+                        "antal og andel ubesatte rekrutteringsforsøg."
+                    ),
+                }
+            )
     data["meta"]["jobindsatsUpdateStatus"] = {
         "successful": successes,
         "failed": failures,
