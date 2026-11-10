@@ -103,7 +103,8 @@ jobs:
           set -e
           cat status/run.log || true
           if [ "$code" -eq 0 ]; then
-            printf 'status: ok\ntid_utc: %s\ndato_dk: %s\n' "$started" "$today" > status/last-run.txt
+            data_state="$(python -c 'import json; print(json.load(open("data/dashboard-data.json", encoding="utf-8")).get("meta", {}).get("updateStatus", {}).get("state", "ok"))')"
+            printf 'status: %s\ntid_utc: %s\ndato_dk: %s\n' "$data_state" "$started" "$today" > status/last-run.txt
           else
             message="$(tail -n 12 status/run.log | tr '\n' ' ' | sed 's/[[:space:]]\+/ /g')"
             printf 'status: fejl\ntid_utc: %s\ndato_dk: %s\ntrin: opdatering\nfejl: %s\n' "$started" "$today" "$message" > status/last-run.txt
@@ -152,7 +153,20 @@ jobs:
             git config user.name "Dashboard automation"
             git config user.email "dashboard-automation@users.noreply.github.com"
             git commit -m "Opdater dashboarddata, seniorfeed og status"
-            git push
+            pushed=false
+            for attempt in 1 2 3; do
+              if git push; then
+                pushed=true
+                break
+              fi
+              echo "Push fejlede i forsoeg $attempt. Henter nyeste main og proever igen."
+              git pull --rebase origin main
+              sleep $((attempt * 5))
+            done
+            if [ "$pushed" != "true" ]; then
+              echo "Kunne ikke publicere dashboardet efter 3 forsoeg."
+              exit 1
+            fi
           fi
 
       - name: Markér mislykket kørsel
