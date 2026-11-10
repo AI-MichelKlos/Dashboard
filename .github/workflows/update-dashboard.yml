@@ -23,7 +23,7 @@ permissions:
 
 concurrency:
   group: update-labour-market-dashboard
-  cancel-in-progress: false
+  cancel-in-progress: true
 
 jobs:
   update:
