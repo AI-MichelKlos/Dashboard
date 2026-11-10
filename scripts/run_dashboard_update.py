@@ -670,6 +670,47 @@ def refresh_jobindsats(data):
             },
         )
 
+        # Varslinger offentliggoeres som udgangspunkt den 7. hverdag i
+        # maaneden med den foregaaende maaned som ny periode. Et vellykket
+        # HTTP-kald maa derfor ikke i sig selv taelle som en vellykket
+        # opdatering, hvis den forventede periode mangler.
+        now_local = datetime.now(ZoneInfo("Europe/Copenhagen"))
+        business_days = 0
+        seventh_business_day = None
+        for day in range(1, 16):
+            candidate = now_local.replace(day=day).date()
+            if candidate.weekday() < 5:
+                business_days += 1
+                if business_days == 7:
+                    seventh_business_day = candidate
+                    break
+
+        if now_local.month == 1:
+            expected_year, expected_month = now_local.year - 1, 12
+        else:
+            expected_year, expected_month = now_local.year, now_local.month - 1
+        expected_period = f"{expected_year}M{expected_month:02d}"
+        latest_notice_period = max(
+            (str(record.get("Periode")) for record in records if record.get("Periode")),
+            default=None,
+        )
+
+        if (
+            seventh_business_day is not None
+            and now_local.date() >= seventh_business_day
+            and latest_notice_period is not None
+            and latest_notice_period < expected_period
+        ):
+            if "Varslede afskedigelser" in successes:
+                successes.remove("Varslede afskedigelser")
+            message = (
+                "Varslede afskedigelser: API-kaldet lykkedes, men seneste "
+                f"periode er {latest_notice_period}; forventet mindst {expected_period} "
+                "efter den 7. hverdag."
+            )
+            failures.append(message)
+            print(f"ADVARSEL: {message}", flush=True)
+
     records = fetch(
         "Arbejdsfordelinger",
         f"data/y25i06?{common}&hierarchy._nykom=/"
@@ -762,6 +803,7 @@ def refresh_jobindsats(data):
     now = datetime.now(ZoneInfo("Europe/Copenhagen")).isoformat(timespec="seconds")
     source_status = data.setdefault("meta", {}).setdefault("sourceStatus", {})
     for label, key, dataset, target in (
+        ("Varslede afskedigelser", "notices", "y25i05", data["notices"]),
         ("Arbejdsfordelinger", "workSharing", "y25i06", data["workSharing"]),
         (
             "Opbrugt dagpengeret",
