@@ -1,8 +1,8 @@
 {
   "meta": {
-    "updated": "9. november 2026",
+    "updated": "10. november 2026",
     "sourceFile": "Samlet overblik.xlsx",
-    "retrievedAt": "2026-11-09",
+    "retrievedAt": "2026-11-10",
     "sourceRegister": {
       "unemployment": {
         "source": "Jobindsats API v3",
@@ -87,7 +87,7 @@
         "seasonalAdjustment": "sæsonkorrigeret",
         "sourceUpdated": "2026-10-21T06:00:00Z",
         "latestPeriod": "2026M08",
-        "fetchedAt": "2026-11-09T10:10:44+01:00"
+        "fetchedAt": "2026-11-10T22:19:44+01:00"
       },
       "bankruptcies": {
         "source": "Danmarks Statistik",
@@ -103,7 +103,7 @@
         "seasonalAdjustment": "kun serie A1",
         "sourceUpdated": "2026-11-05T07:00:00Z",
         "latestPeriod": "2026M10",
-        "fetchedAt": "2026-11-09T10:10:44+01:00"
+        "fetchedAt": "2026-11-10T22:19:44+01:00"
       },
       "consumerConfidence": {
         "source": "Danmarks Statistik",
@@ -117,7 +117,7 @@
         "seasonalAdjustment": "ikke oplyst",
         "sourceUpdated": "2026-10-22T06:00:00Z",
         "latestPeriod": "2026M10",
-        "fetchedAt": "2026-11-09T10:10:44+01:00"
+        "fetchedAt": "2026-11-10T22:19:44+01:00"
       },
       "jobindsats": {
         "source": "Jobindsats",
@@ -153,9 +153,9 @@
         },
         "unit": "pct. år til år",
         "seasonalAdjustment": "ikke relevant",
-        "sourceUpdated": "2026-10-12T06:00:00Z",
-        "latestPeriod": "2026M09",
-        "fetchedAt": "2026-11-09T10:10:58+01:00"
+        "sourceUpdated": "2026-11-10T07:00:00Z",
+        "latestPeriod": "2026M10",
+        "fetchedAt": "2026-11-10T22:19:52+01:00"
       }
     },
     "updateStatus": {
@@ -178,7 +178,7 @@
         "Ubesatte rekrutteringsforsøg"
       ],
       "failed": [],
-      "checkedAt": "2026-11-09T10:11:23+01:00"
+      "checkedAt": "2026-11-10T22:20:08+01:00"
     },
     "jobindsatsUpdateStatus": {
       "successful": [
@@ -199,26 +199,33 @@
     "sourceStatus": {
       "workSharing": {
         "state": "ok",
-        "latestPeriod": "2026M09",
-        "checkedAt": "2026-11-09T10:11:23+01:00",
+        "latestPeriod": "2026M10",
+        "checkedAt": "2026-11-10T22:20:08+01:00",
         "source": "Jobindsats API v3",
         "dataset": "y25i06"
       },
       "expiredBenefits": {
         "state": "ok",
         "latestPeriod": "2026M07",
-        "checkedAt": "2026-11-09T10:11:23+01:00",
+        "checkedAt": "2026-11-10T22:20:08+01:00",
         "source": "Jobindsats API v3",
         "dataset": "y01ud01di"
       },
       "failedRecruitment": {
         "state": "ok",
         "latestPeriod": "2026M09",
-        "checkedAt": "2026-11-09T10:11:23+01:00",
+        "checkedAt": "2026-11-10T22:20:08+01:00",
         "source": "Jobindsats API v3",
         "dataset": "y25i14",
         "definition": "Ubesatte rekrutteringsforsøg",
         "note": "Serien følger de aktuelle Jobindsats-kolonner for antal og andel ubesatte rekrutteringsforsøg."
+      },
+      "notices": {
+        "state": "ok",
+        "latestPeriod": "2026M10",
+        "checkedAt": "2026-11-10T22:20:08+01:00",
+        "source": "Jobindsats API v3",
+        "dataset": "y25i05"
       }
     }
   },
@@ -1653,7 +1660,8 @@
       "2026M06",
       "2026M07",
       "2026M08",
-      "2026M09"
+      "2026M09",
+      "2026M10"
     ],
     "people": [
       216,
@@ -1771,14 +1779,15 @@
       1068,
       969,
       1207,
-      676,
-      1889,
+      673,
+      1873,
       406,
       979,
       309,
       null,
-      1482,
-      1414
+      1534,
+      1126,
+      1186
     ],
     "companies": [
       7,
@@ -1896,14 +1905,15 @@
       54,
       119,
       66,
-      34,
+      36,
       78,
       25,
       30,
       55,
       null,
-      29,
-      78
+      32,
+      87,
+      30
     ]
   },
   "bankruptcies": {
@@ -3585,7 +3595,8 @@
       "2026M06",
       "2026M07",
       "2026M08",
-      "2026M09"
+      "2026M09",
+      "2026M10"
     ],
     "total": [
       null,
@@ -3897,6 +3908,7 @@
       1.9,
       1.7,
       2,
+      2.2,
       2.2
     ],
     "core": [
@@ -4209,7 +4221,8 @@
       2.3,
       2.3,
       2.2,
-      1.9
+      1.9,
+      1.7
     ]
   },
   "confidence": {
@@ -8001,7 +8014,8 @@
       "2026M06",
       "2026M07",
       "2026M08",
-      "2026M09"
+      "2026M09",
+      "2026M10"
     ],
     "under13Weeks": [
       460,
@@ -8228,7 +8242,8 @@
       189,
       123,
       113,
-      132
+      132,
+      144
     ],
     "over13Weeks": [
       48,
@@ -8455,6 +8470,7 @@
       25,
       8,
       8,
+      null,
       null
     ],
     "total": [
@@ -8682,7 +8698,8 @@
       214,
       131,
       121,
-      132
+      132,
+      144
     ]
   },
   "expiredBenefits": {
