@@ -465,7 +465,7 @@ def merge_work_sharing(target: dict, records: list[dict]) -> None:
     for key in ("under13Weeks", "over13Weeks"):
         target[key] = [combined[period].get(key) for period in labels]
     target["total"] = [
-        sum(value for value in values if value is not None) if any(value is not None for value in values) else None
+        sum(values) if all(value is not None for value in values) else None
         for values in zip(target["under13Weeks"], target["over13Weeks"])
     ]
     target.pop("kpi", None)
@@ -711,6 +711,8 @@ def refresh_jobindsats(data):
             failures.append(message)
             print(f"ADVARSEL: {message}", flush=True)
 
+    work_sharing_partial = False
+    work_sharing_missing = []
     records = fetch(
         "Arbejdsfordelinger",
         f"data/y25i06?{common}&hierarchy._nykom=/"
@@ -718,6 +720,28 @@ def refresh_jobindsats(data):
     )
     if records is not None:
         merge_work_sharing(data["workSharing"], records)
+        latest_index = len(data["workSharing"]["labels"]) - 1
+        missing_labels = {
+            "under13Weeks": "under 13 uger",
+            "over13Weeks": "over 13 uger",
+        }
+        work_sharing_missing = [
+            label
+            for key, label in missing_labels.items()
+            if data["workSharing"][key][latest_index] is None
+        ]
+        if work_sharing_missing:
+            work_sharing_partial = True
+            if "Arbejdsfordelinger" in successes:
+                successes.remove("Arbejdsfordelinger")
+            latest_period = data["workSharing"]["labels"][latest_index]
+            message = (
+                f"Arbejdsfordelinger: seneste periode {latest_period} er ufuldstændig; "
+                f"mangler {', '.join(work_sharing_missing)}. "
+                "Seneste fulde total bevares."
+            )
+            failures.append(message)
+            print(f"ADVARSEL: {message}", flush=True)
 
     records = fetch(
         "Opbrugt dagpengeret",
@@ -818,14 +842,37 @@ def refresh_jobindsats(data):
             data["failedRecruitment"],
         ),
     ):
-        latest_period = target.get("topPeriod") or target.get("labels", [None])[-1]
+        if key == "workSharing":
+            complete_periods = [
+                period
+                for period, total in zip(target.get("labels", []), target.get("total", []))
+                if total is not None
+            ]
+            latest_period = complete_periods[-1] if complete_periods else None
+            state = "partial" if work_sharing_partial else (
+                "ok" if label in successes else "stale"
+            )
+        else:
+            latest_period = target.get("topPeriod") or target.get("labels", [None])[-1]
+            state = "ok" if label in successes else "stale"
         source_status[key] = {
-            "state": "ok" if label in successes else "stale",
+            "state": state,
             "latestPeriod": latest_period,
             "checkedAt": now,
             "source": "Jobindsats API v3",
             "dataset": dataset,
         }
+        if key == "workSharing" and work_sharing_partial:
+            source_status[key].update(
+                {
+                    "latestIncompletePeriod": target.get("labels", [None])[-1],
+                    "note": (
+                        "Seneste periode er ufuldstændig og mangler "
+                        + ", ".join(work_sharing_missing)
+                        + ". Seneste fulde total er bevaret."
+                    ),
+                }
+            )
         if key == "failedRecruitment":
             source_status[key].update(
                 {

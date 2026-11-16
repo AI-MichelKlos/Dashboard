@@ -1459,6 +1459,13 @@ def validate(data, html):
     assert latest_valid(data["workSharing"]["labels"], data["workSharing"]["total"])[1] is not None
     for key in ("under13Weeks", "over13Weeks", "total"):
         assert len(data["workSharing"][key]) == len(data["workSharing"]["labels"])
+    for under, over, total in zip(
+        data["workSharing"]["under13Weeks"],
+        data["workSharing"]["over13Weeks"],
+        data["workSharing"]["total"],
+    ):
+        expected_total = under + over if under is not None and over is not None else None
+        assert total == expected_total
     assert latest_valid(
         data["failedRecruitment"]["labels"],
         data["failedRecruitment"]["attempts"],
