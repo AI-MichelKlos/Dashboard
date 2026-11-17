@@ -1,8 +1,8 @@
 {
   "meta": {
-    "updated": "16. november 2026",
+    "updated": "17. november 2026",
     "sourceFile": "Samlet overblik.xlsx",
-    "retrievedAt": "2026-11-16",
+    "retrievedAt": "2026-11-17",
     "sourceRegister": {
       "unemployment": {
         "source": "Jobindsats API v3",
@@ -87,7 +87,7 @@
         "seasonalAdjustment": "sæsonkorrigeret",
         "sourceUpdated": "2026-10-21T06:00:00Z",
         "latestPeriod": "2026M08",
-        "fetchedAt": "2026-11-16T17:59:38+01:00"
+        "fetchedAt": "2026-11-17T17:53:02+01:00"
       },
       "bankruptcies": {
         "source": "Danmarks Statistik",
@@ -103,7 +103,7 @@
         "seasonalAdjustment": "kun serie A1",
         "sourceUpdated": "2026-11-05T07:00:00Z",
         "latestPeriod": "2026M10",
-        "fetchedAt": "2026-11-16T17:59:38+01:00"
+        "fetchedAt": "2026-11-17T17:53:02+01:00"
       },
       "consumerConfidence": {
         "source": "Danmarks Statistik",
@@ -117,7 +117,7 @@
         "seasonalAdjustment": "ikke oplyst",
         "sourceUpdated": "2026-10-22T06:00:00Z",
         "latestPeriod": "2026M10",
-        "fetchedAt": "2026-11-16T17:59:38+01:00"
+        "fetchedAt": "2026-11-17T17:53:02+01:00"
       },
       "jobindsats": {
         "source": "Jobindsats",
@@ -155,7 +155,7 @@
         "seasonalAdjustment": "ikke relevant",
         "sourceUpdated": "2026-11-10T07:00:00Z",
         "latestPeriod": "2026M10",
-        "fetchedAt": "2026-11-16T17:59:45+01:00"
+        "fetchedAt": "2026-11-17T17:53:16+01:00"
       }
     },
     "updateStatus": {
@@ -179,7 +179,7 @@
       "failed": [
         "Arbejdsfordelinger: seneste periode 2026M10 er ufuldstændig; mangler over 13 uger. Seneste fulde total bevares."
       ],
-      "checkedAt": "2026-11-16T18:00:07+01:00"
+      "checkedAt": "2026-11-17T17:53:33+01:00"
     },
     "jobindsatsUpdateStatus": {
       "successful": [
@@ -202,7 +202,7 @@
       "workSharing": {
         "state": "partial",
         "latestPeriod": "2026M08",
-        "checkedAt": "2026-11-16T18:00:07+01:00",
+        "checkedAt": "2026-11-17T17:53:33+01:00",
         "source": "Jobindsats API v3",
         "dataset": "y25i06",
         "latestIncompletePeriod": "2026M10",
@@ -210,15 +210,15 @@
       },
       "expiredBenefits": {
         "state": "ok",
-        "latestPeriod": "2026M07",
-        "checkedAt": "2026-11-16T18:00:07+01:00",
+        "latestPeriod": "2026M08",
+        "checkedAt": "2026-11-17T17:53:33+01:00",
         "source": "Jobindsats API v3",
         "dataset": "y01ud01di"
       },
       "failedRecruitment": {
         "state": "ok",
         "latestPeriod": "2026M09",
-        "checkedAt": "2026-11-16T18:00:07+01:00",
+        "checkedAt": "2026-11-17T17:53:33+01:00",
         "source": "Jobindsats API v3",
         "dataset": "y25i14",
         "definition": "Ubesatte rekrutteringsforsøg",
@@ -227,7 +227,7 @@
       "notices": {
         "state": "ok",
         "latestPeriod": "2026M10",
-        "checkedAt": "2026-11-16T18:00:07+01:00",
+        "checkedAt": "2026-11-17T17:53:33+01:00",
         "source": "Jobindsats API v3",
         "dataset": "y25i05"
       }
@@ -8762,7 +8762,8 @@
       "2026M04",
       "2026M05",
       "2026M06",
-      "2026M07"
+      "2026M07",
+      "2026M08"
     ],
     "total": [
       168,
@@ -8799,27 +8800,28 @@
       495,
       432,
       370,
-      365,
-      403,
+      366,
+      402,
       484,
       525,
-      486,
+      485,
       426,
       413,
       601,
-      527,
-      532,
-      450,
+      526,
+      531,
+      449,
       393,
       408,
-      355,
-      536,
-      562,
-      418,
-      448,
-      456,
-      607,
-      694
+      354,
+      535,
+      561,
+      414,
+      447,
+      453,
+      606,
+      681,
+      639
     ],
     "oneYearGraduate": [
       null,
@@ -8865,18 +8867,19 @@
       76,
       237,
       205,
-      180,
+      179,
       120,
       98,
       91,
-      70,
+      69,
       171,
-      171,
+      170,
       116,
       123,
       116,
-      273,
-      322
+      272,
+      319,
+      237
     ],
     "otherGraduates": [
       41,
@@ -8929,11 +8932,12 @@
       37,
       61,
       44,
-      30,
+      28,
       34,
       21,
       24,
-      31
+      31,
+      30
     ],
     "otherUnemployed": [
       127,
@@ -8970,27 +8974,28 @@
       248,
       226,
       226,
-      242,
-      273,
+      243,
+      272,
       291,
       295,
-      281,
+      280,
       289,
       280,
       300,
-      279,
+      278,
       297,
-      291,
+      290,
       246,
       274,
       248,
-      304,
+      303,
       347,
-      272,
-      291,
-      319,
+      270,
+      290,
+      316,
       310,
-      341
+      331,
+      372
     ]
   },
   "failedRecruitment": {
