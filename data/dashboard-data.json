@@ -1,8 +1,8 @@
 {
   "meta": {
-    "updated": "17. november 2026",
+    "updated": "18. november 2026",
     "sourceFile": "Samlet overblik.xlsx",
-    "retrievedAt": "2026-11-17",
+    "retrievedAt": "2026-11-18",
     "sourceRegister": {
       "unemployment": {
         "source": "Jobindsats API v3",
@@ -87,7 +87,7 @@
         "seasonalAdjustment": "sæsonkorrigeret",
         "sourceUpdated": "2026-10-21T06:00:00Z",
         "latestPeriod": "2026M08",
-        "fetchedAt": "2026-11-17T17:53:02+01:00"
+        "fetchedAt": "2026-11-18T17:26:56+01:00"
       },
       "bankruptcies": {
         "source": "Danmarks Statistik",
@@ -103,7 +103,7 @@
         "seasonalAdjustment": "kun serie A1",
         "sourceUpdated": "2026-11-05T07:00:00Z",
         "latestPeriod": "2026M10",
-        "fetchedAt": "2026-11-17T17:53:02+01:00"
+        "fetchedAt": "2026-11-18T17:26:56+01:00"
       },
       "consumerConfidence": {
         "source": "Danmarks Statistik",
@@ -117,7 +117,7 @@
         "seasonalAdjustment": "ikke oplyst",
         "sourceUpdated": "2026-10-22T06:00:00Z",
         "latestPeriod": "2026M10",
-        "fetchedAt": "2026-11-17T17:53:02+01:00"
+        "fetchedAt": "2026-11-18T17:26:56+01:00"
       },
       "jobindsats": {
         "source": "Jobindsats",
@@ -155,7 +155,7 @@
         "seasonalAdjustment": "ikke relevant",
         "sourceUpdated": "2026-11-10T07:00:00Z",
         "latestPeriod": "2026M10",
-        "fetchedAt": "2026-11-17T17:53:16+01:00"
+        "fetchedAt": "2026-11-18T17:27:11+01:00"
       }
     },
     "updateStatus": {
@@ -179,7 +179,7 @@
       "failed": [
         "Arbejdsfordelinger: seneste periode 2026M10 er ufuldstændig; mangler over 13 uger. Seneste fulde total bevares."
       ],
-      "checkedAt": "2026-11-17T17:53:33+01:00"
+      "checkedAt": "2026-11-18T17:27:32+01:00"
     },
     "jobindsatsUpdateStatus": {
       "successful": [
@@ -202,7 +202,7 @@
       "workSharing": {
         "state": "partial",
         "latestPeriod": "2026M08",
-        "checkedAt": "2026-11-17T17:53:33+01:00",
+        "checkedAt": "2026-11-18T17:27:32+01:00",
         "source": "Jobindsats API v3",
         "dataset": "y25i06",
         "latestIncompletePeriod": "2026M10",
@@ -211,14 +211,14 @@
       "expiredBenefits": {
         "state": "ok",
         "latestPeriod": "2026M08",
-        "checkedAt": "2026-11-17T17:53:33+01:00",
+        "checkedAt": "2026-11-18T17:27:32+01:00",
         "source": "Jobindsats API v3",
         "dataset": "y01ud01di"
       },
       "failedRecruitment": {
         "state": "ok",
         "latestPeriod": "2026M09",
-        "checkedAt": "2026-11-17T17:53:33+01:00",
+        "checkedAt": "2026-11-18T17:27:32+01:00",
         "source": "Jobindsats API v3",
         "dataset": "y25i14",
         "definition": "Ubesatte rekrutteringsforsøg",
@@ -227,7 +227,7 @@
       "notices": {
         "state": "ok",
         "latestPeriod": "2026M10",
-        "checkedAt": "2026-11-17T17:53:33+01:00",
+        "checkedAt": "2026-11-18T17:27:32+01:00",
         "source": "Jobindsats API v3",
         "dataset": "y25i05"
       }
@@ -357,7 +357,8 @@
       "2026M06",
       "2026M07",
       "2026M08",
-      "2026M09"
+      "2026M09",
+      "2026M10"
     ],
     "total": [
       111735,
@@ -460,29 +461,30 @@
       86994,
       87675,
       87842,
-      88036,
-      87743,
-      86911,
-      87093,
-      87235,
-      86826,
-      86854,
-      87339,
-      87513,
-      87838,
-      88057,
-      88290,
-      88966,
-      89407,
-      90100,
-      93738,
-      91977,
-      92497,
-      93183,
-      93444,
-      93590,
-      93878,
-      93971
+      88008,
+      87861,
+      86980,
+      87070,
+      87218,
+      86815,
+      86814,
+      87350,
+      87544,
+      87851,
+      88012,
+      88221,
+      88938,
+      89463,
+      90202,
+      93716,
+      91926,
+      92494,
+      93161,
+      93466,
+      93622,
+      93989,
+      94168,
+      94469
     ],
     "rate": [
       4.1,
@@ -607,6 +609,7 @@
       3.1,
       3.1,
       3.1,
+      3.1,
       3.1
     ],
     "benefit": [
@@ -710,29 +713,30 @@
       74695,
       75275,
       75450,
-      75592,
-      75302,
-      74552,
-      74691,
-      74768,
-      74490,
-      74629,
-      74947,
-      75030,
-      75068,
-      75279,
-      75246,
-      75134,
-      75000,
-      75381,
-      78849,
-      76940,
-      77269,
-      77713,
-      78159,
-      78512,
-      78762,
-      78871
+      75590,
+      75437,
+      74651,
+      74680,
+      74765,
+      74463,
+      74595,
+      74950,
+      75046,
+      75088,
+      75192,
+      75157,
+      75133,
+      75066,
+      75517,
+      78845,
+      76925,
+      77237,
+      77689,
+      78160,
+      78543,
+      78890,
+      79198,
+      79448
     ],
     "assistance": [
       31899,
@@ -835,29 +839,30 @@
       12298,
       12401,
       12392,
-      12444,
-      12441,
-      12359,
-      12402,
-      12467,
-      12336,
-      12225,
+      12418,
+      12425,
+      12329,
       12391,
-      12483,
-      12770,
-      12778,
-      13043,
-      13832,
-      14407,
-      14719,
-      14889,
-      15037,
-      15228,
-      15471,
-      15285,
-      15078,
-      15117,
-      15100
+      12453,
+      12352,
+      12219,
+      12400,
+      12498,
+      12762,
+      12820,
+      13065,
+      13805,
+      14397,
+      14685,
+      14871,
+      15001,
+      15258,
+      15472,
+      15306,
+      15079,
+      15099,
+      14970,
+      15021
     ]
   },
   "vacancies": {
