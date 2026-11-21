@@ -891,10 +891,11 @@ def build_html(data):
 #senior-dashboard .mk-cross-dashboard a[aria-current="page"]{{color:#fff}}
 @media(max-width:650px){{.mk-cross-dashboard .mk-cross-inner{{padding:10px 16px;gap:7px}}.mk-cross-dashboard .mk-cross-label{{width:100%}}.mk-cross-dashboard a{{font-size:12px;flex:1 1 40%;white-space:normal;text-align:center}}}}
 </style>
+<link rel="stylesheet" href="assets/editorial-design.css?v=20261121a">
 </head>
 <body>
-<header class="dak-hero"><div class="dak-hero-inner"><h1>Analytisk overblik - Arbejdsmarkedet</h1><div class="dak-byline">Udarbejdet af Michel Klos</div><p class="dak-hero-sub">Udvalgte nøgletal for arbejdsmarkedet, samfundsøkonomien og den internationale udvikling. Tallene opdateres i takt med de enkelte kilders offentliggørelser.</p></div></header>
-<nav class="mk-cross-dashboard" aria-label="Skift mellem arbejdsmarkedsdashboards"><div class="mk-cross-inner"><span class="mk-cross-label">Udforsk flere dashboards</span><a href="https://ai-michelklos.github.io/Dashboard/" aria-current="page">Analytisk overblik</a><a href="https://ai-michelklos.github.io/arbejdsstyrke/">Seniorer</a><a href="https://ai-michelklos.github.io/udenlandskeloenmodtagere/">Udenlandske lønmodtagere</a><a href="https://ai-michelklos.github.io/A-kasseindsigt-dashboard/">A-kasseindsigt</a></div></nav>
+<nav class="mk-cross-dashboard" aria-label="Skift mellem arbejdsmarkedsdashboards"><div class="mk-cross-inner"><span class="mk-cross-label">Michel Klos<small>Arbejdsmarkedsanalyser</small></span><a href="https://ai-michelklos.github.io/Dashboard/" aria-current="page">Analytisk overblik</a><a href="https://ai-michelklos.github.io/arbejdsstyrke/">Seniorer</a><a href="https://ai-michelklos.github.io/udenlandskeloenmodtagere/">Udenlandske lønmodtagere</a><a href="https://ai-michelklos.github.io/A-kasseindsigt-dashboard/">A-kasseindsigt</a></div></nav>
+<header class="dak-hero"><div class="dak-hero-inner"><h1>Analytisk overblik - Arbejdsmarkedet</h1><p class="mk-editorial-subtitle">Udvikling og status på det danske arbejdsmarked</p><div class="dak-byline">Udarbejdet af Michel Klos</div><p class="dak-hero-sub">Udvalgte nøgletal for arbejdsmarkedet, samfundsøkonomien og den internationale udvikling. Tallene opdateres i takt med de enkelte kilders offentliggørelser.</p></div></header>
 <main id="dak-dashboard">
   <div class="toolbar">
     <span class="toolbar-label">Vis periode:</span>
@@ -1447,6 +1448,7 @@ updateChartInsights();
 <script data-goatcounter="https://arbejdsmarkedsoverblikket.goatcounter.com/count"
         async src="//gc.zgo.at/count.js"></script>
 <script src="assets/linkedin-links.js?v=20261121"></script>
+<script src="assets/editorial-design.js?v=20261121a"></script>
 </body>
 </html>"""
 
