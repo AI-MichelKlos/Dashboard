@@ -879,9 +879,22 @@ def build_html(data):
     }}
     @media(prefers-reduced-motion:reduce) {{html {{scroll-behavior:auto}} #dak-dashboard * {{scroll-behavior:auto!important; transition:none!important}}}}
   </style>
+<style id="mk-cross-dashboard-css">
+.mk-cross-dashboard{{display:block;background:#fff;border-bottom:1px solid #e6ddd2;font-family:Arial,sans-serif;color:#4a3428}}
+.mk-cross-dashboard .mk-cross-inner{{max-width:1280px;margin:0 auto;padding:10px 20px;display:flex;align-items:center;gap:8px;flex-wrap:wrap}}
+.mk-cross-dashboard .mk-cross-label{{font-size:13px;font-weight:700;margin-right:5px;white-space:nowrap}}
+.mk-cross-dashboard a{{display:inline-flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;line-height:1.3;color:#4a3428;text-decoration:none;padding:8px 12px;border:1px solid #e6ddd2;border-radius:999px;background:#fff;min-height:36px}}
+.mk-cross-dashboard a:hover:not([aria-current="page"]){{background:#f7f1ea;border-color:#c9bcae;text-decoration:underline}}
+.mk-cross-dashboard a[aria-current="page"]{{background:#4a3428;border-color:#4a3428;color:#fff;cursor:default}}
+.mk-cross-dashboard a:focus-visible{{outline:3px solid #146298;outline-offset:2px}}
+#senior-dashboard .mk-cross-dashboard a{{color:#4a3428}}
+#senior-dashboard .mk-cross-dashboard a[aria-current="page"]{{color:#fff}}
+@media(max-width:650px){{.mk-cross-dashboard .mk-cross-inner{{padding:10px 16px;gap:7px}}.mk-cross-dashboard .mk-cross-label{{width:100%}}.mk-cross-dashboard a{{font-size:12px;flex:1 1 40%;white-space:normal;text-align:center}}}}
+</style>
 </head>
 <body>
 <header class="dak-hero"><div class="dak-hero-inner"><h1>Analytisk overblik - Arbejdsmarkedet</h1><div class="dak-byline">Udarbejdet af Michel Klos</div><p class="dak-hero-sub">Udvalgte nøgletal for arbejdsmarkedet, samfundsøkonomien og den internationale udvikling. Tallene opdateres i takt med de enkelte kilders offentliggørelser.</p></div></header>
+<nav class="mk-cross-dashboard" aria-label="Skift mellem arbejdsmarkedsdashboards"><div class="mk-cross-inner"><span class="mk-cross-label">Udforsk flere dashboards</span><a href="https://ai-michelklos.github.io/Dashboard/" aria-current="page">Analytisk overblik</a><a href="https://ai-michelklos.github.io/arbejdsstyrke/">Seniorer</a><a href="https://ai-michelklos.github.io/udenlandskeloenmodtagere/">Udenlandske lønmodtagere</a><a href="https://ai-michelklos.github.io/A-kasseindsigt-dashboard/">A-kasseindsigt</a><a href="https://ai-michelklos.github.io/arbejdsmarked/">Alle dashboards</a></div></nav>
 <main id="dak-dashboard">
   <div class="toolbar">
     <span class="toolbar-label">Vis periode:</span>
