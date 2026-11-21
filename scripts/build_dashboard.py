@@ -1330,7 +1330,7 @@ function exportChartCanvas(card,chartCanvas){{
   const sourceText=source.length>120?source.slice(0,117)+'...':source;
   ctx.fillText(sourceText,58,589);
   ctx.fillStyle='#2B211B'; ctx.font='700 18px Segoe UI, Arial, sans-serif';
-  ctx.fillText('Danske A-kasser',58,629);
+  ctx.fillText('Michel Klos',58,629);
   ctx.fillStyle='#6f6258'; ctx.font='17px Segoe UI, Arial, sans-serif';
   ctx.fillText('Analytisk overblik - Arbejdsmarkedet',205,629);
   ctx.textAlign='right';
@@ -1397,8 +1397,8 @@ function setupChartSharing(){{
     card.id=card.id||'graf-'+canvas.id;
     const actions=document.createElement('div'); actions.className='chart-actions';
     const button=document.createElement('button');
-    button.type='button'; button.className='share-chart'; button.textContent='Del / hent';
-    button.setAttribute('aria-label','Del eller hent '+(card.querySelector('h3')?.textContent||'graf'));
+    button.type='button'; button.className='share-chart'; button.textContent='Flere muligheder';
+    button.setAttribute('aria-label','Flere muligheder for '+(card.querySelector('h3')?.textContent||'graf'));
     button.setAttribute('aria-expanded','false');
     const menu=document.createElement('div'); menu.className='chart-menu'; menu.hidden=true;
     const items=[
@@ -1446,7 +1446,7 @@ updateChartInsights();
 </script>
 <script data-goatcounter="https://arbejdsmarkedsoverblikket.goatcounter.com/count"
         async src="//gc.zgo.at/count.js"></script>
-</body>
+<script src="assets/linkedin-links.js?v=20261121"></script>\n</body>
 </html>"""
 
 
