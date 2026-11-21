@@ -894,7 +894,7 @@ def build_html(data):
 </head>
 <body>
 <header class="dak-hero"><div class="dak-hero-inner"><h1>Analytisk overblik - Arbejdsmarkedet</h1><div class="dak-byline">Udarbejdet af Michel Klos</div><p class="dak-hero-sub">Udvalgte nøgletal for arbejdsmarkedet, samfundsøkonomien og den internationale udvikling. Tallene opdateres i takt med de enkelte kilders offentliggørelser.</p></div></header>
-<nav class="mk-cross-dashboard" aria-label="Skift mellem arbejdsmarkedsdashboards"><div class="mk-cross-inner"><span class="mk-cross-label">Udforsk flere dashboards</span><a href="https://ai-michelklos.github.io/Dashboard/" aria-current="page">Analytisk overblik</a><a href="https://ai-michelklos.github.io/arbejdsstyrke/">Seniorer</a><a href="https://ai-michelklos.github.io/udenlandskeloenmodtagere/">Udenlandske lønmodtagere</a><a href="https://ai-michelklos.github.io/A-kasseindsigt-dashboard/">A-kasseindsigt</a><a href="https://ai-michelklos.github.io/arbejdsmarked/">Alle dashboards</a></div></nav>
+<nav class="mk-cross-dashboard" aria-label="Skift mellem arbejdsmarkedsdashboards"><div class="mk-cross-inner"><span class="mk-cross-label">Udforsk flere dashboards</span><a href="https://ai-michelklos.github.io/Dashboard/" aria-current="page">Analytisk overblik</a><a href="https://ai-michelklos.github.io/arbejdsstyrke/">Seniorer</a><a href="https://ai-michelklos.github.io/udenlandskeloenmodtagere/">Udenlandske lønmodtagere</a><a href="https://ai-michelklos.github.io/A-kasseindsigt-dashboard/">A-kasseindsigt</a></div></nav>
 <main id="dak-dashboard">
   <div class="toolbar">
     <span class="toolbar-label">Vis periode:</span>
