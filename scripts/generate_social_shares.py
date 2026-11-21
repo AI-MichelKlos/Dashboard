@@ -501,7 +501,7 @@ def write_image(spec):
 
     fig.lines.append(plt.Line2D([0.075, 0.925], [0.16, 0.16], transform=fig.transFigure, color=GRID, linewidth=1))
     fig.text(0.075, 0.125, spec["source"], fontsize=9, color=MUTED)
-    fig.text(0.075, 0.065, "Danske A-kasser", fontsize=10, fontweight="bold", color=INK)
+    fig.text(0.075, 0.065, "Michel Klos", fontsize=10, fontweight="bold", color=INK)
     fig.text(0.195, 0.065, "Analytisk overblik - Arbejdsmarkedet", fontsize=9, color=MUTED)
     fig.text(0.925, 0.065, "ai-michelklos.github.io/Dashboard/", fontsize=8.5, color=GREEN, ha="right")
 
@@ -528,7 +528,7 @@ def write_share_page(spec, value_text, detail_text):
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>{html.escape(spec['title'])} | Analytisk overblik</title>
-  <meta name="description" content="{html.escape(description, quote=True)}">
+  <meta name="description" content="{html.escape(description, quote=True)}">\n  <meta name="author" content="Michel Klos">\n  <meta property="og:site_name" content="Analytisk overblik | Michel Klos">\n  <meta property="og:locale" content="da_DK">
   <meta property="og:type" content="website">
   <meta property="og:title" content="{html.escape(spec['title'], quote=True)}">
   <meta property="og:description" content="{html.escape(description, quote=True)}">
@@ -548,14 +548,14 @@ def write_share_page(spec, value_text, detail_text):
     img {{max-width:100%; height:auto; display:block; border:1px solid #E6DDD2}}
     a {{color:#4a3428; font-weight:700}}
   </style>
-  <script>window.addEventListener('DOMContentLoaded',function(){{window.location.replace({json.dumps(target_url)});}});</script>
+  <script>window.addEventListener('DOMContentLoaded',function(){{const target=new URL({json.dumps(target_url)});const months=new URLSearchParams(location.search).get('months');if(['12','36','60'].includes(months))target.searchParams.set('months',months);document.getElementById('open-dashboard').href=target.href;window.location.replace(target.href);}});</script>
 </head>
 <body>
   <main>
     <h1>{html.escape(spec['title'])}</h1>
     <p>{html.escape(description)}</p>
     <img src="../{spec['id']}.png" alt="{html.escape(spec['title'], quote=True)}">
-    <p><a href="{html.escape(target_url, quote=True)}">Åbn grafen i dashboardet</a></p>
+    <p><a id="open-dashboard" href="{html.escape(target_url, quote=True)}">Åbn grafen i dashboardet</a></p>
   </main>
 </body>
 </html>
