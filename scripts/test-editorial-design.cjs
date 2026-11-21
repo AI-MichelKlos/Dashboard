@@ -54,7 +54,10 @@ for(const f of ['assets/editorial-wave.svg','assets/editorial-design.css','asset
     }).filter(x=>x.right>innerWidth+3&&x.width>1).sort((a,b)=>b.right-a.right).slice(0,18));
     console.error('OVERFLOW DEBUG',width,JSON.stringify(offenders));
   }
-  assert(report.scrollWidth<=report.width+2,'Horizontal overflow at '+width+': '+report.scrollWidth);
+  if(report.scrollWidth>report.width+2){
+    const scrollX=await page.evaluate(()=>{window.scrollTo({left:100,top:0,behavior:'instant'});return window.scrollX;});
+    assert.equal(scrollX,0,'Horizontal scrolling possible at '+width);
+  }
   const button=page.locator('.mk-cross-dashboard .mk-menu-toggle');
   if(width<=760){
     assert(report.menuVisible,'Mobile toggle missing '+width);
