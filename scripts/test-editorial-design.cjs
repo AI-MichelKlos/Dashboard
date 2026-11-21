@@ -48,7 +48,13 @@ for(const f of ['assets/editorial-wave.svg','assets/editorial-design.css','asset
   assert(report.navBeforeHeader,'Navigation should precede hero');
   assert(report.links.length===4,'Expected four dashboard links, got '+report.links);
   assert(report.cards>=EXPECTED,'Expected preserved graphs '+EXPECTED+' got '+report.cards);
-  assert(report.scrollWidth<=report.width+2,'Mobile horizontal overflow at '+width+': '+report.scrollWidth);
+  if(report.scrollWidth>report.width+2){
+    const offenders=await page.evaluate(()=>Array.from(document.querySelectorAll('body *')).map(el=>{
+      const r=el.getBoundingClientRect();return {tag:el.tagName,cls:String(el.className||'').slice(0,100),id:el.id,right:Math.round(r.right),left:Math.round(r.left),width:Math.round(r.width)};
+    }).filter(x=>x.right>innerWidth+3&&x.width>1).sort((a,b)=>b.right-a.right).slice(0,18));
+    console.error('OVERFLOW DEBUG',width,JSON.stringify(offenders));
+  }
+  assert(report.scrollWidth<=report.width+2,'Horizontal overflow at '+width+': '+report.scrollWidth);
   const button=page.locator('.mk-cross-dashboard .mk-menu-toggle');
   if(width<=760){
     assert(report.menuVisible,'Mobile toggle missing '+width);
