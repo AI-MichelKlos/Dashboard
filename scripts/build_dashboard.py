@@ -964,7 +964,7 @@ def build_html(data):
 (function(){{
 const DATA={json_data};
 const COUNTRY_NAMES={country_names};
-const COLORS=['#9A5B34','#146298','#8C9C41','#8C7FCF','#7D3659','#1D9999'];
+const COLORS=['#0B72B8','#48A3CF','#279E9D','#7B88C9','#D66C69','#176D88'];
 const charts={{}};
 let activeMonths=60;
 
@@ -1304,15 +1304,15 @@ function exportChartCanvas(card,chartCanvas){{
   const ctx=output.getContext('2d');
   ctx.fillStyle='#ffffff'; ctx.fillRect(0,0,width,height);
 
-  ctx.fillStyle='#4a3428'; ctx.font='700 17px Segoe UI, Arial, sans-serif';
+  ctx.fillStyle='#092B45'; ctx.font='700 17px Segoe UI, Arial, sans-serif';
   ctx.fillText('ANALYTISK OVERBLIK | ARBEJDSMARKEDET',58,38);
-  ctx.fillStyle='#9A5B34'; ctx.fillRect(58,53,72,4);
+  ctx.fillStyle='#0B72B8'; ctx.fillRect(58,53,72,4);
 
   ctx.fillStyle='#2B211B'; ctx.font='700 34px Segoe UI, Arial, sans-serif';
   const titleBottom=wrapCanvasText(ctx,title,58,91,width-116,40,2);
   let summaryY=Math.max(142,titleBottom+8);
   if(summary.valueText){{
-    ctx.fillStyle='#4a3428'; ctx.font='800 38px Segoe UI, Arial, sans-serif';
+    ctx.fillStyle='#092B45'; ctx.font='800 38px Segoe UI, Arial, sans-serif';
     ctx.fillText(summary.valueText,58,summaryY);
     summaryY+=29;
   }}
@@ -1335,7 +1335,7 @@ function exportChartCanvas(card,chartCanvas){{
   ctx.fillStyle='#6f6258'; ctx.font='17px Segoe UI, Arial, sans-serif';
   ctx.fillText('Analytisk overblik - Arbejdsmarkedet',205,629);
   ctx.textAlign='right';
-  ctx.fillStyle='#4a3428'; ctx.font='600 16px Segoe UI, Arial, sans-serif';
+  ctx.fillStyle='#092B45'; ctx.font='600 16px Segoe UI, Arial, sans-serif';
   ctx.fillText('ai-michelklos.github.io/Dashboard/',width-58,629);
   ctx.textAlign='left';
   return {{canvas:output,title}};
