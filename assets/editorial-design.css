@@ -347,6 +347,29 @@ body footer,
   #senior-dashboard .hero .wrap,
   body>header .wrap{padding-right:clamp(95px,18vw,190px)!important}
 }
+
+/* Mobil emnenavigation skal ombryde i stedet for at blive en vandret scrollrække. */
+@media(max-width:760px){
+  #dak-dashboard .section-nav{
+    display:flex!important;
+    flex-wrap:wrap!important;
+    overflow-x:visible!important;
+    margin-left:0!important;
+    margin-right:0!important;
+    padding:9px 0!important;
+    position:relative!important;
+    gap:7px!important;
+    background:transparent!important;
+  }
+  #dak-dashboard .section-nav a{
+    flex:0 1 auto;
+    white-space:normal!important;
+    max-width:100%;
+    padding:8px 10px!important;
+    border-color:var(--mk-line)!important;
+    color:var(--mk-navy)!important;
+  }
+}
 /* Mobil: rigtig menu, klikbare kontrolfelter og ingen horisontal overflow */
 @media(max-width:760px){
   .mk-cross-dashboard .mk-cross-inner{
