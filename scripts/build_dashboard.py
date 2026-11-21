@@ -1446,7 +1446,8 @@ updateChartInsights();
 </script>
 <script data-goatcounter="https://arbejdsmarkedsoverblikket.goatcounter.com/count"
         async src="//gc.zgo.at/count.js"></script>
-<script src="assets/linkedin-links.js?v=20261121"></script>\n</body>
+<script src="assets/linkedin-links.js?v=20261121"></script>
+</body>
 </html>"""
 
 
