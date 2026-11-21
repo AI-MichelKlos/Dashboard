@@ -17,11 +17,11 @@ DATA_PATH = BASE / "data" / "dashboard-data.json"
 SHARE_DIR = BASE / "share"
 PUBLIC_BASE = "https://ai-michelklos.github.io/Dashboard/"
 
-COLORS = ["#9A5B34", "#146298", "#8C9C41", "#8C7FCF", "#7D3659", "#1D9999"]
-INK = "#2B211B"
-GREEN = "#4a3428"
-MUTED = "#6f6258"
-GRID = "#E6DDD2"
+COLORS = ["#0B72B8", "#48A3CF", "#279E9D", "#7B88C9", "#D66C69", "#176D88"]
+INK = "#122F46"
+GREEN = "#092B45"
+MUTED = "#526D80"
+GRID = "#DBE5EE"
 
 MONTHS = [
     "jan.", "feb.", "mar.", "apr.", "maj", "jun.",
