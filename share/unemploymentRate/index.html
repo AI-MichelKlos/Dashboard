@@ -5,6 +5,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Ledighedsprocent | Analytisk overblik</title>
   <meta name="description" content="3,1 pct. | Ledighed | okt. 2026. Se grafen i Analytisk overblik - Arbejdsmarkedet.">
+  <meta name="author" content="Michel Klos">
+  <meta property="og:site_name" content="Analytisk overblik | Michel Klos">
+  <meta property="og:locale" content="da_DK">
   <meta property="og:type" content="website">
   <meta property="og:title" content="Ledighedsprocent">
   <meta property="og:description" content="3,1 pct. | Ledighed | okt. 2026. Se grafen i Analytisk overblik - Arbejdsmarkedet.">
@@ -24,14 +27,14 @@
     img {max-width:100%; height:auto; display:block; border:1px solid #E6DDD2}
     a {color:#4a3428; font-weight:700}
   </style>
-  <script>window.addEventListener('DOMContentLoaded',function(){window.location.replace("https://ai-michelklos.github.io/Dashboard/#graf-unemploymentRate");});</script>
+  <script>window.addEventListener('DOMContentLoaded',function(){const target=new URL("https://ai-michelklos.github.io/Dashboard/#graf-unemploymentRate");const months=new URLSearchParams(location.search).get('months');if(['12','36','60'].includes(months))target.searchParams.set('months',months);document.getElementById('open-dashboard').href=target.href;window.location.replace(target.href);});</script>
 </head>
 <body>
   <main>
     <h1>Ledighedsprocent</h1>
     <p>3,1 pct. | Ledighed | okt. 2026. Se grafen i Analytisk overblik - Arbejdsmarkedet.</p>
     <img src="../unemploymentRate.png" alt="Ledighedsprocent">
-    <p><a href="https://ai-michelklos.github.io/Dashboard/#graf-unemploymentRate">Åbn grafen i dashboardet</a></p>
+    <p><a id="open-dashboard" href="https://ai-michelklos.github.io/Dashboard/#graf-unemploymentRate">Åbn grafen i dashboardet</a></p>
   </main>
 </body>
 </html>
