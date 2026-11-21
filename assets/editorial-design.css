@@ -108,6 +108,7 @@ body>header{
 body>header .wrap{
   max-width:1360px!important;
   width:100%;
+  box-sizing:border-box!important;
   margin:0 auto!important;
   padding:0 clamp(160px,24vw,310px) 0 0!important;
   position:relative;
