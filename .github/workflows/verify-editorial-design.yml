@@ -1,0 +1,34 @@
+name: Verify editorial dashboard mobile design
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - 'assets/editorial-design.css'
+      - 'assets/editorial-design.js'
+      - 'assets/editorial-wave.svg'
+      - 'scripts/test-editorial-design.cjs'
+      - '.github/workflows/verify-editorial-design.yml'
+permissions:
+  contents: read
+concurrency:
+  group: editorial-design-qa
+  cancel-in-progress: true
+jobs:
+  mobile:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install headless Chrome
+        run: |
+          npm install --no-save playwright
+          npx playwright install --with-deps chromium
+      - name: Serve dashboard from repository root
+        run: |
+          python3 -m http.server 8765 --bind 127.0.0.1 > /tmp/editorial-server.log 2>&1 &
+          sleep 2
+      - name: Verify responsive layout and navigation
+        run: node scripts/test-editorial-design.cjs
