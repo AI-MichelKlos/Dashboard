@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="760" height="360" viewBox="0 0 760 360" preserveAspectRatio="xMidYMid slice">
+<defs>
+ <linearGradient id="wave1" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#DFF5FC" stop-opacity=".2"/><stop offset=".5" stop-color="#A3E0F4" stop-opacity=".72"/><stop offset="1" stop-color="#6FC3E6" stop-opacity=".88"/></linearGradient>
+ <linearGradient id="wave2" x1="0" y1="1" x2="1" y2="0"><stop offset="0" stop-color="#64BDE4" stop-opacity=".08"/><stop offset=".5" stop-color="#399BD1" stop-opacity=".74"/><stop offset="1" stop-color="#0A649F"/></linearGradient>
+ <linearGradient id="wave3" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#E8F8FD" stop-opacity=".1"/><stop offset=".8" stop-color="#78C9EC" stop-opacity=".68"/></linearGradient>
+</defs>
+<path d="M-10 320 C115 309 147 180 274 168 C396 151 471 225 584 133 C677 58 721 48 775 51 L775 366 L-10 366Z" fill="url(#wave1)"/>
+<path d="M65 355 C208 328 255 300 378 205 C505 112 573 25 772 -2 L772 365 L65 365Z" fill="url(#wave2)"/>
+<path d="M292 359 C436 321 517 269 605 202 C667 154 720 123 775 129 L775 367 L292 367Z" fill="url(#wave3)"/>
+</svg>
