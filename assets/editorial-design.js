@@ -67,7 +67,8 @@
     Chart.defaults.borderColor='#E3ECF3';
     Object.values(Chart.instances||{}).forEach(adjust);
   }
-  if(window.Chart && !Chart.registry.plugins.get('mk-editorial-theme')){
+  if(window.Chart && !window.__mkEditorialPluginRegistered){
+    window.__mkEditorialPluginRegistered=true;
     Chart.register({id:'mk-editorial-theme',beforeUpdate(chart){
       for(const d of chart.data.datasets||[]){
         for(const key of fields){if(d[key]!==undefined)d[key]=recolor(d[key]);}
