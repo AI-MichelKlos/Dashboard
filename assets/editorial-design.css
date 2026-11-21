@@ -1,0 +1,480 @@
+/* Michel Klos / Redaktionelt Dataatlas
+   Fælles design 2026. Kun udseende og responsiv navigation.
+   Datakilder, filtre, diagrammer og indholdsstruktur bevares.
+*/
+:root{
+  --mk-navy:#092B45;
+  --mk-ink:#122F46;
+  --mk-blue:#086EBA;
+  --mk-blue-soft:#E7F3FB;
+  --mk-pale:#F6F9FC;
+  --mk-line:#DBE5EE;
+  --mk-muted:#516778;
+  --mk-coral:#DB624A;
+  --mk-sea:#279E9D;
+}
+html{color-scheme:light}
+body{background:var(--mk-pale)!important;color:var(--mk-ink)!important}
+body,button,select,input{font-family:Arial,Helvetica,sans-serif}
+
+/* Navigationsbånd: redaktionel topbjælke, ikke dashboard-piller */
+.mk-cross-dashboard{
+  background:var(--mk-navy)!important;
+  border:0!important;
+  color:white!important;
+  position:relative;
+  z-index:50;
+}
+.mk-cross-dashboard .mk-cross-inner{
+  max-width:1360px!important;
+  margin:0 auto;
+  padding:0 24px!important;
+  min-height:64px;
+  display:flex!important;
+  align-items:stretch!important;
+  justify-content:flex-end!important;
+  gap:clamp(8px,1.2vw,22px)!important;
+  flex-wrap:nowrap!important;
+}
+.mk-cross-dashboard .mk-cross-label{
+  display:flex!important;
+  flex-direction:column;
+  justify-content:center;
+  align-self:stretch;
+  margin-right:auto!important;
+  flex:0 0 auto;
+  color:white!important;
+  font:700 clamp(15px,1.45vw,20px)/1.1 Cambria,Caladea,Georgia,serif!important;
+  white-space:nowrap!important;
+  width:auto!important;
+  padding:10px 16px 10px 0;
+}
+.mk-cross-dashboard .mk-cross-label small{
+  font:500 10px/1.25 Arial,Helvetica,sans-serif;
+  letter-spacing:.055em;
+  color:#B6D9ED;
+  margin-top:4px;
+}
+.mk-cross-dashboard .mk-cross-inner>a,
+#senior-dashboard .mk-cross-dashboard .mk-cross-inner>a{
+  display:inline-flex!important;
+  align-items:center;
+  justify-content:center;
+  align-self:stretch;
+  background:transparent!important;
+  border:0!important;
+  border-bottom:3px solid transparent!important;
+  border-radius:0!important;
+  box-shadow:none!important;
+  color:#F0F5FA!important;
+  font:700 clamp(11px,.97vw,14px)/1.2 Arial,Helvetica,sans-serif!important;
+  text-decoration:none!important;
+  min-height:64px;
+  padding:8px 4px!important;
+  white-space:nowrap!important;
+  flex:0 1 auto!important;
+}
+.mk-cross-dashboard .mk-cross-inner>a:hover{
+  background:rgba(255,255,255,.06)!important;
+  color:white!important;
+}
+.mk-cross-dashboard .mk-cross-inner>a[aria-current="page"]{
+  color:#FFF!important;
+  border-bottom-color:#69C8F5!important;
+}
+.mk-cross-dashboard a:focus-visible,.mk-cross-dashboard button:focus-visible{
+  outline:3px solid #86D9FF!important;
+  outline-offset:2px;
+}
+.mk-cross-dashboard .mk-menu-toggle{display:none}
+
+/* Lys editorial masthead med signaturbølge i stedet for brunt fotografi */
+.dak-hero,
+#senior-dashboard .hero,
+body>header{
+  background-color:#F9FCFF!important;
+  background-image:url("./editorial-wave.svg")!important;
+  background-size:clamp(360px,52vw,760px) 100%!important;
+  background-position:right center!important;
+  background-repeat:no-repeat!important;
+  border-bottom:1px solid var(--mk-line)!important;
+  color:var(--mk-ink)!important;
+  padding:44px 24px 36px!important;
+  min-height:235px;
+  box-shadow:none!important;
+}
+.dak-hero .dak-hero-inner,
+#senior-dashboard .hero .wrap,
+body>header .wrap{
+  max-width:1360px!important;
+  width:100%;
+  margin:0 auto!important;
+  padding:0 clamp(160px,24vw,310px) 0 0!important;
+  position:relative;
+}
+.dak-hero h1,
+#senior-dashboard .hero h1,
+body>header h1{
+  color:var(--mk-navy)!important;
+  font:700 clamp(2.2rem,5vw,4.4rem)/1.08 Cambria,Caladea,Georgia,serif!important;
+  letter-spacing:-.022em;
+  text-wrap:balance;
+  margin:0 0 6px!important;
+}
+.mk-editorial-subtitle{
+  color:var(--mk-navy)!important;
+  font:700 clamp(1.18rem,2.15vw,1.9rem)/1.25 Cambria,Caladea,Georgia,serif!important;
+  margin:2px 0 16px!important;
+  text-wrap:balance;
+}
+.dak-hero-sub,
+#senior-dashboard .hero .lead,
+body>header .lead,
+body>header .sub{
+  display:block;
+  max-width:800px!important;
+  color:#3D586B!important;
+  border-left:4px solid var(--mk-blue)!important;
+  padding-left:16px!important;
+  line-height:1.5!important;
+  font-size:clamp(.96rem,1.3vw,1.08rem)!important;
+  margin:14px 0 0!important;
+  text-shadow:none!important;
+}
+.dak-byline,
+#senior-dashboard .hero .byline,
+body>header .byline,
+#senior-dashboard .hero .updated,
+body>header .updated,
+#senior-dashboard .hero .eyebrow,
+body>header .eyebrow{
+  color:#53758D!important;
+  text-shadow:none!important;
+}
+#senior-dashboard .hero .wrap{padding-top:0!important;padding-bottom:0!important}
+#senior-dashboard{
+  --brown:#092B45;
+  --cognac:#086EBA;
+  --sand:#E7F3FB;
+  --sand-strong:#DDEDF7;
+  --tint:#F6F9FC;
+  --stone:#BFCDDA;
+  --line:#DBE5EE;
+  --ink:#122F46;
+  --ink-muted:#526D80;
+  --surface:#fff;
+  color:var(--mk-ink)!important;
+  background:var(--mk-pale)!important;
+}
+#dak-dashboard{
+  --navy:#092B45;
+  --blue:#086EBA;
+  --cyan:#4BADD0;
+  --green:#086EBA;
+  --green-dark:#092B45;
+  --orange:#DB624A;
+  --purple:#7B88C9;
+  --ink:#122F46;
+  --muted:#526D80;
+  --line:#DBE5EE;
+  --paper:#fff;
+  --soft:#F0F6FB;
+  max-width:1360px!important;
+}
+:root{
+  --g:#086EBA;
+  --gd:#092B45;
+  --o:#279E9D;
+  --b:#086EBA;
+  --p:#7B88C9;
+  --grid:#DBE5EE;
+  --muted:#526D80;
+  --bg:#F6F9FC;
+  --green:#086EBA;
+  --green-dark:#092B45;
+  --heading:#092B45;
+  --orange:#DB624A;
+  --blue:#086EBA;
+  --purple:#7B88C9;
+  --page:#F6F9FC;
+  --border:#DBE5EE;
+  --line:#DBE5EE;
+  --ink:#122F46;
+  --paper:#fff;
+  --shadow:none;
+}
+/* Fælles overskrifter og blå sektionstegn */
+#dak-dashboard h2,#dak-dashboard h3,
+#senior-dashboard h2,#senior-dashboard h3,
+body>main h2,main h2,
+.card h3{
+  color:var(--mk-navy)!important;
+}
+#dak-dashboard h2,
+#senior-dashboard main h2,
+main section>.section-head h2,
+body main section>h2{
+  font-family:Cambria,Caladea,Georgia,serif!important;
+  line-height:1.18!important;
+  letter-spacing:-.01em;
+}
+#dak-dashboard h2{font-size:clamp(1.65rem,2.7vw,2.3rem)!important}
+#dak-dashboard .chart-card h3,#senior-dashboard .chart-grid h2,
+body main .section-head h2,body main .card h3{
+  font-family:Cambria,Caladea,Georgia,serif!important;
+  font-size:clamp(1.2rem,1.8vw,1.55rem)!important;
+}
+/* Nøgletal er den primære visuelle fortælling */
+#dak-dashboard .kpi-card,
+#dak-dashboard .table-card,
+#dak-dashboard .chart-card,
+#senior-dashboard .card,
+main .kpi,
+main>div>section,
+main section,
+main .card{
+  background:#fff!important;
+  border:1px solid var(--mk-line)!important;
+  box-shadow:0 3px 18px rgba(9,43,69,.035)!important;
+  border-radius:12px!important;
+}
+#dak-dashboard .kpi-card,
+#senior-dashboard .kpis .card,
+main .kpi,
+main .kpis .kpi{
+  border-top:0!important;
+  box-shadow:none!important;
+}
+#dak-dashboard .kpi-card.priority{border-top:3px solid var(--mk-blue)!important}
+#dak-dashboard .kpi-value,
+#senior-dashboard .kpis strong,
+#senior-dashboard .pension-kpi strong,
+main .kpi-value,
+main .kpi strong{
+  font-family:Cambria,Caladea,Georgia,serif!important;
+  font-weight:700!important;
+  font-variant-numeric:tabular-nums;
+  letter-spacing:-.015em;
+  color:var(--mk-navy)!important;
+}
+#dak-dashboard .kpi-value{font-size:clamp(1.85rem,2.7vw,2.65rem)!important}
+#dak-dashboard .kpi-title,
+#senior-dashboard .kpis .kicker,
+#senior-dashboard .kpi-label,
+main .kpi-label,
+main .kpi small{
+  color:var(--mk-ink)!important;
+  font-weight:700!important;
+  text-transform:uppercase;
+  letter-spacing:.035em;
+  font-size:clamp(.68rem,.8vw,.8rem)!important;
+}
+/* Hvide grafkort, svag gitterlinjefølelse, lidt større visuel plads */
+#dak-dashboard .chart-card,
+#senior-dashboard .chart-grid .card,
+#senior-dashboard .map-card,
+main section:has(> .chart-box),
+main .card:has(canvas){
+  padding:clamp(16px,2vw,26px)!important;
+}
+#dak-dashboard .chart-card .chart-wrap,
+#senior-dashboard .chart,
+main .chart-box,
+main .chart{
+  min-width:0;
+  max-width:100%;
+}
+#dak-dashboard .chart-insight,
+#senior-dashboard .source,
+main .source{
+  color:var(--mk-muted)!important;
+}
+#senior-dashboard .filters,
+#dak-dashboard .toolbar,
+.control-band,
+body main section.filters{
+  background:#F0F6FB!important;
+  border-color:var(--mk-line)!important;
+  box-shadow:none!important;
+}
+#dak-dashboard button,
+#senior-dashboard button,
+button,
+select,
+input{accent-color:var(--mk-blue)}
+#dak-dashboard button:focus-visible,
+#senior-dashboard button:focus-visible,
+body button:focus-visible,
+body select:focus-visible{
+  outline:3px solid #5EBDF0!important;
+  outline-offset:2px;
+}
+#senior-dashboard select,#senior-dashboard button,
+.control select,.controls select{
+  color:var(--mk-navy)!important;
+  border-color:#B6CADA!important;
+}
+#senior-dashboard .mk-social-actions .mk-linkedin-btn,
+main .mk-social-actions .mk-linkedin-btn,
+#dak-dashboard .mk-linkedin-buttons .mk-share-linkedin,
+#dashboard .dak-share-linkedin{
+  background:var(--mk-blue)!important;
+  color:#fff!important;
+  border-color:var(--mk-blue)!important;
+}
+#dak-dashboard .mk-linkedin-buttons .mk-share-copy,
+.mk-social-actions .mk-copy-btn{
+  background:#fff!important;
+  border-color:#B8CAD8!important;
+  color:var(--mk-navy)!important;
+}
+/* Smal redaktionel fod */
+body footer,
+#senior-dashboard footer{
+  color:var(--mk-muted);
+  border-top:1px solid var(--mk-line);
+}
+/* Tablet: 2-spaltet statistik, enkeltspaltede visualiseringer */
+@media(max-width:1050px){
+  .mk-cross-dashboard .mk-cross-inner{gap:10px!important;padding:0 14px!important}
+  .mk-cross-dashboard .mk-cross-inner>a{font-size:11px!important}
+  #dak-dashboard .chart-grid,
+  #senior-dashboard .chart-grid{grid-template-columns:1fr!important}
+  #dak-dashboard .chart-card.wide,
+  #senior-dashboard .chart-grid .wide{grid-column:auto!important}
+  .dak-hero .dak-hero-inner,
+  #senior-dashboard .hero .wrap,
+  body>header .wrap{padding-right:clamp(95px,18vw,190px)!important}
+}
+/* Mobil: rigtig menu, klikbare kontrolfelter og ingen horisontal overflow */
+@media(max-width:760px){
+  .mk-cross-dashboard .mk-cross-inner{
+    display:grid!important;
+    grid-template-columns:minmax(0,1fr) auto!important;
+    align-items:center!important;
+    justify-content:stretch!important;
+    gap:0!important;
+    min-height:66px;
+    padding:8px 16px!important;
+  }
+  .mk-cross-dashboard .mk-cross-label{
+    grid-column:1!important;
+    min-width:0;
+    padding:7px 6px 7px 0!important;
+    white-space:normal!important;
+    font-size:17px!important;
+    line-height:1.07!important;
+  }
+  .mk-cross-dashboard .mk-cross-label small{font-size:10px}
+  .mk-cross-dashboard .mk-menu-toggle{
+    display:flex!important;
+    grid-column:2;
+    align-items:center;
+    gap:8px;
+    justify-content:center;
+    color:white;
+    border:1px solid #79A7C0;
+    background:transparent;
+    border-radius:8px;
+    min-width:76px;
+    min-height:43px;
+    padding:8px 10px;
+    font:700 13px Arial,Helvetica,sans-serif;
+    cursor:pointer;
+  }
+  .mk-cross-dashboard .mk-menu-toggle::before{content:"☰";font-size:18px;line-height:1}
+  .mk-cross-dashboard.is-open .mk-menu-toggle::before{content:"×"}
+  .mk-cross-dashboard .mk-cross-inner>a,
+  #senior-dashboard .mk-cross-dashboard .mk-cross-inner>a{
+    display:none!important;
+    grid-column:1 / -1;
+    justify-content:flex-start;
+    text-align:left!important;
+    white-space:normal!important;
+    width:100%;
+    min-height:43px;
+    padding:12px 10px!important;
+    border-bottom:1px solid rgba(255,255,255,.1)!important;
+    flex:initial!important;
+  }
+  .mk-cross-dashboard.is-open .mk-cross-inner>a,
+  #senior-dashboard .mk-cross-dashboard.is-open .mk-cross-inner>a{
+    display:flex!important;
+  }
+  .mk-cross-dashboard.is-open .mk-cross-inner>a[aria-current="page"]{
+    border-left:4px solid #69C8F5!important;
+    background:rgba(255,255,255,.09)!important;
+  }
+  .dak-hero,#senior-dashboard .hero,body>header{
+    padding:32px 17px 28px!important;
+    min-height:0!important;
+    background-size:clamp(185px,58vw,330px) auto!important;
+    background-position:right top!important;
+  }
+  .dak-hero .dak-hero-inner,
+  #senior-dashboard .hero .wrap,
+  body>header .wrap{
+    padding:0!important;
+  }
+  .dak-hero h1,#senior-dashboard .hero h1,body>header h1{
+    font-size:clamp(2rem,8.2vw,3rem)!important;
+    max-width:85%;
+    overflow-wrap:break-word;
+  }
+  .mk-editorial-subtitle{font-size:clamp(1.1rem,5vw,1.5rem)!important;max-width:92%}
+  .dak-hero-sub,#senior-dashboard .hero .lead,
+  body>header .lead,body>header .sub{
+    padding-left:12px!important;
+    max-width:100%!important;
+    line-height:1.48!important;
+    font-size:.92rem!important;
+  }
+  #dak-dashboard,#senior-dashboard .wrap,
+  body>main,body main{max-width:100%;min-width:0}
+  #dak-dashboard{padding:18px 14px 38px!important}
+  #senior-dashboard .wrap{padding-left:14px!important;padding-right:14px!important}
+  .hero-kpis,.section-kpis,.section-kpis.one,
+  #senior-dashboard .kpis,#dak-dashboard .kpi-grid,
+  #dak-dashboard .kpi-grid.economy,
+  #dak-dashboard .kpi-grid.dynamics,
+  #dak-dashboard .kpi-grid.international,
+  .kpis{
+    display:grid!important;
+    grid-template-columns:repeat(2,minmax(0,1fr))!important;
+    gap:10px!important;
+  }
+  #dak-dashboard .kpi-card,
+  #senior-dashboard .kpis .card,
+  main .kpi,.kpis .kpi{padding:14px!important;min-width:0}
+  #dak-dashboard .kpi-value,
+  #senior-dashboard .kpis strong,main .kpi-value,.kpi strong{
+    font-size:clamp(1.36rem,5.4vw,1.85rem)!important;
+    overflow-wrap:anywhere;
+  }
+  #dak-dashboard .chart-grid,#senior-dashboard .chart-grid,
+  #dashboard .grid,.grid{grid-template-columns:minmax(0,1fr)!important}
+  #dak-dashboard .chart-card,#senior-dashboard .chart-grid .card,
+  #dashboard .card,main section{min-width:0;padding:15px!important}
+  #dak-dashboard .chart-wrap,
+  #senior-dashboard .chart,
+  main .chart-box{height:310px;max-width:100%}
+  #dak-dashboard .chart-card.tall .chart-wrap,
+  main .chart-box.tall{height:480px}
+  #senior-dashboard .map-layout{grid-template-columns:minmax(0,1fr)!important}
+  #senior-dashboard .map-card{min-width:0}
+  #dak-dashboard .toolbar,#senior-dashboard .filters{gap:9px!important}
+  #dak-dashboard .mk-linkedin-buttons button,
+  .mk-social-actions button{
+    min-height:44px!important;
+    flex:1 1 42%!important;
+  }
+}
+@media(max-width:365px){
+  .hero-kpis,.section-kpis,
+  #dak-dashboard .kpi-grid,
+  #senior-dashboard .kpis,.kpis{grid-template-columns:minmax(0,1fr)!important}
+  .dak-hero h1,#senior-dashboard .hero h1,body>header h1{max-width:100%}
+}
+@media(prefers-reduced-motion:reduce){
+  .mk-cross-dashboard a{scroll-behavior:auto!important;transition:none!important}
+}
