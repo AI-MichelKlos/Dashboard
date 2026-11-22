@@ -1,3 +1,3 @@
 status: partial
-tid_utc: 2026-11-22T15:02:48Z
+tid_utc: 2026-11-22T15:16:43Z
 dato_dk: 2026-11-22
