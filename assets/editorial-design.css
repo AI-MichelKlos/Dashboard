@@ -90,6 +90,16 @@ body,button,select,input{font-family:Arial,Helvetica,sans-serif}
 }
 .mk-cross-dashboard .mk-menu-toggle{display:none}
 
+/* Legacy top-banner artwork must never cover the light editorial masthead.
+   In particular, older A-kasseindsigt versions added an opaque ::before photo. */
+body > header::before,
+#senior-dashboard .hero::before{
+  content:none!important;
+  display:none!important;
+  opacity:0!important;
+  background-image:none!important;
+}
+
 /* Lys editorial masthead med signaturbølge i stedet for brunt fotografi */
 .dak-hero,
 #senior-dashboard .hero,
