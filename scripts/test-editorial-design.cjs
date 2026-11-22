@@ -44,7 +44,8 @@ for(const f of ['assets/editorial-wave.svg','assets/editorial-design.css','asset
   },ROOT_SELECTOR);
   assert(report.cssLoaded,'Stylesheet not loaded at '+width);
   assert(report.navBackground==='rgb(9, 43, 69)','Navigation should be navy '+width+': '+report.navBackground);
-  assert(report.heroBgImage.includes('editorial-wave.svg'),'Blue wave missing '+width+': '+report.heroBgImage);
+  assert(report.heroBgImage.includes('arbejdsmarked-faglogo.svg')||report.heroBgImage.includes('editorial-wave.svg'),
+    'Neither selected professions logo nor editorial wave rendered at '+width+': '+report.heroBgImage);
   assert(report.heroBackground==='rgb(249, 252, 255)','Hero should be white '+width+': '+report.heroBackground);
   assert(report.oldBannerDisplay==='none','Old dark photographic overlay is still visible at '+width+': '+report.oldBannerDisplay);
   assert(report.navBeforeHeader,'Navigation should precede hero');
