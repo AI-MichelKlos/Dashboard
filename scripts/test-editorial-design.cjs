@@ -8,7 +8,9 @@ const ROOT_SELECTOR="#dak-dashboard";
 const INDEX=fs.readFileSync('index.html','utf8');
 assert(INDEX.includes('assets/editorial-design.css'),'Dashboard mangler design-CSS');
 assert(INDEX.includes('assets/editorial-design.js'),'Dashboard mangler mobilmenu');
-assert(INDEX.includes('Michel Klos<small>Arbejdsmarkedsanalyser</small>'),'Dashboardnavn mangler');
+assert(INDEX.includes('Arbejdsmarkedsstatistik<small>Udarbejdet af Michel Klos</small>'),'Den nye dashboardtitel og afsender mangler');
+assert(!INDEX.includes('Michel Klos<small>Arbejdsmarkedsanalyser</small>'),'Den gamle toptekst findes stadig');
+assert(!/(?:dak-byline|class="byline")>Udarbejdet af Michel Klos<\//.test(INDEX),'Dobbeltafsender i sidens hovedbanner');
 assert(!INDEX.includes('Alle dashboards</a>'),'Uønsket link til alle dashboards findes');
 for(const f of ['assets/editorial-wave.svg','assets/editorial-design.css','assets/editorial-design.js']){
   assert(fs.existsSync(f),f+' mangler');
