@@ -34,7 +34,7 @@ for(const f of ['assets/editorial-wave.svg','assets/editorial-design.css','asset
     return {
       width:innerWidth,scrollWidth:document.documentElement.scrollWidth,
       navBackground:getComputedStyle(nav).backgroundColor,heroBackground:st.backgroundColor,
-      heroBgImage:st.backgroundImage,h1Color:getComputedStyle(heading).color,
+      heroBgImage:st.backgroundImage,heroBgSize:st.backgroundSize,h1Color:getComputedStyle(heading).color,
       oldBannerDisplay:getComputedStyle(hero,'::before').display,
       menuVisible:getComputedStyle(nav.querySelector('.mk-menu-toggle')).display!=='none',
       links:labels,navBeforeHeader:nav.compareDocumentPosition(hero)&Node.DOCUMENT_POSITION_FOLLOWING,
@@ -44,8 +44,19 @@ for(const f of ['assets/editorial-wave.svg','assets/editorial-design.css','asset
   },ROOT_SELECTOR);
   assert(report.cssLoaded,'Stylesheet not loaded at '+width);
   assert(report.navBackground==='rgb(9, 43, 69)','Navigation should be navy '+width+': '+report.navBackground);
-  assert(report.heroBgImage.includes('arbejdsmarked-faglogo.svg')||report.heroBgImage.includes('editorial-wave.svg'),
-    'Neither selected professions logo nor editorial wave rendered at '+width+': '+report.heroBgImage);
+  assert(report.heroBgImage.includes('arbejdsmarked-faglogo.svg'),'The shared four-professions logo is missing at '+width+': '+report.heroBgImage);
+  const logoWidth=parseFloat(report.heroBgSize);
+  const bounds=width<=760?[62,82]:width<=1050?[123,167]:[154,213];
+  assert(Number.isFinite(logoWidth)&&logoWidth>=bounds[0]-1&&logoWidth<=bounds[1]+1,
+    'Unexpected logo width at '+width+': '+report.heroBgSize+' expected '+bounds);
+  const logoAvailable=await page.evaluate(async()=>{
+    const hero=document.querySelector('header h1').closest('header');
+    const image=getComputedStyle(hero).backgroundImage;
+    const match=image.match(/url\(["']?([^"'\)]+)["']?\)/);
+    if(!match)return false;
+    try{return (await fetch(match[1],{cache:'no-store'})).ok;}catch(_){return false;}
+  });
+  assert(logoAvailable,'The professions logo SVG file could not be loaded at '+width);
   assert(report.heroBackground==='rgb(249, 252, 255)','Hero should be white '+width+': '+report.heroBackground);
   assert(report.oldBannerDisplay==='none','Old dark photographic overlay is still visible at '+width+': '+report.oldBannerDisplay);
   assert(report.navBeforeHeader,'Navigation should precede hero');
