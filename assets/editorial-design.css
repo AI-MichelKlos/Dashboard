@@ -515,24 +515,35 @@ body footer,
   .mk-cross-dashboard a{scroll-behavior:auto!important;transition:none!important}
 }
 
-/* Arbejdsmarkedets logo: fire fagpersoner og en udviklingskurve.
-   Kun dette dashboard. Erstat den dekorative signaturboelge. */
-.dak-hero {
-  background-image: url("./arbejdsmarked-faglogo.svg") !important;
-  background-size: clamp(230px, 22vw, 320px) auto !important;
-  background-position: right max(24px, calc((100vw - 1360px) / 2 + 24px)) center !important;
-  background-repeat: no-repeat !important;
+/* One consistent logo across the four dashboards.
+   At desktop and tablet this is two-thirds of the original
+   Analytisk overblik logo, with proportionate mobile scaling. */
+.dak-hero,
+#senior-dashboard .hero,
+body > header{
+  background-image:url("./arbejdsmarked-faglogo.svg")!important;
+  background-size:clamp(154px, 14.667vw, 213px) auto!important;
+  background-position:right max(24px, calc((100vw - 1360px)/2 + 24px)) center!important;
+  background-repeat:no-repeat!important;
 }
-@media (min-width: 761px) and (max-width: 1050px) {
-  .dak-hero {
-    background-size: clamp(185px, 22vw, 250px) auto !important;
-    background-position: right 18px center !important;
+@media(min-width:761px) and (max-width:1050px){
+  .dak-hero,
+  #senior-dashboard .hero,
+  body > header{
+    background-size:clamp(123px, 14.667vw, 167px) auto!important;
+    background-position:right 18px center!important;
   }
 }
-@media (max-width: 760px) {
-  .dak-hero {
-    background-size: clamp(92px, 25vw, 122px) auto !important;
-    background-position: right 16px top 26px !important;
+@media(max-width:760px){
+  .dak-hero,
+  #senior-dashboard .hero,
+  body > header{
+    background-size:clamp(62px, 16.667vw, 82px) auto!important;
+    background-position:right 16px top 26px!important;
   }
-  .dak-hero h1 { max-width: 73% !important; }
+  .dak-hero h1,
+  #senior-dashboard .hero h1,
+  body > header h1{
+    max-width:calc(100% - clamp(90px, 18vw, 132px))!important;
+  }
 }
