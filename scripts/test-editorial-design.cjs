@@ -35,6 +35,7 @@ for(const f of ['assets/editorial-wave.svg','assets/editorial-design.css','asset
       width:innerWidth,scrollWidth:document.documentElement.scrollWidth,
       navBackground:getComputedStyle(nav).backgroundColor,heroBackground:st.backgroundColor,
       heroBgImage:st.backgroundImage,h1Color:getComputedStyle(heading).color,
+      oldBannerDisplay:getComputedStyle(hero,'::before').display,
       menuVisible:getComputedStyle(nav.querySelector('.mk-menu-toggle')).display!=='none',
       links:labels,navBeforeHeader:nav.compareDocumentPosition(hero)&Node.DOCUMENT_POSITION_FOLLOWING,
       cards:document.querySelectorAll(root+' canvas').length, cssLoaded:!!link?.sheet,
@@ -45,6 +46,7 @@ for(const f of ['assets/editorial-wave.svg','assets/editorial-design.css','asset
   assert(report.navBackground==='rgb(9, 43, 69)','Navigation should be navy '+width+': '+report.navBackground);
   assert(report.heroBgImage.includes('editorial-wave.svg'),'Blue wave missing '+width);
   assert(report.heroBackground==='rgb(249, 252, 255)','Hero should be white '+width+': '+report.heroBackground);
+  assert(report.oldBannerDisplay==='none','Old dark photographic overlay is still visible at '+width+': '+report.oldBannerDisplay);
   assert(report.navBeforeHeader,'Navigation should precede hero');
   assert(report.links.length===4,'Expected four dashboard links, got '+report.links);
   assert(report.cards>=EXPECTED,'Expected preserved graphs '+EXPECTED+' got '+report.cards);
