@@ -1,8 +1,8 @@
 {
   "meta": {
-    "updated": "26. november 2026",
+    "updated": "27. november 2026",
     "sourceFile": "Samlet overblik.xlsx",
-    "retrievedAt": "2026-11-26",
+    "retrievedAt": "2026-11-27",
     "sourceRegister": {
       "unemployment": {
         "source": "Jobindsats API v3",
@@ -87,7 +87,7 @@
         "seasonalAdjustment": "sæsonkorrigeret",
         "sourceUpdated": "2026-11-23T07:00:00Z",
         "latestPeriod": "2026M09",
-        "fetchedAt": "2026-11-26T18:42:51+01:00"
+        "fetchedAt": "2026-11-27T18:27:28+01:00"
       },
       "bankruptcies": {
         "source": "Danmarks Statistik",
@@ -103,7 +103,7 @@
         "seasonalAdjustment": "kun serie A1",
         "sourceUpdated": "2026-11-05T07:00:00Z",
         "latestPeriod": "2026M10",
-        "fetchedAt": "2026-11-26T18:42:51+01:00"
+        "fetchedAt": "2026-11-27T18:27:28+01:00"
       },
       "consumerConfidence": {
         "source": "Danmarks Statistik",
@@ -117,7 +117,7 @@
         "seasonalAdjustment": "ikke oplyst",
         "sourceUpdated": "2026-11-20T07:00:00Z",
         "latestPeriod": "2026M11",
-        "fetchedAt": "2026-11-26T18:42:51+01:00"
+        "fetchedAt": "2026-11-27T18:27:28+01:00"
       },
       "jobindsats": {
         "source": "Jobindsats",
@@ -155,7 +155,7 @@
         "seasonalAdjustment": "ikke relevant",
         "sourceUpdated": "2026-11-10T07:00:00Z",
         "latestPeriod": "2026M10",
-        "fetchedAt": "2026-11-26T18:43:06+01:00"
+        "fetchedAt": "2026-11-27T18:27:41+01:00"
       }
     },
     "updateStatus": {
@@ -179,7 +179,7 @@
       "failed": [
         "Arbejdsfordelinger: seneste periode 2026M10 er ufuldstændig; mangler over 13 uger. Seneste fulde total bevares."
       ],
-      "checkedAt": "2026-11-26T18:43:18+01:00"
+      "checkedAt": "2026-11-27T18:27:55+01:00"
     },
     "jobindsatsUpdateStatus": {
       "successful": [
@@ -202,7 +202,7 @@
       "workSharing": {
         "state": "partial",
         "latestPeriod": "2026M08",
-        "checkedAt": "2026-11-26T18:43:18+01:00",
+        "checkedAt": "2026-11-27T18:27:55+01:00",
         "source": "Jobindsats API v3",
         "dataset": "y25i06",
         "latestIncompletePeriod": "2026M10",
@@ -211,14 +211,14 @@
       "expiredBenefits": {
         "state": "ok",
         "latestPeriod": "2026M08",
-        "checkedAt": "2026-11-26T18:43:18+01:00",
+        "checkedAt": "2026-11-27T18:27:55+01:00",
         "source": "Jobindsats API v3",
         "dataset": "y01ud01di"
       },
       "failedRecruitment": {
         "state": "ok",
         "latestPeriod": "2026M09",
-        "checkedAt": "2026-11-26T18:43:18+01:00",
+        "checkedAt": "2026-11-27T18:27:55+01:00",
         "source": "Jobindsats API v3",
         "dataset": "y25i14",
         "definition": "Ubesatte rekrutteringsforsøg",
@@ -227,7 +227,7 @@
       "notices": {
         "state": "ok",
         "latestPeriod": "2026M10",
-        "checkedAt": "2026-11-26T18:43:18+01:00",
+        "checkedAt": "2026-11-27T18:27:55+01:00",
         "source": "Jobindsats API v3",
         "dataset": "y25i05"
       }
